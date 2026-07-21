@@ -221,6 +221,17 @@
     box-shadow: 0 0 0 1px #81929c;
   }
   .color-button[aria-pressed="true"] { box-shadow: 0 0 0 3px #182936; }
+  .color-custom { display: grid; grid-template-columns: 48px 1fr; gap: 8px; margin-top: 10px; }
+  .color-custom input[type="color"] { height: 42px; padding: 3px; }
+  .contrast-card { margin: 15px 0; padding: 13px; border: 1px solid #b8c8d0; border-left: 5px solid var(--mcc-teal); border-radius: 7px; background: #f6fafb; }
+  .contrast-card h3 { margin: 0 0 7px; color: var(--mcc-navy); font-size: 15px; }
+  .contrast-ratio { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 8px 0; }
+  .contrast-ratio strong { font-size: 20px; }
+  .contrast-badges { display: flex; flex-wrap: wrap; gap: 5px; }
+  .contrast-badge { padding: 3px 6px; border-radius: 4px; font-size: 11px; font-weight: 900; }
+  .contrast-pass { color: #0b4d2c; background: #dff3e7; }
+  .contrast-fail { color: #7d201e; background: #fde4e1; }
+  .contrast-sample { margin-top: 9px; padding: 10px; border: 1px solid #9caab2; border-radius: 5px; font-weight: 800; }
   .panel-divider { border: 0; border-top: 1px solid #d9e1e5; margin: 19px -17px; }
   .block-search {
     display: flex;
@@ -610,13 +621,26 @@
   };
   const slugify = (value) => String(value || 'mcc-brightspace-page').toLowerCase().trim()
     .replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'mcc-brightspace-page';
-  const contrast = (hex) => {
-    const raw = String(hex || '#003366').replace('#', '');
-    const full = raw.length === 3 ? raw.split('').map(c => c + c).join('') : raw;
-    const rgb = [0,2,4].map(i => parseInt(full.slice(i, i + 2), 16) || 0);
-    const lum = (rgb[0] * 299 + rgb[1] * 587 + rgb[2] * 114) / 1000;
-    return lum > 150 ? '#182936' : '#FFFFFF';
+  const normalizeHex = (value) => {
+    let raw = String(value || '').trim().replace(/^#/, '');
+    if (/^[0-9a-f]{3}$/i.test(raw)) raw = raw.split('').map(c => c + c).join('');
+    return /^[0-9a-f]{6}$/i.test(raw) ? '#' + raw.toUpperCase() : null;
   };
+  const colorChannel = (value) => {
+    const channel = value / 255;
+    return channel <= .04045 ? channel / 12.92 : Math.pow((channel + .055) / 1.055, 2.4);
+  };
+  const relativeLuminance = (hex) => {
+    const value = normalizeHex(hex) || '#000000';
+    return .2126 * colorChannel(parseInt(value.slice(1, 3), 16)) +
+      .7152 * colorChannel(parseInt(value.slice(3, 5), 16)) +
+      .0722 * colorChannel(parseInt(value.slice(5, 7), 16));
+  };
+  const contrastRatio = (foreground, background) => {
+    const a = relativeLuminance(foreground), b = relativeLuminance(background);
+    return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+  };
+  const contrast = (background) => contrastRatio('#FFFFFF', background) >= contrastRatio('#182936', background) ? '#FFFFFF' : '#182936';
   const uid = () => 'mcc-' + Date.now().toString(36) + '-' + (uidCounter++).toString(36);
   const clone = (obj) => JSON.parse(JSON.stringify(obj));
   const countText = (n) => n + ' ' + (n === 1 ? 'block' : 'blocks');
@@ -843,7 +867,7 @@
   };
 
   function makeBlock(type, override) {
-    return { id: uid(), type, color: null, data: Object.assign(clone(defs[type].defaults), clone(override || {})) };
+    return { id: uid(), type, color: null, textColor: null, backgroundColor: null, data: Object.assign(clone(defs[type].defaults), clone(override || {})) };
   }
 
   function syncRepeater(block) {
@@ -891,7 +915,7 @@
   }
 
   function renderAccentPalette() {
-    el.accent.innerHTML = COLORS.map(color => '<button type="button" class="color-button" style="background:' + color + '" data-accent="' + color + '" aria-label="Use accent color ' + color + '" aria-pressed="' + (state.accent.toLowerCase() === color.toLowerCase()) + '"></button>').join('');
+    el.accent.innerHTML = COLORS.map(color => '<button type="button" class="color-button" style="background-color:' + color + '" data-accent="' + color + '" aria-label="Use accent color ' + color + '" aria-pressed="' + (state.accent.toLowerCase() === color.toLowerCase()) + '"></button>').join('');
   }
 
   function renderLibrary(filter) {
@@ -912,81 +936,108 @@
 
   function blockColor(block) { return block.color || state.accent; }
 
+  const CONTROL_BACKGROUND_TYPES = new Set(['button','colored','accordion','tabs','timeline','reveal','knowledge','process','table']);
+  function blockColorPair(block) {
+    const accent = blockColor(block);
+    const usesControlBackground = CONTROL_BACKGROUND_TYPES.has(block.type);
+    const background = block.backgroundColor || (usesControlBackground ? accent : '#FFFFFF');
+    const text = block.textColor || (usesControlBackground ? contrast(background) : '#1F2933');
+    return { background, text, usesControlBackground };
+  }
+
+  function contrastBadge(label, passes) {
+    return '<span class="contrast-badge ' + (passes ? 'contrast-pass' : 'contrast-fail') + '">' + label + ' ' + (passes ? 'Pass' : 'Fail') + '</span>';
+  }
+
+  function contrastResultsHtml(block) {
+    const pair = blockColorPair(block);
+    const ratio = contrastRatio(pair.text, pair.background);
+    return '<div class="contrast-card" id="block-contrast"><h3>Accessibility contrast checker</h3>' +
+      '<p class="field-help">WCAG requires 4.5:1 for normal text and 3:1 for large text.</p>' +
+      '<div class="contrast-ratio"><span>Text and background</span><strong>' + ratio.toFixed(2) + ':1</strong></div>' +
+      '<div class="contrast-badges">' + contrastBadge('AA normal', ratio >= 4.5) + contrastBadge('AA large', ratio >= 3) + contrastBadge('AAA normal', ratio >= 7) + contrastBadge('AAA large', ratio >= 4.5) + '</div>' +
+      '<div class="contrast-sample" style="color:' + pair.text + ';background-color:' + pair.background + '">Sample block text</div></div>';
+  }
+
   function renderBlockHtml(block) {
     const d = block.data;
     const color = blockColor(block);
-    const text = contrast(color);
-    const base = 'font-family:Lato,Arial,sans-serif;font-size:19px;color:#1f2933;line-height:1.65';
+    const pair = blockColorPair(block);
+    const background = pair.background;
+    const text = pair.text;
+    const rootText = pair.usesControlBackground ? '#1F2933' : text;
+    const rootBackground = pair.usesControlBackground ? '#FFFFFF' : background;
+    const base = 'font-family:Lato,Arial,sans-serif;font-size:19px;color:' + rootText + ';background-color:' + rootBackground + ';line-height:1.65';
     const items = (d.items || []).slice(0, parseInt(d.count, 10) || (d.items || []).length);
 
     switch (block.type) {
       case 'intro':
-        return '<p style="' + base + ';font-size:21px;color:' + color + ';margin:0 0 24px">' + br(d.content) + '</p>';
+        return '<p style="' + base + ';font-size:21px;color:' + text + ';margin:0 0 24px">' + br(d.content) + '</p>';
       case 'heading': {
         const level = ['2','3','4'].includes(String(d.level)) ? String(d.level) : '2';
         const size = level === '2' ? '30px' : level === '3' ? '24px' : '21px';
-        return '<h' + level + ' style="font-family:Lato,Arial,sans-serif;font-size:' + size + ';line-height:1.25;color:' + color + ';margin:30px 0 12px">' + e(d.text) + '</h' + level + '>';
+        return '<h' + level + ' style="font-family:Lato,Arial,sans-serif;font-size:' + size + ';line-height:1.25;color:' + text + ';background-color:' + background + ';border-bottom:3px solid ' + color + ';padding-bottom:7px;margin:30px 0 12px">' + e(d.text) + '</h' + level + '>';
       }
       case 'paragraph':
         return '<p style="' + base + ';margin:0 0 22px">' + br(d.content) + '</p>';
       case 'checklist':
-        return '<section style="' + base + ';margin:20px 0"><h3 style="font-size:22px;color:' + color + ';margin:0 0 10px">' + e(d.title) + '</h3><ul style="margin:0;padding-left:28px">' + lines(d.items).map(item => '<li style="margin:7px 0">' + e(item) + '</li>').join('') + '</ul></section>';
+        return '<section style="' + base + ';margin:20px 0"><h3 style="font-size:22px;color:' + text + ';margin:0 0 10px">' + e(d.title) + '</h3><ul style="color:' + text + ';margin:0;padding-left:28px">' + lines(d.items).map(item => '<li style="color:' + text + ';margin:7px 0">' + e(item) + '</li>').join('') + '</ul></section>';
       case 'callout':
-        return '<aside style="' + base + ';margin:24px 0;padding:20px 22px;border-left:7px solid ' + color + ';border-radius:0 8px 8px 0;background:#eef6f8"><h3 style="font-size:22px;color:' + color + ';margin:0 0 7px">' + e(d.title) + '</h3><p style="margin:0">' + br(d.content) + '</p></aside>';
+        return '<aside style="' + base + ';margin:24px 0;padding:20px 22px;border-left:7px solid ' + color + ';border-radius:0 8px 8px 0;background-color:' + background + '"><h3 style="font-size:22px;color:' + text + ';margin:0 0 7px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p></aside>';
       case 'quote':
-        return '<figure style="' + base + ';margin:26px 0;padding:22px 25px;border-left:6px solid ' + color + ';background:#f5f7f9"><blockquote style="margin:0 0 9px;font-size:23px;font-style:italic;color:#243746">“' + br(d.quote) + '”</blockquote><figcaption style="font-size:16px;color:#586874">— ' + e(d.citation) + '</figcaption></figure>';
+        return '<figure style="' + base + ';margin:26px 0;padding:22px 25px;border-left:6px solid ' + color + ';background-color:' + background + '"><blockquote style="margin:0 0 9px;font-size:23px;font-style:italic;color:' + text + '">“' + br(d.quote) + '”</blockquote><figcaption style="font-size:16px;color:' + text + '">— ' + e(d.citation) + '</figcaption></figure>';
       case 'button':
-        return '<p style="font-family:Lato,Arial,sans-serif;margin:24px 0"><a href="' + safeUrl(d.url, '#') + '" style="display:inline-block;padding:13px 20px;color:' + text + ';background:' + color + ';border-radius:6px;font-size:18px;font-weight:700;text-decoration:none">' + e(d.label) + '</a></p>';
+        return '<p style="font-family:Lato,Arial,sans-serif;margin:24px 0"><a href="' + safeUrl(d.url, '#') + '" style="display:inline-block;padding:13px 20px;color:' + text + ';background-color:' + background + ';border:1px solid ' + color + ';border-radius:6px;font-size:18px;font-weight:700;text-decoration:none">' + e(d.label) + '</a></p>';
       case 'colored':
-        return '<section style="' + base + ';margin:24px 0;padding:22px 24px;color:' + text + ';background:' + color + ';border-radius:8px"><h3 style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p></section>';
+        return '<section style="' + base + ';margin:24px 0;padding:22px 24px;color:' + text + ';background-color:' + background + ';border-radius:8px"><h3 style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p></section>';
       case 'insight':
-        return '<aside style="' + base + ';margin:24px 0;padding:20px 22px;border:1px solid #9ccbd4;border-radius:8px;background:#eaf7fa"><div style="display:flex;gap:14px;align-items:flex-start"><span aria-hidden="true" style="display:inline-grid;place-items:center;flex:0 0 38px;height:38px;border-radius:50%;color:#fff;background:' + color + ';font-weight:700">i</span><div><h3 style="font-size:21px;color:' + color + ';margin:0 0 6px">' + e(d.title) + '</h3><p style="margin:0">' + br(d.content) + '</p></div></div></aside>';
+        return '<aside style="' + base + ';margin:24px 0;padding:20px 22px;border:1px solid #9ccbd4;border-radius:8px;background-color:' + background + '"><div style="display:flex;gap:14px;align-items:flex-start"><span aria-hidden="true" style="display:inline-grid;place-items:center;flex:0 0 38px;height:38px;border-radius:50%;color:' + contrast(color) + ';background-color:' + color + ';font-weight:700">i</span><div><h3 style="font-size:21px;color:' + text + ';margin:0 0 6px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p></div></div></aside>';
       case 'accordion':
-        return '<div style="' + base + ';margin:24px 0">' + items.map(item => '<details style="font-family:Lato,Arial,sans-serif;font-size:19px;border:1px solid ' + color + ';border-radius:8px;margin:0 0 10px;overflow:hidden"><summary style="cursor:pointer;background:' + color + ';color:' + text + ';font-weight:700;padding:16px 18px">' + e(item.heading) + '</summary><div style="padding:16px 18px">' + br(item.content) + '</div></details>').join('') + '</div>';
+        return '<div style="' + base + ';margin:24px 0">' + items.map(item => '<details style="font-family:Lato,Arial,sans-serif;font-size:19px;border:1px solid ' + color + ';border-radius:8px;margin:0 0 10px;overflow:hidden"><summary style="cursor:pointer;background-color:' + background + ';color:' + text + ';font-weight:700;padding:16px 18px">' + e(item.heading) + '</summary><div style="padding:16px 18px;color:#1F2933;background-color:#FFFFFF">' + br(item.content) + '</div></details>').join('') + '</div>';
       case 'tabs': {
         const id = block.id;
-        const tabButtons = items.map((item, i) => '<button type="button" role="tab" id="' + id + '-tab-' + i + '" aria-controls="' + id + '-panel-' + i + '" aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? '0' : '-1') + '" onclick="var r=this.closest(\'[data-mcc-tabs]\');r.querySelectorAll(\'[role=tab]\').forEach(function(t){t.setAttribute(\'aria-selected\',\'false\');t.tabIndex=-1;t.style.background=\'#eef3f5\';t.style.color=\'#182936\'});r.querySelectorAll(\'[role=tabpanel]\').forEach(function(p){p.hidden=true});this.setAttribute(\'aria-selected\',\'true\');this.tabIndex=0;this.style.background=\'' + color + '\';this.style.color=\'' + text + '\';document.getElementById(this.getAttribute(\'aria-controls\')).hidden=false" onkeydown="if(event.key===\'ArrowRight\'||event.key===\'ArrowLeft\'){event.preventDefault();var a=Array.from(this.parentNode.querySelectorAll(\'[role=tab]\')),i=a.indexOf(this),n=event.key===\'ArrowRight\'?(i+1)%a.length:(i-1+a.length)%a.length;a[n].click();a[n].focus()}" style="padding:12px 16px;border:1px solid ' + color + ';border-radius:6px 6px 0 0;background:' + (i === 0 ? color : '#eef3f5') + ';color:' + (i === 0 ? text : '#182936') + ';font-weight:700;font-size:17px;cursor:pointer">' + e(item.heading) + '</button>').join('');
-        const panels = items.map((item, i) => '<div role="tabpanel" id="' + id + '-panel-' + i + '" aria-labelledby="' + id + '-tab-' + i + '"' + (i ? ' hidden' : '') + ' style="padding:20px;border:1px solid ' + color + ';border-radius:0 7px 7px 7px;background:#fff">' + br(item.content) + '</div>').join('');
+        const tabButtons = items.map((item, i) => '<button type="button" role="tab" id="' + id + '-tab-' + i + '" aria-controls="' + id + '-panel-' + i + '" aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? '0' : '-1') + '" onclick="var r=this.closest(\'[data-mcc-tabs]\');r.querySelectorAll(\'[role=tab]\').forEach(function(t){t.setAttribute(\'aria-selected\',\'false\');t.tabIndex=-1;t.style.backgroundColor=\'#eef3f5\';t.style.color=\'#182936\'});r.querySelectorAll(\'[role=tabpanel]\').forEach(function(p){p.hidden=true});this.setAttribute(\'aria-selected\',\'true\');this.tabIndex=0;this.style.backgroundColor=\'' + background + '\';this.style.color=\'' + text + '\';document.getElementById(this.getAttribute(\'aria-controls\')).hidden=false" onkeydown="if(event.key===\'ArrowRight\'||event.key===\'ArrowLeft\'){event.preventDefault();var a=Array.from(this.parentNode.querySelectorAll(\'[role=tab]\')),i=a.indexOf(this),n=event.key===\'ArrowRight\'?(i+1)%a.length:(i-1+a.length)%a.length;a[n].click();a[n].focus()}" style="padding:12px 16px;border:1px solid ' + color + ';border-radius:6px 6px 0 0;background-color:' + (i === 0 ? background : '#eef3f5') + ';color:' + (i === 0 ? text : '#182936') + ';font-weight:700;font-size:17px;cursor:pointer">' + e(item.heading) + '</button>').join('');
+        const panels = items.map((item, i) => '<div role="tabpanel" id="' + id + '-panel-' + i + '" aria-labelledby="' + id + '-tab-' + i + '"' + (i ? ' hidden' : '') + ' style="padding:20px;border:1px solid ' + color + ';border-radius:0 7px 7px 7px;color:#1F2933;background-color:#FFFFFF">' + br(item.content) + '</div>').join('');
         return '<div data-mcc-tabs="' + id + '" style="' + base + ';margin:24px 0"><div role="tablist" aria-label="Tabbed content" style="display:flex;flex-wrap:wrap;gap:5px;align-items:flex-end">' + tabButtons + '</div>' + panels + '</div>';
       }
       case 'flip':
-        return '<div style="' + base + ';display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:24px 0">' + items.map((item, i) => '<button type="button" aria-pressed="false" onclick="var f=this.querySelector(\'[data-front]\'),b=this.querySelector(\'[data-back]\'),show=this.getAttribute(\'aria-pressed\')!==\'true\';this.setAttribute(\'aria-pressed\',show);f.hidden=show;b.hidden=!show" style="min-height:170px;padding:22px;border:2px solid ' + color + ';border-radius:10px;color:#182936;background:#fff;font-family:Lato,Arial,sans-serif;font-size:19px;cursor:pointer"><span data-front><strong style="display:block;color:' + color + ';font-size:22px">' + e(item.front) + '</strong><small style="display:block;margin-top:14px;color:#5b6b75">Select to reveal</small></span><span data-back hidden><strong style="display:block;color:' + color + ';font-size:18px;margin-bottom:8px">' + e(item.front) + '</strong>' + br(item.back) + '<small style="display:block;margin-top:14px;color:#5b6b75">Select to flip back</small></span></button>').join('') + '</div>';
+        return '<div style="' + base + ';display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:24px 0">' + items.map((item, i) => '<button type="button" aria-pressed="false" onclick="var f=this.querySelector(\'[data-front]\'),b=this.querySelector(\'[data-back]\'),show=this.getAttribute(\'aria-pressed\')!==\'true\';this.setAttribute(\'aria-pressed\',show);f.hidden=show;b.hidden=!show" style="min-height:170px;padding:22px;border:2px solid ' + color + ';border-radius:10px;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:19px;cursor:pointer"><span data-front><strong style="display:block;color:' + text + ';font-size:22px">' + e(item.front) + '</strong><small style="display:block;margin-top:14px;color:' + text + '">Select to reveal</small></span><span data-back hidden><strong style="display:block;color:' + text + ';font-size:18px;margin-bottom:8px">' + e(item.front) + '</strong>' + br(item.back) + '<small style="display:block;margin-top:14px;color:' + text + '">Select to flip back</small></span></button>').join('') + '</div>';
       case 'timeline':
-        return '<ol style="' + base + ';margin:26px 0;padding:0;list-style:none">' + items.map((item, i) => '<li style="position:relative;margin:0 0 0 18px;padding:0 0 24px 34px;border-left:3px solid ' + color + '"><span aria-hidden="true" style="position:absolute;left:-16px;top:0;display:grid;place-items:center;width:29px;height:29px;border-radius:50%;color:' + text + ';background:' + color + ';font-size:14px;font-weight:700">' + (i + 1) + '</span><h3 style="font-size:21px;color:' + color + ';margin:0 0 5px">' + e(item.heading) + '</h3><p style="margin:0">' + br(item.content) + '</p></li>').join('') + '</ol>';
+        return '<ol style="' + base + ';margin:26px 0;padding:0;list-style:none">' + items.map((item, i) => '<li style="position:relative;margin:0 0 0 18px;padding:0 0 24px 34px;border-left:3px solid ' + color + '"><span aria-hidden="true" style="position:absolute;left:-16px;top:0;display:grid;place-items:center;width:29px;height:29px;border-radius:50%;color:' + text + ';background-color:' + background + ';font-size:14px;font-weight:700">' + (i + 1) + '</span><h3 style="font-size:21px;color:' + color + ';margin:0 0 5px">' + e(item.heading) + '</h3><p style="color:#1F2933;margin:0">' + br(item.content) + '</p></li>').join('') + '</ol>';
       case 'reveal':
-        return '<section data-mcc-reveal style="' + base + ';margin:24px 0;padding:22px;border:1px solid #b8c8d0;border-radius:8px;background:#f7fafb"><p style="margin:0 0 14px;font-weight:700">' + br(d.prompt) + '</p><button type="button" aria-expanded="false" onclick="var p=this.parentNode.querySelector(\'[data-reveal-panel]\'),open=this.getAttribute(\'aria-expanded\')!==\'true\';this.setAttribute(\'aria-expanded\',open);p.hidden=!open;this.textContent=open?\'Hide explanation\':this.getAttribute(\'data-label\')" data-label="' + attr(d.button) + '" style="padding:11px 16px;border:0;border-radius:6px;color:' + text + ';background:' + color + ';font-size:17px;font-weight:700;cursor:pointer">' + e(d.button) + '</button><div data-reveal-panel hidden style="margin-top:15px;padding:16px;border-left:5px solid ' + color + ';background:#fff">' + br(d.content) + '</div></section>';
+        return '<section data-mcc-reveal style="' + base + ';margin:24px 0;padding:22px;border:1px solid #b8c8d0;border-radius:8px;background-color:#f7fafb"><p style="color:#1F2933;margin:0 0 14px;font-weight:700">' + br(d.prompt) + '</p><button type="button" aria-expanded="false" onclick="var p=this.parentNode.querySelector(\'[data-reveal-panel]\'),open=this.getAttribute(\'aria-expanded\')!==\'true\';this.setAttribute(\'aria-expanded\',open);p.hidden=!open;this.textContent=open?\'Hide explanation\':this.getAttribute(\'data-label\')" data-label="' + attr(d.button) + '" style="padding:11px 16px;border:0;border-radius:6px;color:' + text + ';background-color:' + background + ';font-size:17px;font-weight:700;cursor:pointer">' + e(d.button) + '</button><div data-reveal-panel hidden style="margin-top:15px;padding:16px;border-left:5px solid ' + color + ';color:#1F2933;background-color:#FFFFFF">' + br(d.content) + '</div></section>';
       case 'knowledge': {
         const qid = block.id + '-question';
         const opts = items.map((item, i) => '<label style="display:block;margin:9px 0;padding:12px;border:1px solid #c3d0d6;border-radius:6px;cursor:pointer"><input type="radio" name="' + qid + '" value="' + (i + 1) + '" data-feedback="' + attr(item.feedback) + '" style="margin-right:9px">' + e(item.option) + '</label>').join('');
-        return '<section data-mcc-quiz data-correct="' + e(d.correct) + '" style="' + base + ';margin:25px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px"><h3 style="font-size:22px;color:' + color + ';margin:0 0 13px">Knowledge check</h3><p style="margin:0 0 12px;font-weight:700">' + br(d.question) + '</p><div role="radiogroup" aria-label="Answer choices">' + opts + '</div><button type="button" onclick="var r=this.closest(\'[data-mcc-quiz]\'),c=r.querySelector(\'input:checked\'),f=r.querySelector(\'[data-quiz-feedback]\');if(!c){f.textContent=\'Choose an answer before checking.\';f.style.background=\'#fff4d6\';f.hidden=false;return}var ok=c.value===r.getAttribute(\'data-correct\');f.textContent=(ok?\'Correct. \':\'Not quite. \')+c.getAttribute(\'data-feedback\');f.style.background=ok?\'#e5f5eb\':\'#fff0ed\';f.hidden=false" style="margin-top:12px;padding:11px 16px;border:0;border-radius:6px;color:' + text + ';background:' + color + ';font-size:17px;font-weight:700;cursor:pointer">Check answer</button><div data-quiz-feedback role="status" aria-live="polite" hidden style="margin-top:13px;padding:14px;border-radius:6px"></div></section>';
+        return '<section data-mcc-quiz data-correct="' + e(d.correct) + '" style="' + base + ';margin:25px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px"><h3 style="font-size:22px;color:' + color + ';margin:0 0 13px">Knowledge check</h3><p style="color:#1F2933;margin:0 0 12px;font-weight:700">' + br(d.question) + '</p><div role="radiogroup" aria-label="Answer choices">' + opts + '</div><button type="button" onclick="var r=this.closest(\'[data-mcc-quiz]\'),c=r.querySelector(\'input:checked\'),f=r.querySelector(\'[data-quiz-feedback]\');if(!c){f.textContent=\'Choose an answer before checking.\';f.style.backgroundColor=\'#fff4d6\';f.hidden=false;return}var ok=c.value===r.getAttribute(\'data-correct\');f.textContent=(ok?\'Correct. \':\'Not quite. \')+c.getAttribute(\'data-feedback\');f.style.backgroundColor=ok?\'#e5f5eb\':\'#fff0ed\';f.hidden=false" style="margin-top:12px;padding:11px 16px;border:0;border-radius:6px;color:' + text + ';background-color:' + background + ';font-size:17px;font-weight:700;cursor:pointer">Check answer</button><div data-quiz-feedback role="status" aria-live="polite" hidden style="margin-top:13px;padding:14px;color:#1F2933;border-radius:6px"></div></section>';
       }
       case 'scenario': {
-        const choices = items.map((item, i) => '<button type="button" data-choice="' + (i + 1) + '" data-feedback="' + attr(item.feedback) + '" onclick="var r=this.closest(\'[data-mcc-scenario]\'),f=r.querySelector(\'[data-scenario-feedback]\'),ok=this.getAttribute(\'data-choice\')===r.getAttribute(\'data-correct\');r.querySelectorAll(\'[data-choice]\').forEach(function(b){b.style.outline=\'none\'});this.style.outline=\'3px solid ' + color + '\';f.textContent=(ok?\'Recommended response. \':\'Consider the impact. \')+this.getAttribute(\'data-feedback\');f.style.background=ok?\'#e5f5eb\':\'#fff4d6\';f.hidden=false" style="display:block;width:100%;margin:9px 0;padding:13px 15px;border:1px solid ' + color + ';border-radius:6px;color:#182936;background:#fff;text-align:left;font-family:Lato,Arial,sans-serif;font-size:18px;cursor:pointer">' + e(item.option) + '</button>').join('');
-        return '<section data-mcc-scenario data-correct="' + e(d.correct) + '" style="' + base + ';margin:25px 0;padding:22px;border-left:7px solid ' + color + ';border-radius:0 9px 9px 0;background:#f3f8fa"><h3 style="font-size:23px;color:' + color + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="margin:0 0 15px">' + br(d.scenario) + '</p><div aria-label="Scenario responses">' + choices + '</div><div data-scenario-feedback role="status" aria-live="polite" hidden style="margin-top:13px;padding:14px;border-radius:6px"></div></section>';
+        const choices = items.map((item, i) => '<button type="button" data-choice="' + (i + 1) + '" data-feedback="' + attr(item.feedback) + '" onclick="var r=this.closest(\'[data-mcc-scenario]\'),f=r.querySelector(\'[data-scenario-feedback]\'),ok=this.getAttribute(\'data-choice\')===r.getAttribute(\'data-correct\');r.querySelectorAll(\'[data-choice]\').forEach(function(b){b.style.outline=\'none\'});this.style.outline=\'3px solid ' + color + '\';f.textContent=(ok?\'Recommended response. \':\'Consider the impact. \')+this.getAttribute(\'data-feedback\');f.style.backgroundColor=ok?\'#e5f5eb\':\'#fff4d6\';f.hidden=false" style="display:block;width:100%;margin:9px 0;padding:13px 15px;border:1px solid ' + color + ';border-radius:6px;color:' + text + ';background-color:' + background + ';text-align:left;font-family:Lato,Arial,sans-serif;font-size:18px;cursor:pointer">' + e(item.option) + '</button>').join('');
+        return '<section data-mcc-scenario data-correct="' + e(d.correct) + '" style="' + base + ';margin:25px 0;padding:22px;border-left:7px solid ' + color + ';border-radius:0 9px 9px 0;background-color:' + background + '"><h3 style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0 0 15px">' + br(d.scenario) + '</p><div aria-label="Scenario responses">' + choices + '</div><div data-scenario-feedback role="status" aria-live="polite" hidden style="margin-top:13px;padding:14px;color:#1F2933;border-radius:6px"></div></section>';
       }
       case 'process': {
         const id = block.id;
-        const controls = items.map((item, i) => '<button type="button" aria-controls="' + id + '-step-' + i + '" aria-pressed="' + (i === 0) + '" onclick="var r=this.closest(\'[data-mcc-process]\');r.querySelectorAll(\'[aria-controls]\').forEach(function(b){b.setAttribute(\'aria-pressed\',\'false\');b.style.background=\'#fff\';b.style.color=\'#182936\'});r.querySelectorAll(\'[data-process-panel]\').forEach(function(p){p.hidden=true});this.setAttribute(\'aria-pressed\',\'true\');this.style.background=\'' + color + '\';this.style.color=\'' + text + '\';document.getElementById(this.getAttribute(\'aria-controls\')).hidden=false" style="flex:1 1 120px;padding:12px;border:1px solid ' + color + ';border-radius:6px;background:' + (i === 0 ? color : '#fff') + ';color:' + (i === 0 ? text : '#182936') + ';font-family:Lato,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer">' + (i + 1) + '. ' + e(item.heading) + '</button>').join('');
-        const panels = items.map((item, i) => '<div id="' + id + '-step-' + i + '" data-process-panel' + (i ? ' hidden' : '') + ' style="margin-top:12px;padding:19px;border:1px solid #c4d1d7;border-radius:7px;background:#fff"><h4 style="font-size:21px;color:' + color + ';margin:0 0 7px">Step ' + (i + 1) + ': ' + e(item.heading) + '</h4><p style="margin:0">' + br(item.content) + '</p></div>').join('');
+        const controls = items.map((item, i) => '<button type="button" aria-controls="' + id + '-step-' + i + '" aria-pressed="' + (i === 0) + '" onclick="var r=this.closest(\'[data-mcc-process]\');r.querySelectorAll(\'[aria-controls]\').forEach(function(b){b.setAttribute(\'aria-pressed\',\'false\');b.style.backgroundColor=\'#fff\';b.style.color=\'#182936\'});r.querySelectorAll(\'[data-process-panel]\').forEach(function(p){p.hidden=true});this.setAttribute(\'aria-pressed\',\'true\');this.style.backgroundColor=\'' + background + '\';this.style.color=\'' + text + '\';document.getElementById(this.getAttribute(\'aria-controls\')).hidden=false" style="flex:1 1 120px;padding:12px;border:1px solid ' + color + ';border-radius:6px;background-color:' + (i === 0 ? background : '#fff') + ';color:' + (i === 0 ? text : '#182936') + ';font-family:Lato,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer">' + (i + 1) + '. ' + e(item.heading) + '</button>').join('');
+        const panels = items.map((item, i) => '<div id="' + id + '-step-' + i + '" data-process-panel' + (i ? ' hidden' : '') + ' style="margin-top:12px;padding:19px;border:1px solid #c4d1d7;border-radius:7px;color:#1F2933;background-color:#fff"><h4 style="font-size:21px;color:' + color + ';margin:0 0 7px">Step ' + (i + 1) + ': ' + e(item.heading) + '</h4><p style="margin:0">' + br(item.content) + '</p></div>').join('');
         return '<section data-mcc-process style="' + base + ';margin:25px 0"><h3 style="font-size:23px;color:' + color + ';margin:0 0 12px">' + e(d.title) + '</h3><div style="display:flex;flex-wrap:wrap;gap:7px">' + controls + '</div>' + panels + '</section>';
       }
       case 'interactiveChecklist': {
         const id = block.id;
-        return '<section data-mcc-checklist style="' + base + ';margin:25px 0;padding:21px;border:1px solid #bdcbd2;border-radius:8px;background:#f8fafb"><h3 style="font-size:23px;color:' + color + ';margin:0 0 6px">' + e(d.title) + '</h3><p data-progress aria-live="polite" style="margin:0 0 13px;color:#5a6972">0 of ' + items.length + ' complete</p>' + items.map((item, i) => '<label style="display:flex;align-items:flex-start;gap:10px;margin:8px 0;padding:11px;background:#fff;border:1px solid #d2dce1;border-radius:6px"><input type="checkbox" onchange="var r=this.closest(\'[data-mcc-checklist]\'),n=r.querySelectorAll(\'input[type=checkbox]:checked\').length,t=r.querySelectorAll(\'input[type=checkbox]\').length;r.querySelector(\'[data-progress]\').textContent=n+\' of \'+t+\' complete\'" style="width:20px;height:20px;margin-top:3px;accent-color:' + color + '"><span>' + e(item.text) + '</span></label>').join('') + '</section>';
+        return '<section data-mcc-checklist style="' + base + ';margin:25px 0;padding:21px;border:1px solid #bdcbd2;border-radius:8px;background-color:' + background + '"><h3 style="font-size:23px;color:' + text + ';margin:0 0 6px">' + e(d.title) + '</h3><p data-progress aria-live="polite" style="margin:0 0 13px;color:' + text + '">0 of ' + items.length + ' complete</p>' + items.map((item, i) => '<label style="display:flex;align-items:flex-start;gap:10px;margin:8px 0;padding:11px;color:' + text + ';background-color:' + background + ';border:1px solid #d2dce1;border-radius:6px"><input type="checkbox" onchange="var r=this.closest(\'[data-mcc-checklist]\'),n=r.querySelectorAll(\'input[type=checkbox]:checked\').length,t=r.querySelectorAll(\'input[type=checkbox]\').length;r.querySelector(\'[data-progress]\').textContent=n+\' of \'+t+\' complete\'" style="width:20px;height:20px;margin-top:3px;accent-color:' + color + '"><span>' + e(item.text) + '</span></label>').join('') + '</section>';
       }
       case 'image':
-        return '<figure style="' + base + ';margin:26px 0"><img src="' + safeUrl(d.url, 'https://placehold.co/1200x600/003366/FFFFFF?text=Course+image') + '" alt="' + attr(d.alt) + '" style="display:block;width:100%;height:auto;border-radius:8px">' + (d.caption ? '<figcaption style="margin-top:8px;color:#5d6b74;font-size:16px;text-align:center">' + e(d.caption) + '</figcaption>' : '') + '</figure>';
+        return '<figure style="' + base + ';margin:26px 0"><img src="' + safeUrl(d.url, 'https://placehold.co/1200x600/003366/FFFFFF?text=Course+image') + '" alt="' + attr(d.alt) + '" style="display:block;width:100%;height:auto;border-radius:8px">' + (d.caption ? '<figcaption style="margin-top:8px;color:' + text + ';font-size:16px;text-align:center">' + e(d.caption) + '</figcaption>' : '') + '</figure>';
       case 'video':
-        return '<div style="' + base + ';position:relative;width:100%;padding-top:56.25%;margin:26px 0;overflow:hidden;border-radius:8px;background:#000"><iframe src="' + youtubeEmbed(d.url) + '" title="' + attr(d.title) + '" allowfullscreen loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div>';
+        return '<div style="' + base + ';position:relative;width:100%;padding-top:56.25%;margin:26px 0;overflow:hidden;border-radius:8px;background-color:#000"><iframe src="' + youtubeEmbed(d.url) + '" title="' + attr(d.title) + '" allowfullscreen loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div>';
       case 'table': {
         const headers = listFromPipes(d.headers)[0] || ['Item','Details'];
         const rows = listFromPipes(d.rows);
-        return '<div style="' + base + ';overflow-x:auto;margin:26px 0"><table style="width:100%;border-collapse:collapse"><caption style="padding:10px;color:' + color + ';font-size:21px;font-weight:700;text-align:left">' + e(d.caption) + '</caption><thead><tr>' + headers.map(h => '<th scope="col" style="padding:12px;border:1px solid #aab9c1;color:' + text + ';background:' + color + ';text-align:left">' + e(h) + '</th>').join('') + '</tr></thead><tbody>' + rows.map(row => '<tr>' + headers.map((_,i) => '<td style="padding:12px;border:1px solid #c5d0d6;vertical-align:top">' + e(row[i] || '') + '</td>').join('') + '</tr>').join('') + '</tbody></table></div>';
+        return '<div style="' + base + ';overflow-x:auto;margin:26px 0"><table style="width:100%;border-collapse:collapse"><caption style="padding:10px;color:' + color + ';font-size:21px;font-weight:700;text-align:left">' + e(d.caption) + '</caption><thead><tr>' + headers.map(h => '<th scope="col" style="padding:12px;border:1px solid #aab9c1;color:' + text + ';background-color:' + background + ';text-align:left">' + e(h) + '</th>').join('') + '</tr></thead><tbody>' + rows.map(row => '<tr>' + headers.map((_,i) => '<td style="padding:12px;border:1px solid #c5d0d6;color:#1F2933;background-color:#FFFFFF;vertical-align:top">' + e(row[i] || '') + '</td>').join('') + '</tr>').join('') + '</tbody></table></div>';
       }
       case 'divider':
         return '<hr style="border:0;border-top:4px solid ' + color + ';margin:32px 0">';
       case 'columns':
-        return '<div style="' + base + ';display:flex;flex-wrap:wrap;gap:20px;margin:25px 0"><section style="flex:1 1 260px;padding:20px;border-top:6px solid ' + color + ';background:#f4f7f9"><h3 style="font-size:22px;color:' + color + ';margin:0 0 8px">' + e(d.leftTitle) + '</h3><p style="margin:0">' + br(d.leftContent) + '</p></section><section style="flex:1 1 260px;padding:20px;border-top:6px solid ' + color + ';background:#f4f7f9"><h3 style="font-size:22px;color:' + color + ';margin:0 0 8px">' + e(d.rightTitle) + '</h3><p style="margin:0">' + br(d.rightContent) + '</p></section></div>';
+        return '<div style="' + base + ';display:flex;flex-wrap:wrap;gap:20px;margin:25px 0"><section style="flex:1 1 260px;padding:20px;border-top:6px solid ' + color + ';color:' + text + ';background-color:' + background + '"><h3 style="font-size:22px;color:' + text + ';margin:0 0 8px">' + e(d.leftTitle) + '</h3><p style="color:' + text + ';margin:0">' + br(d.leftContent) + '</p></section><section style="flex:1 1 260px;padding:20px;border-top:6px solid ' + color + ';color:' + text + ';background-color:' + background + '"><h3 style="font-size:22px;color:' + text + ';margin:0 0 8px">' + e(d.rightTitle) + '</h3><p style="color:' + text + ';margin:0">' + br(d.rightContent) + '</p></section></div>';
       default:
         return '';
     }
@@ -995,14 +1046,14 @@
   function generatedBody() {
     const bannerUrl = state.bannerUrl ? '<img src="' + safeUrl(state.bannerUrl, '') + '" alt="" style="display:block;width:100%;max-height:340px;object-fit:cover">' : '';
     const title = state.titleStyle === 'text'
-      ? '<header style="padding:28px 38px;background:#fff;border-bottom:3px solid ' + state.accent + '"><p style="font-family:Lato,Arial,sans-serif;margin:0 0 6px;color:' + state.accent + ';font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">' + e(state.pageLabel) + '</p><h1 style="font-family:Lato,Arial,sans-serif;margin:0;color:#001B3B;font-size:42px;line-height:1.12;font-weight:500">' + e(state.title) + '</h1></header>'
-      : '<header style="padding:32px 40px;color:#fff;background:' + state.accent + ';border-bottom:7px solid #FF6600"><p style="font-family:Lato,Arial,sans-serif;margin:0 0 7px;color:#fff;font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">' + e(state.pageLabel) + '</p><h1 style="font-family:Lato,Arial,sans-serif;margin:0;color:#fff;font-size:44px;line-height:1.12;font-weight:400">' + e(state.title) + '</h1></header>';
+      ? '<header style="padding:28px 38px;background-color:#fff;border-bottom:3px solid ' + state.accent + '"><p style="font-family:Lato,Arial,sans-serif;margin:0 0 6px;color:' + state.accent + ';font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">' + e(state.pageLabel) + '</p><h1 style="font-family:Lato,Arial,sans-serif;margin:0;color:#001B3B;font-size:42px;line-height:1.12;font-weight:500">' + e(state.title) + '</h1></header>'
+      : '<header style="padding:32px 40px;color:' + contrast(state.accent) + ';background-color:' + state.accent + ';border-bottom:7px solid #FF6600"><p style="font-family:Lato,Arial,sans-serif;margin:0 0 7px;color:' + contrast(state.accent) + ';font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">' + e(state.pageLabel) + '</p><h1 style="font-family:Lato,Arial,sans-serif;margin:0;color:' + contrast(state.accent) + ';font-size:44px;line-height:1.12;font-weight:400">' + e(state.title) + '</h1></header>';
     const blocks = state.blocks.map(renderBlockHtml).join('');
-    return '<div style="max-width:1100px;margin:0 auto;background:#fff;border:1px solid #d5dfe4;font-family:Lato,Arial,sans-serif;font-size:19px;color:#1f2933;line-height:1.65">' + bannerUrl + title + '<main style="padding:32px 40px">' + (blocks || '<p style="font-family:Lato,Arial,sans-serif;font-size:19px">Add your course content here.</p>') + '</main><footer style="padding:16px 40px;color:#fff;background:#001B3B;font-family:Lato,Arial,sans-serif;font-size:14px">McLennan Online</footer></div>';
+    return '<div style="max-width:1100px;margin:0 auto;background-color:#fff;border:1px solid #d5dfe4;font-family:Lato,Arial,sans-serif;font-size:19px;color:#1f2933;line-height:1.65">' + bannerUrl + title + '<main style="padding:32px 40px">' + (blocks || '<p style="font-family:Lato,Arial,sans-serif;font-size:19px">Add your course content here.</p>') + '</main><footer style="padding:16px 40px;color:#fff;background-color:#001B3B;font-family:Lato,Arial,sans-serif;font-size:14px">McLennan Online</footer></div>';
   }
 
   function fullHtml() {
-    return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>' + e(state.title) + '</title>\n</head>\n<body style="margin:0;padding:20px;background:#f4f7f9">\n' + generatedBody() + '\n</body>\n</html>';
+    return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>' + e(state.title) + '</title>\n</head>\n<body style="margin:0;padding:20px;background-color:#f4f7f9">\n' + generatedBody() + '\n</body>\n</html>';
   }
 
   function renderPreview() {
@@ -1017,7 +1068,7 @@
     }).join('');
     const banner = state.bannerUrl ? '<img class="page-banner-image" src="' + safeUrl(state.bannerUrl, '') + '" alt="">' : '';
     const titleClass = state.titleStyle === 'text' ? ' text-only' : '';
-    el.preview.innerHTML = banner + '<div class="page-title-preview' + titleClass + '" style="' + (state.titleStyle === 'banner' ? 'background:' + state.accent + ';border-bottom-color:#FF6600' : 'border-bottom-color:' + state.accent) + '"><p class="page-kicker">' + e(state.pageLabel) + '</p><h3>' + e(state.title) + '</h3></div><div class="preview-content">' + (blocks || '<div class="preview-empty"><strong>Your page is ready for content.</strong><br>Add a building block from the left panel.</div>') + '</div><div class="preview-footer">McLennan Online</div>';
+    el.preview.innerHTML = banner + '<div class="page-title-preview' + titleClass + '" style="' + (state.titleStyle === 'banner' ? 'background-color:' + state.accent + ';color:' + contrast(state.accent) + ';border-bottom-color:#FF6600' : 'border-bottom-color:' + state.accent) + '"><p class="page-kicker">' + e(state.pageLabel) + '</p><h3>' + e(state.title) + '</h3></div><div class="preview-content">' + (blocks || '<div class="preview-empty"><strong>Your page is ready for content.</strong><br>Add a building block from the left panel.</div>') + '</div><div class="preview-footer">McLennan Online</div>';
     el.count.textContent = countText(state.blocks.length);
   }
 
@@ -1050,8 +1101,18 @@
       const items = block.data[def.repeater.key] || [];
       fieldsHtml += items.map((item, index) => '<fieldset class="repeater-group"><legend class="repeater-title">' + e(def.repeater.title) + ' ' + (index + 1) + '</legend>' + def.repeater.fields.map(f => inputHtml(block, f, item[f.key], index)).join('') + '</fieldset>').join('');
     }
-    const colorButtons = BLOCK_COLORS.map(color => '<button type="button" class="color-button" style="background:' + color + '" data-block-color="' + color + '" aria-label="Use block color ' + color + '" aria-pressed="' + (String(block.color || '').toLowerCase() === color.toLowerCase()) + '"></button>').join('') + '<button type="button" class="small-button" data-block-color="accent" aria-pressed="' + (!block.color) + '">Use page accent</button>';
-    el.editor.innerHTML = '<span class="selected-kind">' + e(def.label) + '</span><div class="editor-fields">' + fieldsHtml + '<fieldset class="editor-field" style="border:0;padding:0"><legend class="field-label">Block color</legend><p class="field-help">Choose an MCC color, black, white, or use the page accent.</p><div class="palette">' + colorButtons + '</div></fieldset><div class="snippet-box"><h3>Customized code snippet</h3><p>This updates as you edit the selected block.</p><pre id="block-code"></pre><button type="button" class="small-button" data-copy-block>Copy block HTML</button><button type="button" class="small-button danger-button" data-delete-selected>Delete this block</button></div></div>';
+    const pair = blockColorPair(block);
+    const colorButtons = BLOCK_COLORS.map(color => '<button type="button" class="color-button" style="background-color:' + color + '" data-block-color="' + color + '" aria-label="Use accent color ' + color + '" aria-pressed="' + (String(block.color || '').toLowerCase() === color.toLowerCase()) + '"></button>').join('') + '<button type="button" class="small-button" data-block-color="accent" aria-pressed="' + (!block.color) + '">Use page accent</button>';
+    const textButtons = BLOCK_COLORS.map(color => '<button type="button" class="color-button" style="background-color:' + color + '" data-block-text-color="' + color + '" aria-label="Use text color ' + color + '" aria-pressed="' + (String(block.textColor || '').toLowerCase() === color.toLowerCase()) + '"></button>').join('') + '<button type="button" class="small-button" data-block-text-color="auto" aria-pressed="' + (!block.textColor) + '">Use accessible default</button>';
+    const backgroundButtons = BLOCK_COLORS.map(color => '<button type="button" class="color-button" style="background-color:' + color + '" data-block-background-color="' + color + '" aria-label="Use background color ' + color + '" aria-pressed="' + (String(block.backgroundColor || '').toLowerCase() === color.toLowerCase()) + '"></button>').join('') + '<button type="button" class="small-button" data-block-background-color="default" aria-pressed="' + (!block.backgroundColor) + '">Use block default</button>';
+    const textCustom = '<div class="color-custom"><input type="color" data-block-custom="textColor" value="' + pair.text + '" aria-label="Choose custom text color"><input type="text" data-block-custom="textColor" value="' + pair.text + '" maxlength="7" aria-label="Text color hexadecimal value"></div>';
+    const backgroundCustom = '<div class="color-custom"><input type="color" data-block-custom="backgroundColor" value="' + pair.background + '" aria-label="Choose custom background color"><input type="text" data-block-custom="backgroundColor" value="' + pair.background + '" maxlength="7" aria-label="Background color hexadecimal value"></div>';
+    el.editor.innerHTML = '<span class="selected-kind">' + e(def.label) + '</span><div class="editor-fields">' + fieldsHtml +
+      '<fieldset class="editor-field" style="border:0;padding:0"><legend class="field-label">Accent color</legend><p class="field-help">Used for borders, markers, headings, and interactive accents.</p><div class="palette">' + colorButtons + '</div></fieldset>' +
+      '<fieldset class="editor-field" style="border:0;padding:0"><legend class="field-label">Text color</legend><p class="field-help">Choose an MCC color or enter a hexadecimal color.</p><div class="palette">' + textButtons + '</div>' + textCustom + '</fieldset>' +
+      '<fieldset class="editor-field" style="border:0;padding:0"><legend class="field-label">Background color</legend><p class="field-help">Solid colors only. CourseMaker does not generate gradients.</p><div class="palette">' + backgroundButtons + '</div>' + backgroundCustom + '</fieldset>' +
+      contrastResultsHtml(block) +
+      '<div class="snippet-box"><h3>Customized code snippet</h3><p>This updates as you edit the selected block.</p><pre id="block-code"></pre><button type="button" class="small-button" data-copy-block>Copy block HTML</button><button type="button" class="small-button danger-button" data-delete-selected>Delete this block</button></div></div>';
     document.getElementById('block-code').textContent = renderBlockHtml(block);
   }
 
@@ -1065,6 +1126,8 @@
     const block = state.blocks.find(b => b.id === state.selectedId);
     const code = document.getElementById('block-code');
     if (block && code) code.textContent = renderBlockHtml(block);
+    const contrastCard = document.getElementById('block-contrast');
+    if (block && contrastCard) contrastCard.outerHTML = contrastResultsHtml(block);
   }
 
   function toast(message) {
@@ -1160,7 +1223,16 @@
   el.editor.addEventListener('input', (event) => {
     const block = state.blocks.find(b => b.id === state.selectedId); if (!block) return;
     const target = event.target;
-    if (target.dataset.field) {
+    if (target.dataset.blockCustom) {
+      const hex = normalizeHex(target.value);
+      if (!hex) return;
+      block[target.dataset.blockCustom] = hex;
+      if (target.type === 'color') {
+        const textInput = el.editor.querySelector('input[type="text"][data-block-custom="' + target.dataset.blockCustom + '"]');
+        if (textInput) textInput.value = hex;
+      }
+      updatePreviewAndCode();
+    } else if (target.dataset.field) {
       const f = defs[block.type].fields.find(x => x.key === target.dataset.field);
       block.data[target.dataset.field] = f && f.type === 'number' ? parseInt(target.value, 10) || f.min : target.value;
       if (defs[block.type].repeater && defs[block.type].repeater.countKey === target.dataset.field) { syncRepeater(block); renderEditor(); }
@@ -1181,6 +1253,10 @@
     const block = state.blocks.find(b => b.id === state.selectedId); if (!block) return;
     const color = event.target.closest('[data-block-color]');
     if (color) { block.color = color.dataset.blockColor === 'accent' ? null : color.dataset.blockColor; renderAll(); return; }
+    const textColor = event.target.closest('[data-block-text-color]');
+    if (textColor) { block.textColor = textColor.dataset.blockTextColor === 'auto' ? null : textColor.dataset.blockTextColor; renderAll(); return; }
+    const backgroundColor = event.target.closest('[data-block-background-color]');
+    if (backgroundColor) { block.backgroundColor = backgroundColor.dataset.blockBackgroundColor === 'default' ? null : backgroundColor.dataset.blockBackgroundColor; renderAll(); return; }
     if (event.target.closest('[data-copy-block]')) { copyText(renderBlockHtml(block), 'Block HTML copied.'); return; }
     if (event.target.closest('[data-delete-selected]')) deleteBlock(block.id);
   });
