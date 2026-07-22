@@ -673,14 +673,14 @@
       fields: [field('content', 'Paragraph text', 'textarea')]
     },
     checklist: {
-      label: 'Checklist', category: 'Text',
-      defaults: { title: 'Before you continue', items: 'Review the instructions\nComplete the activity\nSubmit your work' },
-      fields: [field('title', 'Checklist heading'), field('items', 'Checklist items', 'textarea', 'Place one item on each line.')]
+      label: 'Bulleted list', category: 'Text',
+      defaults: { title: 'Key points', items: 'Add the first point\nAdd the second point\nAdd the third point' },
+      fields: [field('title', 'List heading'), field('items', 'Bullet items', 'textarea', 'Place one item on each line.')]
     },
     callout: {
       label: 'Callout box', category: 'Featured',
-      defaults: { title: 'Important', content: 'Use this space to highlight an important reminder or key idea.' },
-      fields: [field('title', 'Callout heading'), field('content', 'Callout content', 'textarea')]
+      defaults: { style: 'information', title: 'Good to know', content: 'Use this space to add helpful context or guidance.' },
+      fields: [field('style', 'Callout style', 'select', '', { options: [['information','Information callout'],['notice','Important notice']] }), field('title', 'Callout heading'), field('content', 'Callout content', 'textarea')]
     },
     quote: {
       label: 'Blockquote', category: 'Featured',
@@ -688,9 +688,10 @@
       fields: [field('quote', 'Quotation', 'textarea'), field('citation', 'Citation')]
     },
     button: {
-      label: 'Button link', category: 'Featured',
-      defaults: { label: 'Open resource', url: 'https://www.mclennan.edu/' },
-      fields: [field('label', 'Button label'), field('url', 'Link URL', 'url')]
+      label: 'Button links (1–4)', category: 'Featured',
+      defaults: { count: 1, items: [{ label: 'Open resource', url: 'https://www.mclennan.edu/' }] },
+      fields: [field('count', 'Buttons (1–4)', 'number', '', { min: 1, max: 4 })],
+      repeater: repeater('items', 'Button', 'count', [field('label', 'Button label'), field('url', 'Link URL', 'url')])
     },
     colored: {
       label: 'Colored block', category: 'Featured',
@@ -699,8 +700,23 @@
     },
     insight: {
       label: 'Instructor insight', category: 'Featured',
-      defaults: { title: 'Instructor insight', content: 'Here is a practical tip that can save you time or help you avoid a common mistake.' },
-      fields: [field('title', 'Insight heading'), field('content', 'Insight or tip', 'textarea')]
+      defaults: { layout: 'image-left', image: '', alt: 'Instructor portrait', title: 'Instructor insight', content: 'Here is a practical tip that can save you time or help you avoid a common mistake.' },
+      fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left (33%)'],['image-right','Image right (33%)']] }), field('image', 'Image URL', 'url'), field('alt', 'Image alternative text', 'textarea'), field('title', 'Insight heading'), field('content', 'Insight or tip', 'textarea')]
+    },
+    instructorInfo: {
+      label: 'Instructor information', category: 'Featured', isNew: true,
+      defaults: { layout: 'image-left', image: '', alt: 'Instructor portrait', name: 'Instructor Name', office: 'Office number', email: 'instructor@mclennan.edu', hours: 'Office hours', about: 'Share hobbies, interests, professional experience, or anything else that helps students get to know you.' },
+      fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left (33%)'],['image-right','Image right (33%)']] }), field('image', 'Instructor image URL', 'url'), field('alt', 'Image alternative text', 'textarea'), field('name', 'Instructor name'), field('office', 'Office number'), field('email', 'Email address'), field('hours', 'Office hours'), field('about', 'Additional information', 'textarea')]
+    },
+    imageText: {
+      label: 'Content image with text', category: 'Featured', isNew: true,
+      defaults: { layout: 'image-left', image: '', alt: 'Describe the instructional image.', title: 'Content heading', content: 'Add informational text that explains or supports the image.' },
+      fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left (33%)'],['image-right','Image right (33%)']] }), field('image', 'Content image URL', 'url'), field('alt', 'Image alternative text', 'textarea'), field('title', 'Content heading'), field('content', 'Informational text', 'textarea')]
+    },
+    aiPolicy: {
+      label: 'AI policy block', category: 'Featured', isNew: true,
+      defaults: { level: 'yellow', parameters: 'Describe the specific ways students may use AI for this work.' },
+      fields: [field('level', 'AI use level', 'select', '', { options: [['red','Red: No AI Allowed'],['yellow','Yellow: Restricted AI Use'],['green','Green: Full AI Use Allowed']] }), field('parameters', 'Instructor-defined parameters for Yellow', 'textarea', 'This text appears only when Yellow is selected.')]
     },
     accordion: {
       label: 'Accordion (1–6)', category: 'Interactive',
@@ -714,12 +730,12 @@
     },
     tabs: {
       label: 'Tabbed sections', category: 'Interactive',
-      defaults: { count: 3, items: [
+      defaults: { orientation: 'horizontal', count: 3, items: [
         { heading: 'Overview', content: 'Introduce the topic or activity.' },
         { heading: 'Example', content: 'Show students a practical example.' },
         { heading: 'Try it', content: 'Invite students to apply what they learned.' }
       ] },
-      fields: [field('count', 'Tabs (2–4)', 'number', '', { min: 2, max: 4 })],
+      fields: [field('orientation', 'Tab layout', 'select', '', { options: [['horizontal','Horizontal tabs'],['vertical','Vertical tabs']] }), field('count', 'Tabs (2–4)', 'number', '', { min: 2, max: 4 })],
       repeater: repeater('items', 'Tab', 'count', [field('heading', 'Tab label'), field('content', 'Tab content', 'textarea')])
     },
     flip: {
@@ -790,6 +806,35 @@
       fields: [field('title', 'Checklist heading'), field('count', 'Checklist items (2–8)', 'number', '', { min: 2, max: 8 })],
       repeater: repeater('items', 'Checklist item', 'count', [field('text', 'Item text')])
     },
+    storyboard: {
+      label: 'Sticky storyboard', category: 'Interactive', isNew: true,
+      defaults: { title: 'Explore the story', count: 3, items: [
+        { heading: 'First idea', content: 'Introduce the first concept or moment in the story.', image: '', alt: 'Describe the first visual.' },
+        { heading: 'Next idea', content: 'Explain how the story, process, or concept develops.', image: '', alt: 'Describe the second visual.' },
+        { heading: 'Final idea', content: 'Connect the ideas and summarize the takeaway.', image: '', alt: 'Describe the final visual.' }
+      ] },
+      fields: [field('title', 'Storyboard heading'), field('count', 'Story sections (2–5)', 'number', '', { min: 2, max: 5 })],
+      repeater: repeater('items', 'Story section', 'count', [field('heading', 'Section heading'), field('content', 'Section text', 'textarea'), field('image', 'Image URL', 'url'), field('alt', 'Image alternative text', 'textarea')])
+    },
+    decoder: {
+      label: 'Secret decoder reveal', category: 'Interactive', isNew: true,
+      defaults: { prompt: 'Decode the hidden explanation', hint: 'Think about the question before opening the decoder.', content: 'Place the optional hint, answer, or explanation here.' },
+      fields: [field('prompt', 'Decoder label'), field('hint', 'Visible prompt or hint', 'textarea'), field('content', 'Revealed answer', 'textarea')]
+    },
+    hotspot: {
+      label: 'Accessible image hotspots', category: 'Interactive', isNew: true,
+      defaults: { image: '', alt: 'Describe the full image and its instructional purpose.', count: 2, items: [
+        { label: 'Hotspot 1', content: 'Explain the first highlighted area.', x: 28, y: 35 },
+        { label: 'Hotspot 2', content: 'Explain the second highlighted area.', x: 70, y: 62 }
+      ] },
+      fields: [field('image', 'Image URL', 'url'), field('alt', 'Image alternative text', 'textarea'), field('count', 'Hotspots (1–4)', 'number', '', { min: 1, max: 4 })],
+      repeater: repeater('items', 'Hotspot', 'count', [field('label', 'Accessible label'), field('content', 'Reveal text', 'textarea'), field('x', 'Horizontal position (%)', 'number', '', { min: 5, max: 95 }), field('y', 'Vertical position (%)', 'number', '', { min: 5, max: 95 })])
+    },
+    branching: {
+      label: 'Branching scenario', category: 'Interactive', isNew: true,
+      defaults: { title: 'Choose your path', scenario: 'Describe the situation and ask the learner to choose a response.', choiceA: 'Choose path A', outcomeA: 'Explain the immediate result of path A.', followA: 'What should happen next?', a1: 'Follow-up choice A1', a1Outcome: 'Explain the result of this follow-up choice.', a2: 'Follow-up choice A2', a2Outcome: 'Explain the result of this follow-up choice.', choiceB: 'Choose path B', outcomeB: 'Explain the immediate result of path B.', followB: 'What should happen next?', b1: 'Follow-up choice B1', b1Outcome: 'Explain the result of this follow-up choice.', b2: 'Follow-up choice B2', b2Outcome: 'Explain the result of this follow-up choice.' },
+      fields: [field('title', 'Scenario heading'), field('scenario', 'Starting situation', 'textarea'), field('choiceA', 'First choice A'), field('outcomeA', 'Path A outcome', 'textarea'), field('followA', 'Path A follow-up question'), field('a1', 'Path A follow-up choice 1'), field('a1Outcome', 'Path A follow-up result 1', 'textarea'), field('a2', 'Path A follow-up choice 2'), field('a2Outcome', 'Path A follow-up result 2', 'textarea'), field('choiceB', 'First choice B'), field('outcomeB', 'Path B outcome', 'textarea'), field('followB', 'Path B follow-up question'), field('b1', 'Path B follow-up choice 1'), field('b1Outcome', 'Path B follow-up result 1', 'textarea'), field('b2', 'Path B follow-up choice 2'), field('b2Outcome', 'Path B follow-up result 2', 'textarea')]
+    },
     image: {
       label: 'Image', category: 'Media',
       defaults: { url: 'https://placehold.co/1200x600/003366/FFFFFF?text=Course+image', alt: 'Describe the meaningful content of this image.', caption: '' },
@@ -797,8 +842,8 @@
     },
     video: {
       label: 'Video', category: 'Media',
-      defaults: { url: 'https://www.youtube.com/watch?v=ZZ5LpwO-An4&t=2s', title: 'Course video' },
-      fields: [field('url', 'YouTube or embed URL', 'url'), field('title', 'Accessible video title')]
+      defaults: { mode: 'embed', url: 'https://www.youtube.com/watch?v=ZZ5LpwO-An4&t=2s', title: 'Course video' },
+      fields: [field('mode', 'Video source', 'select', '', { options: [['embed','Embed a YouTube or video URL'],['brightspace','Brightspace or YuJa video placeholder']] }), field('url', 'YouTube or embed URL', 'url', 'Used only when Embed URL is selected.'), field('title', 'Accessible video title')]
     },
     table: {
       label: 'Table', category: 'Data',
@@ -816,41 +861,34 @@
   };
 
   const templates = {
-    blank: { label: 'Blank page', pageLabel: 'Course content', title: 'Blank page', blocks: [] },
-    course: { label: 'Course content', pageLabel: 'Course content', title: 'Lesson title', blocks: [
-      ['intro', { content: 'Use this page to introduce the lesson, connect it to the course, and guide students through the work.' }],
-      ['heading', { text: 'What you will learn', level: '2' }],
-      ['checklist', { title: 'By the end of this lesson, you will be able to', items: 'Explain the key concept\nApply the concept to an example\nCheck your understanding' }],
-      ['heading', { text: 'Lesson content', level: '2' }],
-      ['paragraph', { content: 'Add your lesson content here. Break longer material into short sections with descriptive headings.' }]
+    module: { label: 'Module Overview', pageLabel: 'Module overview', title: 'Module Overview', blocks: [
+      ['heading', { text: 'Module Objectives', level: '2' }],
+      ['checklist', { title: 'By the end of this module, you will be able to', items: 'Add the first module objective\nAdd the second module objective\nAdd the third module objective' }],
+      ['heading', { text: 'Task List', level: '2' }],
+      ['interactiveChecklist', { title: 'Complete these module tasks', count: 4, items: [{text:'Review the module overview and objectives'},{text:'Complete the instructional materials'},{text:'Participate in the learning activity'},{text:'Submit the module assessment'}] }],
+      ['heading', { text: 'Brief Summary', level: '2' }],
+      ['paragraph', { content: 'Add a concise summary explaining what students will learn, why it matters, and how the module connects to the course.' }]
     ] },
-    instructor: { label: 'Meet your instructor', pageLabel: 'Course information', title: 'Meet your instructor', blocks: [
-      ['intro', { content: 'Welcome! Use this page to help students get to know you and understand how you will support their learning.' }],
-      ['image', { url: 'https://placehold.co/800x500/003366/FFFFFF?text=Instructor+photo', alt: 'Instructor portrait', caption: '' }],
-      ['heading', { text: 'About me', level: '2' }],
-      ['paragraph', { content: 'Share a short professional introduction and one or two details that help you feel approachable.' }],
-      ['insight', { title: 'How to reach me', content: 'Tell students the best way to contact you and when they can expect a response.' }]
+    instructor: { label: 'Instructor Information', pageLabel: 'Course information', title: 'Instructor Information', blocks: [
+      ['instructorInfo', { layout:'image-left', image:'', alt:'Instructor portrait', name:'Instructor Name', office:'Office number', email:'instructor@mclennan.edu', hours:'Office hours', about:'Add a brief welcome or teaching philosophy.' }],
+      ['heading', { text: 'More About Your Instructor', level: '2' }],
+      ['paragraph', { content: 'Share hobbies, interests, professional experience, or other information you would like students to know.' }]
     ] },
-    module: { label: 'Module overview page', pageLabel: 'Module overview', title: 'Module overview', blocks: [
-      ['intro', { content: 'Use this overview to show students where they are going, why it matters, and what they need to complete.' }],
-      ['checklist', { title: 'This module includes', items: 'Review the module objectives\nComplete the learning materials\nParticipate in the activity\nSubmit the assessment' }],
-      ['process', { title: 'Recommended path', count: 4, items: [{heading:'Orient',content:'Review the overview and objectives.'},{heading:'Learn',content:'Read, watch, and take notes.'},{heading:'Practice',content:'Try the guided activity.'},{heading:'Demonstrate',content:'Complete the assessment.'}] }]
+    course: { label: 'Instructional Content', pageLabel: 'Instructional content', title: 'Instructional Content', blocks: [
+      ['intro', { content: 'Add a brief overview that introduces the content, connects it to the learning objectives, and explains why it matters.' }],
+      ['imageText', { layout:'image-left', image:'', alt:'Describe the instructional image.', title:'Content Heading', content:'Add informational text that explains the key idea shown in the image.' }],
+      ['tabs', { orientation:'horizontal', count:3, items:[{heading:'Key Idea',content:'Explain the first important concept.'},{heading:'Example',content:'Show how the concept works in practice.'},{heading:'Apply It',content:'Invite students to connect or apply the idea.'}] }],
+      ['knowledge', { question:'Which choice best demonstrates the concept presented on this page?', count:4, correct:1, items:[{option:'Add the correct answer',feedback:'Correct. Explain why this choice demonstrates the concept.'},{option:'Add a plausible distractor',feedback:'Not quite. Explain the misconception and direct students back to the relevant content.'},{option:'Add another distractor',feedback:'Not quite. Provide specific corrective feedback.'},{option:'Add a final distractor',feedback:'Try again. Explain what the learner should reconsider.'}] }]
     ] },
-    aiRed: { label: 'Course AI policy: Red', pageLabel: 'Course policy', title: 'Generative AI use: Not permitted', accent: '#a22522', blocks: [
-      ['colored', { title: 'Red light: AI use is not permitted', content: 'Complete this work without generative AI unless your instructor gives written permission for a specific task.' }],
-      ['heading', { text: 'What this means', level: '2' }],
-      ['checklist', { title: 'For this work', items: 'Use only the resources named by your instructor\nCreate and revise the work yourself\nAsk your instructor before using any AI-enabled tool' }]
+    weekly: { label: 'Weekly Task List', pageLabel: 'Weekly overview', title: 'Weekly Task List', blocks: [
+      ['intro', { content: 'Add a brief overview of the week, the central focus, and any important due dates or reminders.' }],
+      ['interactiveChecklist', { title:'This Week', count:5, items:[{text:'Review the weekly overview'},{text:'Complete the readings or videos'},{text:'Participate in the discussion or activity'},{text:'Complete the assignment'},{text:'Check due dates and submit your work'}] }]
     ] },
-    aiYellow: { label: 'Course AI policy: Yellow', pageLabel: 'Course policy', title: 'Generative AI use: Limited', accent: '#b46b00', blocks: [
-      ['colored', { title: 'Yellow light: AI use is limited', content: 'You may use generative AI only for the specific purposes listed by your instructor. Document and cite your use when required.' }],
-      ['heading', { text: 'Use AI responsibly', level: '2' }],
-      ['checklist', { title: 'Before submitting', items: 'Confirm the permitted uses\nVerify all AI-generated information\nRevise the work in your own voice\nDisclose or cite AI use as directed' }]
+    videoPage: { label: 'Video Page', pageLabel: 'Course video', title: 'Video Page', blocks: [
+      ['intro', { content: 'Introduce the video, explain what students should watch for, and connect it to the lesson objectives.' }],
+      ['video', { mode:'brightspace', url:'', title:'Course video' }]
     ] },
-    aiGreen: { label: 'Course AI policy: Green', pageLabel: 'Course policy', title: 'Generative AI use: Encouraged', accent: '#167442', blocks: [
-      ['colored', { title: 'Green light: Responsible AI use is encouraged', content: 'You may use approved generative AI tools to support this work. You remain responsible for accuracy, quality, privacy, and appropriate disclosure.' }],
-      ['heading', { text: 'Use AI as a learning partner', level: '2' }],
-      ['checklist', { title: 'Good practice', items: 'Protect private or sensitive information\nCheck claims against reliable sources\nRevise outputs with your own judgment\nExplain or cite your AI use as directed' }]
-    ] }
+    blank: { label: 'Blank Page', pageLabel: 'Course content', title: 'Blank Page', blocks: [] }
   };
 
   const state = {
@@ -936,9 +974,29 @@
 
   function blockColor(block) { return block.color || state.accent; }
 
-  const CONTROL_BACKGROUND_TYPES = new Set(['button','colored','accordion','tabs','timeline','reveal','knowledge','process','table']);
+  const CONTROL_BACKGROUND_TYPES = new Set(['button','colored','accordion','tabs','timeline','reveal','knowledge','process','table','decoder','branching']);
+  function aiPolicyPalette(level) {
+    if (level === 'red') return { background: '#FDECEB', text: '#4A1716', accent: '#A22522', badge: 'R', label: 'Red Light: No AI Allowed', meaning: 'AI is entirely prohibited.' };
+    if (level === 'green') return { background: '#E5F5EB', text: '#103B25', accent: '#167442', badge: 'G', label: 'Green Light: Full AI Use Allowed', meaning: 'AI is permitted without restrictions, provided it’s used ethically.' };
+    return { background: '#FFF4D6', text: '#4A3200', accent: '#9A5B00', badge: 'Y', label: 'Yellow Light: Restricted AI Use', meaning: 'AI is allowed under specific instructor-defined parameters.' };
+  }
+
+  function calloutPalette(style) {
+    return style === 'notice'
+      ? { background: '#FDECEB', text: '#4A1716', accent: '#A22522', icon: '!' }
+      : { background: '#EEF6F8', text: '#173744', accent: '#246B7A', icon: 'i' };
+  }
+
   function blockColorPair(block) {
     const accent = blockColor(block);
+    if (block.type === 'aiPolicy') {
+      const palette = aiPolicyPalette(block.data.level);
+      return { background: block.backgroundColor || palette.background, text: block.textColor || palette.text, usesControlBackground: false };
+    }
+    if (block.type === 'callout') {
+      const palette = calloutPalette(block.data.style);
+      return { background: block.backgroundColor || palette.background, text: block.textColor || palette.text, usesControlBackground: false };
+    }
     const usesControlBackground = CONTROL_BACKGROUND_TYPES.has(block.type);
     const background = block.backgroundColor || (usesControlBackground ? accent : '#FFFFFF');
     const text = block.textColor || (usesControlBackground ? contrast(background) : '#1F2933');
@@ -970,6 +1028,16 @@
     const base = 'font-family:Lato,Arial,sans-serif;font-size:19px;color:' + rootText + ';background-color:' + rootBackground + ';line-height:1.65';
     const items = (d.items || []).slice(0, parseInt(d.count, 10) || (d.items || []).length);
 
+    const placeholder = (altText, label) => '<div role="img" aria-label="' + attr(altText || label || 'Image placeholder') + '" style="display:grid;place-items:center;min-height:220px;padding:18px;border:2px dashed #7395A4;color:#173744;background-color:#EAF2F5;font-family:Lato,Arial,sans-serif;font-size:18px;font-weight:700;text-align:center">' + e(label || 'Image placeholder') + '</div>';
+    const imageOrPlaceholder = (url, altText, label) => url
+      ? '<img src="' + safeUrl(url, '#') + '" alt="' + attr(altText) + '" style="display:block;width:100%;height:auto">'
+      : placeholder(altText, label);
+    const imageTextTable = (image, altText, layout, inner, label) => {
+      const imageCell = '<td style="width:33.333%;padding:0;vertical-align:top;background-color:#EAF2F5">' + imageOrPlaceholder(image, altText, label) + '</td>';
+      const textCell = '<td style="width:66.667%;padding:24px;vertical-align:top;color:' + text + ';background-color:' + background + '">' + inner + '</td>';
+      return '<table role="presentation" style="width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border:1px solid #AFC1CA"><tbody><tr>' + (layout === 'image-right' ? textCell + imageCell : imageCell + textCell) + '</tr></tbody></table>';
+    };
+
     switch (block.type) {
       case 'intro':
         return '<p style="' + base + ';font-size:21px;color:' + text + ';margin:0 0 24px">' + br(d.content) + '</p>';
@@ -983,22 +1051,44 @@
       case 'checklist':
         return '<section style="' + base + ';margin:20px 0"><h3 style="font-size:22px;color:' + text + ';margin:0 0 10px">' + e(d.title) + '</h3><ul style="color:' + text + ';margin:0;padding-left:28px">' + lines(d.items).map(item => '<li style="color:' + text + ';margin:7px 0">' + e(item) + '</li>').join('') + '</ul></section>';
       case 'callout':
-        return '<aside style="' + base + ';margin:24px 0;padding:20px 22px;border-left:7px solid ' + color + ';border-radius:0 8px 8px 0;background-color:' + background + '"><h3 style="font-size:22px;color:' + text + ';margin:0 0 7px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p></aside>';
+        {
+          const palette = calloutPalette(d.style);
+          const accent = block.color || palette.accent;
+          return '<aside style="' + base + ';display:flex;gap:18px;align-items:flex-start;margin:24px 0;padding:20px 22px;border:2px solid ' + accent + ';border-left-width:8px;border-radius:8px;background-color:' + background + '"><span aria-hidden="true" style="display:inline-grid;place-items:center;flex:0 0 48px;width:48px;height:48px;border-radius:50%;color:' + contrast(accent) + ';background-color:' + accent + ';font-size:32px;font-weight:800;line-height:1">' + palette.icon + '</span><div><h3 style="font-size:22px;color:' + text + ';margin:0 0 7px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p></div></aside>';
+        }
       case 'quote':
         return '<figure style="' + base + ';margin:26px 0;padding:22px 25px;border-left:6px solid ' + color + ';background-color:' + background + '"><blockquote style="margin:0 0 9px;font-size:23px;font-style:italic;color:' + text + '">“' + br(d.quote) + '”</blockquote><figcaption style="font-size:16px;color:' + text + '">— ' + e(d.citation) + '</figcaption></figure>';
       case 'button':
-        return '<p style="font-family:Lato,Arial,sans-serif;margin:24px 0"><a href="' + safeUrl(d.url, '#') + '" style="display:inline-block;padding:13px 20px;color:' + text + ';background-color:' + background + ';border:1px solid ' + color + ';border-radius:6px;font-size:18px;font-weight:700;text-decoration:none">' + e(d.label) + '</a></p>';
+        return '<div style="display:flex;flex-wrap:wrap;gap:10px;margin:24px 0;font-family:Lato,Arial,sans-serif">' + items.map(item => '<a href="' + safeUrl(item.url, '#') + '" style="display:inline-block;flex:1 1 180px;padding:13px 20px;color:' + text + ';background-color:' + background + ';border:1px solid ' + color + ';border-radius:6px;font-size:18px;font-weight:700;text-align:center;text-decoration:none">' + e(item.label) + '</a>').join('') + '</div>';
       case 'colored':
         return '<section style="' + base + ';margin:24px 0;padding:22px 24px;color:' + text + ';background-color:' + background + ';border-radius:8px"><h3 style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p></section>';
       case 'insight':
-        return '<aside style="' + base + ';margin:24px 0;padding:20px 22px;border:1px solid #9ccbd4;border-radius:8px;background-color:' + background + '"><div style="display:flex;gap:14px;align-items:flex-start"><span aria-hidden="true" style="display:inline-grid;place-items:center;flex:0 0 38px;height:38px;border-radius:50%;color:' + contrast(color) + ';background-color:' + color + ';font-weight:700">i</span><div><h3 style="font-size:21px;color:' + text + ';margin:0 0 6px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p></div></div></aside>';
+        return '<aside style="' + base + ';margin:24px 0">' + imageTextTable(d.image, d.alt, d.layout, '<h3 style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p>', 'Instructor image placeholder') + '</aside>';
+      case 'instructorInfo': {
+        const email = String(d.email || '').trim();
+        const info = '<h3 style="font-size:25px;color:' + text + ';margin:0 0 12px">' + e(d.name) + '</h3><dl style="margin:0;color:' + text + '"><dt style="font-weight:700">Office</dt><dd style="margin:0 0 9px">' + e(d.office) + '</dd><dt style="font-weight:700">Email</dt><dd style="margin:0 0 9px">' + (email ? '<a href="' + safeUrl('mailto:' + email, '#') + '" style="color:' + text + '">' + e(email) + '</a>' : 'Add email address') + '</dd><dt style="font-weight:700">Office hours</dt><dd style="margin:0 0 14px">' + e(d.hours) + '</dd></dl><div style="padding-top:14px;border-top:1px solid #AFC1CA;color:' + text + '">' + br(d.about) + '</div>';
+        return '<section style="' + base + ';margin:24px 0">' + imageTextTable(d.image, d.alt, d.layout, info, 'Instructor image placeholder') + '</section>';
+      }
+      case 'imageText':
+        return '<section style="' + base + ';margin:24px 0">' + imageTextTable(d.image, d.alt, d.layout, '<h3 style="font-size:25px;color:' + text + ';margin:0 0 10px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p>', 'Content image placeholder') + '</section>';
+      case 'aiPolicy': {
+        const palette = aiPolicyPalette(d.level);
+        const accent = block.color || palette.accent;
+        const allowed = d.level === 'yellow' || d.level === 'green';
+        const parameters = d.level === 'yellow' ? '<div style="margin-top:14px;padding:14px;border:1px solid ' + accent + ';color:' + text + ';background-color:' + background + '"><strong>Instructor-defined parameters:</strong><br>' + br(d.parameters) + '</div>' : '';
+        const responsible = allowed ? '<div style="margin-top:14px;padding:14px;border-left:5px solid ' + accent + ';color:' + text + ';background-color:' + background + '"><strong>Responsible-use expectations:</strong> AI may support your process, but it may not do the work for you. Do not copy and paste AI-generated work as your own. Cite the prompt you used.</div>' : '';
+        return '<section style="' + base + ';margin:24px 0;padding:22px;border:2px solid ' + accent + ';border-left-width:9px;border-radius:8px;color:' + text + ';background-color:' + background + '"><div style="display:flex;gap:16px;align-items:flex-start"><span aria-hidden="true" style="display:inline-grid;place-items:center;flex:0 0 48px;width:48px;height:48px;border-radius:50%;color:' + contrast(accent) + ';background-color:' + accent + ';font-size:25px;font-weight:800">' + palette.badge + '</span><div><h3 style="font-size:24px;color:' + text + ';margin:0 0 7px">' + e(palette.label) + '</h3><p style="color:' + text + ';margin:0"><strong>Meaning:</strong> ' + e(palette.meaning) + '</p></div></div>' + parameters + responsible + '</section>';
+      }
       case 'accordion':
         return '<div style="' + base + ';margin:24px 0">' + items.map(item => '<details style="font-family:Lato,Arial,sans-serif;font-size:19px;border:1px solid ' + color + ';border-radius:8px;margin:0 0 10px;overflow:hidden"><summary style="cursor:pointer;background-color:' + background + ';color:' + text + ';font-weight:700;padding:16px 18px">' + e(item.heading) + '</summary><div style="padding:16px 18px;color:#1F2933;background-color:#FFFFFF">' + br(item.content) + '</div></details>').join('') + '</div>';
       case 'tabs': {
         const id = block.id;
-        const tabButtons = items.map((item, i) => '<button type="button" role="tab" id="' + id + '-tab-' + i + '" aria-controls="' + id + '-panel-' + i + '" aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? '0' : '-1') + '" onclick="var r=this.closest(\'[data-mcc-tabs]\');r.querySelectorAll(\'[role=tab]\').forEach(function(t){t.setAttribute(\'aria-selected\',\'false\');t.tabIndex=-1;t.style.backgroundColor=\'#eef3f5\';t.style.color=\'#182936\'});r.querySelectorAll(\'[role=tabpanel]\').forEach(function(p){p.hidden=true});this.setAttribute(\'aria-selected\',\'true\');this.tabIndex=0;this.style.backgroundColor=\'' + background + '\';this.style.color=\'' + text + '\';document.getElementById(this.getAttribute(\'aria-controls\')).hidden=false" onkeydown="if(event.key===\'ArrowRight\'||event.key===\'ArrowLeft\'){event.preventDefault();var a=Array.from(this.parentNode.querySelectorAll(\'[role=tab]\')),i=a.indexOf(this),n=event.key===\'ArrowRight\'?(i+1)%a.length:(i-1+a.length)%a.length;a[n].click();a[n].focus()}" style="padding:12px 16px;border:1px solid ' + color + ';border-radius:6px 6px 0 0;background-color:' + (i === 0 ? background : '#eef3f5') + ';color:' + (i === 0 ? text : '#182936') + ';font-weight:700;font-size:17px;cursor:pointer">' + e(item.heading) + '</button>').join('');
+        const vertical = d.orientation === 'vertical';
+        const nextKey = vertical ? 'ArrowDown' : 'ArrowRight';
+        const previousKey = vertical ? 'ArrowUp' : 'ArrowLeft';
+        const tabButtons = items.map((item, i) => '<button type="button" role="tab" id="' + id + '-tab-' + i + '" aria-controls="' + id + '-panel-' + i + '" aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? '0' : '-1') + '" onclick="var r=this.closest(\'[data-mcc-tabs]\');r.querySelectorAll(\'[role=tab]\').forEach(function(t){t.setAttribute(\'aria-selected\',\'false\');t.tabIndex=-1;t.style.backgroundColor=\'#EEF3F5\';t.style.color=\'#182936\'});r.querySelectorAll(\'[role=tabpanel]\').forEach(function(p){p.hidden=true});this.setAttribute(\'aria-selected\',\'true\');this.tabIndex=0;this.style.backgroundColor=\'' + background + '\';this.style.color=\'' + text + '\';document.getElementById(this.getAttribute(\'aria-controls\')).hidden=false" onkeydown="if(event.key===\'' + nextKey + '\'||event.key===\'' + previousKey + '\'){event.preventDefault();var a=Array.from(this.parentNode.querySelectorAll(\'[role=tab]\')),i=a.indexOf(this),n=event.key===\'' + nextKey + '\'?(i+1)%a.length:(i-1+a.length)%a.length;a[n].click();a[n].focus()}" style="' + (vertical ? 'display:block;width:100%;text-align:left;' : '') + 'padding:12px 16px;border:1px solid ' + color + ';border-radius:6px;background-color:' + (i === 0 ? background : '#EEF3F5') + ';color:' + (i === 0 ? text : '#182936') + ';font-weight:700;font-size:17px;cursor:pointer">' + e(item.heading) + '</button>').join('');
         const panels = items.map((item, i) => '<div role="tabpanel" id="' + id + '-panel-' + i + '" aria-labelledby="' + id + '-tab-' + i + '"' + (i ? ' hidden' : '') + ' style="padding:20px;border:1px solid ' + color + ';border-radius:0 7px 7px 7px;color:#1F2933;background-color:#FFFFFF">' + br(item.content) + '</div>').join('');
-        return '<div data-mcc-tabs="' + id + '" style="' + base + ';margin:24px 0"><div role="tablist" aria-label="Tabbed content" style="display:flex;flex-wrap:wrap;gap:5px;align-items:flex-end">' + tabButtons + '</div>' + panels + '</div>';
+        return '<div data-mcc-tabs="' + id + '" style="' + base + ';' + (vertical ? 'display:flex;flex-wrap:wrap;align-items:flex-start;gap:12px;' : '') + 'margin:24px 0"><div role="tablist" aria-label="Tabbed content" aria-orientation="' + (vertical ? 'vertical' : 'horizontal') + '" style="display:flex;' + (vertical ? 'flex:1 1 190px;flex-direction:column;align-items:stretch;' : 'flex-wrap:wrap;align-items:flex-end;') + 'gap:5px">' + tabButtons + '</div><div style="' + (vertical ? 'flex:3 1 340px;' : '') + '">' + panels + '</div></div>';
       }
       case 'flip':
         return '<div style="' + base + ';display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:24px 0">' + items.map((item, i) => '<button type="button" aria-pressed="false" onclick="var f=this.querySelector(\'[data-front]\'),b=this.querySelector(\'[data-back]\'),show=this.getAttribute(\'aria-pressed\')!==\'true\';this.setAttribute(\'aria-pressed\',show);f.hidden=show;b.hidden=!show" style="min-height:170px;padding:22px;border:2px solid ' + color + ';border-radius:10px;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:19px;cursor:pointer"><span data-front><strong style="display:block;color:' + text + ';font-size:22px">' + e(item.front) + '</strong><small style="display:block;margin-top:14px;color:' + text + '">Select to reveal</small></span><span data-back hidden><strong style="display:block;color:' + text + ';font-size:18px;margin-bottom:8px">' + e(item.front) + '</strong>' + br(item.back) + '<small style="display:block;margin-top:14px;color:' + text + '">Select to flip back</small></span></button>').join('') + '</div>';
@@ -1025,10 +1115,31 @@
         const id = block.id;
         return '<section data-mcc-checklist style="' + base + ';margin:25px 0;padding:21px;border:1px solid #bdcbd2;border-radius:8px;background-color:' + background + '"><h3 style="font-size:23px;color:' + text + ';margin:0 0 6px">' + e(d.title) + '</h3><p data-progress aria-live="polite" style="margin:0 0 13px;color:' + text + '">0 of ' + items.length + ' complete</p>' + items.map((item, i) => '<label style="display:flex;align-items:flex-start;gap:10px;margin:8px 0;padding:11px;color:' + text + ';background-color:' + background + ';border:1px solid #d2dce1;border-radius:6px"><input type="checkbox" onchange="var r=this.closest(\'[data-mcc-checklist]\'),n=r.querySelectorAll(\'input[type=checkbox]:checked\').length,t=r.querySelectorAll(\'input[type=checkbox]\').length;r.querySelector(\'[data-progress]\').textContent=n+\' of \'+t+\' complete\'" style="width:20px;height:20px;margin-top:3px;accent-color:' + color + '"><span>' + e(item.text) + '</span></label>').join('') + '</section>';
       }
+      case 'storyboard':
+        return '<section style="' + base + ';margin:28px 0;scroll-snap-type:y proximity"><h3 style="font-size:27px;color:' + text + ';margin:0 0 16px">' + e(d.title) + '</h3>' + items.map((item, i) => '<section style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:24px;min-height:390px;margin:0 0 30px;padding:22px;border:1px solid #B8C8D0;border-top:6px solid ' + color + ';scroll-snap-align:start;color:' + text + ';background-color:' + background + '"><div style="position:sticky;top:20px;align-self:flex-start;flex:1 1 300px">' + imageOrPlaceholder(item.image, item.alt, 'Storyboard image ' + (i + 1) + ' placeholder') + '</div><div style="flex:1 1 300px;padding:8px 0"><p style="margin:0 0 5px;color:' + text + ';font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Story section ' + (i + 1) + '</p><h4 style="font-size:25px;color:' + text + ';margin:0 0 10px">' + e(item.heading) + '</h4><p style="color:' + text + ';margin:0">' + br(item.content) + '</p></div></section>').join('') + '</section>';
+      case 'decoder':
+        return '<section style="' + base + ';margin:25px 0;padding:22px;border:2px dashed ' + color + ';border-radius:8px;color:#1F2933;background-color:#F7FAFB"><p style="margin:0 0 14px;color:#1F2933">' + br(d.hint) + '</p><details><summary style="cursor:pointer;padding:13px 16px;border-radius:6px;color:' + text + ';background-color:' + background + ';font-size:19px;font-weight:700">' + e(d.prompt) + '</summary><div style="margin-top:12px;padding:17px;border-left:6px solid ' + color + ';color:#1F2933;background-color:#FFFFFF">' + br(d.content) + '</div></details></section>';
+      case 'hotspot': {
+        const hotspotButtons = items.map((item, i) => {
+          const x = Math.max(5, Math.min(95, parseFloat(item.x) || 50));
+          const y = Math.max(5, Math.min(95, parseFloat(item.y) || 50));
+          return '<button type="button" aria-label="Open ' + attr(item.label) + '" data-label="' + attr(item.label) + '" data-content="' + attr(item.content) + '" onclick="var r=this.closest(\'[data-mcc-hotspots]\'),p=r.querySelector(\'[data-hotspot-panel]\');p.hidden=false;p.querySelector(\'strong\').textContent=this.getAttribute(\'data-label\');p.querySelector(\'span\').textContent=this.getAttribute(\'data-content\');r.querySelectorAll(\'[data-hotspot-button]\').forEach(function(b){b.setAttribute(\'aria-pressed\',\'false\')});this.setAttribute(\'aria-pressed\',\'true\')" data-hotspot-button aria-pressed="false" style="position:absolute;left:' + x + '%;top:' + y + '%;transform:translate(-50%,-50%);display:grid;place-items:center;width:44px;height:44px;padding:0;border:3px solid #FFFFFF;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.35);color:' + contrast(color) + ';background-color:' + color + ';font-family:Lato,Arial,sans-serif;font-size:18px;font-weight:800;cursor:pointer">' + (i + 1) + '</button>';
+        }).join('');
+        const fallback = items.map((item, i) => '<details style="margin:8px 0;border:1px solid #B8C8D0"><summary style="cursor:pointer;padding:10px 13px;color:#173744;background-color:#EEF6F8;font-weight:700">' + (i + 1) + '. ' + e(item.label) + '</summary><div style="padding:12px 13px;color:#1F2933;background-color:#FFFFFF">' + br(item.content) + '</div></details>').join('');
+        return '<section data-mcc-hotspots style="' + base + ';margin:26px 0"><div style="position:relative;min-height:340px;overflow:hidden;border:1px solid #AFC1CA;background-color:#EAF2F5">' + imageOrPlaceholder(d.image, d.alt, 'Hotspot image placeholder') + hotspotButtons + '</div><div data-hotspot-panel role="status" aria-live="polite" hidden style="margin-top:12px;padding:15px;border-left:6px solid ' + color + ';color:#1F2933;background-color:#F7FAFB"><strong style="display:block;margin-bottom:5px"></strong><span></span></div><div style="margin-top:16px"><p style="margin:0 0 7px;color:#1F2933;font-weight:700">Hotspot details</p>' + fallback + '</div></section>';
+      }
+      case 'branching': {
+        const id = block.id;
+        const choiceButton = (label, target) => '<button type="button" aria-expanded="false" aria-controls="' + target + '" onclick="var r=this.closest(\'[data-mcc-branching]\');r.querySelectorAll(\'[data-branch-panel]\').forEach(function(p){p.hidden=true});r.querySelectorAll(\'[aria-controls]\').forEach(function(b){b.setAttribute(\'aria-expanded\',\'false\')});document.getElementById(this.getAttribute(\'aria-controls\')).hidden=false;this.setAttribute(\'aria-expanded\',\'true\')" style="flex:1 1 230px;padding:13px 16px;border:1px solid ' + color + ';border-radius:6px;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:18px;font-weight:700;text-align:left;cursor:pointer">' + e(label) + '</button>';
+        const followup = (label, outcome) => '<details style="margin:9px 0;border:1px solid #B8C8D0;border-radius:6px;overflow:hidden"><summary style="cursor:pointer;padding:12px 14px;color:#173744;background-color:#EEF6F8;font-weight:700">' + e(label) + '</summary><div style="padding:14px;color:#1F2933;background-color:#FFFFFF">' + br(outcome) + '</div></details>';
+        const panel = (suffix, outcome, question, firstLabel, firstOutcome, secondLabel, secondOutcome) => '<section id="' + id + '-' + suffix + '" data-branch-panel hidden style="margin-top:16px;padding:19px;border-left:6px solid ' + color + ';color:#1F2933;background-color:#F7FAFB"><p style="margin:0 0 14px">' + br(outcome) + '</p><h4 style="font-size:20px;color:#173744;margin:0 0 8px">' + e(question) + '</h4>' + followup(firstLabel, firstOutcome) + followup(secondLabel, secondOutcome) + '</section>';
+        return '<section data-mcc-branching style="' + base + ';margin:26px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#FFFFFF"><h3 style="font-size:25px;color:' + color + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="margin:0 0 15px;color:#1F2933">' + br(d.scenario) + '</p><div style="display:flex;flex-wrap:wrap;gap:10px">' + choiceButton(d.choiceA, id + '-path-a') + choiceButton(d.choiceB, id + '-path-b') + '</div>' + panel('path-a', d.outcomeA, d.followA, d.a1, d.a1Outcome, d.a2, d.a2Outcome) + panel('path-b', d.outcomeB, d.followB, d.b1, d.b1Outcome, d.b2, d.b2Outcome) + '</section>';
+      }
       case 'image':
         return '<figure style="' + base + ';margin:26px 0"><img src="' + safeUrl(d.url, 'https://placehold.co/1200x600/003366/FFFFFF?text=Course+image') + '" alt="' + attr(d.alt) + '" style="display:block;width:100%;height:auto;border-radius:8px">' + (d.caption ? '<figcaption style="margin-top:8px;color:' + text + ';font-size:16px;text-align:center">' + e(d.caption) + '</figcaption>' : '') + '</figure>';
       case 'video':
-        return '<div style="' + base + ';position:relative;width:100%;padding-top:56.25%;margin:26px 0;overflow:hidden;border-radius:8px;background-color:#000"><iframe src="' + youtubeEmbed(d.url) + '" title="' + attr(d.title) + '" allowfullscreen loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div>';
+        if (d.mode === 'brightspace') return '<section style="' + base + ';margin:26px 0"><div role="img" aria-label="Brightspace or YuJa video placeholder" style="display:grid;place-items:center;min-height:340px;padding:24px;border:3px dashed #7395A4;color:#173744;background-color:#EAF2F5;font-size:23px;font-weight:700;text-align:center">Brightspace / YuJa video placeholder</div><p style="margin:10px 0 0;color:' + text + ';font-size:17px"><strong>Please add the video after you add this template in Brightspace</strong></p></section>';
+        return '<div style="' + base + ';position:relative;width:100%;padding-top:56.25%;margin:26px 0;overflow:hidden;border-radius:8px;background-color:#000000"><iframe src="' + youtubeEmbed(d.url) + '" title="' + attr(d.title) + '" allowfullscreen loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div>';
       case 'table': {
         const headers = listFromPipes(d.headers)[0] || ['Item','Details'];
         const rows = listFromPipes(d.rows);
@@ -1275,7 +1386,7 @@
   renderTemplateOptions();
   renderLibrary('');
   const requestedTemplate = new URLSearchParams(window.location.search).get('template');
-  const templateMap = { content:'course', instructor:'instructor', module:'module', 'ai-red':'aiRed', 'ai-yellow':'aiYellow', 'ai-green':'aiGreen', blank:'blank' };
+  const templateMap = { content:'course', instructor:'instructor', module:'module', weekly:'weekly', video:'videoPage', blank:'blank' };
   applyTemplate(templateMap[requestedTemplate] || 'blank');
 })();
 </script>
