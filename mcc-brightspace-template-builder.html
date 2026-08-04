@@ -735,11 +735,11 @@
         { heading: 'Example', content: 'Show students a practical example.' },
         { heading: 'Try it', content: 'Invite students to apply what they learned.' }
       ] },
-      fields: [field('orientation', 'Tab layout', 'select', '', { options: [['horizontal','Horizontal tabs'],['vertical','Vertical tabs']] }), field('count', 'Tabs (2–4)', 'number', '', { min: 2, max: 4 })],
+      fields: [field('orientation', 'Tab layout', 'select', '', { options: [['horizontal','Horizontal tabs'],['vertical','Vertical tabs']] }), field('count', 'Tabs (2–3)', 'number', '', { min: 2, max: 3 })],
       repeater: repeater('items', 'Tab', 'count', [field('heading', 'Tab label'), field('content', 'Tab content', 'textarea')])
     },
     flip: {
-      label: 'Flip cards', category: 'Interactive',
+      label: 'Flip card', category: 'Interactive',
       defaults: { count: 3, items: [
         { front: 'Key term', back: 'Definition or explanation' },
         { front: 'Concept', back: 'Example or application' },
@@ -758,6 +758,26 @@
       fields: [field('count', 'Timeline items (2–6)', 'number', '', { min: 2, max: 6 })],
       repeater: repeater('items', 'Timeline item', 'count', [field('heading', 'Heading'), field('content', 'Content', 'textarea')])
     },
+    carousel: {
+      label: 'Story or image carousel', category: 'Interactive', isNew: true,
+      defaults: { title: 'Explore the story', instructions: 'Use Previous and Next to move through the slides.', count: 3, items: [
+        { heading: 'Opening', content: 'Introduce the story, concept, or first image.', image: '', alt: 'Describe the first image.' },
+        { heading: 'Development', content: 'Explain what changes or what learners should notice next.', image: '', alt: 'Describe the second image.' },
+        { heading: 'Takeaway', content: 'Conclude the story and reinforce the central idea.', image: '', alt: 'Describe the final image.' }
+      ] },
+      fields: [field('title', 'Carousel heading'), field('instructions', 'Learner instructions', 'textarea'), field('count', 'Slides (2–6)', 'number', '', { min: 2, max: 6 })],
+      repeater: repeater('items', 'Slide', 'count', [field('heading', 'Slide heading'), field('content', 'Slide text', 'textarea'), field('image', 'Optional image URL', 'url'), field('alt', 'Image alternative text', 'textarea')])
+    },
+    interactiveTimeline: {
+      label: 'Interactive timeline', category: 'Interactive', isNew: true,
+      defaults: { title: 'Explore the timeline', instructions: 'Select each milestone to reveal its details.', count: 3, items: [
+        { label: 'First', heading: 'Milestone 1', content: 'Describe the first milestone, date, or phase.' },
+        { label: 'Next', heading: 'Milestone 2', content: 'Explain what happens next and why it matters.' },
+        { label: 'Final', heading: 'Milestone 3', content: 'Describe the final milestone or outcome.' }
+      ] },
+      fields: [field('title', 'Timeline heading'), field('instructions', 'Learner instructions', 'textarea'), field('count', 'Milestones (2–6)', 'number', '', { min: 2, max: 6 })],
+      repeater: repeater('items', 'Milestone', 'count', [field('label', 'Button label or date'), field('heading', 'Milestone heading'), field('content', 'Milestone details', 'textarea')])
+    },
     reveal: {
       label: 'Click and reveal', category: 'Interactive', isNew: true,
       defaults: { prompt: 'Think about your answer before revealing the explanation.', button: 'Reveal explanation', content: 'Explain the answer, key idea, or instructor reasoning here.' },
@@ -775,7 +795,7 @@
       repeater: repeater('items', 'Choice', 'count', [field('option', 'Answer choice'), field('feedback', 'Feedback', 'textarea')])
     },
     scenario: {
-      label: 'Interactive scenario', category: 'Interactive', isNew: true,
+      label: 'Decision scenario', category: 'Interactive', isNew: true,
       defaults: { title: 'What would you do?', scenario: 'Describe a realistic situation and ask students to choose the strongest response.', count: 3, correct: 1, items: [
         { option: 'Choose the strongest response', feedback: 'Good choice. Explain why this response works well.' },
         { option: 'Choose a tempting but incomplete response', feedback: 'This might help, but it misses an important consideration.' },
@@ -785,7 +805,7 @@
       repeater: repeater('items', 'Choice', 'count', [field('option', 'Response option'), field('feedback', 'Detailed feedback', 'textarea')])
     },
     process: {
-      label: 'Step-through process', category: 'Interactive', isNew: true,
+      label: 'Guided stepper', category: 'Interactive', isNew: true,
       defaults: { title: 'Explore the process', count: 4, items: [
         { heading: 'Prepare', content: 'Gather what you need and review the goal.' },
         { heading: 'Plan', content: 'Choose an approach and identify the next action.' },
@@ -796,7 +816,7 @@
       repeater: repeater('items', 'Step', 'count', [field('heading', 'Step label'), field('content', 'Step content', 'textarea')])
     },
     interactiveChecklist: {
-      label: 'Interactive checklist', category: 'Interactive', isNew: true,
+      label: 'Interactive checklist', category: 'Internal', isNew: true,
       defaults: { title: 'Track your progress', count: 4, items: [
         { text: 'Review the learning objectives' },
         { text: 'Read or watch the lesson content' },
@@ -807,7 +827,7 @@
       repeater: repeater('items', 'Checklist item', 'count', [field('text', 'Item text')])
     },
     storyboard: {
-      label: 'Sticky storyboard', category: 'Interactive', isNew: true,
+      label: 'Sticky storyboard', category: 'Internal', isNew: true,
       defaults: { title: 'Explore the story', count: 3, items: [
         { heading: 'First idea', content: 'Introduce the first concept or moment in the story.', image: '', alt: 'Describe the first visual.' },
         { heading: 'Next idea', content: 'Explain how the story, process, or concept develops.', image: '', alt: 'Describe the second visual.' },
@@ -817,12 +837,12 @@
       repeater: repeater('items', 'Story section', 'count', [field('heading', 'Section heading'), field('content', 'Section text', 'textarea'), field('image', 'Image URL', 'url'), field('alt', 'Image alternative text', 'textarea')])
     },
     decoder: {
-      label: 'Secret decoder reveal', category: 'Interactive', isNew: true,
+      label: 'Secret decoder reveal', category: 'Internal', isNew: true,
       defaults: { prompt: 'Decode the hidden explanation', hint: 'Think about the question before opening the decoder.', content: 'Place the optional hint, answer, or explanation here.' },
       fields: [field('prompt', 'Decoder label'), field('hint', 'Visible prompt or hint', 'textarea'), field('content', 'Revealed answer', 'textarea')]
     },
     hotspot: {
-      label: 'Accessible image hotspots', category: 'Interactive', isNew: true,
+      label: 'Accessible image hotspots', category: 'Internal', isNew: true,
       defaults: { image: '', alt: 'Describe the full image and its instructional purpose.', count: 2, items: [
         { label: 'Hotspot 1', content: 'Explain the first highlighted area.', x: 28, y: 35 },
         { label: 'Hotspot 2', content: 'Explain the second highlighted area.', x: 70, y: 62 }
@@ -831,7 +851,7 @@
       repeater: repeater('items', 'Hotspot', 'count', [field('label', 'Accessible label'), field('content', 'Reveal text', 'textarea'), field('x', 'Horizontal position (%)', 'number', '', { min: 5, max: 95 }), field('y', 'Vertical position (%)', 'number', '', { min: 5, max: 95 })])
     },
     branching: {
-      label: 'Branching scenario', category: 'Interactive', isNew: true,
+      label: 'Branching scenario', category: 'Internal', isNew: true,
       defaults: { title: 'Choose your path', scenario: 'Describe the situation and ask the learner to choose a response.', choiceA: 'Choose path A', outcomeA: 'Explain the immediate result of path A.', followA: 'What should happen next?', a1: 'Follow-up choice A1', a1Outcome: 'Explain the result of this follow-up choice.', a2: 'Follow-up choice A2', a2Outcome: 'Explain the result of this follow-up choice.', choiceB: 'Choose path B', outcomeB: 'Explain the immediate result of path B.', followB: 'What should happen next?', b1: 'Follow-up choice B1', b1Outcome: 'Explain the result of this follow-up choice.', b2: 'Follow-up choice B2', b2Outcome: 'Explain the result of this follow-up choice.' },
       fields: [field('title', 'Scenario heading'), field('scenario', 'Starting situation', 'textarea'), field('choiceA', 'First choice A'), field('outcomeA', 'Path A outcome', 'textarea'), field('followA', 'Path A follow-up question'), field('a1', 'Path A follow-up choice 1'), field('a1Outcome', 'Path A follow-up result 1', 'textarea'), field('a2', 'Path A follow-up choice 2'), field('a2Outcome', 'Path A follow-up result 2', 'textarea'), field('choiceB', 'First choice B'), field('outcomeB', 'Path B outcome', 'textarea'), field('followB', 'Path B follow-up question'), field('b1', 'Path B follow-up choice 1'), field('b1Outcome', 'Path B follow-up result 1', 'textarea'), field('b2', 'Path B follow-up choice 2'), field('b2Outcome', 'Path B follow-up result 2', 'textarea')]
     },
@@ -961,7 +981,9 @@
     const cats = ['Text','Featured','Interactive','Media','Data','Layout'];
     let total = 0;
     el.library.innerHTML = cats.map(cat => {
+      const interactiveOrder = ['accordion','tabs','flip','timeline','carousel','interactiveTimeline','scenario','knowledge','reveal','process'];
       const buttons = Object.entries(defs).filter(([,d]) => d.category === cat && (!q || d.label.toLowerCase().includes(q)))
+        .sort((a, b) => cat === 'Interactive' ? interactiveOrder.indexOf(a[0]) - interactiveOrder.indexOf(b[0]) : 0)
         .map(([key,d]) => {
           total++;
           return '<button class="add-block" type="button" data-add="' + key + '"><span class="plus" aria-hidden="true">+</span><span>' + e(d.label) + '</span>' + (d.isNew ? '<span class="new-tag">New</span>' : '') + '</button>';
@@ -974,7 +996,7 @@
 
   function blockColor(block) { return block.color || state.accent; }
 
-  const CONTROL_BACKGROUND_TYPES = new Set(['button','colored','accordion','tabs','timeline','reveal','knowledge','process','table','decoder','branching']);
+  const CONTROL_BACKGROUND_TYPES = new Set(['button','colored','accordion','tabs','flip','timeline','carousel','interactiveTimeline','reveal','knowledge','scenario','process','table','decoder','branching']);
   function aiPolicyPalette(level) {
     if (level === 'red') return { background: '#FDECEB', text: '#4A1716', accent: '#A22522', badge: 'R', label: 'Red Light: No AI Allowed', meaning: 'AI is entirely prohibited.' };
     if (level === 'green') return { background: '#E5F5EB', text: '#103B25', accent: '#167442', badge: 'G', label: 'Green Light: Full AI Use Allowed', meaning: 'AI is permitted without restrictions, provided it’s used ethically.' };
@@ -1094,6 +1116,22 @@
         return '<div style="' + base + ';display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:24px 0">' + items.map((item, i) => '<button type="button" aria-pressed="false" onclick="var f=this.querySelector(\'[data-front]\'),b=this.querySelector(\'[data-back]\'),show=this.getAttribute(\'aria-pressed\')!==\'true\';this.setAttribute(\'aria-pressed\',show);f.hidden=show;b.hidden=!show" style="min-height:170px;padding:22px;border:2px solid ' + color + ';border-radius:10px;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:19px;cursor:pointer"><span data-front><strong style="display:block;color:' + text + ';font-size:22px">' + e(item.front) + '</strong><small style="display:block;margin-top:14px;color:' + text + '">Select to reveal</small></span><span data-back hidden><strong style="display:block;color:' + text + ';font-size:18px;margin-bottom:8px">' + e(item.front) + '</strong>' + br(item.back) + '<small style="display:block;margin-top:14px;color:' + text + '">Select to flip back</small></span></button>').join('') + '</div>';
       case 'timeline':
         return '<ol style="' + base + ';margin:26px 0;padding:0;list-style:none">' + items.map((item, i) => '<li style="position:relative;margin:0 0 0 18px;padding:0 0 24px 34px;border-left:3px solid ' + color + '"><span aria-hidden="true" style="position:absolute;left:-16px;top:0;display:grid;place-items:center;width:29px;height:29px;border-radius:50%;color:' + text + ';background-color:' + background + ';font-size:14px;font-weight:700">' + (i + 1) + '</span><h3 style="font-size:21px;color:' + color + ';margin:0 0 5px">' + e(item.heading) + '</h3><p style="color:#1F2933;margin:0">' + br(item.content) + '</p></li>').join('') + '</ol>';
+      case 'carousel': {
+        const slides = items.map((item, i) => {
+          const media = item.image ? '<div style="margin-bottom:18px"><img src="' + safeUrl(item.image, '#') + '" alt="' + attr(item.alt) + '" style="display:block;width:100%;max-height:460px;object-fit:cover;border-radius:7px"></div>' : '';
+          return '<section data-carousel-slide' + (i ? ' hidden' : '') + ' aria-label="Slide ' + (i + 1) + ' of ' + items.length + '" style="padding:22px;border:1px solid #B8C8D0;border-top:6px solid ' + color + ';border-radius:7px;color:#1F2933;background-color:#FFFFFF">' + media + '<p style="margin:0 0 5px;color:' + color + ';font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Slide ' + (i + 1) + '</p><h4 style="margin:0 0 9px;color:#001B3B;font-size:25px">' + e(item.heading) + '</h4>' + (item.content ? '<p style="margin:0;color:#1F2933">' + br(item.content) + '</p>' : '') + '</section>';
+        }).join('');
+        const dots = items.map((item, i) => '<button type="button" data-carousel-dot data-index="' + i + '" aria-label="Show slide ' + (i + 1) + '" aria-pressed="' + (i === 0) + '" onclick="var r=this.closest(\'[data-mcc-carousel]\'),s=Array.from(r.querySelectorAll(\'[data-carousel-slide]\')),d=Array.from(r.querySelectorAll(\'[data-carousel-dot]\')),n=parseInt(this.getAttribute(\'data-index\'),10);s.forEach(function(x,j){x.hidden=j!==n});d.forEach(function(x,j){x.setAttribute(\'aria-pressed\',j===n);x.style.backgroundColor=j===n?\'' + color + '\':\'#D7E1E6\'});r.setAttribute(\'data-current\',n);r.querySelector(\'[data-carousel-status]\').textContent=\'Slide \'+(n+1)+\' of \'+s.length" style="width:14px;height:14px;padding:0;border:1px solid ' + color + ';border-radius:50%;background-color:' + (i === 0 ? color : '#D7E1E6') + ';cursor:pointer"></button>').join('');
+        const previous = "var r=this.closest('[data-mcc-carousel]'),s=Array.from(r.querySelectorAll('[data-carousel-slide]')),d=Array.from(r.querySelectorAll('[data-carousel-dot]')),i=parseInt(r.getAttribute('data-current')||'0',10),n=(i-1+s.length)%s.length;s.forEach(function(x,j){x.hidden=j!==n});d.forEach(function(x,j){x.setAttribute('aria-pressed',j===n);x.style.backgroundColor=j===n?'" + color + "':'#D7E1E6'});r.setAttribute('data-current',n);r.querySelector('[data-carousel-status]').textContent='Slide '+(n+1)+' of '+s.length";
+        const next = "var r=this.closest('[data-mcc-carousel]'),s=Array.from(r.querySelectorAll('[data-carousel-slide]')),d=Array.from(r.querySelectorAll('[data-carousel-dot]')),i=parseInt(r.getAttribute('data-current')||'0',10),n=(i+1)%s.length;s.forEach(function(x,j){x.hidden=j!==n});d.forEach(function(x,j){x.setAttribute('aria-pressed',j===n);x.style.backgroundColor=j===n?'" + color + "':'#D7E1E6'});r.setAttribute('data-current',n);r.querySelector('[data-carousel-status]').textContent='Slide '+(n+1)+' of '+s.length";
+        return '<section data-mcc-carousel data-current="0" style="' + base + ';margin:26px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#F7FAFB"><h3 style="margin:0 0 5px;color:' + color + ';font-size:26px">' + e(d.title) + '</h3><p style="margin:0 0 16px;color:#1F2933">' + br(d.instructions) + '</p>' + slides + '<div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-top:15px"><button type="button" onclick="' + attr(previous) + '" style="padding:10px 15px;border:1px solid ' + color + ';border-radius:6px;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer">Previous</button><div style="display:flex;align-items:center;gap:8px">' + dots + '</div><button type="button" onclick="' + attr(next) + '" style="padding:10px 15px;border:1px solid ' + color + ';border-radius:6px;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer">Next</button></div><p data-carousel-status aria-live="polite" style="margin:10px 0 0;color:#1F2933;font-size:16px;text-align:center">Slide 1 of ' + items.length + '</p></section>';
+      }
+      case 'interactiveTimeline': {
+        const id = block.id;
+        const controls = items.map((item, i) => '<button type="button" data-time-button data-index="' + i + '" aria-controls="' + id + '-milestone-' + i + '" aria-pressed="' + (i === 0) + '" onclick="var r=this.closest(\'[data-mcc-interactive-timeline]\'),n=parseInt(this.getAttribute(\'data-index\'),10);r.querySelectorAll(\'[data-time-button]\').forEach(function(b,j){b.setAttribute(\'aria-pressed\',j===n);b.style.backgroundColor=j===n?\'' + background + '\':\'#FFFFFF\';b.style.color=j===n?\'' + text + '\':\'#173744\'});r.querySelectorAll(\'[data-time-panel]\').forEach(function(p,j){p.hidden=j!==n})" style="position:relative;flex:1 1 125px;min-width:110px;padding:16px 12px;border:2px solid ' + color + ';border-radius:8px;color:' + (i === 0 ? text : '#173744') + ';background-color:' + (i === 0 ? background : '#FFFFFF') + ';font-family:Lato,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer"><span aria-hidden="true" style="display:block;width:18px;height:18px;margin:0 auto 7px;border:4px solid #FFFFFF;border-radius:50%;box-shadow:0 0 0 2px ' + color + ';background-color:' + color + '"></span>' + e(item.label) + '</button>').join('');
+        const panels = items.map((item, i) => '<section id="' + id + '-milestone-' + i + '" data-time-panel' + (i ? ' hidden' : '') + ' style="margin-top:16px;padding:20px;border-left:7px solid ' + color + ';border-radius:0 7px 7px 0;color:#1F2933;background-color:#FFFFFF"><p style="margin:0 0 5px;color:' + color + ';font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">' + e(item.label) + '</p><h4 style="margin:0 0 8px;color:#001B3B;font-size:23px">' + e(item.heading) + '</h4><p style="margin:0;color:#1F2933">' + br(item.content) + '</p></section>').join('');
+        return '<section data-mcc-interactive-timeline style="' + base + ';margin:26px 0;padding:22px;border:1px solid #B8C8D0;border-radius:9px;color:#1F2933;background-color:#F7FAFB"><h3 style="margin:0 0 5px;color:' + color + ';font-size:26px">' + e(d.title) + '</h3><p style="margin:0 0 16px;color:#1F2933">' + br(d.instructions) + '</p><div role="group" aria-label="Timeline milestones" style="display:flex;flex-wrap:wrap;gap:9px;border-bottom:4px solid ' + color + ';padding-bottom:13px">' + controls + '</div><div aria-live="polite">' + panels + '</div></section>';
+      }
       case 'reveal':
         return '<section data-mcc-reveal style="' + base + ';margin:24px 0;padding:22px;border:1px solid #b8c8d0;border-radius:8px;background-color:#f7fafb"><p style="color:#1F2933;margin:0 0 14px;font-weight:700">' + br(d.prompt) + '</p><button type="button" aria-expanded="false" onclick="var p=this.parentNode.querySelector(\'[data-reveal-panel]\'),open=this.getAttribute(\'aria-expanded\')!==\'true\';this.setAttribute(\'aria-expanded\',open);p.hidden=!open;this.textContent=open?\'Hide explanation\':this.getAttribute(\'data-label\')" data-label="' + attr(d.button) + '" style="padding:11px 16px;border:0;border-radius:6px;color:' + text + ';background-color:' + background + ';font-size:17px;font-weight:700;cursor:pointer">' + e(d.button) + '</button><div data-reveal-panel hidden style="margin-top:15px;padding:16px;border-left:5px solid ' + color + ';color:#1F2933;background-color:#FFFFFF">' + br(d.content) + '</div></section>';
       case 'knowledge': {
