@@ -78,6 +78,7 @@
     color: var(--mcc-navy);
     text-decoration: none;
   }
+  .header-logo { display:block; width:min(285px,55vw); height:auto; }
   .mcc-lockup { display:flex; align-items:center; gap:12px; }
   .mcc-mark {
     display:grid; place-items:center; width:61px; height:61px; border:7px solid var(--mcc-blue);
@@ -475,7 +476,7 @@
   </div>
   <div class="brand-row">
     <a class="brand" href="index.html" aria-label="MCC CourseMaker home">
-      <span class="mcc-lockup" aria-hidden="true"><span class="mcc-mark">M</span><span class="mcc-words">McLennan<small>Community College</small></span></span>
+      <img class="header-logo" src="https://raw.githubusercontent.com/jghazzagh/coursebuild/refs/heads/main/mcclogoidi.png" alt="McLennan Community College">
       <span class="brand-name">CourseMaker</span>
     </a>
     <form class="site-search" id="site-search" role="search">
@@ -489,6 +490,7 @@
       <li><a href="index.html">Build</a></li>
       <li><a href="templates.html">Templates</a></li>
       <li><a href="mcc-brightspace-template-builder.html" aria-current="page">Page Builder</a></li>
+      <li><a href="building-blocks.html">Block Guide</a></li>
       <li><a href="widget-builder.html">Widget Builder</a></li>
       <li><a href="support.html">Support</a></li>
     </ul>
@@ -585,6 +587,7 @@
       <h2>Build</h2>
       <a href="templates.html">Page templates</a>
       <a href="mcc-brightspace-template-builder.html">Page builder</a>
+      <a href="building-blocks.html">Building block guide</a>
       <a href="widget-builder.html">Widget builder</a>
     </div>
     <div>
@@ -794,6 +797,17 @@
       fields: [field('question', 'Question', 'textarea'), field('count', 'Answer choices (2–4)', 'number', '', { min: 2, max: 4 }), field('correct', 'Correct choice', 'dynamic-select')],
       repeater: repeater('items', 'Choice', 'count', [field('option', 'Answer choice'), field('feedback', 'Feedback', 'textarea')])
     },
+    multipleChoice: {
+      label: 'Multiple choice question', category: 'Interactive', isNew: true,
+      defaults: { question: 'Which answer best demonstrates the concept?', count: 4, correct: 1, items: [
+        { option: 'Correct answer', feedback: 'Correct. Explain why this answer best applies the concept.' },
+        { option: 'Plausible distractor', feedback: 'Not quite. Address the misconception and point learners back to the relevant idea.' },
+        { option: 'Another distractor', feedback: 'Not quite. Explain what makes this option incomplete or inaccurate.' },
+        { option: 'Final distractor', feedback: 'Not quite. Suggest what the learner should review before trying again.' }
+      ] },
+      fields: [field('question', 'Question', 'textarea'), field('count', 'Answer choices (2–6)', 'number', '', { min: 2, max: 6 }), field('correct', 'Correct answer', 'dynamic-select')],
+      repeater: repeater('items', 'Answer', 'count', [field('option', 'Answer text'), field('feedback', 'Feedback for this answer', 'textarea')])
+    },
     scenario: {
       label: 'Decision scenario', category: 'Interactive', isNew: true,
       defaults: { title: 'What would you do?', scenario: 'Describe a realistic situation and ask students to choose the strongest response.', count: 3, correct: 1, items: [
@@ -981,7 +995,7 @@
     const cats = ['Text','Featured','Interactive','Media','Data','Layout'];
     let total = 0;
     el.library.innerHTML = cats.map(cat => {
-      const interactiveOrder = ['accordion','tabs','flip','timeline','carousel','interactiveTimeline','scenario','knowledge','reveal','process'];
+      const interactiveOrder = ['accordion','tabs','flip','timeline','carousel','interactiveTimeline','scenario','knowledge','multipleChoice','reveal','process'];
       const buttons = Object.entries(defs).filter(([,d]) => d.category === cat && (!q || d.label.toLowerCase().includes(q)))
         .sort((a, b) => cat === 'Interactive' ? interactiveOrder.indexOf(a[0]) - interactiveOrder.indexOf(b[0]) : 0)
         .map(([key,d]) => {
@@ -996,7 +1010,7 @@
 
   function blockColor(block) { return block.color || state.accent; }
 
-  const CONTROL_BACKGROUND_TYPES = new Set(['button','colored','accordion','tabs','flip','timeline','carousel','interactiveTimeline','reveal','knowledge','scenario','process','table','decoder','branching']);
+  const CONTROL_BACKGROUND_TYPES = new Set(['button','colored','accordion','tabs','flip','timeline','carousel','interactiveTimeline','reveal','knowledge','multipleChoice','scenario','process','table','decoder','branching']);
   function aiPolicyPalette(level) {
     if (level === 'red') return { background: '#FDECEB', text: '#4A1716', accent: '#A22522', badge: 'R', label: 'Red Light: No AI Allowed', meaning: 'AI is entirely prohibited.' };
     if (level === 'green') return { background: '#E5F5EB', text: '#103B25', accent: '#167442', badge: 'G', label: 'Green Light: Full AI Use Allowed', meaning: 'AI is permitted without restrictions, provided it’s used ethically.' };
@@ -1138,6 +1152,14 @@
         const qid = block.id + '-question';
         const opts = items.map((item, i) => '<label style="display:block;margin:9px 0;padding:12px;border:1px solid #c3d0d6;border-radius:6px;cursor:pointer"><input type="radio" name="' + qid + '" value="' + (i + 1) + '" data-feedback="' + attr(item.feedback) + '" style="margin-right:9px">' + e(item.option) + '</label>').join('');
         return '<section data-mcc-quiz data-correct="' + e(d.correct) + '" style="' + base + ';margin:25px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px"><h3 style="font-size:22px;color:' + color + ';margin:0 0 13px">Knowledge check</h3><p style="color:#1F2933;margin:0 0 12px;font-weight:700">' + br(d.question) + '</p><div role="radiogroup" aria-label="Answer choices">' + opts + '</div><button type="button" onclick="var r=this.closest(\'[data-mcc-quiz]\'),c=r.querySelector(\'input:checked\'),f=r.querySelector(\'[data-quiz-feedback]\');if(!c){f.textContent=\'Choose an answer before checking.\';f.style.backgroundColor=\'#fff4d6\';f.hidden=false;return}var ok=c.value===r.getAttribute(\'data-correct\');f.textContent=(ok?\'Correct. \':\'Not quite. \')+c.getAttribute(\'data-feedback\');f.style.backgroundColor=ok?\'#e5f5eb\':\'#fff0ed\';f.hidden=false" style="margin-top:12px;padding:11px 16px;border:0;border-radius:6px;color:' + text + ';background-color:' + background + ';font-size:17px;font-weight:700;cursor:pointer">Check answer</button><div data-quiz-feedback role="status" aria-live="polite" hidden style="margin-top:13px;padding:14px;color:#1F2933;border-radius:6px"></div></section>';
+      }
+      case 'multipleChoice': {
+        const qid = block.id + '-mcq';
+        const correctNumber = Math.max(1, Math.min(items.length, parseInt(d.correct, 10) || 1));
+        const correctItem = items[correctNumber - 1] || items[0] || { option: 'Correct answer', feedback: '' };
+        const answers = items.map((item, i) => '<div style="margin:10px 0"><input type="radio" id="' + qid + '-answer-' + i + '" name="' + qid + '-answer" value="' + (i + 1) + '" data-feedback="' + attr(item.feedback) + '" style="width:20px;height:20px;vertical-align:middle;margin:0 8px 0 0;accent-color:' + color + '"> <label for="' + qid + '-answer-' + i + '" style="font-family:Lato,Arial,sans-serif;font-size:19px;color:#1F2933;vertical-align:middle">' + e(item.option) + '</label></div>').join('');
+        const checkCode = "var f=this.form,a=f.querySelector('input[name=\"" + qid + "-answer\"]:checked'),o=f.querySelector('[data-mcq-feedback]'),r=o.querySelector('[data-mcq-result]'),m=o.querySelector('[data-mcq-message]');o.style.display='block';if(!a){r.textContent='Choose an answer.';m.textContent='Select one option before checking.';o.style.borderLeft='6px solid #9A6700';o.style.backgroundColor='#FFF4D6'}else{var ok=a.value===f.getAttribute('data-correct');r.textContent=ok?'Correct.':'Not quite.';m.textContent=a.getAttribute('data-feedback');o.style.borderLeft='6px solid '+(ok?'#18794E':'#B42318');o.style.backgroundColor=ok?'#EAF6EE':'#FCECEC'}o.focus()";
+        return '<section style="' + base + ';margin:28px 0"><h2 style="font-family:Lato,Arial,sans-serif;color:' + color + ';font-size:30px;line-height:1.25;margin:40px 0 12px">Knowledge check</h2><form id="' + qid + '" data-correct="' + correctNumber + '" style="border:1px solid #C9D7DE;border-radius:10px;background-color:#F3F7F8;padding:22px 24px;margin:0 0 28px;box-sizing:border-box" onsubmit="return false"><fieldset style="border:0;padding:0;margin:0"><legend style="font-family:Lato,Arial,sans-serif;color:#001B3B;font-size:22px;font-weight:bold;line-height:1.4;margin:0 0 16px;padding:0">' + br(d.question) + '</legend>' + answers + '<button type="button" onclick="' + attr(checkCode) + '" style="font-family:Lato,Arial,sans-serif;font-size:19px;font-weight:bold;background-color:' + color + ';color:' + contrast(color) + ';border:2px solid ' + color + ';border-radius:7px;padding:12px 20px;margin-top:8px;cursor:pointer">Check my answer</button><div data-mcq-feedback role="status" aria-live="polite" style="display:none;font-family:Lato,Arial,sans-serif;font-size:19px;line-height:1.65;margin:20px 0 0;padding:18px 20px;border-radius:0 8px 8px 0;box-sizing:border-box;color:#1F2933" tabindex="-1"><strong data-mcq-result style="display:block;margin-bottom:4px"></strong><span data-mcq-message></span></div></fieldset></form><noscript><details style="font-family:Lato,Arial,sans-serif;font-size:19px;border:1px solid ' + color + ';border-radius:8px;margin:0 0 28px;overflow:hidden"><summary style="cursor:pointer;background-color:' + color + ';color:' + contrast(color) + ';font-weight:bold;padding:16px 18px">Reveal the knowledge-check answer</summary><div style="font-family:Lato,Arial,sans-serif;font-size:19px;color:#1F2933;line-height:1.65;padding:16px 18px;background-color:#FFFFFF"><p style="margin:0"><strong>Answer: ' + e(correctItem.option) + '.</strong> ' + br(correctItem.feedback) + '</p></div></details></noscript></section>';
       }
       case 'scenario': {
         const choices = items.map((item, i) => '<button type="button" data-choice="' + (i + 1) + '" data-feedback="' + attr(item.feedback) + '" onclick="var r=this.closest(\'[data-mcc-scenario]\'),f=r.querySelector(\'[data-scenario-feedback]\'),ok=this.getAttribute(\'data-choice\')===r.getAttribute(\'data-correct\');r.querySelectorAll(\'[data-choice]\').forEach(function(b){b.style.outline=\'none\'});this.style.outline=\'3px solid ' + color + '\';f.textContent=(ok?\'Recommended response. \':\'Consider the impact. \')+this.getAttribute(\'data-feedback\');f.style.backgroundColor=ok?\'#e5f5eb\':\'#fff4d6\';f.hidden=false" style="display:block;width:100%;margin:9px 0;padding:13px 15px;border:1px solid ' + color + ';border-radius:6px;color:' + text + ';background-color:' + background + ';text-align:left;font-family:Lato,Arial,sans-serif;font-size:18px;cursor:pointer">' + e(item.option) + '</button>').join('');
