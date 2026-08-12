@@ -676,9 +676,9 @@
       fields: [field('content', 'Paragraph text', 'textarea')]
     },
     checklist: {
-      label: 'Bulleted list', category: 'Text',
+      label: 'Checklist', category: 'Text',
       defaults: { title: 'Key points', items: 'Add the first point\nAdd the second point\nAdd the third point' },
-      fields: [field('title', 'List heading'), field('items', 'Bullet items', 'textarea', 'Place one item on each line.')]
+      fields: [field('title', 'Checklist heading'), field('items', 'Checklist items', 'textarea', 'Place one item on each line.')]
     },
     callout: {
       label: 'Callout box', category: 'Featured',
@@ -830,7 +830,7 @@
       repeater: repeater('items', 'Step', 'count', [field('heading', 'Step label'), field('content', 'Step content', 'textarea')])
     },
     interactiveChecklist: {
-      label: 'Interactive checklist', category: 'Internal', isNew: true,
+      label: 'Interactive checklist', category: 'Interactive', isNew: true,
       defaults: { title: 'Track your progress', count: 4, items: [
         { text: 'Review the learning objectives' },
         { text: 'Read or watch the lesson content' },
@@ -995,7 +995,7 @@
     const cats = ['Text','Featured','Interactive','Media','Data','Layout'];
     let total = 0;
     el.library.innerHTML = cats.map(cat => {
-      const interactiveOrder = ['accordion','tabs','flip','timeline','carousel','interactiveTimeline','scenario','knowledge','multipleChoice','reveal','process'];
+      const interactiveOrder = ['accordion','tabs','flip','timeline','interactiveChecklist','carousel','interactiveTimeline','scenario','knowledge','multipleChoice','reveal','process'];
       const buttons = Object.entries(defs).filter(([,d]) => d.category === cat && (!q || d.label.toLowerCase().includes(q)))
         .sort((a, b) => cat === 'Interactive' ? interactiveOrder.indexOf(a[0]) - interactiveOrder.indexOf(b[0]) : 0)
         .map(([key,d]) => {
@@ -1085,7 +1085,7 @@
       case 'paragraph':
         return '<p style="' + base + ';margin:0 0 22px">' + br(d.content) + '</p>';
       case 'checklist':
-        return '<section style="' + base + ';margin:20px 0"><h3 style="font-size:22px;color:' + text + ';margin:0 0 10px">' + e(d.title) + '</h3><ul style="color:' + text + ';margin:0;padding-left:28px">' + lines(d.items).map(item => '<li style="color:' + text + ';margin:7px 0">' + e(item) + '</li>').join('') + '</ul></section>';
+        return '<section style="' + base + ';margin:24px 0"><h3 style="font-family:Lato,Arial,sans-serif;font-size:22px;color:' + text + ';margin:0 0 12px">' + e(d.title) + '</h3><ul role="list" style="margin:0;padding:0;list-style:none;color:' + text + '">' + lines(d.items).map((item, i, all) => '<li style="display:flex;align-items:flex-start;gap:13px;margin:0;padding:12px 0;' + (i < all.length - 1 ? 'border-bottom:1px solid #D7E1E6;' : '') + 'color:' + text + ';font-family:Lato,Arial,sans-serif;font-size:19px;line-height:1.65"><span aria-hidden="true" style="display:block;flex:0 0 19px;width:19px;height:7px;margin-top:12px;border-radius:2px;background-color:' + color + '"></span><span style="display:block;flex:1 1 auto;font-family:Lato,Arial,sans-serif;font-size:19px;color:' + text + '">' + e(item) + '</span></li>').join('') + '</ul></section>';
       case 'callout':
         {
           const palette = calloutPalette(d.style);
@@ -1173,7 +1173,7 @@
       }
       case 'interactiveChecklist': {
         const id = block.id;
-        return '<section data-mcc-checklist style="' + base + ';margin:25px 0;padding:21px;border:1px solid #bdcbd2;border-radius:8px;background-color:' + background + '"><h3 style="font-size:23px;color:' + text + ';margin:0 0 6px">' + e(d.title) + '</h3><p data-progress aria-live="polite" style="margin:0 0 13px;color:' + text + '">0 of ' + items.length + ' complete</p>' + items.map((item, i) => '<label style="display:flex;align-items:flex-start;gap:10px;margin:8px 0;padding:11px;color:' + text + ';background-color:' + background + ';border:1px solid #d2dce1;border-radius:6px"><input type="checkbox" onchange="var r=this.closest(\'[data-mcc-checklist]\'),n=r.querySelectorAll(\'input[type=checkbox]:checked\').length,t=r.querySelectorAll(\'input[type=checkbox]\').length;r.querySelector(\'[data-progress]\').textContent=n+\' of \'+t+\' complete\'" style="width:20px;height:20px;margin-top:3px;accent-color:' + color + '"><span>' + e(item.text) + '</span></label>').join('') + '</section>';
+        return '<section data-mcc-checklist style="' + base + ';margin:25px 0;padding:21px;border:1px solid #bdcbd2;border-left:7px solid ' + color + ';border-radius:8px;background-color:' + background + '"><h3 style="font-family:Lato,Arial,sans-serif;font-size:23px;color:' + text + ';margin:0 0 6px">' + e(d.title) + '</h3><p data-progress aria-live="polite" style="margin:0 0 13px;color:' + text + ';font-size:17px">0 of ' + items.length + ' complete</p>' + items.map((item, i) => '<label style="display:flex;align-items:flex-start;gap:11px;margin:8px 0;padding:12px;color:' + text + ';background-color:' + background + ';border:1px solid #d2dce1;border-radius:6px;font-family:Lato,Arial,sans-serif;font-size:19px;line-height:1.65"><input type="checkbox" onchange="var r=this.closest(\'[data-mcc-checklist]\'),n=r.querySelectorAll(\'input[type=checkbox]:checked\').length,t=r.querySelectorAll(\'input[type=checkbox]\').length;r.querySelector(\'[data-progress]\').textContent=n+\' of \'+t+\' complete\'" style="flex:0 0 auto;width:22px;height:22px;margin-top:4px;accent-color:' + color + '"><span style="font-family:Lato,Arial,sans-serif;font-size:19px;color:' + text + '">' + e(item.text) + '</span></label>').join('') + '</section>';
       }
       case 'storyboard':
         return '<section style="' + base + ';margin:28px 0;scroll-snap-type:y proximity"><h3 style="font-size:27px;color:' + text + ';margin:0 0 16px">' + e(d.title) + '</h3>' + items.map((item, i) => '<section style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:24px;min-height:390px;margin:0 0 30px;padding:22px;border:1px solid #B8C8D0;border-top:6px solid ' + color + ';scroll-snap-align:start;color:' + text + ';background-color:' + background + '"><div style="position:sticky;top:20px;align-self:flex-start;flex:1 1 300px">' + imageOrPlaceholder(item.image, item.alt, 'Storyboard image ' + (i + 1) + ' placeholder') + '</div><div style="flex:1 1 300px;padding:8px 0"><p style="margin:0 0 5px;color:' + text + ';font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Story section ' + (i + 1) + '</p><h4 style="font-size:25px;color:' + text + ';margin:0 0 10px">' + e(item.heading) + '</h4><p style="color:' + text + ';margin:0">' + br(item.content) + '</p></div></section>').join('') + '</section>';
