@@ -513,6 +513,56 @@
   }
   .toast.show { opacity: 1; transform: translateY(0); }
 
+  .setup-acc { border: 1px solid #d9e1e5; border-radius: 8px; margin: 0 0 14px; overflow: hidden; }
+  .setup-acc > summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 13px;
+    color: var(--mcc-navy);
+    background: #f2f6f8;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .setup-acc > summary::-webkit-details-marker { display: none; }
+  .setup-acc > summary::after { content: "\25B8"; color: #687680; font-size: 12px; }
+  .setup-acc[open] > summary::after { content: "\25BE"; }
+  .setup-acc[open] > summary { border-bottom: 1px solid #d9e1e5; }
+  .setup-body { padding: 13px; }
+  .setup-body .control-group:last-child { margin-bottom: 4px; }
+  .cat-acc { border: 1px solid #d9e1e5; border-radius: 7px; margin: 0 0 8px; overflow: hidden; }
+  .cat-acc > summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    color: #687680;
+    background: #f4f8fa;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  .cat-acc > summary::-webkit-details-marker { display: none; }
+  .cat-acc > summary:hover { color: var(--mcc-navy); }
+  .cat-acc[open] > summary { color: var(--mcc-navy); border-bottom: 1px solid #d9e1e5; }
+  .cat-count {
+    display: inline-grid;
+    place-items: center;
+    min-width: 22px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 9px;
+    color: #fff;
+    background: var(--mcc-teal);
+    font-size: 10px;
+    letter-spacing: 0;
+  }
+  .cat-acc .block-library { padding: 8px; }
   @media (max-width: 1050px) {
     .brand-row, .breadcrumb, .footer-main, .footer-bottom { margin-left: 24px; margin-right: 24px; }
     .builder-grid { grid-template-columns: 250px minmax(380px, 1fr); }
@@ -602,7 +652,9 @@
     <div class="builder-grid">
       <aside class="panel control-panel" aria-label="Page controls and building blocks">
         <div class="panel-body">
-          <h2 id="page-setup">Page setup</h2>
+          <details class="setup-acc" id="setup-details" open>
+          <summary id="page-setup">Page setup</summary>
+          <div class="setup-body">
           <div class="control-group">
             <label for="starter-template">Starter template</label>
             <select id="starter-template"></select>
@@ -630,10 +682,12 @@
             <legend class="field-label">Accent color</legend>
             <div class="palette" id="accent-palette"></div>
           </fieldset>
+          </div>
+          </details>
 
           <hr class="panel-divider">
           <h2 id="interactive-blocks">Building blocks</h2>
-          <p class="field-help">Select a block to add it to your page. Use the "Add block here" bars in the preview to insert between blocks, or drag blocks to reorder them.</p>
+          <p class="field-help">Open a category and select a block to add it to your page. Use the "Add block here" bars in the preview to insert between blocks, or drag blocks to reorder them.</p>
           <label class="block-search" for="block-search">
             <span aria-hidden="true">⌕</span>
             <input id="block-search" type="search" placeholder="Filter blocks">
@@ -1219,6 +1273,8 @@
   }
 
   function syncSetupInputs() {
+    const setup = document.getElementById('setup-details');
+    if (setup) setup.open = state.blocks.length === 0;
     el.template.value = state.template;
     el.pageLabel.value = state.pageLabel;
     el.title.value = state.title;
@@ -1231,20 +1287,20 @@
     el.accent.innerHTML = COLORS.map(color => '<button type="button" class="color-button" style="background-color:' + color + '" data-accent="' + color + '" aria-label="Use accent color ' + color + '" aria-pressed="' + (state.accent.toLowerCase() === color.toLowerCase()) + '"></button>').join('');
   }
 
+  let openCategory = 'Text';
   function renderLibrary(filter) {
     const q = String(filter || '').trim().toLowerCase();
     const cats = ['Text','Featured','Interactive','Media','Data','Layout'];
     let total = 0;
     el.library.innerHTML = cats.map(cat => {
       const interactiveOrder = ['accordion','tabs','flip','timeline','interactiveChecklist','carousel','interactiveTimeline','scenario','knowledge','multipleChoice','reveal','process','sorting','sequence','matching','estimate','poll','selfCheck','compare','workedExample'];
-      const buttons = Object.entries(defs).filter(([,d]) => d.category === cat && (!q || d.label.toLowerCase().includes(q)))
-        .sort((a, b) => cat === 'Interactive' ? interactiveOrder.indexOf(a[0]) - interactiveOrder.indexOf(b[0]) : 0)
-        .map(([key,d]) => {
-          total++;
-          return '<button class="add-block" type="button" data-add="' + key + '"><span class="plus" aria-hidden="true">+</span><span>' + e(d.label) + '</span>' + (d.isNew ? '<span class="new-tag">New</span>' : '') + '</button>';
-        }).join('');
-      if (!buttons) return '';
-      return '<div class="category-title">' + cat + '</div><div class="block-library">' + buttons + '</div>';
+      const entries = Object.entries(defs).filter(([,d]) => d.category === cat && (!q || d.label.toLowerCase().includes(q)))
+        .sort((a, b) => cat === 'Interactive' ? interactiveOrder.indexOf(a[0]) - interactiveOrder.indexOf(b[0]) : 0);
+      if (!entries.length) return '';
+      total += entries.length;
+      const buttons = entries.map(([key,d]) => '<button class="add-block" type="button" data-add="' + key + '"><span class="plus" aria-hidden="true">+</span><span>' + e(d.label) + '</span>' + (d.isNew ? '<span class="new-tag">New</span>' : '') + '</button>').join('');
+      const open = q ? true : openCategory === cat;
+      return '<details class="cat-acc" data-cat="' + e(cat) + '"' + (open ? ' open' : '') + '><summary>' + e(cat) + '<span class="cat-count">' + entries.length + '</span></summary><div class="block-library">' + buttons + '</div></details>';
     }).join('');
     if (!total) el.library.innerHTML = '<div class="empty-search">No blocks match that search.</div>';
   }
@@ -1736,6 +1792,18 @@
     state.accent = button.dataset.accent; renderAccentPalette(); renderAll();
   });
   el.library.addEventListener('click', (event) => {
+    const summary = event.target.closest('.cat-acc > summary');
+    if (summary) {
+      event.preventDefault();
+      const cat = summary.parentElement.dataset.cat;
+      if (el.search.value.trim()) {
+        summary.parentElement.open = !summary.parentElement.open;
+      } else {
+        openCategory = openCategory === cat ? null : cat;
+        renderLibrary(el.search.value);
+      }
+      return;
+    }
     const button = event.target.closest('[data-add]'); if (!button) return;
     snapshot();
     const block = makeBlock(button.dataset.add); syncRepeater(block);
@@ -1746,6 +1814,7 @@
       state.blocks.push(block);
     }
     state.selectedId = block.id;
+    if (state.blocks.length === 1) { const setup = document.getElementById('setup-details'); if (setup) setup.open = false; }
     renderAll(); toast(defs[block.type].label + ' added.');
     setTimeout(() => document.querySelector('[data-block-id="' + block.id + '"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 20);
   });
