@@ -242,6 +242,37 @@
         margin: auto;
         padding: 82px 0;
       }
+      .reuse-note {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin: 0 0 34px;
+        padding: 20px 24px;
+        border-left: 6px solid var(--teal);
+        border-radius: 0 8px 8px 0;
+        background: var(--soft);
+      }
+      .reuse-note p {
+        margin: 0;
+        max-width: 720px;
+        color: var(--ink);
+        font-size: 15px;
+      }
+      .reuse-note strong {
+        color: var(--navy);
+      }
+      .reuse-note a {
+        flex: 0 0 auto;
+        color: var(--blue);
+        font-weight: 900;
+        text-decoration: none;
+        white-space: nowrap;
+      }
+      .reuse-note a:hover {
+        text-decoration: underline;
+      }
       .template-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -447,6 +478,10 @@
         .mini {
           min-height: 190px;
         }
+        .reuse-note {
+          flex-direction: column;
+          align-items: flex-start;
+        }
         .footer-main {
           grid-template-columns: 1fr;
         }
@@ -517,6 +552,15 @@
       </div>
     </section>
     <main id="main-content">
+      <div class="reuse-note">
+        <p>
+          <strong>Already have a saved project?</strong> Starting from a
+          template is not the only option. If you have a CourseMaker .json file,
+          one you exported before or one a colleague shared, open the Page
+          Builder and choose Import JSON to load it and keep editing.
+        </p>
+        <a href="mcc-brightspace-template-builder.html">Open the Page Builder &rarr;</a>
+      </div>
       <div class="template-grid">
         <article class="template">
           <div class="mini">
@@ -535,7 +579,7 @@
               brief summary.
             </p>
             <a href="mcc-brightspace-template-builder.html?template=module"
-              >Use this template →</a
+              >Use this template &rarr;</a
             >
           </div>
         </article>
@@ -555,7 +599,7 @@
               and space for a personal introduction.
             </p>
             <a href="mcc-brightspace-template-builder.html?template=instructor"
-              >Use this template →</a
+              >Use this template &rarr;</a
             >
           </div>
         </article>
@@ -576,7 +620,7 @@
               section, and knowledge check.
             </p>
             <a href="mcc-brightspace-template-builder.html?template=content"
-              >Use this template →</a
+              >Use this template &rarr;</a
             >
           </div>
         </article>
@@ -597,7 +641,7 @@
               students can use to track progress.
             </p>
             <a href="mcc-brightspace-template-builder.html?template=weekly"
-              >Use this template →</a
+              >Use this template &rarr;</a
             >
           </div>
         </article>
@@ -605,7 +649,7 @@
           <div class="mini">
             <div class="mini-page">
               <div class="mini-head"></div>
-              <div class="mini-stop" style="background: #003366">▶</div>
+              <div class="mini-stop" style="background: #003366">&#9654;</div>
               <div class="mini-line short"></div>
             </div>
           </div>
@@ -617,7 +661,7 @@
               Brightspace, or YuJa video.
             </p>
             <a href="mcc-brightspace-template-builder.html?template=video"
-              >Use this template →</a
+              >Use this template &rarr;</a
             >
           </div>
         </article>
@@ -634,7 +678,7 @@
             <h2>Blank Page</h2>
             <p>A clean starting point for any Brightspace page.</p>
             <a href="mcc-brightspace-template-builder.html?template=blank"
-              >Use this template →</a
+              >Use this template &rarr;</a
             >
           </div>
         </article>
@@ -678,11 +722,11 @@
         .addEventListener("submit", function (e) {
           e.preventDefault();
           var q = document.getElementById("search-box").value.toLowerCase();
-          if (/block|accordion|tab|question|timeline|carousel|table|layout/.test(q))
+          if (/block|accordion|tab|question|timeline|carousel|table|layout|sort|sequence|match|poll|audio|reading/.test(q))
             location.href = "building-blocks.html";
           else if (/widget|homepage|instructor/.test(q))
             location.href = "widget-builder.html";
-          else if (/support|help|accessib|brightspace/.test(q))
+          else if (/support|help|accessib|brightspace|json|import|export/.test(q))
             location.href = "support.html";
           else if (/template|policy|module/.test(q))
             location.href = "templates.html";
