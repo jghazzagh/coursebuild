@@ -348,6 +348,34 @@
         margin: 0;
         font-size: 15px;
       }
+      .save-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .save-card {
+        padding: 30px;
+        border: 1px solid var(--line);
+        border-top: 6px solid var(--teal);
+        border-radius: 9px;
+        background: #fff;
+      }
+      .save-card h2 {
+        margin: 0 0 9px;
+        color: var(--navy);
+        font-size: 23px;
+        font-weight: 500;
+      }
+      .save-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+      }
+      .save-follow {
+        margin: 18px 0 0;
+        color: var(--muted);
+        font-size: 15px;
+      }
       .widget-help {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -488,6 +516,9 @@
         .guide-grid {
           grid-template-columns: 1fr 1fr;
         }
+        .save-grid {
+          grid-template-columns: 1fr;
+        }
       }
       @media (max-width: 760px) {
         .brand-row {
@@ -529,7 +560,8 @@
         .help-grid,
         .guide-grid,
         .community-grid,
-        .widget-help {
+        .widget-help,
+        .save-grid {
           grid-template-columns: 1fr;
         }
         .footer-main {
@@ -631,24 +663,26 @@
           <h3>Set up the page</h3>
           <p>
             Choose a template, write the page label and Heading 1, select a
-            title style, and optionally add an image URL.
+            title style, and optionally add an image URL. Page Setup collapses
+            after your first block so it stays out of the way.
           </p>
         </article>
         <article class="guide">
           <span class="step">Step 2</span>
           <h3>Add and edit blocks</h3>
           <p>
-            Add blocks from the left panel. Select a block in the preview to
-            edit it, then drag it or use the arrow controls to reorder it.
+            Open a category in the left panel and add blocks. Use the Add block
+            here bars in the preview to insert between blocks, then drag or use
+            the arrow controls to reorder, and the copy control to duplicate.
           </p>
         </article>
         <article class="guide">
           <span class="step">Step 3</span>
           <h3>Check accessibility</h3>
           <p>
-            Use logical headings, meaningful link text, useful image
-            descriptions, accurate captions, and content that does not rely on
-            color alone.
+            Use the Check page button to scan for heading order, color contrast,
+            placeholder text, and empty links. Keep meaningful link text, useful
+            image descriptions, and content that does not rely on color alone.
           </p>
         </article>
         <article class="guide">
@@ -660,6 +694,43 @@
           </p>
         </article>
       </section>
+      <div class="section-head">
+        <p class="tag">Save and reuse</p>
+        <h2>Keep your work with Export and Import</h2>
+      </div>
+      <section class="save-grid">
+        <article class="save-card">
+          <h2>Export JSON</h2>
+          <p>
+            The Export JSON button downloads your whole page as a small .json
+            project file. This is separate from the Brightspace HTML. The HTML
+            is the finished page you paste into a course, and the JSON is the
+            editable source you can reopen later.
+          </p>
+        </article>
+        <article class="save-card">
+          <h2>Import JSON</h2>
+          <p>
+            The Import JSON button loads a .json file back into the builder with
+            every block intact, ready to keep editing. Use it to reuse a strong
+            page next term, or to open one a colleague shared with you.
+          </p>
+        </article>
+        <article class="save-card">
+          <h2>Autosave and Resume</h2>
+          <p>
+            The builder autosaves to this browser as you work. When you return,
+            choose Resume to pick up where you left off. Autosave stays in one
+            browser, so use Export JSON to move a page between computers or
+            people.
+          </p>
+        </article>
+      </section>
+      <p class="save-follow">
+        The Widget Builder has the same Export JSON and Import JSON buttons, so
+        your team can build a shared set of standard homepage widgets and hand
+        them out as files.
+      </p>
       <div class="section-head">
         <p class="tag">Widget help</p>
         <h2>Add widgets to a Brightspace homepage</h2>
@@ -731,6 +802,32 @@
           </p>
         </details>
         <details>
+          <summary>Can I save a page and come back to it later?</summary>
+          <p>
+            Yes. The Page Builder autosaves in your browser and shows a Resume
+            option when you return. For a copy you can keep or move between
+            computers, use Export JSON to download the page as a file, then
+            Import JSON to open it again.
+          </p>
+        </details>
+        <details>
+          <summary>How do I share a page with a colleague?</summary>
+          <p>
+            Use Export JSON to download the page as a .json file and send it to
+            them. They open the Page Builder, choose Import JSON to load it, and
+            customize their own copy. This shares the editable source, not just
+            the finished HTML.
+          </p>
+        </details>
+        <details>
+          <summary>What if I delete or change the wrong block?</summary>
+          <p>
+            Use the Undo button, or press Ctrl+Z (Cmd+Z on a Mac), to step back.
+            You can also duplicate a block with its copy control instead of
+            rebuilding it.
+          </p>
+        </details>
+        <details>
           <summary>Can I edit the page after copying it?</summary>
           <p>
             Yes. The output is standard HTML with inline styles, so it can be
@@ -799,11 +896,11 @@
         .addEventListener("submit", function (e) {
           e.preventDefault();
           var q = document.getElementById("search-box").value.toLowerCase();
-          if (/block|accordion|tab|question|timeline|carousel|table|layout/.test(q))
+          if (/block|accordion|tab|question|timeline|carousel|table|layout|sort|sequence|match|poll|audio|reading/.test(q))
             location.href = "building-blocks.html";
           else if (/widget|homepage|instructor/.test(q))
             location.href = "widget-builder.html";
-          else if (/support|help|accessib|brightspace/.test(q))
+          else if (/support|help|accessib|brightspace|json|save|import|export|autosave/.test(q))
             location.href = "support.html";
           else if (/template|policy|module/.test(q))
             location.href = "templates.html";
