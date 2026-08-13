@@ -184,6 +184,20 @@
     opacity: 0; transform: translateY(15px); pointer-events: none; transition: 0.2s;
   }
   .toast.show { opacity: 1; transform: none; }
+  .gallery-bar {
+    display: flex; align-items: center; gap: 10px; width: 100%;
+    padding: 10px 12px;
+    border: 2px solid var(--teal); border-radius: 8px; background: #eff9fb;
+  }
+  .gallery-bar .gname { min-width: 0; flex: 1; color: var(--navy); font-size: 13px; font-weight: 800; }
+  .gallery-change {
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    border: 1px solid var(--blue); border-radius: 6px;
+    color: var(--blue); background: #fff;
+    font-size: 12px; font-weight: 800;
+  }
+  .gallery-change:hover { background: #e8f1f5; }
   @media (max-width: 1220px) {
     .brand-row, .crumb, .footer-main, .footer-bottom { margin-left: 24px; margin-right: 24px; }
   }
@@ -262,7 +276,6 @@
       <aside class="panel editor" aria-label="Widget template gallery and editor">
         <div class="panel-body">
           <h2>Widget gallery</h2>
-          <p class="help">Your edits are kept per widget, so you can switch between widgets to compare without losing work.</p>
           <div id="template-gallery"></div>
           <h2 style="margin-top:20px">Widget editor</h2>
           <p class="template-desc" id="template-desc"></p>
@@ -565,7 +578,7 @@
 
   var CATEGORIES = ['Instructor', 'Course information', 'Student support', 'Needs regular updates', 'Custom'];
 
-  var state = { type: 'instructor', store: {} };
+  var state = { type: 'instructor', store: {}, galleryOpen: true };
 
   function esc(v) {
     return String(v == null ? '' : v)
@@ -676,7 +689,13 @@
       '</div>';
   }
   function renderGallery() {
-    el.gallery.innerHTML = CATEGORIES.map(function (cat) {
+    if (!state.galleryOpen) {
+      var t = templates[state.type];
+      var swatch = (state.store[state.type] && normalizeHex(state.store[state.type].headerBg)) || normalizeHex(t.defaults.headerBg) || '#003366';
+      el.gallery.innerHTML = '<div class="gallery-bar"><span class="tswatch" aria-hidden="true" style="background-color:' + swatch + '"></span><span class="gname">' + esc(t.label) + '</span><button type="button" class="gallery-change" data-gallery-open>Change widget</button></div>';
+      return;
+    }
+    el.gallery.innerHTML = '<p class="help">Your edits are kept per widget, so you can switch between widgets to compare without losing work.</p>' + CATEGORIES.map(function (cat) {
       var cards = Object.keys(templates).filter(function (k) { return templates[k].category === cat; }).map(function (k) {
         var t = templates[k];
         var swatch = (state.store[k] && normalizeHex(state.store[k].headerBg)) || normalizeHex(t.defaults.headerBg) || '#003366';
@@ -982,9 +1001,15 @@
   }
 
   el.gallery.addEventListener('click', function (event) {
+    if (event.target.closest('[data-gallery-open]')) {
+      state.galleryOpen = true;
+      renderGallery();
+      return;
+    }
     var card = event.target.closest('[data-template]');
-    if (!card || card.dataset.template === state.type) return;
+    if (!card) return;
     state.type = card.dataset.template;
+    state.galleryOpen = false;
     render();
   });
   el.editor.addEventListener('input', function (event) {
@@ -1081,7 +1106,7 @@
   });
 
   var requested = new URLSearchParams(window.location.search).get('template');
-  if (requested && templates[requested]) state.type = requested;
+  if (requested && templates[requested]) { state.type = requested; state.galleryOpen = false; }
 
   var savedRaw = null;
   try { savedRaw = localStorage.getItem(SAVE_KEY); } catch (_) { }
@@ -1099,6 +1124,7 @@
           if (templates[key]) state.store[key] = Object.assign(clone(templates[key].defaults), savedParsed.store[key]);
         });
         if (!requested && templates[savedParsed.type]) state.type = savedParsed.type;
+        state.galleryOpen = false;
         bannerRow.remove();
         render();
         toast('Autosaved edits restored.');
