@@ -284,22 +284,9 @@
   .empty-search { padding: 12px; color: var(--muted); font-size: 13px; }
 
   .preview-column { min-width: 0; }
-  .preview-label-row { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 10px; margin: 9px 6px 10px; }
+  .preview-label-row { display: flex; justify-content: space-between; align-items: center; margin: 9px 6px 10px; }
   .preview-label-row h2 { margin: 0; color: var(--mcc-navy); font-size: 20px; font-weight: 500; }
-  .preview-meta { display: block; color: #687680; font-size: 12px; }
-  .preview-tools { display: flex; align-items: center; gap: 12px; }
   .block-count { color: #687680; font-size: 12px; }
-  .viewport-toggle { display: flex; gap: 5px; }
-  .viewport-toggle button {
-    padding: 6px 10px;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    background: #fff;
-    color: var(--mcc-navy);
-    font-size: 12px;
-    font-weight: 700;
-  }
-  .viewport-toggle button[aria-pressed="true"] { color: #fff; background: var(--mcc-blue); border-color: var(--mcc-blue); }
   .preview-frame {
     overflow: hidden;
     min-height: 620px;
@@ -307,45 +294,14 @@
     border: 1px solid #c8d3d9;
     border-radius: 12px;
     box-shadow: var(--shadow);
-    transition: max-width .2s;
   }
-  .preview-frame.vp-tablet { max-width: 768px; margin: 0 auto; }
-  .preview-frame.vp-phone { max-width: 400px; margin: 0 auto; }
   .page-title-preview { padding: 31px 40px; color: #fff; background: var(--mcc-blue); border-bottom: 7px solid var(--mcc-orange); }
   .page-title-preview.text-only { color: var(--mcc-navy); background: #fff; border-bottom: 2px solid var(--mcc-blue); }
   .page-kicker { margin: 0 0 8px; font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
   .page-title-preview h3 { margin: 0; font-size: clamp(30px, 4vw, 47px); line-height: 1.07; font-weight: 400; }
   .page-banner-image { display: block; width: 100%; max-height: 250px; object-fit: cover; }
   .preview-content { min-height: 430px; padding: 28px 42px; }
-  .preview-content.has-selection .preview-block:not(.is-selected) { opacity: .85; }
-  .preview-content.has-selection .preview-block:not(.is-selected):hover { opacity: 1; }
   .preview-empty { margin: 38px 0; padding: 28px; border: 2px dashed #a6b4bd; border-radius: 8px; color: #6c7a84; background: #f8fafb; text-align: center; }
-  .starter-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 16px; }
-  .starter-card {
-    padding: 14px 12px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    color: var(--mcc-navy);
-    background: #fff;
-    font-size: 13px;
-    font-weight: 700;
-  }
-  .starter-card:hover { border-color: var(--mcc-teal); background: #eff9fb; }
-  .insert-bar {
-    display: block;
-    width: 100%;
-    margin: 2px 0 14px;
-    padding: 6px;
-    border: 1px dashed #a6b4bd;
-    border-radius: 6px;
-    color: #6c7a84;
-    background: transparent;
-    font-size: 12px;
-    font-weight: 700;
-    opacity: .35;
-  }
-  .insert-bar:hover, .insert-bar:focus-visible, .insert-bar.active { opacity: 1; border-color: var(--mcc-teal); color: var(--mcc-teal); background: #eff9fb; }
-  .insert-bar.active { border-style: solid; }
   .preview-footer { padding: 15px 30px; color: #fff; background: var(--mcc-navy); font-size: 12px; }
   .preview-block {
     position: relative;
@@ -421,43 +377,6 @@
   }
   .small-button { width: 100%; padding: 9px 10px; border: 1px solid var(--mcc-blue); border-radius: 6px; color: var(--mcc-blue); background: #fff; font-weight: 800; font-size: 12px; }
   .danger-button { margin-top: 8px; border-color: #a22522; color: #a22522; }
-  .resume-banner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin: 0 0 18px;
-    padding: 14px 18px;
-    background: #fff;
-    border: 1px solid var(--line);
-    border-left: 5px solid var(--mcc-teal);
-    border-radius: 8px;
-  }
-  .resume-actions { display: flex; gap: 8px; }
-  .audit-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 9500;
-    display: grid;
-    place-items: center;
-    padding: 20px;
-    background: rgba(0, 27, 59, .55);
-  }
-  .audit-modal {
-    width: 100%;
-    max-width: 640px;
-    max-height: 82vh;
-    overflow: auto;
-    padding: 24px;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 18px 50px rgba(0,0,0,.3);
-  }
-  .audit-modal h2 { margin: 0 0 10px; color: var(--mcc-navy); font-size: 24px; font-weight: 500; }
-  .audit-modal ul { margin: 0 0 18px; padding-left: 20px; }
-  .audit-modal li { margin: 0 0 10px; font-size: 15px; }
-  .audit-pass { padding: 14px; border-left: 5px solid #167442; background: #e5f5eb; border-radius: 0 6px 6px 0; margin: 0 0 18px; }
   .tip {
     max-width: 1180px;
     margin: 24px auto 0;
@@ -513,56 +432,6 @@
   }
   .toast.show { opacity: 1; transform: translateY(0); }
 
-  .setup-acc { border: 1px solid #d9e1e5; border-radius: 8px; margin: 0 0 14px; overflow: hidden; }
-  .setup-acc > summary {
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 11px 13px;
-    color: var(--mcc-navy);
-    background: #f2f6f8;
-    font-size: 16px;
-    font-weight: 600;
-  }
-  .setup-acc > summary::-webkit-details-marker { display: none; }
-  .setup-acc > summary::after { content: "\25B8"; color: #687680; font-size: 12px; }
-  .setup-acc[open] > summary::after { content: "\25BE"; }
-  .setup-acc[open] > summary { border-bottom: 1px solid #d9e1e5; }
-  .setup-body { padding: 13px; }
-  .setup-body .control-group:last-child { margin-bottom: 4px; }
-  .cat-acc { border: 1px solid #d9e1e5; border-radius: 7px; margin: 0 0 8px; overflow: hidden; }
-  .cat-acc > summary {
-    cursor: pointer;
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 12px;
-    color: #687680;
-    background: #f4f8fa;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: .12em;
-    text-transform: uppercase;
-  }
-  .cat-acc > summary::-webkit-details-marker { display: none; }
-  .cat-acc > summary:hover { color: var(--mcc-navy); }
-  .cat-acc[open] > summary { color: var(--mcc-navy); border-bottom: 1px solid #d9e1e5; }
-  .cat-count {
-    display: inline-grid;
-    place-items: center;
-    min-width: 22px;
-    height: 18px;
-    padding: 0 5px;
-    border-radius: 9px;
-    color: #fff;
-    background: var(--mcc-teal);
-    font-size: 10px;
-    letter-spacing: 0;
-  }
-  .cat-acc .block-library { padding: 8px; }
   @media (max-width: 1050px) {
     .brand-row, .breadcrumb, .footer-main, .footer-bottom { margin-left: 24px; margin-right: 24px; }
     .builder-grid { grid-template-columns: 250px minmax(380px, 1fr); }
@@ -638,23 +507,16 @@
         <p>Add blocks, edit the details, reorder them, and export self-contained HTML for Brightspace.</p>
       </div>
       <div class="top-actions" aria-label="Page actions">
-        <button class="btn" id="undo-page" type="button">Undo</button>
-        <button class="btn" id="audit-page" type="button">Check page</button>
-        <button class="btn" id="import-page" type="button">Import JSON</button>
-        <button class="btn" id="export-page" type="button">Export JSON</button>
         <button class="btn" id="reset-page" type="button">Reset page</button>
         <button class="btn btn-teal" id="download-page" type="button">Download HTML</button>
         <button class="btn btn-primary" id="copy-page" type="button">Copy page HTML</button>
-        <input type="file" id="import-file" accept=".json,application/json" hidden>
       </div>
     </div>
 
     <div class="builder-grid">
       <aside class="panel control-panel" aria-label="Page controls and building blocks">
         <div class="panel-body">
-          <details class="setup-acc" id="setup-details" open>
-          <summary id="page-setup">Page setup</summary>
-          <div class="setup-body">
+          <h2 id="page-setup">Page setup</h2>
           <div class="control-group">
             <label for="starter-template">Starter template</label>
             <select id="starter-template"></select>
@@ -682,12 +544,10 @@
             <legend class="field-label">Accent color</legend>
             <div class="palette" id="accent-palette"></div>
           </fieldset>
-          </div>
-          </details>
 
           <hr class="panel-divider">
           <h2 id="interactive-blocks">Building blocks</h2>
-          <p class="field-help">Open a category and select a block to add it to your page. Use the "Add block here" bars in the preview to insert between blocks, or drag blocks to reorder them.</p>
+          <p class="field-help">Select a block to add it to the bottom of your page. Drag blocks in the preview to reorder them.</p>
           <label class="block-search" for="block-search">
             <span aria-hidden="true">⌕</span>
             <input id="block-search" type="search" placeholder="Filter blocks">
@@ -698,18 +558,8 @@
 
       <section class="preview-column" aria-labelledby="preview-heading">
         <div class="preview-label-row">
-          <div>
-            <h2 id="preview-heading">Page preview</h2>
-            <span class="preview-meta">Approximates how Brightspace renders the exported page</span>
-          </div>
-          <div class="preview-tools">
-            <div class="viewport-toggle" role="group" aria-label="Preview width">
-              <button type="button" data-viewport="desktop" aria-pressed="true">Desktop</button>
-              <button type="button" data-viewport="tablet" aria-pressed="false">Tablet</button>
-              <button type="button" data-viewport="phone" aria-pressed="false">Phone</button>
-            </div>
-            <span class="block-count" id="block-count">0 blocks</span>
-          </div>
+          <h2 id="preview-heading">Page preview</h2>
+          <span class="block-count" id="block-count">0 blocks</span>
         </div>
         <div class="preview-frame" id="page-preview" aria-live="polite"></div>
       </section>
@@ -753,13 +603,13 @@
   </div>
 </footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
 <script>
 (function () {
   'use strict';
 
   const COLORS = ['#003366', '#001B3B', '#008DA7', '#FF6600'];
   const BLOCK_COLORS = ['#003366', '#001B3B', '#008DA7', '#33A1FD', '#FF6600', '#EE7B30', '#F7B32B', '#D6E8EE', '#000000', '#FFFFFF'];
-  const SAVE_KEY = 'mcc-coursemaker-autosave';
   let uidCounter = 1;
 
   const e = (value) => String(value == null ? '' : value)
@@ -799,13 +649,6 @@
   const countText = (n) => n + ' ' + (n === 1 ? 'block' : 'blocks');
   const lines = (value) => String(value || '').split(/\n+/).map(s => s.trim()).filter(Boolean);
   const listFromPipes = (value) => lines(value).map(row => row.split('|').map(cell => cell.trim()));
-  const shuffleForDisplay = (arr) => {
-    const tagged = arr.map((it, i) => ({ it, i }));
-    if (tagged.length < 2) return tagged;
-    const odd = tagged.filter((_, i) => i % 2 === 1);
-    const even = tagged.filter((_, i) => i % 2 === 0).reverse();
-    return odd.concat(even);
-  };
 
   function youtubeEmbed(value) {
     const raw = String(value || '').trim();
@@ -837,15 +680,6 @@
       defaults: { title: 'Key points', items: 'Add the first point\nAdd the second point\nAdd the third point' },
       fields: [field('title', 'Checklist heading'), field('items', 'Checklist items', 'textarea', 'Place one item on each line.')]
     },
-    annotated: {
-      label: 'Annotated reading', category: 'Text', isNew: true,
-      defaults: { intro: 'Read the passage and select each highlighted phrase to see its annotation.', passage: 'This passage contains a {{1}} that students can explore, along with a {{2}} placed later in the text.', count: 2, items: [
-        { phrase: 'highlighted phrase', explanation: 'Explain why this phrase matters, what it means in context, or what students should notice.' },
-        { phrase: 'second key phrase', explanation: 'Add the second annotation here.' }
-      ] },
-      fields: [field('intro', 'Learner instructions', 'textarea'), field('passage', 'Passage', 'textarea', 'Type {{1}}, {{2}}, and so on where each highlighted phrase belongs.'), field('count', 'Annotations (1–6)', 'number', '', { min: 1, max: 6 })],
-      repeater: repeater('items', 'Annotation', 'count', [field('phrase', 'Highlighted phrase'), field('explanation', 'Annotation', 'textarea')])
-    },
     callout: {
       label: 'Callout box', category: 'Featured',
       defaults: { style: 'information', title: 'Good to know', content: 'Use this space to add helpful context or guidance.' },
@@ -869,8 +703,8 @@
     },
     insight: {
       label: 'Instructor insight', category: 'Featured',
-      defaults: { layout: 'image-left', image: '', alt: 'Instructor portrait', title: 'Instructor insight', content: 'Here is a practical tip that can save you time or help you avoid a common mistake.' },
-      fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left (33%)'],['image-right','Image right (33%)']] }), field('image', 'Image URL', 'url'), field('alt', 'Image alternative text', 'textarea'), field('title', 'Insight heading'), field('content', 'Insight or tip', 'textarea')]
+      defaults: { image: '', alt: 'Instructor image', title: 'A Practical Tip from Your Instructor', content: 'Add a concise insight, example, or piece of advice that helps students apply the course content.' },
+      fields: [field('image', 'Image URL', 'url'), field('alt', 'Image alternative text', 'textarea'), field('title', 'Insight heading'), field('content', 'Insight or tip', 'textarea')]
     },
     instructorInfo: {
       label: 'Instructor information', category: 'Featured', isNew: true,
@@ -886,11 +720,6 @@
       label: 'AI policy block', category: 'Featured', isNew: true,
       defaults: { level: 'yellow', parameters: 'Describe the specific ways students may use AI for this work.' },
       fields: [field('level', 'AI use level', 'select', '', { options: [['red','Red: No AI Allowed'],['yellow','Yellow: Restricted AI Use'],['green','Green: Full AI Use Allowed']] }), field('parameters', 'Instructor-defined parameters for Yellow', 'textarea', 'This text appears only when Yellow is selected.')]
-    },
-    dueDate: {
-      label: 'Due date reminder', category: 'Featured', isNew: true,
-      defaults: { label: 'Assignment due', date: 'Friday at 11:59 p.m.', note: 'Submit your work in the Brightspace assignment folder.' },
-      fields: [field('label', 'Reminder label'), field('date', 'Due date and time', '', 'Written out as text so it never goes stale in copied course shells.'), field('note', 'Additional details', 'textarea')]
     },
     accordion: {
       label: 'Accordion (1–6)', category: 'Interactive',
@@ -1011,79 +840,6 @@
       fields: [field('title', 'Checklist heading'), field('count', 'Checklist items (2–8)', 'number', '', { min: 2, max: 8 })],
       repeater: repeater('items', 'Checklist item', 'count', [field('text', 'Item text')])
     },
-    sorting: {
-      label: 'Drag and drop sorting', category: 'Interactive', isNew: true,
-      defaults: { title: 'Sort the items', instructions: 'Select an item, then choose its category. You can also drag items into a category.', categories: 'Category A | Category B', count: 4, items: [
-        { text: 'First item', cat: 1 },
-        { text: 'Second item', cat: 1 },
-        { text: 'Third item', cat: 2 },
-        { text: 'Fourth item', cat: 2 }
-      ] },
-      fields: [field('title', 'Activity heading'), field('instructions', 'Learner instructions', 'textarea'), field('categories', 'Category names', '', 'Separate 2–3 category names with a vertical bar (|).'), field('count', 'Items (2–8)', 'number', '', { min: 2, max: 8 })],
-      repeater: repeater('items', 'Item', 'count', [field('text', 'Item text'), field('cat', 'Correct category (1–3)', 'number', '', { min: 1, max: 3 })])
-    },
-    sequence: {
-      label: 'Sequence ordering', category: 'Interactive', isNew: true,
-      defaults: { title: 'Put the steps in order', instructions: 'Use the up and down buttons to arrange the steps, then check your order. Enter the steps in the correct order; the activity shuffles them for students.', count: 4, items: [
-        { text: 'First step in the correct sequence' },
-        { text: 'Second step in the correct sequence' },
-        { text: 'Third step in the correct sequence' },
-        { text: 'Fourth step in the correct sequence' }
-      ] },
-      fields: [field('title', 'Activity heading'), field('instructions', 'Learner instructions', 'textarea'), field('count', 'Steps (2–8)', 'number', '', { min: 2, max: 8 })],
-      repeater: repeater('items', 'Step', 'count', [field('text', 'Step text')])
-    },
-    estimate: {
-      label: 'Estimation slider', category: 'Interactive', isNew: true,
-      defaults: { question: 'What percent of students who complete week one go on to pass the course?', min: '0', max: '100', unit: '%', answer: '50', explanation: 'Explain the actual answer, where it comes from, and why it matters.' },
-      fields: [field('question', 'Prediction question', 'textarea'), field('min', 'Slider minimum'), field('max', 'Slider maximum'), field('unit', 'Unit label', '', 'Shown after values, for example % or hours.'), field('answer', 'Actual answer'), field('explanation', 'Explanation of the answer', 'textarea')]
-    },
-    compare: {
-      label: 'Before and after compare', category: 'Interactive', isNew: true,
-      defaults: { title: 'Compare the two views', labelA: 'Before', imageA: '', altA: 'Describe the first image.', labelB: 'After', imageB: '', altB: 'Describe the second image.', caption: '' },
-      fields: [field('title', 'Compare heading'), field('labelA', 'First view label'), field('imageA', 'First image URL', 'url'), field('altA', 'First image alternative text', 'textarea'), field('labelB', 'Second view label'), field('imageB', 'Second image URL', 'url'), field('altB', 'Second image alternative text', 'textarea'), field('caption', 'Optional caption')]
-    },
-    selfCheck: {
-      label: 'Self-assessment rubric', category: 'Interactive', isNew: true,
-      defaults: { title: 'Rate your confidence', button: 'See my review plan', count: 3, items: [
-        { criterion: 'I can explain the key concept in my own words' },
-        { criterion: 'I can apply the concept to a new example' },
-        { criterion: 'I can identify common mistakes' }
-      ] },
-      fields: [field('title', 'Rubric heading'), field('button', 'Summary button label'), field('count', 'Criteria (2–6)', 'number', '', { min: 2, max: 6 })],
-      repeater: repeater('items', 'Criterion', 'count', [field('criterion', 'Criterion text')])
-    },
-    matching: {
-      label: 'Matching memory grid', category: 'Interactive', isNew: true,
-      defaults: { title: 'Match each term to its definition', instructions: 'Select two cards at a time to find each matching pair.', count: 3, items: [
-        { term: 'Term 1', match: 'Definition 1' },
-        { term: 'Term 2', match: 'Definition 2' },
-        { term: 'Term 3', match: 'Definition 3' }
-      ] },
-      fields: [field('title', 'Activity heading'), field('instructions', 'Learner instructions', 'textarea'), field('count', 'Pairs (2–6)', 'number', '', { min: 2, max: 6 })],
-      repeater: repeater('items', 'Pair', 'count', [field('term', 'Term'), field('match', 'Matching definition', 'textarea')])
-    },
-    poll: {
-      label: 'Opinion poll', category: 'Interactive', isNew: true,
-      defaults: { question: 'What do you think?', note: 'How past students answered', count: 3, items: [
-        { option: 'First option', percent: 40 },
-        { option: 'Second option', percent: 35 },
-        { option: 'Third option', percent: 25 }
-      ] },
-      fields: [field('question', 'Poll question', 'textarea'), field('note', 'Results label', '', 'Shown above the results, for example "How past students answered."'), field('count', 'Options (2–5)', 'number', '', { min: 2, max: 5 })],
-      repeater: repeater('items', 'Option', 'count', [field('option', 'Option text'), field('percent', 'Result percent (0–100)', 'number', '', { min: 0, max: 100 })])
-    },
-    workedExample: {
-      label: 'Worked example (fading steps)', category: 'Interactive', isNew: true,
-      defaults: { title: 'Worked example', problem: 'State the problem or task here.', shown: 2, count: 4, items: [
-        { heading: 'Understand the problem', content: 'Restate what is being asked in plain language.' },
-        { heading: 'Set up the approach', content: 'Show the setup, formula, or first move.' },
-        { heading: 'Work the solution', content: 'Show the full work for this step.' },
-        { heading: 'Check the result', content: 'Verify the answer makes sense.' }
-      ] },
-      fields: [field('title', 'Example heading'), field('problem', 'Problem statement', 'textarea'), field('shown', 'Steps shown by default (0–6)', 'number', 'Remaining steps are hidden behind "try it, then reveal" buttons.', { min: 0, max: 6 }), field('count', 'Total steps (2–6)', 'number', '', { min: 2, max: 6 })],
-      repeater: repeater('items', 'Step', 'count', [field('heading', 'Step heading'), field('content', 'Step work', 'textarea')])
-    },
     storyboard: {
       label: 'Sticky storyboard', category: 'Internal', isNew: true,
       defaults: { title: 'Explore the story', count: 3, items: [
@@ -1122,11 +878,6 @@
       label: 'Video', category: 'Media',
       defaults: { mode: 'embed', url: 'https://www.youtube.com/watch?v=ZZ5LpwO-An4&t=2s', title: 'Course video' },
       fields: [field('mode', 'Video source', 'select', '', { options: [['embed','Embed a YouTube or video URL'],['brightspace','Brightspace or YuJa video placeholder']] }), field('url', 'YouTube or embed URL', 'url', 'Used only when Embed URL is selected.'), field('title', 'Accessible video title')]
-    },
-    audio: {
-      label: 'Audio note with transcript', category: 'Media', isNew: true,
-      defaults: { url: '', title: 'Audio note from your instructor', transcript: 'Paste the full transcript here.' },
-      fields: [field('url', 'Audio file URL', 'url', 'Direct link to an mp3 or other audio file, for example from YuJa.'), field('title', 'Accessible audio title'), field('transcript', 'Transcript', 'textarea', 'Required for accessibility. Shown in an expandable section under the player.')]
     },
     table: {
       label: 'Table', category: 'Data',
@@ -1175,10 +926,8 @@
   };
 
   const state = {
-    template: 'blank', pageLabel: 'Course content', title: 'Blank page', titleStyle: 'banner', bannerUrl: '', accent: '#003366', blocks: [], selectedId: null, insertAt: null
+    template: 'blank', pageLabel: 'Course content', title: 'Blank page', titleStyle: 'banner', bannerUrl: '', accent: '#003366', blocks: [], selectedId: null
   };
-  const undoStack = [];
-  let ready = false;
 
   const el = {
     template: document.getElementById('starter-template'), pageLabel: document.getElementById('page-label'),
@@ -1188,48 +937,6 @@
     headerSearch: document.getElementById('header-search'), preview: document.getElementById('page-preview'),
     count: document.getElementById('block-count'), editor: document.getElementById('block-editor'), toast: document.getElementById('toast')
   };
-
-  function serialize() {
-    return JSON.stringify({
-      template: state.template, pageLabel: state.pageLabel, title: state.title, titleStyle: state.titleStyle,
-      bannerUrl: state.bannerUrl, accent: state.accent, blocks: state.blocks, selectedId: state.selectedId
-    });
-  }
-
-  function restore(json) {
-    let saved;
-    try { saved = typeof json === 'string' ? JSON.parse(json) : json; } catch (_) { return false; }
-    if (!saved || !Array.isArray(saved.blocks)) return false;
-    state.template = templates[saved.template] ? saved.template : 'blank';
-    state.pageLabel = saved.pageLabel || 'Course content';
-    state.title = saved.title || 'Untitled page';
-    state.titleStyle = saved.titleStyle === 'text' ? 'text' : 'banner';
-    state.bannerUrl = saved.bannerUrl || '';
-    state.accent = normalizeHex(saved.accent) || '#003366';
-    state.blocks = saved.blocks.filter(b => b && defs[b.type]);
-    state.blocks.forEach(b => { if (!b.id) b.id = uid(); syncRepeater(b); });
-    state.selectedId = state.blocks.some(b => b.id === saved.selectedId) ? saved.selectedId : null;
-    state.insertAt = null;
-    syncSetupInputs();
-    renderAll();
-    return true;
-  }
-
-  function saveLocal() {
-    try { localStorage.setItem(SAVE_KEY, serialize()); } catch (_) { }
-  }
-
-  function snapshot() {
-    if (!ready) return;
-    undoStack.push(serialize());
-    if (undoStack.length > 40) undoStack.shift();
-  }
-
-  function undoLast() {
-    const previous = undoStack.pop();
-    if (previous && restore(previous)) toast('Undo applied.');
-    else toast('Nothing to undo.');
-  }
 
   function makeBlock(type, override) {
     return { id: uid(), type, color: null, textColor: null, backgroundColor: null, data: Object.assign(clone(defs[type].defaults), clone(override || {})) };
@@ -1253,14 +960,12 @@
 
   function applyTemplate(key) {
     const t = templates[key] || templates.blank;
-    snapshot();
     state.template = key;
     state.pageLabel = t.pageLabel;
     state.title = t.title;
     state.accent = t.accent || '#003366';
     state.titleStyle = 'banner';
     state.bannerUrl = '';
-    state.insertAt = null;
     state.blocks = t.blocks.map(([type, data]) => makeBlock(type, data));
     state.blocks.forEach(syncRepeater);
     state.selectedId = state.blocks[0] ? state.blocks[0].id : null;
@@ -1273,8 +978,6 @@
   }
 
   function syncSetupInputs() {
-    const setup = document.getElementById('setup-details');
-    if (setup) setup.open = state.blocks.length === 0;
     el.template.value = state.template;
     el.pageLabel.value = state.pageLabel;
     el.title.value = state.title;
@@ -1287,27 +990,27 @@
     el.accent.innerHTML = COLORS.map(color => '<button type="button" class="color-button" style="background-color:' + color + '" data-accent="' + color + '" aria-label="Use accent color ' + color + '" aria-pressed="' + (state.accent.toLowerCase() === color.toLowerCase()) + '"></button>').join('');
   }
 
-  let openCategory = 'Text';
   function renderLibrary(filter) {
     const q = String(filter || '').trim().toLowerCase();
     const cats = ['Text','Featured','Interactive','Media','Data','Layout'];
     let total = 0;
     el.library.innerHTML = cats.map(cat => {
-      const interactiveOrder = ['accordion','tabs','flip','timeline','interactiveChecklist','carousel','interactiveTimeline','scenario','knowledge','multipleChoice','reveal','process','sorting','sequence','matching','estimate','poll','selfCheck','compare','workedExample'];
-      const entries = Object.entries(defs).filter(([,d]) => d.category === cat && (!q || d.label.toLowerCase().includes(q)))
-        .sort((a, b) => cat === 'Interactive' ? interactiveOrder.indexOf(a[0]) - interactiveOrder.indexOf(b[0]) : 0);
-      if (!entries.length) return '';
-      total += entries.length;
-      const buttons = entries.map(([key,d]) => '<button class="add-block" type="button" data-add="' + key + '"><span class="plus" aria-hidden="true">+</span><span>' + e(d.label) + '</span>' + (d.isNew ? '<span class="new-tag">New</span>' : '') + '</button>').join('');
-      const open = q ? true : openCategory === cat;
-      return '<details class="cat-acc" data-cat="' + e(cat) + '"' + (open ? ' open' : '') + '><summary>' + e(cat) + '<span class="cat-count">' + entries.length + '</span></summary><div class="block-library">' + buttons + '</div></details>';
+      const interactiveOrder = ['accordion','tabs','flip','timeline','interactiveChecklist','carousel','interactiveTimeline','scenario','knowledge','multipleChoice','reveal','process'];
+      const buttons = Object.entries(defs).filter(([,d]) => d.category === cat && (!q || d.label.toLowerCase().includes(q)))
+        .sort((a, b) => cat === 'Interactive' ? interactiveOrder.indexOf(a[0]) - interactiveOrder.indexOf(b[0]) : 0)
+        .map(([key,d]) => {
+          total++;
+          return '<button class="add-block" type="button" data-add="' + key + '"><span class="plus" aria-hidden="true">+</span><span>' + e(d.label) + '</span>' + (d.isNew ? '<span class="new-tag">New</span>' : '') + '</button>';
+        }).join('');
+      if (!buttons) return '';
+      return '<div class="category-title">' + cat + '</div><div class="block-library">' + buttons + '</div>';
     }).join('');
     if (!total) el.library.innerHTML = '<div class="empty-search">No blocks match that search.</div>';
   }
 
   function blockColor(block) { return block.color || state.accent; }
 
-  const CONTROL_BACKGROUND_TYPES = new Set(['button','colored','accordion','tabs','flip','timeline','carousel','interactiveTimeline','reveal','knowledge','multipleChoice','scenario','process','table','decoder','branching','sorting','sequence','estimate','compare','selfCheck','matching','poll','workedExample']);
+  const CONTROL_BACKGROUND_TYPES = new Set(['button','colored','accordion','tabs','flip','timeline','carousel','interactiveTimeline','reveal','knowledge','multipleChoice','scenario','process','table','decoder','branching']);
   function aiPolicyPalette(level) {
     if (level === 'red') return { background: '#FDECEB', text: '#4A1716', accent: '#A22522', badge: 'R', label: 'Red Light: No AI Allowed', meaning: 'AI is entirely prohibited.' };
     if (level === 'green') return { background: '#E5F5EB', text: '#103B25', accent: '#167442', badge: 'G', label: 'Green Light: Full AI Use Allowed', meaning: 'AI is permitted without restrictions, provided it’s used ethically.' };
@@ -1383,12 +1086,6 @@
         return '<p style="' + base + ';margin:0 0 22px">' + br(d.content) + '</p>';
       case 'checklist':
         return '<section style="' + base + ';margin:24px 0"><h3 style="font-family:Lato,Arial,sans-serif;font-size:22px;color:' + text + ';margin:0 0 12px">' + e(d.title) + '</h3><ul role="list" style="margin:0;padding:0;list-style:none;color:' + text + '">' + lines(d.items).map((item, i, all) => '<li style="display:flex;align-items:flex-start;gap:13px;margin:0;padding:12px 0;' + (i < all.length - 1 ? 'border-bottom:1px solid #D7E1E6;' : '') + 'color:' + text + ';font-family:Lato,Arial,sans-serif;font-size:19px;line-height:1.65"><span aria-hidden="true" style="display:block;flex:0 0 19px;width:19px;height:7px;margin-top:12px;border-radius:2px;background-color:' + color + '"></span><span style="display:block;flex:1 1 auto;font-family:Lato,Arial,sans-serif;font-size:19px;color:' + text + '">' + e(item) + '</span></li>').join('') + '</ul></section>';
-      case 'annotated': {
-        const noteButton = (item, i) => '<button type="button" data-note-button data-label="' + attr(item.phrase) + '" data-content="' + attr(item.explanation) + '" onclick="var r=this.closest(\'[data-mcc-annotated]\'),p=r.querySelector(\'[data-note-panel]\');p.hidden=false;p.querySelector(\'strong\').textContent=this.getAttribute(\'data-label\');p.querySelector(\'span\').textContent=this.getAttribute(\'data-content\');r.querySelectorAll(\'[data-note-button]\').forEach(function(b){b.setAttribute(\'aria-pressed\',\'false\');b.style.outline=\'none\'});this.setAttribute(\'aria-pressed\',\'true\');this.style.outline=\'3px solid ' + color + '\'" aria-pressed="false" style="display:inline;padding:1px 5px;border:0;border-bottom:2px dotted ' + color + ';border-radius:3px;color:#1F2933;background-color:#FFF4D6;font:inherit;font-weight:700;cursor:pointer">' + e(item.phrase) + '</button>';
-        let passage = br(d.passage);
-        items.forEach((item, i) => { passage = passage.split('{{' + (i + 1) + '}}').join(noteButton(item, i)); });
-        return '<section data-mcc-annotated style="' + base + ';margin:25px 0;padding:22px;border:1px solid #B8C8D0;border-left:6px solid ' + color + ';border-radius:0 8px 8px 0;background-color:#FFFFFF"><p style="margin:0 0 13px;color:#5A6872;font-size:16px">' + br(d.intro) + '</p><p style="margin:0;color:#1F2933">' + passage + '</p><div data-note-panel role="status" aria-live="polite" hidden style="margin-top:15px;padding:15px;border-left:5px solid ' + color + ';color:#1F2933;background-color:#F7FAFB"><strong style="display:block;margin-bottom:5px"></strong><span></span></div></section>';
-      }
       case 'callout':
         {
           const palette = calloutPalette(d.style);
@@ -1401,8 +1098,15 @@
         return '<div style="display:flex;flex-wrap:wrap;gap:10px;margin:24px 0;font-family:Lato,Arial,sans-serif">' + items.map(item => '<a href="' + safeUrl(item.url, '#') + '" style="display:inline-block;flex:1 1 180px;padding:13px 20px;color:' + text + ';background-color:' + background + ';border:1px solid ' + color + ';border-radius:6px;font-size:18px;font-weight:700;text-align:center;text-decoration:none">' + e(item.label) + '</a>').join('') + '</div>';
       case 'colored':
         return '<section style="' + base + ';margin:24px 0;padding:22px 24px;color:' + text + ';background-color:' + background + ';border-radius:8px"><h3 style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p></section>';
-      case 'insight':
-        return '<aside style="' + base + ';margin:24px 0">' + imageTextTable(d.image, d.alt, d.layout, '<h3 style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p>', 'Instructor image placeholder') + '</aside>';
+      case 'insight': {
+        const insightAccent = block.color || '#EE7B30';
+        const insightBackground = block.backgroundColor || '#FFF4EF';
+        const insightText = block.textColor || '#1F2933';
+        const insightImage = d.image
+          ? '<img src="' + safeUrl(d.image, '#') + '" alt="' + attr(d.alt) + '" title="' + attr(d.alt) + '" style="width:100%;height:auto;border-radius:6px;display:block">'
+          : '<div role="img" aria-label="' + attr(d.alt || 'Instructor image placeholder') + '" style="display:flex;align-items:center;justify-content:center;width:100%;min-height:150px;padding:12px;border:2px dashed #AFC1CA;border-radius:6px;background-color:#FFFFFF;color:#566772;font-family:Lato,Arial,sans-serif;font-size:14px;line-height:1.4;text-align:center;box-sizing:border-box">Instructor image placeholder</div>';
+        return '<!-- Instructor Insight --><div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:1.25rem;background-color:' + insightBackground + ';border-left:4px solid ' + insightAccent + ';padding:18px 20px;margin-top:2.5rem;border-radius:0 6px 6px 0;font-family:Lato,Arial,sans-serif;color:' + insightText + '"><div style="flex:0 0 150px;max-width:150px">' + insightImage + '</div><div style="flex:1 1 280px"><span style="display:block;font-size:12px;font-weight:bold;letter-spacing:0.05em;color:' + insightAccent + ';margin-bottom:6px">INSTRUCTOR INSIGHT</span><h4 style="margin:0 0 8px 0;font-size:18px;color:#001B3B">' + e(d.title) + '</h4><p style="margin:0;font-size:16px;color:' + insightText + '">' + br(d.content) + '</p></div></div>';
+      }
       case 'instructorInfo': {
         const email = String(d.email || '').trim();
         const info = '<h3 style="font-size:25px;color:' + text + ';margin:0 0 12px">' + e(d.name) + '</h3><dl style="margin:0;color:' + text + '"><dt style="font-weight:700">Office</dt><dd style="margin:0 0 9px">' + e(d.office) + '</dd><dt style="font-weight:700">Email</dt><dd style="margin:0 0 9px">' + (email ? '<a href="' + safeUrl('mailto:' + email, '#') + '" style="color:' + text + '">' + e(email) + '</a>' : 'Add email address') + '</dd><dt style="font-weight:700">Office hours</dt><dd style="margin:0 0 14px">' + e(d.hours) + '</dd></dl><div style="padding-top:14px;border-top:1px solid #AFC1CA;color:' + text + '">' + br(d.about) + '</div>';
@@ -1418,8 +1122,6 @@
         const responsible = allowed ? '<div style="margin-top:14px;padding:14px;border-left:5px solid ' + accent + ';color:' + text + ';background-color:' + background + '"><strong>Responsible-use expectations:</strong> AI may support your process, but it may not do the work for you. Do not copy and paste AI-generated work as your own. Cite the prompt you used.</div>' : '';
         return '<section style="' + base + ';margin:24px 0;padding:22px;border:2px solid ' + accent + ';border-left-width:9px;border-radius:8px;color:' + text + ';background-color:' + background + '"><div style="display:flex;gap:16px;align-items:flex-start"><span aria-hidden="true" style="display:inline-grid;place-items:center;flex:0 0 48px;width:48px;height:48px;border-radius:50%;color:' + contrast(accent) + ';background-color:' + accent + ';font-size:25px;font-weight:800">' + palette.badge + '</span><div><h3 style="font-size:24px;color:' + text + ';margin:0 0 7px">' + e(palette.label) + '</h3><p style="color:' + text + ';margin:0"><strong>Meaning:</strong> ' + e(palette.meaning) + '</p></div></div>' + parameters + responsible + '</section>';
       }
-      case 'dueDate':
-        return '<aside style="' + base + ';display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin:24px 0;padding:18px 22px;border:2px solid ' + color + ';border-left-width:9px;border-radius:8px;background-color:' + background + '"><span aria-hidden="true" style="display:grid;place-items:center;flex:0 0 74px;height:74px;border-radius:8px;color:' + contrast(color) + ';background-color:' + color + ';font-size:15px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-align:center">Due</span><div style="flex:1 1 240px"><p style="margin:0 0 3px;color:' + text + ';font-size:14px;font-weight:800;letter-spacing:.1em;text-transform:uppercase">' + e(d.label) + '</p><p style="margin:0 0 6px;color:' + text + ';font-size:24px;font-weight:800">' + e(d.date) + '</p>' + (d.note ? '<p style="margin:0;color:' + text + '">' + br(d.note) + '</p>' : '') + '</div></aside>';
       case 'accordion':
         return '<div style="' + base + ';margin:24px 0">' + items.map(item => '<details style="font-family:Lato,Arial,sans-serif;font-size:19px;border:1px solid ' + color + ';border-radius:8px;margin:0 0 10px;overflow:hidden"><summary style="cursor:pointer;background-color:' + background + ';color:' + text + ';font-weight:700;padding:16px 18px">' + e(item.heading) + '</summary><div style="padding:16px 18px;color:#1F2933;background-color:#FFFFFF">' + br(item.content) + '</div></details>').join('') + '</div>';
       case 'tabs': {
@@ -1435,72 +1137,6 @@
         return '<div style="' + base + ';display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin:24px 0">' + items.map((item, i) => '<button type="button" aria-pressed="false" onclick="var f=this.querySelector(\'[data-front]\'),b=this.querySelector(\'[data-back]\'),show=this.getAttribute(\'aria-pressed\')!==\'true\';this.setAttribute(\'aria-pressed\',show);f.hidden=show;b.hidden=!show" style="min-height:170px;padding:22px;border:2px solid ' + color + ';border-radius:10px;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:19px;cursor:pointer"><span data-front><strong style="display:block;color:' + text + ';font-size:22px">' + e(item.front) + '</strong><small style="display:block;margin-top:14px;color:' + text + '">Select to reveal</small></span><span data-back hidden><strong style="display:block;color:' + text + ';font-size:18px;margin-bottom:8px">' + e(item.front) + '</strong>' + br(item.back) + '<small style="display:block;margin-top:14px;color:' + text + '">Select to flip back</small></span></button>').join('') + '</div>';
       case 'timeline':
         return '<ol style="' + base + ';margin:26px 0;padding:0;list-style:none">' + items.map((item, i) => '<li style="position:relative;margin:0 0 0 18px;padding:0 0 24px 34px;border-left:3px solid ' + color + '"><span aria-hidden="true" style="position:absolute;left:-16px;top:0;display:grid;place-items:center;width:29px;height:29px;border-radius:50%;color:' + text + ';background-color:' + background + ';font-size:14px;font-weight:700">' + (i + 1) + '</span><h3 style="font-size:21px;color:' + color + ';margin:0 0 5px">' + e(item.heading) + '</h3><p style="color:#1F2933;margin:0">' + br(item.content) + '</p></li>').join('') + '</ol>';
-      case 'sorting': {
-        const cats = String(d.categories || '').split('|').map(s => s.trim()).filter(Boolean).slice(0, 3);
-        const catCount = Math.max(1, cats.length);
-        const chips = items.map((item, i) => {
-          const cat = Math.max(1, Math.min(catCount, parseInt(item.cat, 10) || 1));
-          return '<button type="button" id="' + block.id + '-item-' + i + '" data-sort-item data-cat="' + cat + '" draggable="true" ondragstart="event.dataTransfer.setData(\'text\',this.id)" onclick="var r=this.closest(\'[data-mcc-sort]\');r.querySelectorAll(\'[data-sort-item]\').forEach(function(c){c.removeAttribute(\'data-picked\');c.style.outline=\'none\'});this.setAttribute(\'data-picked\',\'1\');this.style.outline=\'3px solid ' + color + '\'" style="display:inline-block;margin:4px;padding:10px 14px;border:2px solid ' + color + ';border-radius:20px;color:#1F2933;background-color:#FFFFFF;font-family:Lato,Arial,sans-serif;font-size:17px;font-weight:700;cursor:grab">' + e(item.text) + '</button>';
-        }).join('');
-        const zones = cats.map((cat, j) => '<div ondragover="event.preventDefault()" ondrop="event.preventDefault();var id=event.dataTransfer.getData(\'text\');var c=document.getElementById(id);if(c)this.querySelector(\'[data-zone-items]\').appendChild(c)" style="flex:1 1 200px;border:2px dashed ' + color + ';border-radius:8px;background-color:#F7FAFB;overflow:hidden"><button type="button" onclick="var r=this.closest(\'[data-mcc-sort]\'),c=r.querySelector(\'[data-picked]\'),f=r.querySelector(\'[data-sort-feedback]\');if(!c){f.textContent=\'Select an item first, then choose a category.\';f.style.backgroundColor=\'#FFF4D6\';f.hidden=false;return}this.parentNode.querySelector(\'[data-zone-items]\').appendChild(c);c.removeAttribute(\'data-picked\');c.style.outline=\'none\'" style="display:block;width:100%;padding:12px;border:0;border-bottom:2px solid ' + color + ';color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:18px;font-weight:800;cursor:pointer">' + e(cat) + '</button><div data-zone-items data-zone="' + (j + 1) + '" style="min-height:90px;padding:8px"></div></div>').join('');
-        const check = 'var r=this.closest(\'[data-mcc-sort]\'),ok=0,total=0;r.querySelectorAll(\'[data-zone-items]\').forEach(function(z){z.querySelectorAll(\'[data-sort-item]\').forEach(function(c){total++;var good=c.getAttribute(\'data-cat\')===z.getAttribute(\'data-zone\');c.style.borderColor=good?\'#167442\':\'#A22522\';if(good)ok++})});var left=r.querySelectorAll(\'[data-sort-tray] [data-sort-item]\').length,f=r.querySelector(\'[data-sort-feedback]\');f.hidden=false;if(left){f.textContent=\'Place every item in a category first. \'+left+\' remaining.\';f.style.backgroundColor=\'#FFF4D6\'}else{f.textContent=ok+\' of \'+total+\' sorted correctly.\'+(ok===total?\' Well done.\':\' Move the red-outlined items and check again.\');f.style.backgroundColor=ok===total?\'#E5F5EB\':\'#FFF0ED\'}';
-        const reset = 'var r=this.closest(\'[data-mcc-sort]\'),t=r.querySelector(\'[data-sort-tray]\');r.querySelectorAll(\'[data-zone-items] [data-sort-item]\').forEach(function(c){c.style.borderColor=\'' + color + '\';c.style.outline=\'none\';t.appendChild(c)});r.querySelectorAll(\'[data-sort-item]\').forEach(function(c){c.style.borderColor=\'' + color + '\'});var f=r.querySelector(\'[data-sort-feedback]\');f.hidden=true';
-        return '<section data-mcc-sort style="' + base + ';margin:26px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#FFFFFF"><h3 style="font-size:24px;color:' + color + ';margin:0 0 6px">' + e(d.title) + '</h3><p style="margin:0 0 14px;color:#1F2933">' + br(d.instructions) + '</p><div data-sort-tray aria-label="Items to sort" style="min-height:56px;margin:0 0 14px;padding:8px;border:1px solid #C9D7DE;border-radius:8px;background-color:#F3F7F8">' + chips + '</div><div style="display:flex;flex-wrap:wrap;gap:12px">' + zones + '</div><div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:14px"><button type="button" onclick="' + attr(check) + '" style="padding:11px 16px;border:0;border-radius:6px;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer">Check my sorting</button><button type="button" onclick="' + attr(reset) + '" style="padding:11px 16px;border:1px solid ' + color + ';border-radius:6px;color:#1F2933;background-color:#FFFFFF;font-family:Lato,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer">Reset</button></div><div data-sort-feedback role="status" aria-live="polite" hidden style="margin-top:13px;padding:14px;color:#1F2933;border-radius:6px"></div></section>';
-      }
-      case 'sequence': {
-        const shuffled = shuffleForDisplay(items);
-        const lis = shuffled.map(({ it, i }) => '<li data-order="' + (i + 1) + '" style="display:flex;align-items:center;gap:12px;margin:0 0 9px;padding:13px 15px;border:1px solid #C9D7DE;border-left:6px solid ' + color + ';border-radius:6px;background-color:#FFFFFF;color:#1F2933;font-family:Lato,Arial,sans-serif;font-size:18px"><span style="flex:1 1 auto">' + e(it.text) + '</span><span style="display:flex;gap:5px"><button type="button" aria-label="Move this step up" onclick="var li=this.closest(\'li\'),p=li.previousElementSibling;if(p&&p.hasAttribute(\'data-order\'))li.parentNode.insertBefore(li,p)" style="width:38px;height:38px;padding:0;border:1px solid ' + color + ';border-radius:6px;color:#1F2933;background-color:#F3F7F8;font-size:18px;font-weight:800;cursor:pointer">↑</button><button type="button" aria-label="Move this step down" onclick="var li=this.closest(\'li\'),n=li.nextElementSibling;if(n&&n.hasAttribute(\'data-order\'))li.parentNode.insertBefore(n,li)" style="width:38px;height:38px;padding:0;border:1px solid ' + color + ';border-radius:6px;color:#1F2933;background-color:#F3F7F8;font-size:18px;font-weight:800;cursor:pointer">↓</button></span></li>').join('');
-        const check = 'var r=this.closest(\'[data-mcc-sequence]\'),ok=0,steps=r.querySelectorAll(\'[data-order]\');steps.forEach(function(li,i){var good=parseInt(li.getAttribute(\'data-order\'),10)===i+1;li.style.borderLeftColor=good?\'#167442\':\'#A22522\';if(good)ok++});var f=r.querySelector(\'[data-seq-feedback]\');f.hidden=false;f.textContent=ok+\' of \'+steps.length+\' in the correct position.\'+(ok===steps.length?\' Well done.\':\' Rearrange the red-marked steps and check again.\');f.style.backgroundColor=ok===steps.length?\'#E5F5EB\':\'#FFF0ED\'';
-        return '<section data-mcc-sequence style="' + base + ';margin:26px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#F7FAFB"><h3 style="font-size:24px;color:' + color + ';margin:0 0 6px">' + e(d.title) + '</h3><p style="margin:0 0 14px;color:#1F2933">' + br(d.instructions) + '</p><ol style="margin:0;padding:0;list-style:none">' + lis + '</ol><button type="button" onclick="' + attr(check) + '" style="margin-top:6px;padding:11px 16px;border:0;border-radius:6px;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer">Check my order</button><div data-seq-feedback role="status" aria-live="polite" hidden style="margin-top:13px;padding:14px;color:#1F2933;border-radius:6px"></div></section>';
-      }
-      case 'estimate': {
-        const min = parseFloat(d.min); const max = parseFloat(d.max);
-        const lo = isFinite(min) ? min : 0; const hi = isFinite(max) && max > lo ? max : lo + 100;
-        const mid = Math.round((lo + hi) / 2);
-        const answer = parseFloat(d.answer); const ans = isFinite(answer) ? answer : mid;
-        const reveal = 'var r=this.closest(\'[data-mcc-estimate]\'),s=r.querySelector(\'input[type=range]\');if(s.disabled)return;var a=parseFloat(r.getAttribute(\'data-answer\')),g=parseFloat(s.value),u=r.getAttribute(\'data-unit\')||\'\',f=r.querySelector(\'[data-est-feedback]\');s.disabled=true;this.disabled=true;this.style.opacity=\'.55\';f.querySelector(\'[data-est-actual]\').textContent=\'Actual: \'+a+u+\'. Your estimate: \'+g+u+\'. You were off by \'+Math.round(Math.abs(a-g)*100)/100+u+\'.\';f.hidden=false';
-        return '<section data-mcc-estimate data-answer="' + attr(String(ans)) + '" data-unit="' + attr(d.unit) + '" style="' + base + ';margin:26px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#FFFFFF"><h3 style="font-size:22px;color:' + color + ';margin:0 0 8px">Make a prediction</h3><p style="margin:0 0 16px;color:#1F2933;font-weight:700">' + br(d.question) + '</p><div style="display:flex;flex-wrap:wrap;align-items:center;gap:14px"><span style="font-size:16px;color:#5A6872">' + e(String(lo)) + e(d.unit) + '</span><input type="range" min="' + attr(String(lo)) + '" max="' + attr(String(hi)) + '" step="1" value="' + attr(String(mid)) + '" oninput="this.closest(\'[data-mcc-estimate]\').querySelector(\'[data-est-value]\').textContent=this.value" aria-label="Your estimate" style="flex:1 1 220px;accent-color:' + color + ';height:30px"><span style="font-size:16px;color:#5A6872">' + e(String(hi)) + e(d.unit) + '</span></div><p style="margin:12px 0 16px;font-size:21px;color:#1F2933">My estimate: <strong data-est-value>' + e(String(mid)) + '</strong>' + e(d.unit) + '</p><button type="button" onclick="' + attr(reveal) + '" style="padding:11px 16px;border:0;border-radius:6px;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer">Lock in my estimate</button><div data-est-feedback role="status" aria-live="polite" hidden style="margin-top:14px;padding:16px;border-left:6px solid ' + color + ';color:#1F2933;background-color:#F7FAFB"><strong data-est-actual style="display:block;margin-bottom:7px"></strong><span>' + br(d.explanation) + '</span></div></section>';
-      }
-      case 'compare': {
-        const id = block.id;
-        const view = (suffix, image, altText, label, visible) => '<figure id="' + id + '-view-' + suffix + '" data-compare-view' + (visible ? '' : ' hidden') + ' style="margin:0">' + imageOrPlaceholder(image, altText, label + ' image placeholder') + '</figure>';
-        const toggle = (suffix, label, pressed) => '<button type="button" data-compare-button aria-controls="' + id + '-view-' + suffix + '" aria-pressed="' + pressed + '" onclick="var r=this.closest(\'[data-mcc-compare]\');r.querySelectorAll(\'[data-compare-view]\').forEach(function(v){v.hidden=true});r.querySelectorAll(\'[data-compare-button]\').forEach(function(b){b.setAttribute(\'aria-pressed\',\'false\');b.style.backgroundColor=\'#FFFFFF\';b.style.color=\'#173744\'});document.getElementById(this.getAttribute(\'aria-controls\')).hidden=false;this.setAttribute(\'aria-pressed\',\'true\');this.style.backgroundColor=\'' + background + '\';this.style.color=\'' + text + '\'" style="flex:1 1 130px;padding:12px 16px;border:2px solid ' + color + ';border-radius:6px;color:' + (pressed ? text : '#173744') + ';background-color:' + (pressed ? background : '#FFFFFF') + ';font-family:Lato,Arial,sans-serif;font-size:18px;font-weight:800;cursor:pointer">' + e(label) + '</button>';
-        return '<section data-mcc-compare style="' + base + ';margin:26px 0;padding:22px;border:1px solid #B8C8D0;border-top:6px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#FFFFFF"><h3 style="font-size:24px;color:' + color + ';margin:0 0 12px">' + e(d.title) + '</h3><div style="display:flex;flex-wrap:wrap;gap:9px;margin:0 0 14px">' + toggle('a', d.labelA, true) + toggle('b', d.labelB, false) + '</div>' + view('a', d.imageA, d.altA, d.labelA, true) + view('b', d.imageB, d.altB, d.labelB, false) + (d.caption ? '<p style="margin:12px 0 0;color:#5A6872;font-size:16px;text-align:center">' + e(d.caption) + '</p>' : '') + '</section>';
-      }
-      case 'selfCheck': {
-        const qid = block.id;
-        const levels = [['1','Not yet'],['2','Getting there'],['3','Got it']];
-        const rows = items.map((item, i) => '<fieldset data-crit="' + attr(item.criterion) + '" style="margin:0 0 12px;padding:14px;border:1px solid #C9D7DE;border-radius:7px;background-color:#FFFFFF"><legend style="padding:0 6px;color:#1F2933;font-weight:700;font-size:18px">' + e(item.criterion) + '</legend><div style="display:flex;flex-wrap:wrap;gap:16px">' + levels.map(lv => '<label style="display:flex;align-items:center;gap:7px;color:#1F2933;font-size:17px"><input type="radio" name="' + qid + '-crit-' + i + '" value="' + lv[0] + '" style="width:20px;height:20px;accent-color:' + color + '">' + lv[1] + '</label>').join('') + '</div></fieldset>').join('');
-        const summarize = 'var r=this.closest(\'[data-mcc-selfcheck]\'),focus=[],blank=0;r.querySelectorAll(\'[data-crit]\').forEach(function(row){var c=row.querySelector(\'input:checked\');if(!c)blank++;else if(c.value!==\'3\')focus.push(row.getAttribute(\'data-crit\'))});var f=r.querySelector(\'[data-self-feedback]\');f.hidden=false;if(blank){f.textContent=\'Rate every criterion first. \'+blank+\' left.\';f.style.backgroundColor=\'#FFF4D6\'}else if(focus.length){f.textContent=\'Focus your review on: \'+focus.join(\'; \')+\'.\';f.style.backgroundColor=\'#EEF6F8\'}else{f.textContent=\'You rated yourself confident on every criterion. Nice work. Consider trying the practice activity to confirm it.\';f.style.backgroundColor=\'#E5F5EB\'}';
-        return '<section data-mcc-selfcheck style="' + base + ';margin:26px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#F7FAFB"><h3 style="font-size:24px;color:' + color + ';margin:0 0 5px">' + e(d.title) + '</h3><p style="margin:0 0 14px;color:#5A6872;font-size:16px">This is a private self-check. Nothing is recorded or graded.</p>' + rows + '<button type="button" onclick="' + attr(summarize) + '" style="padding:11px 16px;border:0;border-radius:6px;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer">' + e(d.button) + '</button><div data-self-feedback role="status" aria-live="polite" hidden style="margin-top:13px;padding:14px;color:#1F2933;border-radius:6px"></div></section>';
-      }
-      case 'matching': {
-        const cards = [];
-        items.forEach((item, i) => { cards.push({ label: item.term, pairIndex: i }); cards.push({ label: item.match, pairIndex: i }); });
-        const shuffled = shuffleForDisplay(cards);
-        const flip = 'var r=this.closest(\'[data-mcc-match]\');if(this.getAttribute(\'data-solved\')||this.getAttribute(\'data-open\'))return;if(r.querySelectorAll(\'[data-open]\').length>=2)return;this.setAttribute(\'data-open\',\'1\');this.setAttribute(\'aria-pressed\',\'true\');this.querySelector(\'[data-face]\').hidden=true;this.querySelector(\'[data-text]\').hidden=false;var open=r.querySelectorAll(\'[data-open]\');if(open.length===2){var a=open[0],b=open[1],s=r.querySelector(\'[data-match-status]\');if(a.getAttribute(\'data-pair\')===b.getAttribute(\'data-pair\')){a.setAttribute(\'data-solved\',\'1\');b.setAttribute(\'data-solved\',\'1\');a.removeAttribute(\'data-open\');b.removeAttribute(\'data-open\');a.style.backgroundColor=\'#E5F5EB\';b.style.backgroundColor=\'#E5F5EB\';a.style.borderColor=\'#167442\';b.style.borderColor=\'#167442\';var solved=r.querySelectorAll(\'[data-solved]\').length,total=r.querySelectorAll(\'[data-pair]\').length;s.textContent=solved===total?\'All pairs matched. Well done.\':(solved/2)+\' of \'+(total/2)+\' pairs matched.\'}else{s.textContent=\'Not a match. Try again.\';setTimeout(function(){[a,b].forEach(function(c){c.removeAttribute(\'data-open\');c.setAttribute(\'aria-pressed\',\'false\');c.querySelector(\'[data-face]\').hidden=false;c.querySelector(\'[data-text]\').hidden=true})},900)}}';
-        const grid = shuffled.map(({ it }, k) => '<button type="button" data-pair="' + it.pairIndex + '" aria-pressed="false" onclick="' + attr(flip) + '" style="min-height:110px;padding:14px;border:2px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#FFFFFF;font-family:Lato,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer"><span data-face aria-hidden="true" style="display:block;color:' + color + ';font-size:29px">?</span><span data-text hidden>' + br(it.label) + '</span></button>').join('');
-        return '<section data-mcc-match style="' + base + ';margin:26px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#F7FAFB"><h3 style="font-size:24px;color:' + color + ';margin:0 0 6px">' + e(d.title) + '</h3><p style="margin:0 0 14px;color:#1F2933">' + br(d.instructions) + '</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:11px">' + grid + '</div><p data-match-status role="status" aria-live="polite" style="margin:14px 0 0;color:#1F2933;font-size:17px;font-weight:700">0 of ' + items.length + ' pairs matched.</p></section>';
-      }
-      case 'poll': {
-        const total = items.reduce((sum, item) => sum + (parseFloat(item.percent) || 0), 0) || 1;
-        const choose = 'var r=this.closest(\'[data-mcc-poll]\');r.querySelector(\'[data-poll-results]\').hidden=false;r.querySelectorAll(\'[data-poll-choice]\').forEach(function(b){b.setAttribute(\'aria-pressed\',\'false\');b.style.outline=\'none\'});this.setAttribute(\'aria-pressed\',\'true\');this.style.outline=\'3px solid ' + color + '\'';
-        const choices = items.map(item => '<button type="button" data-poll-choice aria-pressed="false" onclick="' + attr(choose) + '" style="display:block;width:100%;margin:8px 0;padding:13px 15px;border:1px solid ' + color + ';border-radius:6px;color:#1F2933;background-color:#FFFFFF;text-align:left;font-family:Lato,Arial,sans-serif;font-size:18px;cursor:pointer">' + e(item.option) + '</button>').join('');
-        const bars = items.map(item => {
-          const pct = Math.max(0, Math.min(100, Math.round((parseFloat(item.percent) || 0) / total * 100)));
-          return '<div style="margin:10px 0"><div style="display:flex;justify-content:space-between;gap:10px;margin:0 0 4px;color:#1F2933;font-size:16px"><span>' + e(item.option) + '</span><strong>' + pct + '%</strong></div><div style="height:16px;border-radius:8px;background-color:#E1EAEE;overflow:hidden"><div style="width:' + pct + '%;height:100%;background-color:' + color + '"></div></div></div>';
-        }).join('');
-        return '<section data-mcc-poll style="' + base + ';margin:26px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#FFFFFF"><h3 style="font-size:22px;color:' + color + ';margin:0 0 8px">Quick poll</h3><p style="margin:0 0 12px;color:#1F2933;font-weight:700">' + br(d.question) + '</p><div aria-label="Poll choices">' + choices + '</div><div data-poll-results hidden style="margin-top:16px;padding:16px;border-left:6px solid ' + color + ';background-color:#F7FAFB"><p style="margin:0 0 8px;color:#5A6872;font-size:15px;font-weight:800;letter-spacing:.06em;text-transform:uppercase">' + e(d.note) + '</p>' + bars + '</div></section>';
-      }
-      case 'workedExample': {
-        const shown = Math.max(0, Math.min(items.length, parseInt(d.shown, 10) || 0));
-        const steps = items.map((item, i) => {
-          if (i < shown) return '<div style="margin:12px 0;padding:16px;border-left:6px solid ' + color + ';border-radius:0 7px 7px 0;color:#1F2933;background-color:#FFFFFF"><h4 style="margin:0 0 7px;color:' + color + ';font-size:20px">Step ' + (i + 1) + ': ' + e(item.heading) + '</h4><p style="margin:0">' + br(item.content) + '</p></div>';
-          const revealCode = 'var p=this.parentNode.querySelector(\'[data-step-panel]\'),open=this.getAttribute(\'aria-expanded\')!==\'true\';this.setAttribute(\'aria-expanded\',open);p.hidden=!open;this.textContent=open?\'Hide step ' + (i + 1) + '\':\'Reveal step ' + (i + 1) + '\'';
-          return '<div style="margin:12px 0;padding:16px;border:1px dashed ' + color + ';border-radius:7px;color:#1F2933;background-color:#F7FAFB"><p style="margin:0 0 10px;font-weight:700;color:#1F2933">Step ' + (i + 1) + ': ' + e(item.heading) + ' — try this step yourself before revealing it.</p><button type="button" aria-expanded="false" onclick="' + attr(revealCode) + '" style="padding:10px 15px;border:0;border-radius:6px;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:16px;font-weight:700;cursor:pointer">Reveal step ' + (i + 1) + '</button><div data-step-panel hidden style="margin-top:12px;padding:14px;border-left:5px solid ' + color + ';background-color:#FFFFFF">' + br(item.content) + '</div></div>';
-        }).join('');
-        return '<section style="' + base + ';margin:26px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#FFFFFF"><h3 style="font-size:24px;color:' + color + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="margin:0 0 14px;padding:14px;border:1px solid #C9D7DE;border-radius:7px;color:#1F2933;background-color:#F3F7F8;font-weight:700">' + br(d.problem) + '</p>' + steps + '</section>';
-      }
       case 'carousel': {
         const slides = items.map((item, i) => {
           const media = item.image ? '<div style="margin-bottom:18px"><img src="' + safeUrl(item.image, '#') + '" alt="' + attr(item.alt) + '" style="display:block;width:100%;max-height:460px;object-fit:cover;border-radius:7px"></div>' : '';
@@ -1571,12 +1207,6 @@
       case 'video':
         if (d.mode === 'brightspace') return '<section style="' + base + ';margin:26px 0"><div role="img" aria-label="Brightspace or YuJa video placeholder" style="display:grid;place-items:center;min-height:340px;padding:24px;border:3px dashed #7395A4;color:#173744;background-color:#EAF2F5;font-size:23px;font-weight:700;text-align:center">Brightspace / YuJa video placeholder</div><p style="margin:10px 0 0;color:' + text + ';font-size:17px"><strong>Please add the video after you add this template in Brightspace</strong></p></section>';
         return '<div style="' + base + ';position:relative;width:100%;padding-top:56.25%;margin:26px 0;overflow:hidden;border-radius:8px;background-color:#000000"><iframe src="' + youtubeEmbed(d.url) + '" title="' + attr(d.title) + '" allowfullscreen loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe></div>';
-      case 'audio': {
-        const player = d.url
-          ? '<audio controls preload="none" src="' + safeUrl(d.url, '#') + '" title="' + attr(d.title) + '" style="display:block;width:100%">Your browser cannot play this audio. <a href="' + safeUrl(d.url, '#') + '">Download the audio file</a> instead.</audio>'
-          : '<div role="img" aria-label="Audio placeholder" style="display:grid;place-items:center;min-height:84px;padding:16px;border:2px dashed #7395A4;color:#173744;background-color:#EAF2F5;font-size:18px;font-weight:700;text-align:center">Add an audio file URL to enable the player</div>';
-        return '<section style="' + base + ';margin:26px 0;padding:20px 22px;border:1px solid #B8C8D0;border-left:7px solid ' + color + ';border-radius:0 9px 9px 0;background-color:#FFFFFF"><h3 style="font-size:22px;color:' + color + ';margin:0 0 12px">' + e(d.title) + '</h3>' + player + '<details style="margin-top:14px;border:1px solid #C9D7DE;border-radius:6px;overflow:hidden"><summary style="cursor:pointer;padding:11px 14px;color:#173744;background-color:#EEF6F8;font-weight:700">View the transcript</summary><div style="padding:14px;color:#1F2933;background-color:#FFFFFF">' + br(d.transcript) + '</div></details></section>';
-      }
       case 'table': {
         const headers = listFromPipes(d.headers)[0] || ['Item','Details'];
         const rows = listFromPipes(d.rows);
@@ -1604,33 +1234,20 @@
     return '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>' + e(state.title) + '</title>\n</head>\n<body style="margin:0;padding:20px;background-color:#f4f7f9">\n' + generatedBody() + '\n</body>\n</html>';
   }
 
-  function insertBarHtml(index) {
-    const active = state.insertAt === index;
-    return '<button type="button" class="insert-bar' + (active ? ' active' : '') + '" data-insert-at="' + index + '" aria-label="Insert a block at position ' + (index + 1) + '">' + (active ? 'Now choose a block from the library to insert it here' : '+ Add block here') + '</button>';
-  }
-
   function renderPreview() {
-    const parts = [];
-    state.blocks.forEach((block, index) => {
+    const blocks = state.blocks.map((block, index) => {
       const selected = block.id === state.selectedId;
-      parts.push(insertBarHtml(index));
-      parts.push('<div class="preview-block' + (selected ? ' is-selected' : '') + '" data-block-id="' + block.id + '" draggable="true" tabindex="0" aria-label="' + e(defs[block.type].label) + ' block">' +
+      return '<div class="preview-block' + (selected ? ' is-selected' : '') + '" data-block-id="' + block.id + '" draggable="true" tabindex="0" aria-label="' + e(defs[block.type].label) + ' block">' +
         '<div class="block-tools" aria-label="' + e(defs[block.type].label) + ' controls">' +
         '<button type="button" class="block-tool drag-handle" title="Drag to reorder" aria-label="Drag block to reorder">⋮⋮</button>' +
         '<button type="button" class="block-tool" data-action="up" aria-label="Move block up"' + (index === 0 ? ' disabled' : '') + '>↑</button>' +
         '<button type="button" class="block-tool" data-action="down" aria-label="Move block down"' + (index === state.blocks.length - 1 ? ' disabled' : '') + '>↓</button>' +
-        '<button type="button" class="block-tool" data-action="duplicate" title="Duplicate block" aria-label="Duplicate block">⧉</button>' +
-        '<button type="button" class="block-tool delete" data-action="delete" aria-label="Delete block">×</button></div>' + renderBlockHtml(block) + '</div>');
-    });
-    if (state.blocks.length) parts.push(insertBarHtml(state.blocks.length));
-    const blocksHtml = parts.join('');
+        '<button type="button" class="block-tool delete" data-action="delete" aria-label="Delete block">×</button></div>' + renderBlockHtml(block) + '</div>';
+    }).join('');
     const banner = state.bannerUrl ? '<img class="page-banner-image" src="' + safeUrl(state.bannerUrl, '') + '" alt="">' : '';
     const titleClass = state.titleStyle === 'text' ? ' text-only' : '';
-    const starterCards = ['module','instructor','course','weekly'].map(key => '<button type="button" class="starter-card" data-start-template="' + key + '">' + e(templates[key].label) + '</button>').join('');
-    const emptyState = '<div class="preview-empty"><strong>Your page is ready for content.</strong><br>Add a building block from the left panel, or start from a template:<div class="starter-cards">' + starterCards + '</div></div>';
-    el.preview.innerHTML = banner + '<div class="page-title-preview' + titleClass + '" style="' + (state.titleStyle === 'banner' ? 'background-color:' + state.accent + ';color:' + contrast(state.accent) + ';border-bottom-color:#FF6600' : 'border-bottom-color:' + state.accent) + '"><p class="page-kicker">' + e(state.pageLabel) + '</p><h3>' + e(state.title) + '</h3></div><div class="preview-content' + (state.selectedId ? ' has-selection' : '') + '">' + (blocksHtml || emptyState) + '</div><div class="preview-footer">McLennan Online</div>';
+    el.preview.innerHTML = banner + '<div class="page-title-preview' + titleClass + '" style="' + (state.titleStyle === 'banner' ? 'background-color:' + state.accent + ';color:' + contrast(state.accent) + ';border-bottom-color:#FF6600' : 'border-bottom-color:' + state.accent) + '"><p class="page-kicker">' + e(state.pageLabel) + '</p><h3>' + e(state.title) + '</h3></div><div class="preview-content">' + (blocks || '<div class="preview-empty"><strong>Your page is ready for content.</strong><br>Add a building block from the left panel.</div>') + '</div><div class="preview-footer">McLennan Online</div>';
     el.count.textContent = countText(state.blocks.length);
-    saveLocal();
   }
 
   function inputHtml(block, f, value, itemIndex) {
@@ -1695,7 +1312,7 @@
     el.toast.textContent = message;
     el.toast.classList.add('show');
     clearTimeout(toast.timer);
-    toast.timer = setTimeout(() => el.toast.classList.remove('show'), 3400);
+    toast.timer = setTimeout(() => el.toast.classList.remove('show'), 2600);
   }
 
   async function copyText(text, success) {
@@ -1714,7 +1331,6 @@
     const i = state.blocks.findIndex(b => b.id === id);
     const next = i + delta;
     if (i < 0 || next < 0 || next >= state.blocks.length) return;
-    snapshot();
     const temp = state.blocks[i]; state.blocks[i] = state.blocks[next]; state.blocks[next] = temp;
     renderAll();
   }
@@ -1722,63 +1338,9 @@
   function deleteBlock(id) {
     const i = state.blocks.findIndex(b => b.id === id);
     if (i < 0) return;
-    snapshot();
     state.blocks.splice(i, 1);
     state.selectedId = state.blocks[i] ? state.blocks[i].id : state.blocks[i - 1] ? state.blocks[i - 1].id : null;
     renderAll();
-  }
-
-  function auditPage() {
-    const issues = [];
-    const placeholderAlt = /^(describe|instructor portrait$|add )/i;
-    let lastLevel = 1;
-    state.blocks.forEach((block, i) => {
-      const def = defs[block.type];
-      if (!def) return;
-      const label = def.label + ' (block ' + (i + 1) + ')';
-      const d = block.data;
-      if (block.type === 'heading') {
-        const level = parseInt(d.level, 10) || 2;
-        if (level - lastLevel > 1) issues.push(label + ': heading level jumps from H' + lastLevel + ' to H' + level + '. Keep heading levels sequential.');
-        lastLevel = level;
-      }
-      const pair = blockColorPair(block);
-      const ratio = contrastRatio(pair.text, pair.background);
-      if (ratio < 4.5) issues.push(label + ': text contrast is ' + ratio.toFixed(2) + ':1, below the 4.5:1 WCAG AA minimum for normal text.');
-      if (block.type === 'image' && (!String(d.alt || '').trim() || placeholderAlt.test(d.alt))) issues.push(label + ': alternative text is empty or still reads like a placeholder.');
-      if ((block.type === 'imageText' || block.type === 'insight' || block.type === 'instructorInfo' || block.type === 'hotspot') && d.image && placeholderAlt.test(String(d.alt || ''))) issues.push(label + ': the image still uses placeholder alternative text.');
-      if (block.type === 'compare' && ((d.imageA && placeholderAlt.test(String(d.altA || ''))) || (d.imageB && placeholderAlt.test(String(d.altB || ''))))) issues.push(label + ': one or both compare images still use placeholder alternative text.');
-      if (block.type === 'carousel' || block.type === 'storyboard') {
-        (d.items || []).slice(0, parseInt(d.count, 10) || 0).forEach((item, j) => {
-          if (item.image && placeholderAlt.test(String(item.alt || ''))) issues.push(label + ': item ' + (j + 1) + ' still uses placeholder alternative text.');
-        });
-      }
-      if (block.type === 'button' && (d.items || []).slice(0, parseInt(d.count, 10) || 0).some(item => !/^(https?:|mailto:|tel:)/i.test(String(item.url || '').trim()))) issues.push(label + ': one or more buttons are missing a valid link URL.');
-      if (block.type === 'table' && !lines(d.headers).length) issues.push(label + ': the table has no column headers.');
-      if (block.type === 'audio' && (!String(d.transcript || '').trim() || d.transcript === 'Paste the full transcript here.')) issues.push(label + ': the audio note has no transcript yet. A transcript is required for accessibility.');
-      if (block.type === 'annotated' && !/\{\{\d+\}\}/.test(String(d.passage || ''))) issues.push(label + ': the passage has no {{1}}-style markers, so the annotations will never appear.');
-      if (block.type === 'video' && d.mode === 'embed' && !String(d.title || '').trim()) issues.push(label + ': the embedded video is missing an accessible title.');
-    });
-    return issues;
-  }
-
-  function showAudit() {
-    const issues = auditPage();
-    const overlay = document.createElement('div');
-    overlay.className = 'audit-overlay';
-    overlay.innerHTML = '<div class="audit-modal" role="dialog" aria-modal="true" aria-labelledby="audit-title"><h2 id="audit-title">Page accessibility check</h2>' +
-      (issues.length
-        ? '<p>' + issues.length + (issues.length === 1 ? ' item' : ' items') + ' to review before publishing:</p><ul>' + issues.map(x => '<li>' + e(x) + '</li>').join('') + '</ul>'
-        : '<div class="audit-pass"><strong>No issues found.</strong> Heading order is sequential, every block passes WCAG AA contrast, and no placeholder alternative text or empty links were detected.</div>') +
-      '<button class="btn btn-primary" type="button" data-close-audit>Close</button></div>';
-    document.body.appendChild(overlay);
-    const close = () => { overlay.remove(); document.removeEventListener('keydown', onEscape); };
-    function onEscape(event) { if (event.key === 'Escape') close(); }
-    overlay.addEventListener('click', (event) => {
-      if (event.target === overlay || event.target.closest('[data-close-audit]')) close();
-    });
-    document.addEventListener('keydown', onEscape);
-    overlay.querySelector('[data-close-audit]').focus();
   }
 
   el.template.addEventListener('change', () => applyTemplate(el.template.value));
@@ -1788,33 +1350,11 @@
   el.banner.addEventListener('input', () => { state.bannerUrl = el.banner.value; renderPreview(); });
   el.accent.addEventListener('click', (event) => {
     const button = event.target.closest('[data-accent]'); if (!button) return;
-    snapshot();
     state.accent = button.dataset.accent; renderAccentPalette(); renderAll();
   });
   el.library.addEventListener('click', (event) => {
-    const summary = event.target.closest('.cat-acc > summary');
-    if (summary) {
-      event.preventDefault();
-      const cat = summary.parentElement.dataset.cat;
-      if (el.search.value.trim()) {
-        summary.parentElement.open = !summary.parentElement.open;
-      } else {
-        openCategory = openCategory === cat ? null : cat;
-        renderLibrary(el.search.value);
-      }
-      return;
-    }
     const button = event.target.closest('[data-add]'); if (!button) return;
-    snapshot();
-    const block = makeBlock(button.dataset.add); syncRepeater(block);
-    if (state.insertAt != null && state.insertAt <= state.blocks.length) {
-      state.blocks.splice(state.insertAt, 0, block);
-      state.insertAt = null;
-    } else {
-      state.blocks.push(block);
-    }
-    state.selectedId = block.id;
-    if (state.blocks.length === 1) { const setup = document.getElementById('setup-details'); if (setup) setup.open = false; }
+    const block = makeBlock(button.dataset.add); syncRepeater(block); state.blocks.push(block); state.selectedId = block.id;
     renderAll(); toast(defs[block.type].label + ' added.');
     setTimeout(() => document.querySelector('[data-block-id="' + block.id + '"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 20);
   });
@@ -1830,16 +1370,6 @@
 
   let draggedId = null;
   el.preview.addEventListener('click', (event) => {
-    const bar = event.target.closest('[data-insert-at]');
-    if (bar) {
-      const index = parseInt(bar.dataset.insertAt, 10);
-      state.insertAt = state.insertAt === index ? null : index;
-      renderPreview();
-      if (state.insertAt != null) toast('Now choose a block from the library to insert it at that spot.');
-      return;
-    }
-    const starter = event.target.closest('[data-start-template]');
-    if (starter) { applyTemplate(starter.dataset.startTemplate); toast(templates[starter.dataset.startTemplate].label + ' template applied.'); return; }
     const wrapper = event.target.closest('[data-block-id]'); if (!wrapper) return;
     const id = wrapper.dataset.blockId;
     const action = event.target.closest('[data-action]');
@@ -1847,18 +1377,6 @@
       event.preventDefault(); event.stopPropagation();
       if (action.dataset.action === 'up') moveBlock(id, -1);
       if (action.dataset.action === 'down') moveBlock(id, 1);
-      if (action.dataset.action === 'duplicate') {
-        const i = state.blocks.findIndex(b => b.id === id);
-        if (i >= 0) {
-          snapshot();
-          const copy = clone(state.blocks[i]);
-          copy.id = uid();
-          state.blocks.splice(i + 1, 0, copy);
-          state.selectedId = copy.id;
-          renderAll();
-          toast('Block duplicated.');
-        }
-      }
       if (action.dataset.action === 'delete') deleteBlock(id);
       return;
     }
@@ -1877,12 +1395,9 @@
   el.preview.addEventListener('drop', (event) => {
     const target = event.target.closest('[data-block-id]'); if (!target || !draggedId) return;
     event.preventDefault(); const from = state.blocks.findIndex(b => b.id === draggedId); const to = state.blocks.findIndex(b => b.id === target.dataset.blockId);
-    if (from >= 0 && to >= 0 && from !== to) { snapshot(); const block = state.blocks.splice(from, 1)[0]; state.blocks.splice(to, 0, block); state.selectedId = block.id; renderAll(); }
+    if (from >= 0 && to >= 0 && from !== to) { const block = state.blocks.splice(from, 1)[0]; state.blocks.splice(to, 0, block); state.selectedId = block.id; renderAll(); }
   });
 
-  el.editor.addEventListener('focusin', (event) => {
-    if (/^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) snapshot();
-  });
   el.editor.addEventListener('input', (event) => {
     const block = state.blocks.find(b => b.id === state.selectedId); if (!block) return;
     const target = event.target;
@@ -1915,63 +1430,23 @@
   el.editor.addEventListener('click', (event) => {
     const block = state.blocks.find(b => b.id === state.selectedId); if (!block) return;
     const color = event.target.closest('[data-block-color]');
-    if (color) { snapshot(); block.color = color.dataset.blockColor === 'accent' ? null : color.dataset.blockColor; renderAll(); return; }
+    if (color) { block.color = color.dataset.blockColor === 'accent' ? null : color.dataset.blockColor; renderAll(); return; }
     const textColor = event.target.closest('[data-block-text-color]');
-    if (textColor) { snapshot(); block.textColor = textColor.dataset.blockTextColor === 'auto' ? null : textColor.dataset.blockTextColor; renderAll(); return; }
+    if (textColor) { block.textColor = textColor.dataset.blockTextColor === 'auto' ? null : textColor.dataset.blockTextColor; renderAll(); return; }
     const backgroundColor = event.target.closest('[data-block-background-color]');
-    if (backgroundColor) { snapshot(); block.backgroundColor = backgroundColor.dataset.blockBackgroundColor === 'default' ? null : backgroundColor.dataset.blockBackgroundColor; renderAll(); return; }
+    if (backgroundColor) { block.backgroundColor = backgroundColor.dataset.blockBackgroundColor === 'default' ? null : backgroundColor.dataset.blockBackgroundColor; renderAll(); return; }
     if (event.target.closest('[data-copy-block]')) { copyText(renderBlockHtml(block), 'Block HTML copied.'); return; }
     if (event.target.closest('[data-delete-selected]')) deleteBlock(block.id);
   });
 
-  document.querySelectorAll('[data-viewport]').forEach(button => {
-    button.addEventListener('click', () => {
-      document.querySelectorAll('[data-viewport]').forEach(b => b.setAttribute('aria-pressed', b === button));
-      el.preview.classList.remove('vp-tablet', 'vp-phone');
-      if (button.dataset.viewport === 'tablet') el.preview.classList.add('vp-tablet');
-      if (button.dataset.viewport === 'phone') el.preview.classList.add('vp-phone');
-    });
-  });
-
-  document.getElementById('undo-page').addEventListener('click', undoLast);
-  document.addEventListener('keydown', (event) => {
-    if ((event.ctrlKey || event.metaKey) && String(event.key).toLowerCase() === 'z' && !/^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName)) {
-      event.preventDefault();
-      undoLast();
-    }
-  });
-
-  document.getElementById('audit-page').addEventListener('click', showAudit);
-
-  document.getElementById('export-page').addEventListener('click', () => {
-    const blob = new Blob([serialize()], { type: 'application/json;charset=utf-8' });
-    const url = URL.createObjectURL(blob); const a = document.createElement('a');
-    a.href = url; a.download = slugify(state.title) + '.coursemaker.json';
-    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    toast('Page exported as JSON. Import it later to keep editing, or share it with a colleague.');
-  });
-  document.getElementById('import-page').addEventListener('click', () => document.getElementById('import-file').click());
-  document.getElementById('import-file').addEventListener('change', (event) => {
-    const file = event.target.files && event.target.files[0];
-    event.target.value = '';
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      snapshot();
-      if (restore(String(reader.result))) toast('Page imported.');
-      else toast('That file is not a valid CourseMaker page.');
-    };
-    reader.readAsText(file);
-  });
-
-  document.getElementById('copy-page').addEventListener('click', () => copyText(generatedBody(), 'Copied. In Brightspace: create a file, open the HTML source editor (</>), paste, and save.'));
+  document.getElementById('copy-page').addEventListener('click', () => copyText(generatedBody(), 'Brightspace page HTML copied.'));
   document.getElementById('download-page').addEventListener('click', () => {
     const blob = new Blob([fullHtml()], { type: 'text/html;charset=utf-8' });
     const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = slugify(state.title) + '.html';
-    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); toast('HTML file downloaded. Upload it to Manage Files in Brightspace.');
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); toast('HTML file downloaded.');
   });
   document.getElementById('reset-page').addEventListener('click', () => {
-    if (state.blocks.length && !window.confirm('Reset the page and remove all current blocks? You can undo this with Ctrl+Z.')) return;
+    if (state.blocks.length && !window.confirm('Reset the page and remove all current blocks?')) return;
     applyTemplate('blank'); toast('Page reset.');
   });
 
@@ -1980,28 +1455,6 @@
   const requestedTemplate = new URLSearchParams(window.location.search).get('template');
   const templateMap = { content:'course', instructor:'instructor', module:'module', weekly:'weekly', video:'videoPage', blank:'blank' };
   applyTemplate(templateMap[requestedTemplate] || 'blank');
-  ready = true;
-
-  try {
-    const saved = localStorage.getItem(SAVE_KEY);
-    const parsed = saved ? JSON.parse(saved) : null;
-    if (parsed && Array.isArray(parsed.blocks) && parsed.blocks.length) {
-      const bannerRow = document.createElement('div');
-      bannerRow.className = 'resume-banner';
-      bannerRow.innerHTML = '<span><strong>Pick up where you left off?</strong> A previous page was autosaved in this browser.</span><span class="resume-actions"><button class="btn" type="button" data-resume>Resume page</button><button class="btn" type="button" data-dismiss>Start fresh</button></span>';
-      const wrap = document.querySelector('.builder-wrap');
-      wrap.insertBefore(bannerRow, wrap.querySelector('.builder-grid'));
-      bannerRow.addEventListener('click', (event) => {
-        if (event.target.closest('[data-resume]')) {
-          snapshot();
-          if (restore(saved)) toast('Autosaved page restored.');
-          bannerRow.remove();
-        } else if (event.target.closest('[data-dismiss]')) {
-          bannerRow.remove();
-        }
-      });
-    }
-  } catch (_) { }
 })();
 </script>
 </body>
