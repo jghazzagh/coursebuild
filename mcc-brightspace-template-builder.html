@@ -892,6 +892,37 @@
       defaults: { label: 'Assignment due', date: 'Friday at 11:59 p.m.', note: 'Submit your work in the Brightspace assignment folder.' },
       fields: [field('label', 'Reminder label'), field('date', 'Due date and time', '', 'Written out as text so it never goes stale in copied course shells.'), field('note', 'Additional details', 'textarea')]
     },
+    courseCards: {
+      label: 'Colored course cards (1–6)', category: 'Featured', isNew: true,
+      defaults: { title: 'During this course, you will', count: 4, items: [
+        { heading: 'Understand the concept', content: 'Describe the first big outcome students can expect.' },
+        { heading: 'Practice the skills', content: 'Explain how students will apply what they learn.' },
+        { heading: 'Work smarter', content: 'Show how the course saves students time or effort.' },
+        { heading: 'Make good decisions', content: 'Describe the judgment students will build.' }
+      ] },
+      fields: [field('title', 'Section heading', '', 'Leave blank to show only the cards.'), field('count', 'Cards (1–6)', 'number', '', { min: 1, max: 6 })],
+      repeater: repeater('items', 'Card', 'count', [field('heading', 'Card heading'), field('content', 'Card text', 'textarea')])
+    },
+    scopeCards: {
+      label: 'Scope rating cards (1–6)', category: 'Featured', isNew: true,
+      defaults: { title: 'Ideas, from small to ambitious', label: 'Scope', count: 3, items: [
+        { heading: 'Start small', content: 'A low-lift first step with quick value.', level: 1 },
+        { heading: 'Build the habit', content: 'A repeatable version that grows over time.', level: 2 },
+        { heading: 'Go big', content: 'The most ambitious version, with the biggest payoff.', level: 4 }
+      ] },
+      fields: [field('title', 'Section heading', '', 'Leave blank to show only the cards.'), field('label', 'Rating label', '', 'Shown above the dots on every card, for example Scope or Effort.'), field('count', 'Cards (1–6)', 'number', '', { min: 1, max: 6 })],
+      repeater: repeater('items', 'Card', 'count', [field('heading', 'Card heading'), field('content', 'Card text', 'textarea'), field('level', 'Filled dots (1–4)', 'number', '', { min: 1, max: 4 })])
+    },
+    stepBoxes: {
+      label: 'Step flow boxes (2–6)', category: 'Featured', isNew: true,
+      defaults: { count: 3, items: [
+        { label: 'Step one', heading: 'What?', content: 'Describe the first step.' },
+        { label: 'Step two', heading: 'So what?', content: 'Explain why it matters.' },
+        { label: 'Step three', heading: 'Now what?', content: 'Name what happens next.' }
+      ] },
+      fields: [field('count', 'Steps (2–6)', 'number', '', { min: 2, max: 6 })],
+      repeater: repeater('items', 'Step', 'count', [field('label', 'Small label'), field('heading', 'Step heading'), field('content', 'Step text', 'textarea')])
+    },
     accordion: {
       label: 'Accordion (1–6)', category: 'Interactive',
       defaults: { count: 3, items: [
@@ -1083,6 +1114,27 @@
       ] },
       fields: [field('title', 'Example heading'), field('problem', 'Problem statement', 'textarea'), field('shown', 'Steps shown by default (0–6)', 'number', 'Remaining steps are hidden behind "try it, then reveal" buttons.', { min: 0, max: 6 }), field('count', 'Total steps (2–6)', 'number', '', { min: 2, max: 6 })],
       repeater: repeater('items', 'Step', 'count', [field('heading', 'Step heading'), field('content', 'Step work', 'textarea')])
+    },
+    scenarioReveal: {
+      label: 'Scenario reveal boxes (1–6)', category: 'Interactive', isNew: true,
+      defaults: { title: 'Pitfall or best practice?', instructions: 'Read each scenario and decide, then reveal the call.', count: 2, items: [
+        { scenario: 'Describe a realistic situation for students to judge.', kind: 'bad', verdict: 'Pitfall.', explanation: 'Explain why this approach causes problems.' },
+        { scenario: 'Describe a second situation that models the right approach.', kind: 'good', verdict: 'Best practice.', explanation: 'Explain why this approach works.' }
+      ] },
+      fields: [field('title', 'Section heading'), field('instructions', 'Learner instructions', 'textarea'), field('count', 'Scenarios (1–6)', 'number', '', { min: 1, max: 6 })],
+      repeater: repeater('items', 'Scenario', 'count', [field('scenario', 'Scenario text', 'textarea'), field('kind', 'Verdict style', 'select', '', { options: [['bad','Caution (warm orange answer)'],['good','Positive (blue answer)']] }), field('verdict', 'Verdict label', '', 'The bold word shown first, for example Pitfall. or Best practice.'), field('explanation', 'Answer explanation', 'textarea')])
+    },
+    pathTimeline: {
+      label: 'Interactive path timeline (1–8)', category: 'Interactive', isNew: true,
+      defaults: { title: 'The full path, in one picture', intro: 'Select each marker to see its details.', count: 5, items: [
+        { label: 'Start', details: 'Describe the first milestone on the path.' },
+        { label: 'Plan', details: 'Describe the planning stage.' },
+        { label: 'Build', details: 'Describe the main work.' },
+        { label: 'Review', details: 'Describe the check before finishing.' },
+        { label: 'Publish', details: 'Describe the final step.' }
+      ] },
+      fields: [field('title', 'Timeline heading'), field('intro', 'Learner instructions', 'textarea'), field('count', 'Markers (1–8)', 'number', '', { min: 1, max: 8 })],
+      repeater: repeater('items', 'Marker', 'count', [field('label', 'Marker label'), field('details', 'Marker details', 'textarea')])
     },
     storyboard: {
       label: 'Sticky storyboard', category: 'Internal', isNew: true,
@@ -1293,7 +1345,7 @@
     const cats = ['Text','Featured','Interactive','Media','Data','Layout'];
     let total = 0;
     el.library.innerHTML = cats.map(cat => {
-      const interactiveOrder = ['accordion','tabs','flip','timeline','interactiveChecklist','carousel','interactiveTimeline','scenario','knowledge','multipleChoice','reveal','process','sorting','sequence','matching','estimate','poll','selfCheck','compare','workedExample'];
+      const interactiveOrder = ['accordion','tabs','flip','timeline','interactiveChecklist','carousel','interactiveTimeline','scenario','knowledge','multipleChoice','reveal','process','sorting','sequence','matching','estimate','poll','selfCheck','compare','workedExample','scenarioReveal','pathTimeline'];
       const entries = Object.entries(defs).filter(([,d]) => d.category === cat && (!q || d.label.toLowerCase().includes(q)))
         .sort((a, b) => cat === 'Interactive' ? interactiveOrder.indexOf(a[0]) - interactiveOrder.indexOf(b[0]) : 0);
       if (!entries.length) return '';
@@ -1307,7 +1359,7 @@
 
   function blockColor(block) { return block.color || state.accent; }
 
-  const CONTROL_BACKGROUND_TYPES = new Set(['button','colored','accordion','tabs','flip','timeline','carousel','interactiveTimeline','reveal','knowledge','multipleChoice','scenario','process','table','decoder','branching','sorting','sequence','estimate','compare','selfCheck','matching','poll','workedExample']);
+  const CONTROL_BACKGROUND_TYPES = new Set(['button','colored','accordion','tabs','flip','timeline','carousel','interactiveTimeline','reveal','knowledge','multipleChoice','scenario','process','table','decoder','branching','sorting','sequence','estimate','compare','selfCheck','matching','poll','workedExample','scenarioReveal']);
   function aiPolicyPalette(level) {
     if (level === 'red') return { background: '#FDECEB', text: '#4A1716', accent: '#A22522', badge: 'R', label: 'Red Light: No AI Allowed', meaning: 'AI is entirely prohibited.' };
     if (level === 'green') return { background: '#E5F5EB', text: '#103B25', accent: '#167442', badge: 'G', label: 'Green Light: Full AI Use Allowed', meaning: 'AI is permitted without restrictions, provided it’s used ethically.' };
@@ -1545,6 +1597,54 @@
       case 'interactiveChecklist': {
         const id = block.id;
         return '<section data-mcc-checklist style="' + base + ';margin:25px 0;padding:21px;border:1px solid #bdcbd2;border-left:7px solid ' + color + ';border-radius:8px;background-color:' + background + '"><h3 style="font-family:Lato,Arial,sans-serif;font-size:23px;color:' + text + ';margin:0 0 6px">' + e(d.title) + '</h3><p data-progress aria-live="polite" style="margin:0 0 13px;color:' + text + ';font-size:17px">0 of ' + items.length + ' complete</p>' + items.map((item, i) => '<label style="display:flex;align-items:flex-start;gap:11px;margin:8px 0;padding:12px;color:' + text + ';background-color:' + background + ';border:1px solid #d2dce1;border-radius:6px;font-family:Lato,Arial,sans-serif;font-size:19px;line-height:1.65"><input type="checkbox" onchange="var r=this.closest(\'[data-mcc-checklist]\'),n=r.querySelectorAll(\'input[type=checkbox]:checked\').length,t=r.querySelectorAll(\'input[type=checkbox]\').length;r.querySelector(\'[data-progress]\').textContent=n+\' of \'+t+\' complete\'" style="flex:0 0 auto;width:22px;height:22px;margin-top:4px;accent-color:' + color + '"><span style="font-family:Lato,Arial,sans-serif;font-size:19px;color:' + text + '">' + e(item.text) + '</span></label>').join('') + '</section>';
+      }
+      case 'courseCards': {
+        const altColor = String(color).toUpperCase() === '#FF6600' ? '#003366' : '#FF6600';
+        const courseCardsHtml = items.map((item, i) => '<div style="flex:1 1 220px;padding:20px;background-color:#FFFFFF;border:1px solid #C9D7DE;border-top:5px solid ' + (i % 2 ? altColor : color) + ';border-radius:8px;box-shadow:0 2px 8px rgba(0,27,59,.08)"><h4 style="font-family:Lato,Arial,sans-serif;margin:0 0 8px;color:' + color + ';font-size:20px;line-height:1.3">' + e(item.heading) + '</h4><p style="margin:0;color:#1F2933;font-family:Lato,Arial,sans-serif;font-size:17px;line-height:1.55">' + br(item.content) + '</p></div>').join('');
+        return '<section style="' + base + ';margin:26px 0">' + (d.title ? '<h3 style="font-size:26px;color:' + color + ';margin:0 0 14px">' + e(d.title) + '</h3>' : '') + '<div style="display:flex;flex-wrap:wrap;gap:14px">' + courseCardsHtml + '</div></section>';
+      }
+      case 'scopeCards': {
+        const maxDots = 4;
+        const scopeRows = items.map((item) => {
+          const level = Math.max(1, Math.min(maxDots, parseInt(item.level, 10) || 1));
+          let dots = '';
+          for (let j = 0; j < maxDots; j++) dots += '<span style="display:inline-block;width:11px;height:11px;border-radius:50%;background-color:' + (j < level ? color : '#D6E8EE') + ';margin-right:4px"></span>';
+          return '<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;background-color:#FFFFFF;border:1px solid #C9D7DE;border-radius:8px;padding:18px 20px;margin:0 0 14px"><div style="flex:0 0 96px"><span style="display:block;font-family:Lato,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.05em;color:' + color + ';text-transform:uppercase;margin-bottom:6px">' + e(d.label) + '</span><span role="img" aria-label="' + attr(d.label) + ' level ' + level + ' of ' + maxDots + '">' + dots + '</span></div><div style="flex:1 1 220px"><h4 style="font-family:Lato,Arial,sans-serif;margin:0 0 6px;font-size:19px;color:' + color + ';line-height:1.3">' + e(item.heading) + '</h4><p style="margin:0;font-family:Lato,Arial,sans-serif;font-size:17px;color:#1F2933;line-height:1.55">' + br(item.content) + '</p></div></div>';
+        }).join('');
+        return '<section style="' + base + ';margin:26px 0">' + (d.title ? '<h3 style="font-size:26px;color:' + color + ';margin:0 0 14px">' + e(d.title) + '</h3>' : '') + scopeRows + '</section>';
+      }
+      case 'stepBoxes': {
+        const stepPalettes = [
+          { bg: '#003366', label: '#F7B32B', heading: '#FFFFFF', body: '#D6E8EE' },
+          { bg: '#006F84', label: '#FFF4D6', heading: '#FFFFFF', body: '#E0F2F6' },
+          { bg: '#EE7B30', label: '#001B3B', heading: '#001B3B', body: '#33240F' },
+          { bg: '#001B3B', label: '#F7B32B', heading: '#FFFFFF', body: '#D6E8EE' }
+        ];
+        const stepBoxesHtml = items.map((item, i) => {
+          const p = stepPalettes[i % stepPalettes.length];
+          const arrow = i ? '<div aria-hidden="true" style="flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:24px;color:' + color + ';font-weight:700;padding:0 4px">→</div>' : '';
+          return arrow + '<div style="flex:1 1 200px;background-color:' + p.bg + ';border-radius:8px;padding:18px 16px;text-align:center"><p style="margin:0 0 6px;font-family:Lato,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.05em;color:' + p.label + ';text-transform:uppercase">' + e(item.label) + '</p><p style="margin:0;font-family:Lato,Arial,sans-serif;font-size:19px;font-weight:700;color:' + p.heading + '">' + e(item.heading) + '</p><p style="margin:8px 0 0;font-family:Lato,Arial,sans-serif;font-size:15px;color:' + p.body + ';line-height:1.5">' + br(item.content) + '</p></div>';
+        }).join('');
+        return '<div style="' + base + ';display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:26px 0">' + stepBoxesHtml + '</div>';
+      }
+      case 'scenarioReveal': {
+        const verdictPalette = (kind) => kind === 'good'
+          ? { background: '#D6E8EE', text: '#001B3B', verdict: '#0F5C6E' }
+          : { background: '#FFF4EF', text: '#33240F', verdict: '#8A3E00' };
+        const scenarioCards = items.map((item, i) => {
+          const panelId = block.id + '-scenario-' + i;
+          const palette = verdictPalette(item.kind);
+          const toggle = 'var p=document.getElementById(\'' + panelId + '\'),open=this.getAttribute(\'aria-expanded\')!==\'true\';this.setAttribute(\'aria-expanded\',open);p.hidden=!open;this.textContent=open?\'Hide answer\':\'Reveal answer\'';
+          return '<div style="flex:1 1 260px;display:flex;flex-direction:column;background-color:#FFFFFF;border:1px solid ' + color + ';border-radius:8px;overflow:hidden"><div style="flex:1 1 auto;padding:18px 18px 12px;font-family:Lato,Arial,sans-serif;font-size:17px;color:#1F2933;line-height:1.55"><span style="display:block;font-size:13px;font-weight:800;letter-spacing:.05em;color:' + color + ';text-transform:uppercase;margin-bottom:6px">Scenario ' + (i + 1) + '</span>' + br(item.scenario) + '</div><button type="button" aria-expanded="false" aria-controls="' + panelId + '" onclick="' + attr(toggle) + '" style="width:100%;padding:12px 16px;border:0;border-top:1px solid #001B3B;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:16px;font-weight:700;text-align:left;cursor:pointer">Reveal answer</button><div id="' + panelId + '" hidden style="padding:16px 18px;border-top:3px solid #F7B32B;font-family:Lato,Arial,sans-serif;font-size:17px;line-height:1.55;color:' + palette.text + ';background-color:' + palette.background + '"><strong style="display:block;margin-bottom:4px;color:' + palette.verdict + '">' + e(item.verdict) + '</strong>' + br(item.explanation) + '</div></div>';
+        }).join('');
+        return '<section style="' + base + ';margin:26px 0">' + (d.title ? '<h3 style="font-size:24px;color:' + color + ';margin:0 0 6px">' + e(d.title) + '</h3>' : '') + (d.instructions ? '<p style="margin:0 0 14px;color:#1F2933">' + br(d.instructions) + '</p>' : '') + '<div style="display:flex;flex-wrap:wrap;gap:16px">' + scenarioCards + '</div></section>';
+      }
+      case 'pathTimeline': {
+        const pathId = block.id;
+        const activeLabel = '#B34700';
+        const markers = items.map((item, i) => '<button type="button" data-path-marker data-index="' + i + '" aria-controls="' + pathId + '-path-panel-' + i + '" aria-pressed="' + (i === 0) + '" onclick="var r=this.closest(\'[data-mcc-path]\'),n=parseInt(this.getAttribute(\'data-index\'),10);r.querySelectorAll(\'[data-path-marker]\').forEach(function(b,j){b.setAttribute(\'aria-pressed\',j===n);b.querySelector(\'[data-path-dot]\').style.backgroundColor=j===n?\'#FF6600\':\'' + color + '\';b.querySelector(\'[data-path-label]\').style.color=j===n?\'' + activeLabel + '\':\'' + color + '\'});r.querySelectorAll(\'[data-path-panel]\').forEach(function(p,j){p.hidden=j!==n})" style="flex:1 1 110px;padding:0 6px;border:0;background:none;text-align:center;cursor:pointer"><span data-path-dot aria-hidden="true" style="display:block;width:14px;height:14px;background-color:' + (i === 0 ? '#FF6600' : color) + ';border-radius:50%;margin:-27px auto 10px"></span><span data-path-label style="font-family:Lato,Arial,sans-serif;font-size:14px;font-weight:700;color:' + (i === 0 ? activeLabel : color) + '">' + e(item.label) + '</span></button>').join('');
+        const pathPanels = items.map((item, i) => '<section id="' + pathId + '-path-panel-' + i + '" data-path-panel' + (i ? ' hidden' : '') + ' style="margin-top:16px;padding:16px 18px;border-left:6px solid ' + color + ';border-radius:0 7px 7px 0;color:#1F2933;background-color:#F7FAFB"><p style="margin:0 0 5px;font-family:Lato,Arial,sans-serif;color:' + color + ';font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase">' + e(item.label) + '</p><p style="margin:0;font-family:Lato,Arial,sans-serif;font-size:17px;line-height:1.55">' + br(item.details) + '</p></section>').join('');
+        return '<section data-mcc-path style="' + base + ';margin:26px 0">' + (d.title ? '<h3 style="font-size:24px;color:' + color + ';margin:0 0 6px">' + e(d.title) + '</h3>' : '') + (d.intro ? '<p style="margin:0 0 26px;color:#1F2933">' + br(d.intro) + '</p>' : '') + '<div style="display:flex;flex-wrap:wrap;row-gap:34px;border-top:3px solid ' + color + ';padding-top:20px;margin-top:12px">' + markers + '</div><div aria-live="polite">' + pathPanels + '</div></section>';
       }
       case 'storyboard':
         return '<section style="' + base + ';margin:28px 0;scroll-snap-type:y proximity"><h3 style="font-size:27px;color:' + text + ';margin:0 0 16px">' + e(d.title) + '</h3>' + items.map((item, i) => '<section style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:24px;min-height:390px;margin:0 0 30px;padding:22px;border:1px solid #B8C8D0;border-top:6px solid ' + color + ';scroll-snap-align:start;color:' + text + ';background-color:' + background + '"><div style="position:sticky;top:20px;align-self:flex-start;flex:1 1 300px">' + imageOrPlaceholder(item.image, item.alt, 'Storyboard image ' + (i + 1) + ' placeholder') + '</div><div style="flex:1 1 300px;padding:8px 0"><p style="margin:0 0 5px;color:' + text + ';font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Story section ' + (i + 1) + '</p><h4 style="font-size:25px;color:' + text + ';margin:0 0 10px">' + e(item.heading) + '</h4><p style="color:' + text + ';margin:0">' + br(item.content) + '</p></div></section>').join('') + '</section>';
