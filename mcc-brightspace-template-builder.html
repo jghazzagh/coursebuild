@@ -904,6 +904,21 @@
       fields: [field('intro', 'Learner instructions', 'textarea'), field('passage', 'Passage', 'textarea', 'Type {{1}}, {{2}}, and so on where each highlighted phrase belongs.'), field('count', 'Annotations (1–6)', 'number', '', { min: 1, max: 6 })],
       repeater: repeater('items', 'Annotation', 'count', [field('phrase', 'Highlighted phrase'), field('explanation', 'Annotation', 'textarea')])
     },
+    bullets: {
+      label: 'Bullet list (1–10)', category: 'Text', isNew: true,
+      defaults: { title: 'Key points', style: 'disc', layout: 'plain', count: 3, items: [
+        { text: 'Add the first point' },
+        { text: 'Add the second point' },
+        { text: 'Add the third point' }
+      ] },
+      fields: [
+        field('title', 'List heading', '', 'Leave blank to show only the list.'),
+        field('style', 'Bullet style', 'select', '', { options: [['disc','Round bullets'],['square','Square bullets'],['dash','Bar bullets (MCC style)'],['check','Check marks'],['arrow','Arrows'],['number','Numbered circles']] }),
+        field('layout', 'Row style', 'select', '', { options: [['plain','Plain list'],['divided','Divided rows'],['boxed','Boxed rows']] }),
+        field('count', 'List items (1–10)', 'number', '', { min: 1, max: 10 })
+      ],
+      repeater: repeater('items', 'Item', 'count', [field('text', 'Item text')])
+    },
     callout: {
       label: 'Callout box', category: 'Featured',
       defaults: { style: 'information', title: 'Good to know', content: 'Use this space to add helpful context or guidance.' },
@@ -982,7 +997,7 @@
       repeater: repeater('items', 'Step', 'count', [field('label', 'Small label'), field('heading', 'Step heading'), field('content', 'Step text', 'textarea')])
     },
     accordion: {
-      label: 'Accordion (1–6)', category: 'Interactive',
+      label: 'Accordion (1–6)', category: 'Reveal & Explore',
       defaults: { count: 3, items: [
         { heading: 'Select to learn more', content: 'Place optional details or guidance here.' },
         { heading: 'Explore an example', content: 'Add a relevant example or supporting information.' },
@@ -992,7 +1007,7 @@
       repeater: repeater('items', 'Section', 'count', [field('heading', 'Heading'), field('content', 'Content', 'textarea')])
     },
     tabs: {
-      label: 'Tabbed sections', category: 'Interactive',
+      label: 'Tabbed sections', category: 'Reveal & Explore',
       defaults: { orientation: 'horizontal', count: 3, items: [
         { heading: 'Overview', content: 'Introduce the topic or activity.' },
         { heading: 'Example', content: 'Show students a practical example.' },
@@ -1002,7 +1017,7 @@
       repeater: repeater('items', 'Tab', 'count', [field('heading', 'Tab label'), field('content', 'Tab content', 'textarea')])
     },
     flip: {
-      label: 'Flip card', category: 'Interactive',
+      label: 'Flip card', category: 'Reveal & Explore',
       defaults: { count: 3, items: [
         { front: 'Key term', back: 'Definition or explanation' },
         { front: 'Concept', back: 'Example or application' },
@@ -1012,7 +1027,7 @@
       repeater: repeater('items', 'Card', 'count', [field('front', 'Front'), field('back', 'Back', 'textarea')])
     },
     timeline: {
-      label: 'Timeline', category: 'Interactive',
+      label: 'Timeline', category: 'Timelines & Steps',
       defaults: { count: 3, items: [
         { heading: 'Step 1', content: 'Describe the first step or event.' },
         { heading: 'Step 2', content: 'Describe the next step or event.' },
@@ -1022,7 +1037,7 @@
       repeater: repeater('items', 'Timeline item', 'count', [field('heading', 'Heading'), field('content', 'Content', 'textarea')])
     },
     carousel: {
-      label: 'Story or image carousel', category: 'Interactive', isNew: true,
+      label: 'Story or image carousel', category: 'Reveal & Explore', isNew: true,
       defaults: { title: 'Explore the story', instructions: 'Use Previous and Next to move through the slides.', count: 3, items: [
         { heading: 'Opening', content: 'Introduce the story, concept, or first image.', image: '', alt: 'Describe the first image.' },
         { heading: 'Development', content: 'Explain what changes or what learners should notice next.', image: '', alt: 'Describe the second image.' },
@@ -1032,7 +1047,7 @@
       repeater: repeater('items', 'Slide', 'count', [field('heading', 'Slide heading'), field('content', 'Slide text', 'textarea'), field('image', 'Optional image URL', 'url'), field('alt', 'Image alternative text', 'textarea')])
     },
     interactiveTimeline: {
-      label: 'Interactive timeline', category: 'Interactive', isNew: true,
+      label: 'Interactive timeline', category: 'Timelines & Steps', isNew: true,
       defaults: { title: 'Explore the timeline', instructions: 'Select each milestone to reveal its details.', count: 3, items: [
         { label: 'First', heading: 'Milestone 1', content: 'Describe the first milestone, date, or phase.' },
         { label: 'Next', heading: 'Milestone 2', content: 'Explain what happens next and why it matters.' },
@@ -1042,12 +1057,12 @@
       repeater: repeater('items', 'Milestone', 'count', [field('label', 'Button label or date'), field('heading', 'Milestone heading'), field('content', 'Milestone details', 'textarea')])
     },
     reveal: {
-      label: 'Click and reveal', category: 'Interactive', isNew: true,
+      label: 'Click and reveal', category: 'Reveal & Explore', isNew: true,
       defaults: { prompt: 'Think about your answer before revealing the explanation.', button: 'Reveal explanation', content: 'Explain the answer, key idea, or instructor reasoning here.' },
       fields: [field('prompt', 'Prompt', 'textarea'), field('button', 'Reveal button label'), field('content', 'Revealed content', 'textarea')]
     },
     knowledge: {
-      label: 'Knowledge check', category: 'Interactive', isNew: true,
+      label: 'Knowledge check', category: 'Questions & Scenarios', isNew: true,
       defaults: { question: 'Which option best demonstrates the concept?', count: 4, correct: 1, items: [
         { option: 'The best answer', feedback: 'This choice applies the concept accurately.' },
         { option: 'A plausible distractor', feedback: 'Revisit the key distinction in the content above.' },
@@ -1058,7 +1073,7 @@
       repeater: repeater('items', 'Choice', 'count', [field('option', 'Answer choice'), field('feedback', 'Feedback', 'textarea')])
     },
     multipleChoice: {
-      label: 'Multiple choice question', category: 'Interactive', isNew: true,
+      label: 'Multiple choice question', category: 'Questions & Scenarios', isNew: true,
       defaults: { question: 'Which answer best demonstrates the concept?', count: 4, correct: 1, items: [
         { option: 'Correct answer', feedback: 'Correct. Explain why this answer best applies the concept.' },
         { option: 'Plausible distractor', feedback: 'Not quite. Address the misconception and point learners back to the relevant idea.' },
@@ -1069,7 +1084,7 @@
       repeater: repeater('items', 'Answer', 'count', [field('option', 'Answer text'), field('feedback', 'Feedback for this answer', 'textarea')])
     },
     scenario: {
-      label: 'Decision scenario', category: 'Interactive', isNew: true,
+      label: 'Decision scenario', category: 'Questions & Scenarios', isNew: true,
       defaults: { title: 'What would you do?', scenario: 'Describe a realistic situation and ask students to choose the strongest response.', count: 3, correct: 1, items: [
         { option: 'Choose the strongest response', feedback: 'Good choice. Explain why this response works well.' },
         { option: 'Choose a tempting but incomplete response', feedback: 'This might help, but it misses an important consideration.' },
@@ -1079,7 +1094,7 @@
       repeater: repeater('items', 'Choice', 'count', [field('option', 'Response option'), field('feedback', 'Detailed feedback', 'textarea')])
     },
     process: {
-      label: 'Guided stepper', category: 'Interactive', isNew: true,
+      label: 'Guided stepper', category: 'Timelines & Steps', isNew: true,
       defaults: { title: 'Explore the process', count: 4, items: [
         { heading: 'Prepare', content: 'Gather what you need and review the goal.' },
         { heading: 'Plan', content: 'Choose an approach and identify the next action.' },
@@ -1090,7 +1105,7 @@
       repeater: repeater('items', 'Step', 'count', [field('heading', 'Step label'), field('content', 'Step content', 'textarea')])
     },
     interactiveChecklist: {
-      label: 'Interactive checklist', category: 'Interactive', isNew: true,
+      label: 'Interactive checklist', category: 'Practice Activities', isNew: true,
       defaults: { title: 'Track your progress', count: 4, items: [
         { text: 'Review the learning objectives' },
         { text: 'Read or watch the lesson content' },
@@ -1101,7 +1116,7 @@
       repeater: repeater('items', 'Checklist item', 'count', [field('text', 'Item text')])
     },
     sorting: {
-      label: 'Drag and drop sorting', category: 'Interactive', isNew: true,
+      label: 'Drag and drop sorting', category: 'Practice Activities', isNew: true,
       defaults: { title: 'Sort the items', instructions: 'Select an item, then choose its category. You can also drag items into a category.', categories: 'Category A | Category B', count: 4, items: [
         { text: 'First item', cat: 1 },
         { text: 'Second item', cat: 1 },
@@ -1112,7 +1127,7 @@
       repeater: repeater('items', 'Item', 'count', [field('text', 'Item text'), field('cat', 'Correct category (1–3)', 'number', '', { min: 1, max: 3 })])
     },
     sequence: {
-      label: 'Sequence ordering', category: 'Interactive', isNew: true,
+      label: 'Sequence ordering', category: 'Practice Activities', isNew: true,
       defaults: { title: 'Put the steps in order', instructions: 'Use the up and down buttons to arrange the steps, then check your order. Enter the steps in the correct order; the activity shuffles them for students.', count: 4, items: [
         { text: 'First step in the correct sequence' },
         { text: 'Second step in the correct sequence' },
@@ -1123,17 +1138,17 @@
       repeater: repeater('items', 'Step', 'count', [field('text', 'Step text')])
     },
     estimate: {
-      label: 'Estimation slider', category: 'Interactive', isNew: true,
+      label: 'Estimation slider', category: 'Practice Activities', isNew: true,
       defaults: { question: 'What percent of students who complete week one go on to pass the course?', min: '0', max: '100', unit: '%', answer: '50', explanation: 'Explain the actual answer, where it comes from, and why it matters.' },
       fields: [field('question', 'Prediction question', 'textarea'), field('min', 'Slider minimum'), field('max', 'Slider maximum'), field('unit', 'Unit label', '', 'Shown after values, for example % or hours.'), field('answer', 'Actual answer'), field('explanation', 'Explanation of the answer', 'textarea')]
     },
     compare: {
-      label: 'Before and after compare', category: 'Interactive', isNew: true,
+      label: 'Before and after compare', category: 'Media', isNew: true,
       defaults: { title: 'Compare the two views', labelA: 'Before', imageA: '', altA: 'Describe the first image.', labelB: 'After', imageB: '', altB: 'Describe the second image.', caption: '' },
       fields: [field('title', 'Compare heading'), field('labelA', 'First view label'), field('imageA', 'First image URL', 'url'), field('altA', 'First image alternative text', 'textarea'), field('labelB', 'Second view label'), field('imageB', 'Second image URL', 'url'), field('altB', 'Second image alternative text', 'textarea'), field('caption', 'Optional caption')]
     },
     selfCheck: {
-      label: 'Self-assessment rubric', category: 'Interactive', isNew: true,
+      label: 'Self-assessment rubric', category: 'Practice Activities', isNew: true,
       defaults: { title: 'Rate your confidence', button: 'See my review plan', count: 3, items: [
         { criterion: 'I can explain the key concept in my own words' },
         { criterion: 'I can apply the concept to a new example' },
@@ -1143,7 +1158,7 @@
       repeater: repeater('items', 'Criterion', 'count', [field('criterion', 'Criterion text')])
     },
     matching: {
-      label: 'Matching memory grid', category: 'Interactive', isNew: true,
+      label: 'Matching memory grid', category: 'Practice Activities', isNew: true,
       defaults: { title: 'Match each term to its definition', instructions: 'Select two cards at a time to find each matching pair.', count: 3, items: [
         { term: 'Term 1', match: 'Definition 1' },
         { term: 'Term 2', match: 'Definition 2' },
@@ -1153,7 +1168,7 @@
       repeater: repeater('items', 'Pair', 'count', [field('term', 'Term'), field('match', 'Matching definition', 'textarea')])
     },
     poll: {
-      label: 'Opinion poll', category: 'Interactive', isNew: true,
+      label: 'Opinion poll', category: 'Practice Activities', isNew: true,
       defaults: { question: 'What do you think?', note: 'How past students answered', count: 3, items: [
         { option: 'First option', percent: 40 },
         { option: 'Second option', percent: 35 },
@@ -1163,7 +1178,7 @@
       repeater: repeater('items', 'Option', 'count', [field('option', 'Option text'), field('percent', 'Result percent (0–100)', 'number', '', { min: 0, max: 100 })])
     },
     workedExample: {
-      label: 'Worked example (fading steps)', category: 'Interactive', isNew: true,
+      label: 'Worked example (fading steps)', category: 'Questions & Scenarios', isNew: true,
       defaults: { title: 'Worked example', problem: 'State the problem or task here.', shown: 2, count: 4, items: [
         { heading: 'Understand the problem', content: 'Restate what is being asked in plain language.' },
         { heading: 'Set up the approach', content: 'Show the setup, formula, or first move.' },
@@ -1174,7 +1189,7 @@
       repeater: repeater('items', 'Step', 'count', [field('heading', 'Step heading'), field('content', 'Step work', 'textarea')])
     },
     scenarioReveal: {
-      label: 'Scenario reveal boxes (1–6)', category: 'Interactive', isNew: true,
+      label: 'Scenario reveal boxes (1–6)', category: 'Questions & Scenarios', isNew: true,
       defaults: { title: 'Pitfall or best practice?', instructions: 'Read each scenario and decide, then reveal the call.', count: 2, items: [
         { scenario: 'Describe a realistic situation for students to judge.', kind: 'bad', verdict: 'Pitfall.', explanation: 'Explain why this approach causes problems.' },
         { scenario: 'Describe a second situation that models the right approach.', kind: 'good', verdict: 'Best practice.', explanation: 'Explain why this approach works.' }
@@ -1183,7 +1198,7 @@
       repeater: repeater('items', 'Scenario', 'count', [field('scenario', 'Scenario text', 'textarea'), field('kind', 'Verdict style', 'select', '', { options: [['bad','Caution (warm orange answer)'],['good','Positive (blue answer)']] }), field('verdict', 'Verdict label', '', 'The bold word shown first, for example Pitfall. or Best practice.'), field('explanation', 'Answer explanation', 'textarea')])
     },
     pathTimeline: {
-      label: 'Interactive path timeline (1–8)', category: 'Interactive', isNew: true,
+      label: 'Interactive path timeline (1–8)', category: 'Timelines & Steps', isNew: true,
       defaults: { title: 'The full path, in one picture', intro: 'Select each marker to see its details.', count: 5, items: [
         { label: 'Start', details: 'Describe the first milestone on the path.' },
         { label: 'Plan', details: 'Describe the planning stage.' },
@@ -1195,7 +1210,7 @@
       repeater: repeater('items', 'Marker', 'count', [field('label', 'Marker label'), field('details', 'Marker details', 'textarea')])
     },
     weeklyRhythm: {
-      label: 'Weekly rhythm stepper (2–8)', category: 'Interactive', isNew: true,
+      label: 'Weekly rhythm stepper (2–8)', category: 'Timelines & Steps', isNew: true,
       defaults: { title: 'Weekly structure at a glance', intro: 'Each module follows one predictable rhythm. Use Previous and Next to walk through it.', count: 3, items: [
         { heading: 'Read', content: 'Targeted readings, case studies, and real-world examples.' },
         { heading: 'Watch or explore', content: 'Videos, demonstrations, and interactive guides.' },
@@ -1249,15 +1264,15 @@
       fields: [field('url', 'Audio file URL', 'url', 'Direct link to an mp3 or other audio file, for example from YuJa.'), field('title', 'Accessible audio title'), field('transcript', 'Transcript', 'textarea', 'Required for accessibility. Shown in an expandable section under the player.')]
     },
     table: {
-      label: 'Table', category: 'Data',
+      label: 'Table', category: 'Data & Layout',
       defaults: { caption: 'Course information', headers: 'Item | Details', rows: 'Due date | Friday at 11:59 p.m.\nPoints | 100\nSubmission | Brightspace assignment folder' },
       fields: [field('caption', 'Table caption'), field('headers', 'Column headers', 'textarea', 'Separate columns with a vertical bar (|).'), field('rows', 'Table rows', 'textarea', 'Use one row per line and separate cells with a vertical bar (|).')]
     },
     divider: {
-      label: 'Divider', category: 'Layout', defaults: {}, fields: []
+      label: 'Divider', category: 'Data & Layout', defaults: {}, fields: []
     },
     columns: {
-      label: 'Two-column content', category: 'Layout', isNew: true,
+      label: 'Two-column content', category: 'Data & Layout', isNew: true,
       defaults: { leftTitle: 'First idea', leftContent: 'Add content for the first column.', rightTitle: 'Second idea', rightContent: 'Add content for the second column.' },
       fields: [field('leftTitle', 'Left heading'), field('leftContent', 'Left content', 'textarea'), field('rightTitle', 'Right heading'), field('rightContent', 'Right content', 'textarea')]
     }
@@ -1407,15 +1422,25 @@
     el.accent.innerHTML = COLORS.map(color => '<button type="button" class="color-button" style="background-color:' + color + '" data-accent="' + color + '" aria-label="Use accent color ' + color + '" aria-pressed="' + (state.accent.toLowerCase() === color.toLowerCase()) + '"></button>').join('');
   }
 
+  const BLOCK_ORDER = [
+    'intro','heading','paragraph','bullets','checklist','annotated',
+    'callout','quote','button','colored','insight','instructorInfo','imageText','aiPolicy','dueDate','courseCards','scopeCards','stepBoxes',
+    'accordion','tabs','flip','reveal','carousel',
+    'timeline','interactiveTimeline','pathTimeline','process','weeklyRhythm',
+    'knowledge','multipleChoice','scenario','scenarioReveal','workedExample',
+    'sorting','sequence','matching','estimate','poll','selfCheck','interactiveChecklist',
+    'image','video','audio','compare',
+    'table','divider','columns'
+  ];
+  const orderIndex = (key) => { const i = BLOCK_ORDER.indexOf(key); return i < 0 ? 999 : i; };
   let openCategory = 'Text';
   function renderLibrary(filter) {
     const q = String(filter || '').trim().toLowerCase();
-    const cats = ['Text','Featured','Interactive','Media','Data','Layout'];
+    const cats = ['Text','Featured','Reveal & Explore','Timelines & Steps','Questions & Scenarios','Practice Activities','Media','Data & Layout'];
     let total = 0;
     el.library.innerHTML = cats.map(cat => {
-      const interactiveOrder = ['accordion','tabs','flip','timeline','interactiveChecklist','carousel','interactiveTimeline','scenario','knowledge','multipleChoice','reveal','process','sorting','sequence','matching','estimate','poll','selfCheck','compare','workedExample','scenarioReveal','pathTimeline','weeklyRhythm'];
       const entries = Object.entries(defs).filter(([,d]) => d.category === cat && (!q || d.label.toLowerCase().includes(q)))
-        .sort((a, b) => cat === 'Interactive' ? interactiveOrder.indexOf(a[0]) - interactiveOrder.indexOf(b[0]) : 0);
+        .sort((a, b) => orderIndex(a[0]) - orderIndex(b[0]));
       if (!entries.length) return '';
       total += entries.length;
       const buttons = entries.map(([key,d]) => '<button class="add-block" type="button" data-add="' + key + '"><span class="plus" aria-hidden="true">+</span><span>' + e(d.label) + '</span>' + (d.isNew ? '<span class="new-tag">New</span>' : '') + '</button>').join('');
@@ -1719,6 +1744,26 @@
         const rhythmSteps = items.map((item, i) => '<div data-rhythm-step' + (i ? ' hidden' : '') + ' style="min-height:130px"><div style="padding:22px 24px"><p style="margin:0 0 6px;font-family:Lato,Arial,sans-serif;color:' + color + ';font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.06em">Step ' + (i + 1) + ' of ' + items.length + '</p><h4 style="margin:0 0 6px;font-family:Lato,Arial,sans-serif;color:#003366;font-size:21px;line-height:1.3">' + e(item.heading) + '</h4><p style="margin:0;font-family:Lato,Arial,sans-serif;font-size:17px;color:#1F2933;line-height:1.55">' + br(item.content) + '</p></div></div>').join('');
         const rhythmProgress = (100 / items.length).toFixed(4);
         return '<section data-mcc-rhythm data-current="0" style="' + base + ';margin:26px 0;padding:24px;background-color:#D6E8EE;border-left:6px solid ' + color + ';border-radius:8px">' + (d.title ? '<h3 style="margin:0 0 8px;font-family:Lato,Arial,sans-serif;color:#003366;font-size:25px;line-height:1.3">' + e(d.title) + '</h3>' : '') + (d.intro ? '<p style="margin:0 0 18px;font-family:Lato,Arial,sans-serif;font-size:17px;color:#1F2933;line-height:1.55">' + br(d.intro) + '</p>' : '') + '<div style="border:2px solid ' + color + ';border-radius:8px;overflow:hidden;background-color:#FFFFFF"><div style="height:8px;background-color:#EAF2F5"><div data-rhythm-progress style="width:' + rhythmProgress + '%;height:100%;background-color:' + color + ';transition:width .25s"></div></div><div aria-live="polite">' + rhythmSteps + '</div><div style="display:flex;justify-content:space-between;gap:16px;background-color:#F3F7F8;border-top:1px solid #C9D7DE;padding:14px 16px"><button type="button" data-rhythm-dir="-1" disabled onclick="' + attr(rhythmNav) + '" style="font-family:Lato,Arial,sans-serif;font-size:16px;font-weight:700;border:2px solid ' + color + ';background-color:#FFFFFF;color:#1F2933;border-radius:6px;padding:10px 16px;cursor:pointer;opacity:.45">Previous</button><button type="button" data-rhythm-dir="1" onclick="' + attr(rhythmNav) + '" style="font-family:Lato,Arial,sans-serif;font-size:16px;font-weight:700;border:2px solid ' + color + ';background-color:' + background + ';color:' + text + ';border-radius:6px;padding:10px 16px;cursor:pointer">Next</button></div></div></section>';
+      }
+      case 'bullets': {
+        const markerStyle = ['disc','square','dash','check','arrow','number'].includes(d.style) ? d.style : 'disc';
+        const listLayout = ['plain','divided','boxed'].includes(d.layout) ? d.layout : 'plain';
+        const listTag = markerStyle === 'number' ? 'ol' : 'ul';
+        const bulletMarker = (i) => {
+          if (markerStyle === 'square') return '<span aria-hidden="true" style="display:block;flex:0 0 11px;width:11px;height:11px;margin-top:10px;background-color:' + color + '"></span>';
+          if (markerStyle === 'dash') return '<span aria-hidden="true" style="display:block;flex:0 0 18px;width:18px;height:7px;margin-top:12px;border-radius:2px;background-color:' + color + '"></span>';
+          if (markerStyle === 'check') return '<span aria-hidden="true" style="flex:0 0 auto;color:' + color + ';font-size:20px;font-weight:800;line-height:1.5">✓</span>';
+          if (markerStyle === 'arrow') return '<span aria-hidden="true" style="flex:0 0 auto;color:' + color + ';font-size:19px;font-weight:800;line-height:1.6">→</span>';
+          if (markerStyle === 'number') return '<span aria-hidden="true" style="display:grid;place-items:center;flex:0 0 26px;width:26px;height:26px;margin-top:2px;border-radius:50%;color:' + contrast(color) + ';background-color:' + color + ';font-family:Lato,Arial,sans-serif;font-size:14px;font-weight:800">' + (i + 1) + '</span>';
+          return '<span aria-hidden="true" style="display:block;flex:0 0 11px;width:11px;height:11px;margin-top:10px;border-radius:50%;background-color:' + color + '"></span>';
+        };
+        const bulletRowStyle = (i) => {
+          if (listLayout === 'boxed') return 'display:flex;align-items:flex-start;gap:12px;margin:0 0 8px;padding:12px 14px;border:1px solid #C9D7DE;border-left:4px solid ' + color + ';border-radius:6px;background-color:' + background + ';';
+          if (listLayout === 'divided') return 'display:flex;align-items:flex-start;gap:12px;margin:0;padding:12px 0;' + (i < items.length - 1 ? 'border-bottom:1px solid #D7E1E6;' : '');
+          return 'display:flex;align-items:flex-start;gap:12px;margin:0 0 10px;';
+        };
+        const bulletItems = items.map((item, i) => '<li style="' + bulletRowStyle(i) + 'font-family:Lato,Arial,sans-serif;font-size:19px;color:' + text + ';line-height:1.65">' + bulletMarker(i) + '<span style="display:block;flex:1 1 auto;font-family:Lato,Arial,sans-serif;font-size:19px;color:' + text + '">' + br(item.text) + '</span></li>').join('');
+        return '<section style="' + base + ';margin:24px 0">' + (d.title ? '<h3 style="font-family:Lato,Arial,sans-serif;font-size:22px;color:' + text + ';margin:0 0 12px">' + e(d.title) + '</h3>' : '') + '<' + listTag + ' role="list" style="margin:0;padding:0;list-style:none;color:' + text + '">' + bulletItems + '</' + listTag + '></section>';
       }
       case 'storyboard':
         return '<section style="' + base + ';margin:28px 0;scroll-snap-type:y proximity"><h3 style="font-size:27px;color:' + text + ';margin:0 0 16px">' + e(d.title) + '</h3>' + items.map((item, i) => '<section style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:24px;min-height:390px;margin:0 0 30px;padding:22px;border:1px solid #B8C8D0;border-top:6px solid ' + color + ';scroll-snap-align:start;color:' + text + ';background-color:' + background + '"><div style="position:sticky;top:20px;align-self:flex-start;flex:1 1 300px">' + imageOrPlaceholder(item.image, item.alt, 'Storyboard image ' + (i + 1) + ' placeholder') + '</div><div style="flex:1 1 300px;padding:8px 0"><p style="margin:0 0 5px;color:' + text + ';font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase">Story section ' + (i + 1) + '</p><h4 style="font-size:25px;color:' + text + ';margin:0 0 10px">' + e(item.heading) + '</h4><p style="color:' + text + ';margin:0">' + br(item.content) + '</p></div></section>').join('') + '</section>';
