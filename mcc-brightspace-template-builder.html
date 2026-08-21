@@ -311,6 +311,59 @@
   }
   .preview-frame.vp-tablet { max-width: 768px; margin: 0 auto; }
   .preview-frame.vp-phone { max-width: 400px; margin: 0 auto; }
+  .preview-frame.vp-1000 { max-width: 1000px; margin: 0 auto; }
+  .preview-frame.vp-1200 { max-width: 1200px; margin: 0 auto; }
+  .focus-btn, .tab-btn {
+    padding: 6px 10px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--mcc-navy);
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .focus-btn:hover, .tab-btn:hover { border-color: var(--mcc-teal); }
+  .focus-btn[aria-pressed="true"] { color: #fff; background: var(--mcc-teal); border-color: var(--mcc-teal); }
+  .builder-wrap.focus-mode { max-width: 1280px; }
+  .builder-wrap.focus-mode .builder-grid { display: block; }
+  .builder-wrap.focus-mode .control-panel { display: none; }
+  .builder-wrap.focus-mode .insert-bar { display: none; }
+  .builder-wrap.focus-mode .editor-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9000;
+    width: min(380px, 92vw);
+    max-height: none;
+    margin: 0;
+    border-radius: 12px 0 0 12px;
+    overflow: auto;
+    transform: translateX(110%);
+    transition: transform .2s;
+    box-shadow: -10px 0 32px rgba(0, 27, 59, .3);
+  }
+  .builder-wrap.focus-mode .editor-panel.drawer-open { transform: translateX(0); }
+  .editor-panel .panel-body { position: relative; }
+  .drawer-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    display: none;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 1px solid #b7c4ca;
+    border-radius: 50%;
+    background: #fff;
+    color: var(--mcc-navy);
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .drawer-close:hover { color: #fff; background: var(--mcc-blue); }
+  .builder-wrap.focus-mode .editor-panel .drawer-close { display: grid; }
   .page-title-preview { padding: 31px 40px; color: #fff; background: var(--mcc-blue); border-bottom: 7px solid var(--mcc-orange); }
   .page-title-preview.text-only { color: var(--mcc-navy); background: #fff; border-bottom: 2px solid var(--mcc-blue); }
   .page-kicker { margin: 0 0 8px; font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
@@ -704,10 +757,14 @@
           </div>
           <div class="preview-tools">
             <div class="viewport-toggle" role="group" aria-label="Preview width">
-              <button type="button" data-viewport="desktop" aria-pressed="true">Desktop</button>
-              <button type="button" data-viewport="tablet" aria-pressed="false">Tablet</button>
-              <button type="button" data-viewport="phone" aria-pressed="false">Phone</button>
+              <button type="button" data-width="phone" aria-pressed="false" title="Phone width (400px)">Phone</button>
+              <button type="button" data-width="tablet" aria-pressed="false" title="Tablet width (768px)">Tablet</button>
+              <button type="button" data-width="fit" aria-pressed="true" title="Fill the preview column">Fit</button>
+              <button type="button" data-width="w1000" aria-pressed="false" title="Typical Brightspace content width">1000px</button>
+              <button type="button" data-width="w1200" aria-pressed="false" title="Wide Brightspace content width">1200px</button>
             </div>
+            <button type="button" class="focus-btn" id="focus-toggle" aria-pressed="false" title="Hide the side panels so the preview can use the full page width">Focus mode</button>
+            <button type="button" class="tab-btn" id="open-tab" title="Open a full-size snapshot of this page in a new browser tab">Open in tab</button>
             <span class="block-count" id="block-count">0 blocks</span>
           </div>
         </div>
@@ -716,6 +773,7 @@
 
       <aside class="panel editor-panel" aria-labelledby="editor-heading">
         <div class="panel-body">
+          <button class="drawer-close" id="drawer-close" type="button" aria-label="Close the block editor drawer">×</button>
           <h2 id="editor-heading">Block editor</h2>
           <div id="block-editor"></div>
         </div>
@@ -1796,6 +1854,7 @@
   function renderAll() {
     renderPreview();
     renderEditor();
+    syncDrawer();
   }
 
   function updatePreviewAndCode() {
@@ -1945,6 +2004,24 @@
   });
 
   let draggedId = null;
+  let focusMode = false;
+  const wrapEl = document.querySelector('.builder-wrap');
+  const editorPanelEl = document.querySelector('.editor-panel');
+  function syncDrawer() {
+    const open = focusMode && !!state.selectedId;
+    if (open) editorPanelEl.classList.add('drawer-open');
+    else editorPanelEl.classList.remove('drawer-open');
+  }
+  function setFocusMode(on, quiet) {
+    focusMode = on;
+    if (on) wrapEl.classList.add('focus-mode');
+    else wrapEl.classList.remove('focus-mode');
+    document.getElementById('focus-toggle').setAttribute('aria-pressed', on);
+    syncDrawer();
+    if (!quiet) toast(on
+      ? 'Focus mode on. Select a block to edit it in the side drawer; press Escape or Focus mode to exit.'
+      : 'Focus mode off.');
+  }
   el.preview.addEventListener('click', (event) => {
     const bar = event.target.closest('[data-insert-at]');
     if (bar) {
@@ -2040,13 +2117,44 @@
     if (event.target.closest('[data-delete-selected]')) deleteBlock(block.id);
   });
 
-  document.querySelectorAll('[data-viewport]').forEach(button => {
+  document.querySelectorAll('[data-width]').forEach(button => {
     button.addEventListener('click', () => {
-      document.querySelectorAll('[data-viewport]').forEach(b => b.setAttribute('aria-pressed', b === button));
-      el.preview.classList.remove('vp-tablet', 'vp-phone');
-      if (button.dataset.viewport === 'tablet') el.preview.classList.add('vp-tablet');
-      if (button.dataset.viewport === 'phone') el.preview.classList.add('vp-phone');
+      document.querySelectorAll('[data-width]').forEach(b => b.setAttribute('aria-pressed', b === button));
+      el.preview.classList.remove('vp-tablet', 'vp-phone', 'vp-1000', 'vp-1200');
+      const width = button.dataset.width;
+      if (width === 'tablet') el.preview.classList.add('vp-tablet');
+      if (width === 'phone') el.preview.classList.add('vp-phone');
+      if (width === 'w1000') el.preview.classList.add('vp-1000');
+      if (width === 'w1200') el.preview.classList.add('vp-1200');
+      if ((width === 'w1000' || width === 'w1200') && !focusMode) {
+        setFocusMode(true, true);
+        toast('Focus mode turned on so the preview can reach ' + (width === 'w1000' ? '1000px' : '1200px') + ' wide. Press Escape or Focus mode to exit.');
+      }
     });
+  });
+  document.getElementById('focus-toggle').addEventListener('click', () => setFocusMode(!focusMode));
+  document.getElementById('drawer-close').addEventListener('click', () => {
+    state.selectedId = null;
+    renderAll();
+  });
+  document.getElementById('open-tab').addEventListener('click', () => {
+    const blob = new Blob([fullHtml()], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const opened = window.open(url, '_blank');
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    toast(opened
+      ? 'Preview opened in a new tab. It is a snapshot, so reopen it after more edits.'
+      : 'The browser blocked the pop-up. Allow pop-ups for this site to open the preview.');
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !focusMode) return;
+    if (document.querySelector('.audit-overlay')) return;
+    if (state.selectedId) {
+      state.selectedId = null;
+      renderAll();
+    } else {
+      setFocusMode(false);
+    }
   });
 
   document.getElementById('undo-page').addEventListener('click', undoLast);
