@@ -852,6 +852,13 @@
     return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
   };
   const contrast = (background) => contrastRatio('#FFFFFF', background) >= contrastRatio('#182936', background) ? '#FFFFFF' : '#182936';
+  const mixWithWhite = (hex, ratio) => {
+    const clean = normalizeHex(hex) || '#003366';
+    const r = parseInt(clean.slice(1, 3), 16), g = parseInt(clean.slice(3, 5), 16), b = parseInt(clean.slice(5, 7), 16);
+    const blend = (channel) => Math.round(channel + (255 - channel) * ratio);
+    const toHex = (v) => v.toString(16).padStart(2, '0').toUpperCase();
+    return '#' + toHex(blend(r)) + toHex(blend(g)) + toHex(blend(b));
+  };
   const uid = () => 'mcc-' + Date.now().toString(36) + '-' + (uidCounter++).toString(36);
   const clone = (obj) => JSON.parse(JSON.stringify(obj));
   const gridColumns = (n) => {
@@ -928,7 +935,7 @@
     callout: {
       label: 'Callout box', category: 'Featured',
       defaults: { style: 'information', title: 'Good to know', content: 'Use this space to add helpful context or guidance.' },
-      fields: [field('style', 'Callout style', 'select', '', { options: [['information','Information (blue)'],['notice','Important notice (red)'],['tip','Tip (green)'],['example','Example (purple)'],['research','Research and sources (navy)']] }), field('title', 'Callout heading'), field('content', 'Callout content', 'textarea')]
+      fields: [field('style', 'Callout style', 'select', '', { options: [['information','Information (blue)'],['notice','Important notice (red)'],['tip','Tip (green)'],['example','Example (purple)'],['research','Research and sources (navy)'],['reflection','Reflection (amber)']] }), field('title', 'Callout heading'), field('content', 'Callout content', 'textarea')]
     },
     quote: {
       label: 'Blockquote', category: 'Featured',
@@ -1173,16 +1180,6 @@
       fields: [field('title', 'Activity heading'), field('instructions', 'Learner instructions', 'textarea'), field('count', 'Pairs (2–6)', 'number', '', { min: 2, max: 6 })],
       repeater: repeater('items', 'Pair', 'count', [field('term', 'Term'), field('match', 'Matching definition', 'textarea')])
     },
-    poll: {
-      label: 'Opinion poll', category: 'Practice Activities', isNew: true,
-      defaults: { question: 'What do you think?', note: 'How past students answered', count: 3, items: [
-        { option: 'First option', percent: 40 },
-        { option: 'Second option', percent: 35 },
-        { option: 'Third option', percent: 25 }
-      ] },
-      fields: [field('question', 'Poll question', 'textarea'), field('note', 'Results label', '', 'Shown above the results, for example "How past students answered."'), field('count', 'Options (2–5)', 'number', '', { min: 2, max: 5 })],
-      repeater: repeater('items', 'Option', 'count', [field('option', 'Option text'), field('percent', 'Result percent (0–100)', 'number', '', { min: 0, max: 100 })])
-    },
     workedExample: {
       label: 'Worked example (fading steps)', category: 'Questions & Scenarios', isNew: true,
       defaults: { title: 'Worked example', problem: 'State the problem or task here.', shown: 2, count: 4, items: [
@@ -1268,6 +1265,21 @@
       label: 'Audio note with transcript', category: 'Media', isNew: true,
       defaults: { url: '', title: 'Audio note from your instructor', transcript: 'Paste the full transcript here.' },
       fields: [field('url', 'Audio file URL', 'url', 'Direct link to an mp3 or other audio file, for example from YuJa.'), field('title', 'Accessible audio title'), field('transcript', 'Transcript', 'textarea', 'Required for accessibility. Shown in an expandable section under the player.')]
+    },
+    statCard: {
+      label: 'Key statistic', category: 'Data & Layout', isNew: true,
+      defaults: { stat: '73%', label: 'Add a short description of what this number means.', source: '' },
+      fields: [field('stat', 'The statistic', '', 'A short number or figure, for example 73% or 4 out of 5.'), field('label', 'What it means', 'textarea'), field('source', 'Source (required)', '', 'Where this number comes from. A statistic without a source will be flagged by Check Page.')]
+    },
+    rubricTable: {
+      label: 'Grading rubric', category: 'Data & Layout', isNew: true,
+      defaults: { title: 'Grading rubric', levels: 'Exemplary | Proficient | Developing | Beginning', rows: 'Thesis and focus | Clear, specific, and arguable | Clear but somewhat general | Present but vague | Missing or unclear\nUse of evidence | Strong, well-integrated evidence | Adequate evidence | Limited or unclear evidence | Little to no evidence\nOrganization | Logical and easy to follow | Mostly organized | Some organizational issues | Difficult to follow' },
+      fields: [field('title', 'Rubric heading'), field('levels', 'Performance levels', '', 'Column headers from strongest to weakest, separated by a vertical bar (|).'), field('rows', 'Criteria', 'textarea', 'One criterion per line: criterion name, then a description for each level, separated by vertical bars (|). Example: Thesis | Clear and specific | Mostly clear | Vague | Missing')]
+    },
+    referenceList: {
+      label: 'Reference list', category: 'Text', isNew: true,
+      defaults: { title: 'References', entries: 'Author, A. A. (Year). Title of the work. Publisher.\nAuthor, B. B., & Author, C. C. (Year). Title of the article. Journal Name, Volume(Issue), pages.' },
+      fields: [field('title', 'Section heading'), field('entries', 'Reference entries', 'textarea', 'One full citation per line. Each line renders with a hanging indent.')]
     },
     table: {
       label: 'Table', category: 'Data & Layout',
@@ -1429,14 +1441,14 @@
   }
 
   const BLOCK_ORDER = [
-    'intro','heading','paragraph','bullets','checklist','annotated',
+    'intro','heading','paragraph','bullets','checklist','annotated','referenceList',
     'callout','quote','button','colored','insight','instructorInfo','imageText','aiPolicy','dueDate','courseCards','scopeCards','stepBoxes',
     'accordion','tabs','flip','reveal','carousel',
     'timeline','interactiveTimeline','pathTimeline','process','weeklyRhythm',
     'knowledge','multipleChoice','scenario','scenarioReveal','workedExample',
-    'sorting','sequence','matching','estimate','poll','selfCheck','interactiveChecklist',
+    'sorting','sequence','matching','estimate','selfCheck','interactiveChecklist',
     'image','video','audio','compare',
-    'table','divider','columns'
+    'statCard','rubricTable','table','divider','columns'
   ];
   const orderIndex = (key) => { const i = BLOCK_ORDER.indexOf(key); return i < 0 ? 999 : i; };
   let openCategory = 'Text';
@@ -1458,7 +1470,7 @@
 
   function blockColor(block) { return block.color || state.accent; }
 
-  const CONTROL_BACKGROUND_TYPES = new Set(['button','colored','accordion','tabs','flip','timeline','carousel','interactiveTimeline','reveal','knowledge','multipleChoice','scenario','process','table','decoder','branching','sorting','sequence','estimate','compare','selfCheck','matching','poll','workedExample','scenarioReveal','weeklyRhythm']);
+  const CONTROL_BACKGROUND_TYPES = new Set(['button','colored','accordion','tabs','flip','timeline','carousel','interactiveTimeline','reveal','knowledge','multipleChoice','scenario','process','table','decoder','branching','sorting','sequence','estimate','compare','selfCheck','matching','workedExample','scenarioReveal','weeklyRhythm']);
   function aiPolicyPalette(level) {
     if (level === 'red') return { background: '#FDECEB', text: '#4A1716', accent: '#A22522', badge: 'R', label: 'Red Light: No AI Allowed', meaning: 'AI is entirely prohibited.' };
     if (level === 'green') return { background: '#E5F5EB', text: '#103B25', accent: '#167442', badge: 'G', label: 'Green Light: Full AI Use Allowed', meaning: 'AI is permitted without restrictions, provided it’s used ethically.' };
@@ -1471,6 +1483,7 @@
       tip: { background: '#E4F4E7', text: '#123B1E', accent: '#1B7A3D', icon: '\u2713', label: 'Tip' },
       example: { background: '#EEEAF6', text: '#2C2246', accent: '#5B4B9A', icon: '\u2727', label: 'Example' },
       research: { background: '#E6EEF4', text: '#0F2A44', accent: '#003366', icon: '\u201C', label: 'Research' },
+      reflection: { background: '#FCF1DC', text: '#4A3200', accent: '#8A5A00', icon: '\u270E', label: 'Reflect' },
       information: { background: '#EEF6F8', text: '#173744', accent: '#246B7A', icon: 'i', label: 'Note' }
     };
     return palettes[style] || palettes.information;
@@ -1673,16 +1686,6 @@
         const grid = shuffled.map(({ it }, k) => '<button type="button" data-pair="' + it.pairIndex + '" aria-pressed="false" onclick="' + attr(flip) + '" style="min-height:110px;padding:14px;border:2px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#FFFFFF;font-family:Lato,Arial,sans-serif;font-size:17px;font-weight:700;cursor:pointer"><span data-face aria-hidden="true" style="display:block;color:' + color + ';font-size:29px">?</span><span data-text hidden>' + br(it.label) + '</span></button>').join('');
         return '<section data-mcc-match style="' + base + ';margin:26px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#F7FAFB"><h3 style="font-size:24px;color:' + color + ';margin:0 0 6px">' + e(d.title) + '</h3><p style="margin:0 0 14px;color:#1F2933">' + br(d.instructions) + '</p><div style="display:grid;grid-template-columns:repeat(' + gridColumns(shuffled.length) + ',1fr);gap:11px">' + grid + '</div><p data-match-status role="status" aria-live="polite" style="margin:14px 0 0;color:#1F2933;font-size:17px;font-weight:700">0 of ' + items.length + ' pairs matched.</p><p style="margin:10px 0 0;font-family:Lato,Arial,sans-serif;color:#5A6872;font-size:14px;font-style:italic">The board resets when you leave the page.</p></section>';
       }
-      case 'poll': {
-        const total = items.reduce((sum, item) => sum + (parseFloat(item.percent) || 0), 0) || 1;
-        const choose = 'var r=this.closest(\'[data-mcc-poll]\');r.querySelector(\'[data-poll-results]\').hidden=false;r.querySelectorAll(\'[data-poll-choice]\').forEach(function(b){b.setAttribute(\'aria-pressed\',\'false\');b.style.outline=\'none\'});this.setAttribute(\'aria-pressed\',\'true\');this.style.outline=\'3px solid ' + color + '\'';
-        const choices = items.map(item => '<button type="button" data-poll-choice aria-pressed="false" onclick="' + attr(choose) + '" style="display:block;width:100%;margin:8px 0;padding:13px 15px;border:1px solid ' + color + ';border-radius:6px;color:#1F2933;background-color:#FFFFFF;text-align:left;font-family:Lato,Arial,sans-serif;font-size:18px;cursor:pointer">' + e(item.option) + '</button>').join('');
-        const bars = items.map(item => {
-          const pct = Math.max(0, Math.min(100, Math.round((parseFloat(item.percent) || 0) / total * 100)));
-          return '<div style="margin:10px 0"><div style="display:flex;justify-content:space-between;gap:10px;margin:0 0 4px;color:#1F2933;font-size:16px"><span>' + e(item.option) + '</span><strong>' + pct + '%</strong></div><div style="height:16px;border-radius:8px;background-color:#E1EAEE;overflow:hidden"><div style="width:' + pct + '%;height:100%;background-color:' + color + '"></div></div></div>';
-        }).join('');
-        return '<section data-mcc-poll style="' + base + ';margin:26px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#FFFFFF"><h3 style="font-size:22px;color:' + color + ';margin:0 0 8px">Quick poll</h3><p style="margin:0 0 12px;color:#1F2933;font-weight:700">' + br(d.question) + '</p><div aria-label="Poll choices">' + choices + '</div><div data-poll-results hidden style="margin-top:16px;padding:16px;border-left:6px solid ' + color + ';background-color:#F7FAFB"><p style="margin:0 0 8px;color:#5A6872;font-size:15px;font-weight:800;letter-spacing:.06em;text-transform:uppercase">' + e(d.note) + '</p>' + bars + '</div></section>';
-      }
       case 'workedExample': {
         const shown = Math.max(0, Math.min(items.length, parseInt(d.shown, 10) || 0));
         const steps = items.map((item, i) => {
@@ -1841,6 +1844,24 @@
           ? '<audio controls preload="none" src="' + safeUrl(d.url, '#') + '" title="' + attr(d.title) + '" style="display:block;width:100%">Your browser cannot play this audio. <a href="' + safeUrl(d.url, '#') + '">Download the audio file</a> instead.</audio>'
           : '<div role="img" aria-label="Audio placeholder" style="display:grid;place-items:center;min-height:84px;padding:16px;border:2px dashed #7395A4;color:#173744;background-color:#EAF2F5;font-size:18px;font-weight:700;text-align:center">Add an audio file URL to enable the player</div>';
         return '<section style="' + base + ';margin:26px 0;padding:20px 22px;border:1px solid #B8C8D0;border-left:7px solid ' + color + ';border-radius:0 9px 9px 0;background-color:#FFFFFF"><h3 style="font-size:22px;color:' + color + ';margin:0 0 12px">' + e(d.title) + '</h3>' + player + '<details style="margin-top:14px;border:1px solid #C9D7DE;border-radius:6px;overflow:hidden"><summary style="cursor:pointer;padding:11px 14px;color:#173744;background-color:#EEF6F8;font-weight:700">View the transcript</summary><div style="padding:14px;color:#1F2933;background-color:#FFFFFF">' + br(d.transcript) + '</div></details></section>';
+      }
+      case 'statCard': {
+        return '<figure style="' + base + ';margin:26px 0;padding:24px 26px;border:1px solid #C9D7DE;border-left:8px solid ' + color + ';border-radius:0 8px 8px 0;background-color:#FFFFFF"><p style="margin:0 0 6px;font-family:Lato,Arial,sans-serif;font-size:clamp(40px,7vw,58px);font-weight:800;color:' + color + ';line-height:1">' + e(d.stat) + '</p><figcaption style="font-family:Lato,Arial,sans-serif;font-size:18px;color:#1F2933;line-height:1.5">' + br(d.label) + '</figcaption>' + (d.source ? '<p style="margin:14px 0 0;font-family:Lato,Arial,sans-serif;font-size:14px;font-style:italic;color:#5A6872;border-top:1px solid #E1EAEE;padding-top:10px">Source: ' + br(d.source) + '</p>' : '') + '</figure>';
+      }
+      case 'rubricTable': {
+        const rubricLevels = String(d.levels || '').split('|').map(s => s.trim()).filter(Boolean);
+        const rubricRows = listFromPipes(d.rows);
+        const levelCount = rubricLevels.length || 1;
+        const headerCells = rubricLevels.map((lvl, i) => {
+          const tint = mixWithWhite(color, (i / Math.max(1, levelCount - 1)) * 0.65);
+          return '<th scope="col" style="padding:12px;border:1px solid #aab9c1;color:' + contrast(tint) + ';background-color:' + tint + ';text-align:left;font-family:Lato,Arial,sans-serif;font-size:16px">' + e(lvl) + '</th>';
+        }).join('');
+        const bodyRows = rubricRows.map(row => '<tr><th scope="row" style="padding:12px;border:1px solid #aab9c1;color:' + text + ';background-color:' + background + ';text-align:left;font-family:Lato,Arial,sans-serif;font-size:16px;font-weight:700">' + e(row[0] || '') + '</th>' + rubricLevels.map((_, i) => '<td style="padding:12px;border:1px solid #c5d0d6;color:#1F2933;background-color:#FFFFFF;vertical-align:top;font-family:Lato,Arial,sans-serif;font-size:15px;line-height:1.5">' + e(row[i + 1] || '') + '</td>').join('') + '</tr>').join('');
+        return '<div style="' + base + ';overflow-x:auto;margin:26px 0">' + (d.title ? '<h3 style="font-family:Lato,Arial,sans-serif;font-size:24px;color:' + color + ';margin:0 0 12px">' + e(d.title) + '</h3>' : '') + '<table style="width:100%;border-collapse:collapse"><thead><tr><th scope="col" style="padding:12px;border:1px solid #aab9c1;color:' + text + ';background-color:' + background + ';text-align:left;font-family:Lato,Arial,sans-serif;font-size:16px">Criteria</th>' + headerCells + '</tr></thead><tbody>' + bodyRows + '</tbody></table></div>';
+      }
+      case 'referenceList': {
+        const refEntries = lines(d.entries);
+        return '<section style="' + base + ';margin:26px 0">' + (d.title ? '<h3 style="font-family:Lato,Arial,sans-serif;font-size:24px;color:' + color + ';margin:0 0 14px">' + e(d.title) + '</h3>' : '') + refEntries.map(entry => '<p style="margin:0 0 14px;padding-left:2em;text-indent:-2em;font-family:Lato,Arial,sans-serif;font-size:17px;line-height:1.6;color:#1F2933">' + e(entry) + '</p>').join('') + '</section>';
       }
       case 'table': {
         const headers = listFromPipes(d.headers)[0] || ['Item','Details'];
@@ -2029,6 +2050,7 @@
         else if (new Date(dueCheck[1] + '-' + dueCheck[2] + '-' + dueCheck[3] + 'T' + dueCheck[4] + ':' + dueCheck[5] + ':00') < new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }))) issues.push(label + ': the countdown date is already in the past, so students will see "This is now past due." Update it for this term.');
       }
       if (block.type === 'video' && d.mode === 'embed' && !String(d.title || '').trim()) issues.push(label + ': the embedded video is missing an accessible title.');
+      if (block.type === 'statCard' && !String(d.source || '').trim()) issues.push(label + ': this statistic has no source. Add where the number comes from, or remove the block if you cannot cite it.');
     });
     return issues;
   }
