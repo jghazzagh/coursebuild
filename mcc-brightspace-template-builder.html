@@ -922,7 +922,7 @@
     callout: {
       label: 'Callout box', category: 'Featured',
       defaults: { style: 'information', title: 'Good to know', content: 'Use this space to add helpful context or guidance.' },
-      fields: [field('style', 'Callout style', 'select', '', { options: [['information','Information callout'],['notice','Important notice']] }), field('title', 'Callout heading'), field('content', 'Callout content', 'textarea')]
+      fields: [field('style', 'Callout style', 'select', '', { options: [['information','Information (blue)'],['notice','Important notice (red)'],['tip','Tip (green)'],['example','Example (purple)'],['research','Research and sources (navy)']] }), field('title', 'Callout heading'), field('content', 'Callout content', 'textarea')]
     },
     quote: {
       label: 'Blockquote', category: 'Featured',
@@ -1460,9 +1460,14 @@
   }
 
   function calloutPalette(style) {
-    return style === 'notice'
-      ? { background: '#FDECEB', text: '#4A1716', accent: '#A22522', icon: '!' }
-      : { background: '#EEF6F8', text: '#173744', accent: '#246B7A', icon: 'i' };
+    const palettes = {
+      notice: { background: '#FDECEB', text: '#4A1716', accent: '#A22522', icon: '!', label: 'Important' },
+      tip: { background: '#E4F4E7', text: '#123B1E', accent: '#1B7A3D', icon: '\u2713', label: 'Tip' },
+      example: { background: '#EEEAF6', text: '#2C2246', accent: '#5B4B9A', icon: '\u2727', label: 'Example' },
+      research: { background: '#E6EEF4', text: '#0F2A44', accent: '#003366', icon: '\u201C', label: 'Research' },
+      information: { background: '#EEF6F8', text: '#173744', accent: '#246B7A', icon: 'i', label: 'Note' }
+    };
+    return palettes[style] || palettes.information;
   }
 
   function blockColorPair(block) {
@@ -1542,7 +1547,9 @@
         {
           const palette = calloutPalette(d.style);
           const accent = block.color || palette.accent;
-          return '<aside style="' + base + ';display:flex;gap:18px;align-items:flex-start;margin:24px 0;padding:20px 22px;border:2px solid ' + accent + ';border-left-width:8px;border-radius:8px;background-color:' + background + '"><span aria-hidden="true" style="display:inline-grid;place-items:center;flex:0 0 48px;width:48px;height:48px;border-radius:50%;overflow:hidden;color:' + contrast(accent) + ';background-color:' + accent + ';font-size:32px;font-weight:800;line-height:1">' + palette.icon + '</span><div><h3 style="font-size:22px;color:' + text + ';margin:0 0 7px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p></div></aside>';
+          const iconFontSize = ['\u2713', '\u2727', '\u201C'].includes(palette.icon) ? '26px' : '30px';
+          const iconLineHeight = palette.icon === '\u201C' ? '58px' : '48px';
+          return '<aside style="' + base + ';margin:24px 0;padding:20px 22px;border:2px solid ' + accent + ';border-left-width:8px;border-radius:8px;background-color:' + background + '"><table role="presentation" style="border-collapse:collapse;width:100%"><tbody><tr><td style="width:48px;padding:0;vertical-align:top"><span aria-hidden="true" style="display:block;width:48px;height:48px;border-radius:50%;overflow:hidden;color:' + contrast(accent) + ';background-color:' + accent + ';font-family:Lato,Arial,sans-serif;font-size:' + iconFontSize + ';font-weight:800;text-align:center;line-height:' + iconLineHeight + '">' + palette.icon + '</span></td><td style="padding:0 0 0 18px;vertical-align:top"><h3 style="font-family:Lato,Arial,sans-serif;font-size:22px;color:' + text + ';margin:0 0 7px;line-height:1.3">' + e(d.title) + '</h3><p style="font-family:Lato,Arial,sans-serif;color:' + text + ';margin:0;line-height:1.55">' + br(d.content) + '</p></td></tr></tbody></table></aside>';
         }
       case 'quote':
         return '<figure style="' + base + ';margin:26px 0;padding:22px 25px;border-left:6px solid ' + color + ';background-color:' + background + '"><blockquote style="margin:0 0 9px;font-size:23px;font-style:italic;color:' + text + '">“' + br(d.quote) + '”</blockquote><figcaption style="font-size:16px;color:' + text + '">— ' + e(d.citation) + '</figcaption></figure>';
