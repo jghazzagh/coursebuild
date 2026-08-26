@@ -456,6 +456,32 @@
   }
   .editor-field { margin-bottom: 13px; }
   .repeater-group { margin: 12px 0; padding: 11px; background: #f4f8fa; border: 1px solid #d4e0e5; border-radius: 7px; }
+  .rte-toolbar { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 6px; }
+  .rte-btn {
+    min-width: 34px;
+    height: 32px;
+    padding: 0 9px;
+    border: 1px solid #aebcc4;
+    border-radius: 5px;
+    background: #fff;
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .rte-btn:hover { background: #eef3f5; border-color: var(--mcc-teal); }
+  .rte-surface {
+    min-height: 96px;
+    padding: 10px 11px;
+    border: 1px solid #aebcc4;
+    border-radius: 6px;
+    background: #fff;
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.55;
+    overflow-wrap: break-word;
+  }
+  .rte-surface:focus-visible { outline: 3px solid var(--mcc-gold); outline-offset: 2px; }
   .repeater-title { margin: 0 0 9px; color: var(--mcc-blue); font-size: 13px; }
   .snippet-box { margin-top: 17px; padding-top: 15px; border-top: 1px solid #d7e0e4; }
   .snippet-box h3 { margin: 0 0 4px; color: var(--mcc-navy); font-size: 15px; }
@@ -922,6 +948,14 @@
       label: 'Paragraph', category: 'Text',
       defaults: { content: 'Add your course content here.' },
       fields: [field('content', 'Paragraph text', 'textarea')]
+    },
+    richText: {
+      label: 'Formatted text', category: 'Text Editing', isNew: true,
+      defaults: { fontFamily: 'Lato', content: 'Write your content here. Select text, then use the toolbar above to apply bold, italic, underline, strikethrough, superscript, or subscript.' },
+      fields: [
+        field('fontFamily', 'Text font', 'select', 'Lato is recommended to match the rest of the page.', { options: [['Lato', 'Lato (recommended)'], ['Arial', 'Arial'], ['Verdana', 'Verdana'], ['Tahoma', 'Tahoma']] }),
+        field('content', 'Formatted text', 'richtext', 'Select text, then use the toolbar to format it.')
+      ]
     },
     checklist: {
       label: 'Checklist', category: 'Text',
@@ -1461,7 +1495,7 @@
   }
 
   const BLOCK_ORDER = [
-    'intro','heading','paragraph','bullets','checklist','annotated','referenceList',
+    'intro','heading','paragraph','richText','bullets','checklist','annotated','referenceList',
     'callout','quote','button','colored','insight','instructorInfo','imageText','aiPolicy','dueDate','courseCards','scopeCards','stepBoxes',
     'accordion','tabs','flip','reveal','carousel',
     'timeline','interactiveTimeline','pathTimeline','process','weeklyRhythm',
@@ -1475,9 +1509,41 @@
   let openEditorSections = new Set();
   let openEditorBlockId = null;
   const pluralizeTitle = (title) => title === 'Criterion' ? 'Criteria' : title + 's';
+  const RTE_ALLOWED_TAGS = { B: 1, STRONG: 1, I: 1, EM: 1, U: 1, S: 1, STRIKE: 1, SUP: 1, SUB: 1 };
+  const RTE_TAG_MAP = { STRONG: 'b', EM: 'i', STRIKE: 's' };
+  function sanitizeRichText(html) {
+    const container = document.createElement('div');
+    container.innerHTML = html;
+    const out = [];
+    const walk = (node) => {
+      node.childNodes.forEach((child) => {
+        if (child.nodeType === 3) {
+          out.push(e(child.textContent));
+        } else if (child.nodeType === 1) {
+          const tag = child.tagName;
+          if (tag === 'BR') { out.push('<br>'); return; }
+          if (tag === 'DIV' || tag === 'P') {
+            if (out.length) out.push('<br>');
+            walk(child);
+            return;
+          }
+          if (RTE_ALLOWED_TAGS[tag]) {
+            const mapped = RTE_TAG_MAP[tag] || tag.toLowerCase();
+            out.push('<' + mapped + '>');
+            walk(child);
+            out.push('</' + mapped + '>');
+          } else {
+            walk(child);
+          }
+        }
+      });
+    };
+    walk(container);
+    return out.join('').replace(/(<br>){3,}/g, '<br><br>').replace(/^(<br>)+|(<br>)+$/g, '');
+  }
   function renderLibrary(filter) {
     const q = String(filter || '').trim().toLowerCase();
-    const cats = ['Text','Featured','Reveal & Explore','Timelines & Steps','Questions & Scenarios','Practice Activities','Media','Data & Layout'];
+    const cats = ['Text','Text Editing','Featured','Reveal & Explore','Timelines & Steps','Questions & Scenarios','Practice Activities','Media','Data & Layout'];
     let total = 0;
     el.library.innerHTML = cats.map(cat => {
       const entries = Object.entries(defs).filter(([,d]) => d.category === cat && (!q || d.label.toLowerCase().includes(q)))
@@ -1577,6 +1643,11 @@
       }
       case 'paragraph':
         return '<p style="' + base + ';margin:0 0 22px">' + br(d.content) + '</p>';
+      case 'richText': {
+        const richFontStacks = { Lato: 'Lato,Arial,sans-serif', Arial: 'Arial,Helvetica,sans-serif', Verdana: 'Verdana,Geneva,sans-serif', Tahoma: 'Tahoma,Geneva,sans-serif' };
+        const richFont = richFontStacks[d.fontFamily] || richFontStacks.Lato;
+        return '<p style="font-family:' + richFont + ';font-size:19px;color:' + text + ';margin:0 0 22px;line-height:1.65">' + (d.content || '') + '</p>';
+      }
       case 'checklist':
         return '<section style="' + base + ';margin:24px 0"><h3 style="font-family:Lato,Arial,sans-serif;font-size:22px;color:' + text + ';margin:0 0 12px">' + e(d.title) + '</h3><ul role="list" style="margin:0;padding:0;list-style:none;color:' + text + '">' + lines(d.items).map((item, i, all) => '<li style="list-style:none;display:flex;align-items:flex-start;gap:13px;margin:0;padding:12px 0;' + (i < all.length - 1 ? 'border-bottom:1px solid #D7E1E6;' : '') + 'color:' + text + ';font-family:Lato,Arial,sans-serif;font-size:19px;line-height:1.65"><span aria-hidden="true" style="display:block;flex:0 0 19px;width:19px;height:7px;margin-top:12px;border-radius:2px;background-color:' + color + '"></span><span style="display:block;flex:1 1 auto;font-family:Lato,Arial,sans-serif;font-size:19px;color:' + text + '">' + e(item) + '</span></li>').join('') + '</ul></section>';
       case 'annotated': {
@@ -1951,6 +2022,16 @@
     else if (f.type === 'dynamic-select') {
       const n = parseInt(block.data.count, 10) || 2;
       control = '<select id="' + id + '" ' + data + '>' + Array.from({length:n}, (_,i) => '<option value="' + (i + 1) + '"' + (parseInt(value,10) === i + 1 ? ' selected' : '') + '>Choice ' + (i + 1) + '</option>').join('') + '</select>';
+    } else if (f.type === 'richtext') {
+      const toolbar = '<div class="rte-toolbar" role="toolbar" aria-label="Text formatting">' +
+        '<button type="button" class="rte-btn" data-rte-cmd="bold" aria-label="Bold" title="Bold"><strong>B</strong></button>' +
+        '<button type="button" class="rte-btn" data-rte-cmd="italic" aria-label="Italic" title="Italic"><em>I</em></button>' +
+        '<button type="button" class="rte-btn" data-rte-cmd="underline" aria-label="Underline" title="Underline"><span style="text-decoration:underline">U</span></button>' +
+        '<button type="button" class="rte-btn" data-rte-cmd="strikeThrough" aria-label="Strikethrough" title="Strikethrough"><span style="text-decoration:line-through">S</span></button>' +
+        '<button type="button" class="rte-btn" data-rte-cmd="superscript" aria-label="Superscript" title="Superscript">x<sup>2</sup></button>' +
+        '<button type="button" class="rte-btn" data-rte-cmd="subscript" aria-label="Subscript" title="Subscript">x<sub>2</sub></button>' +
+        '</div>';
+      control = '<div class="rte-field">' + toolbar + '<div id="' + id + '" class="rte-surface" contenteditable="true" ' + data + ' role="textbox" aria-multiline="true" aria-label="' + attr(f.label) + '">' + value + '</div></div>';
     } else {
       const bounds = f.type === 'number' ? ' min="' + f.min + '" max="' + f.max + '"' : '';
       control = '<input id="' + id + '" type="' + (f.type === 'url' ? 'url' : f.type === 'number' ? 'number' : 'text') + '" value="' + attr(value) + '" ' + data + bounds + '>';
@@ -2085,6 +2166,10 @@
       if (block.type === 'table' && !lines(d.headers).length) issues.push(label + ': the table has no column headers.');
       if (block.type === 'audio' && (!String(d.transcript || '').trim() || d.transcript === 'Paste the full transcript here.')) issues.push(label + ': the audio note has no transcript yet. A transcript is required for accessibility.');
       if (block.type === 'annotated' && !/\{\{\d+\}\}/.test(String(d.passage || ''))) issues.push(label + ': the passage has no {{1}}-style markers, so the annotations will never appear.');
+      if (block.type === 'richText') {
+        const richStripped = String(d.content || '').replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
+        if (!richStripped) issues.push(label + ': this text block has no content yet.');
+      }
       if (block.type === 'dueDate' && d.countdown === 'on') {
         const dueCheck = String(d.dueDateTime || '').trim().match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})$/);
         if (!dueCheck) issues.push(label + ': the live countdown is on but the countdown date is missing or not in YYYY-MM-DD HH:MM format, so students will not see a countdown.');
@@ -2257,7 +2342,11 @@
       updatePreviewAndCode();
     } else if (target.dataset.field) {
       const f = defs[block.type].fields.find(x => x.key === target.dataset.field);
-      block.data[target.dataset.field] = f && f.type === 'number' ? parseInt(target.value, 10) || f.min : target.value;
+      if (target.isContentEditable) {
+        block.data[target.dataset.field] = target.innerHTML;
+      } else {
+        block.data[target.dataset.field] = f && f.type === 'number' ? parseInt(target.value, 10) || f.min : target.value;
+      }
       if (defs[block.type].repeater && defs[block.type].repeater.countKey === target.dataset.field) { syncRepeater(block); renderEditor(); }
       updatePreviewAndCode();
     } else if (target.dataset.itemField != null) {
@@ -2272,8 +2361,31 @@
       syncRepeater(block); renderAll();
     }
   });
+  el.editor.addEventListener('mousedown', (event) => {
+    if (event.target.closest('[data-rte-cmd]')) event.preventDefault();
+  });
+  el.editor.addEventListener('blur', (event) => {
+    const surface = event.target;
+    if (!surface.classList || !surface.classList.contains('rte-surface')) return;
+    const block = state.blocks.find(b => b.id === state.selectedId); if (!block) return;
+    const clean = sanitizeRichText(surface.innerHTML);
+    surface.innerHTML = clean;
+    if (surface.dataset.field) block.data[surface.dataset.field] = clean;
+    updatePreviewAndCode();
+  }, true);
   el.editor.addEventListener('click', (event) => {
     const block = state.blocks.find(b => b.id === state.selectedId); if (!block) return;
+    const rteBtn = event.target.closest('[data-rte-cmd]');
+    if (rteBtn) {
+      const wrapper = rteBtn.closest('.rte-field');
+      const surface = wrapper && wrapper.querySelector('.rte-surface');
+      if (surface) {
+        document.execCommand(rteBtn.dataset.rteCmd, false, null);
+        if (surface.dataset.field) block.data[surface.dataset.field] = surface.innerHTML;
+        updatePreviewAndCode();
+      }
+      return;
+    }
     const color = event.target.closest('[data-block-color]');
     if (color) { snapshot(); block.color = color.dataset.blockColor === 'accent' ? null : color.dataset.blockColor; renderAll(); return; }
     const textColor = event.target.closest('[data-block-text-color]');
