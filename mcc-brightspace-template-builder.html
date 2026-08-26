@@ -616,12 +616,32 @@
     letter-spacing: 0;
   }
   .cat-acc .block-library { padding: 8px; }
+  .editor-acc { border: 1px solid #d9e1e5; border-radius: 8px; margin: 0 0 14px; overflow: hidden; }
+  .editor-acc > summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 13px;
+    color: var(--mcc-navy);
+    background: #f2f6f8;
+    font-size: 14px;
+    font-weight: 800;
+  }
+  .editor-acc > summary::-webkit-details-marker { display: none; }
+  .editor-acc > summary::after { content: "\25B8"; color: #687680; font-size: 12px; }
+  .editor-acc[open] > summary::after { content: "\25BE"; }
+  .editor-acc[open] > summary { border-bottom: 1px solid #d9e1e5; }
+  .editor-acc-body { padding: 14px; }
+  .editor-acc-body .repeater-group:last-child { margin-bottom: 0; }
   @media (max-width: 1050px) {
     .brand-row, .breadcrumb, .footer-main, .footer-bottom { margin-left: 24px; margin-right: 24px; }
     .builder-grid { grid-template-columns: 250px minmax(380px, 1fr); }
     .editor-panel { grid-column: 1 / -1; position: static; }
     .editor-fields { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
     .editor-fields .editor-field, .editor-fields .repeater-group, .editor-fields .snippet-box { margin: 0; }
+    .editor-fields .editor-acc { grid-column: 1 / -1; }
   }
   @media (max-width: 760px) {
     .topbar { padding-left: 18px; padding-right: 18px; }
@@ -1452,6 +1472,9 @@
   ];
   const orderIndex = (key) => { const i = BLOCK_ORDER.indexOf(key); return i < 0 ? 999 : i; };
   let openCategory = 'Text';
+  let openEditorSections = new Set();
+  let openEditorBlockId = null;
+  const pluralizeTitle = (title) => title === 'Criterion' ? 'Criteria' : title + 's';
   function renderLibrary(filter) {
     const q = String(filter || '').trim().toLowerCase();
     const cats = ['Text','Featured','Reveal & Explore','Timelines & Steps','Questions & Scenarios','Practice Activities','Media','Data & Layout'];
@@ -1939,14 +1962,22 @@
     const block = state.blocks.find(b => b.id === state.selectedId);
     if (!block) {
       el.editor.innerHTML = '<div class="editor-empty"><div><strong>No block selected</strong>Click any block in the preview to edit it, or add a new block from the categories in the left panel.</div></div>';
+      openEditorBlockId = null;
       return;
+    }
+    if (block.id !== openEditorBlockId) {
+      openEditorSections = new Set();
+      openEditorBlockId = block.id;
     }
     const def = defs[block.type];
     syncRepeater(block);
-    let fieldsHtml = def.fields.map(f => inputHtml(block, f, block.data[f.key], null)).join('');
+    const contentFieldsHtml = def.fields.map(f => inputHtml(block, f, block.data[f.key], null)).join('');
+    let itemsHtml = '';
+    let itemCount = 0;
     if (def.repeater) {
-      const items = block.data[def.repeater.key] || [];
-      fieldsHtml += items.map((item, index) => '<fieldset class="repeater-group"><legend class="repeater-title">' + e(def.repeater.title) + ' ' + (index + 1) + '</legend>' + def.repeater.fields.map(f => inputHtml(block, f, item[f.key], index)).join('') + '</fieldset>').join('');
+      const repeaterItems = block.data[def.repeater.key] || [];
+      itemCount = repeaterItems.length;
+      itemsHtml = repeaterItems.map((item, index) => '<fieldset class="repeater-group"><legend class="repeater-title">' + e(def.repeater.title) + ' ' + (index + 1) + '</legend>' + def.repeater.fields.map(f => inputHtml(block, f, item[f.key], index)).join('') + '</fieldset>').join('');
     }
     const pair = blockColorPair(block);
     const colorButtons = BLOCK_COLORS.map(color => '<button type="button" class="color-button" style="background-color:' + color + '" data-block-color="' + color + '" aria-label="Use accent color ' + color + '" aria-pressed="' + (String(block.color || '').toLowerCase() === color.toLowerCase()) + '"></button>').join('') + '<button type="button" class="small-button" data-block-color="accent" aria-pressed="' + (!block.color) + '">Use page accent</button>';
@@ -1954,12 +1985,22 @@
     const backgroundButtons = BLOCK_COLORS.map(color => '<button type="button" class="color-button" style="background-color:' + color + '" data-block-background-color="' + color + '" aria-label="Use background color ' + color + '" aria-pressed="' + (String(block.backgroundColor || '').toLowerCase() === color.toLowerCase()) + '"></button>').join('') + '<button type="button" class="small-button" data-block-background-color="default" aria-pressed="' + (!block.backgroundColor) + '">Use block default</button>';
     const textCustom = '<div class="color-custom"><input type="color" data-block-custom="textColor" value="' + pair.text + '" aria-label="Choose custom text color"><input type="text" data-block-custom="textColor" value="' + pair.text + '" maxlength="7" aria-label="Text color hexadecimal value"></div>';
     const backgroundCustom = '<div class="color-custom"><input type="color" data-block-custom="backgroundColor" value="' + pair.background + '" aria-label="Choose custom background color"><input type="text" data-block-custom="backgroundColor" value="' + pair.background + '" maxlength="7" aria-label="Background color hexadecimal value"></div>';
-    el.editor.innerHTML = '<span class="selected-kind">' + e(def.label) + '</span><div class="editor-fields">' + fieldsHtml +
+    const isOpen = (key) => openEditorSections.has(key) ? ' open' : '';
+    const sections = [];
+    if (contentFieldsHtml) {
+      sections.push('<details class="editor-acc" data-section="content"' + isOpen('content') + '><summary>Content<span class="cat-count">' + def.fields.length + '</span></summary><div class="editor-acc-body">' + contentFieldsHtml + '</div></details>');
+    }
+    if (def.repeater) {
+      sections.push('<details class="editor-acc" data-section="items"' + isOpen('items') + '><summary>' + e(pluralizeTitle(def.repeater.title)) + '<span class="cat-count">' + itemCount + '</span></summary><div class="editor-acc-body">' + itemsHtml + '</div></details>');
+    }
+    sections.push('<details class="editor-acc" data-section="appearance"' + isOpen('appearance') + '><summary>Appearance and colors</summary><div class="editor-acc-body">' +
       '<fieldset class="editor-field" style="border:0;padding:0"><legend class="field-label">Accent color</legend><p class="field-help">Used for borders, markers, headings, and interactive accents.</p><div class="palette">' + colorButtons + '</div></fieldset>' +
       '<fieldset class="editor-field" style="border:0;padding:0"><legend class="field-label">Text color</legend><p class="field-help">Choose an MCC color or enter a hexadecimal color.</p><div class="palette">' + textButtons + '</div>' + textCustom + '</fieldset>' +
       '<fieldset class="editor-field" style="border:0;padding:0"><legend class="field-label">Background color</legend><p class="field-help">Solid colors only. CourseMaker does not generate gradients.</p><div class="palette">' + backgroundButtons + '</div>' + backgroundCustom + '</fieldset>' +
       contrastResultsHtml(block) +
-      '<div class="snippet-box"><h3>Customized code snippet</h3><p>This updates as you edit the selected block.</p><pre id="block-code"></pre><button type="button" class="small-button" data-copy-block>Copy block HTML</button><button type="button" class="small-button danger-button" data-delete-selected>Delete this block</button></div></div>';
+      '</div></details>');
+    sections.push('<details class="editor-acc" data-section="code"' + isOpen('code') + '><summary>Code snippet and actions</summary><div class="editor-acc-body"><div class="snippet-box" style="margin-top:0;padding-top:0;border-top:0"><h3>Customized code snippet</h3><p>This updates as you edit the selected block.</p><pre id="block-code"></pre><button type="button" class="small-button" data-copy-block>Copy block HTML</button><button type="button" class="small-button danger-button" data-delete-selected>Delete this block</button></div></div></details>');
+    el.editor.innerHTML = '<span class="selected-kind">' + e(def.label) + '</span><div class="editor-fields">' + sections.join('') + '</div>';
     document.getElementById('block-code').textContent = renderBlockHtml(block);
   }
 
@@ -2191,6 +2232,14 @@
     if (from >= 0 && to >= 0 && from !== to) { snapshot(); const block = state.blocks.splice(from, 1)[0]; state.blocks.splice(to, 0, block); state.selectedId = block.id; renderAll(); }
   });
 
+  el.editor.addEventListener('toggle', (event) => {
+    const details = event.target;
+    if (!details.classList || !details.classList.contains('editor-acc')) return;
+    const key = details.dataset.section;
+    if (!key) return;
+    if (details.open) openEditorSections.add(key);
+    else openEditorSections.delete(key);
+  }, true);
   el.editor.addEventListener('focusin', (event) => {
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(event.target.tagName)) snapshot();
   });
