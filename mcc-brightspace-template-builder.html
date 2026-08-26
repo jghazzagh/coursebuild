@@ -1414,7 +1414,7 @@
     state.bannerUrl = saved.bannerUrl || '';
     state.accent = normalizeHex(saved.accent) || '#003366';
     state.blocks = saved.blocks.filter(b => b && defs[b.type]);
-    state.blocks.forEach(b => { if (!b.id) b.id = uid(); syncRepeater(b); });
+    state.blocks.forEach(b => { if (!b.id) b.id = uid(); syncRepeater(b); sanitizeBlockRichText(b); });
     state.selectedId = state.blocks.some(b => b.id === saved.selectedId) ? saved.selectedId : null;
     state.insertAt = null;
     syncSetupInputs();
@@ -1541,6 +1541,15 @@
     walk(container);
     return out.join('').replace(/(<br>){3,}/g, '<br><br>').replace(/^(<br>)+|(<br>)+$/g, '');
   }
+  function sanitizeBlockRichText(block) {
+    const def = defs[block.type];
+    if (!def) return;
+    def.fields.forEach((f) => {
+      if (f.type === 'richtext' && typeof block.data[f.key] === 'string') {
+        block.data[f.key] = sanitizeRichText(block.data[f.key]);
+      }
+    });
+  }
   function renderLibrary(filter) {
     const q = String(filter || '').trim().toLowerCase();
     const cats = ['Text','Text Editing','Featured','Reveal & Explore','Timelines & Steps','Questions & Scenarios','Practice Activities','Media','Data & Layout'];
@@ -1646,7 +1655,7 @@
       case 'richText': {
         const richFontStacks = { Lato: 'Lato,Arial,sans-serif', Arial: 'Arial,Helvetica,sans-serif', Verdana: 'Verdana,Geneva,sans-serif', Tahoma: 'Tahoma,Geneva,sans-serif' };
         const richFont = richFontStacks[d.fontFamily] || richFontStacks.Lato;
-        return '<p style="font-family:' + richFont + ';font-size:19px;color:' + text + ';margin:0 0 22px;line-height:1.65">' + (d.content || '') + '</p>';
+        return '<p style="font-family:' + richFont + ';font-size:19px;color:' + text + ';margin:0 0 22px;line-height:1.65">' + sanitizeRichText(d.content || '') + '</p>';
       }
       case 'checklist':
         return '<section style="' + base + ';margin:24px 0"><h3 style="font-family:Lato,Arial,sans-serif;font-size:22px;color:' + text + ';margin:0 0 12px">' + e(d.title) + '</h3><ul role="list" style="margin:0;padding:0;list-style:none;color:' + text + '">' + lines(d.items).map((item, i, all) => '<li style="list-style:none;display:flex;align-items:flex-start;gap:13px;margin:0;padding:12px 0;' + (i < all.length - 1 ? 'border-bottom:1px solid #D7E1E6;' : '') + 'color:' + text + ';font-family:Lato,Arial,sans-serif;font-size:19px;line-height:1.65"><span aria-hidden="true" style="display:block;flex:0 0 19px;width:19px;height:7px;margin-top:12px;border-radius:2px;background-color:' + color + '"></span><span style="display:block;flex:1 1 auto;font-family:Lato,Arial,sans-serif;font-size:19px;color:' + text + '">' + e(item) + '</span></li>').join('') + '</ul></section>';
@@ -2031,7 +2040,7 @@
         '<button type="button" class="rte-btn" data-rte-cmd="superscript" aria-label="Superscript" title="Superscript">x<sup>2</sup></button>' +
         '<button type="button" class="rte-btn" data-rte-cmd="subscript" aria-label="Subscript" title="Subscript">x<sub>2</sub></button>' +
         '</div>';
-      control = '<div class="rte-field">' + toolbar + '<div id="' + id + '" class="rte-surface" contenteditable="true" ' + data + ' role="textbox" aria-multiline="true" aria-label="' + attr(f.label) + '">' + value + '</div></div>';
+      control = '<div class="rte-field">' + toolbar + '<div id="' + id + '" class="rte-surface" contenteditable="true" ' + data + ' role="textbox" aria-multiline="true" aria-label="' + attr(f.label) + '">' + sanitizeRichText(value) + '</div></div>';
     } else {
       const bounds = f.type === 'number' ? ' min="' + f.min + '" max="' + f.max + '"' : '';
       control = '<input id="' + id + '" type="' + (f.type === 'url' ? 'url' : f.type === 'number' ? 'number' : 'text') + '" value="' + attr(value) + '" ' + data + bounds + '>';
@@ -2343,7 +2352,7 @@
     } else if (target.dataset.field) {
       const f = defs[block.type].fields.find(x => x.key === target.dataset.field);
       if (target.isContentEditable) {
-        block.data[target.dataset.field] = target.innerHTML;
+        block.data[target.dataset.field] = sanitizeRichText(target.innerHTML);
       } else {
         block.data[target.dataset.field] = f && f.type === 'number' ? parseInt(target.value, 10) || f.min : target.value;
       }
@@ -2381,7 +2390,7 @@
       const surface = wrapper && wrapper.querySelector('.rte-surface');
       if (surface) {
         document.execCommand(rteBtn.dataset.rteCmd, false, null);
-        if (surface.dataset.field) block.data[surface.dataset.field] = surface.innerHTML;
+        if (surface.dataset.field) block.data[surface.dataset.field] = sanitizeRichText(surface.innerHTML);
         updatePreviewAndCode();
       }
       return;
