@@ -937,7 +937,7 @@
     intro: {
       label: 'Intro text', category: 'Text',
       defaults: { content: 'Use this short introduction to orient students to the page.' },
-      fields: [field('content', 'Content', 'textarea')]
+      fields: [field('content', 'Content', 'richtext')]
     },
     heading: {
       label: 'Section heading', category: 'Text',
@@ -947,15 +947,7 @@
     paragraph: {
       label: 'Paragraph', category: 'Text',
       defaults: { content: 'Add your course content here.' },
-      fields: [field('content', 'Paragraph text', 'textarea')]
-    },
-    richText: {
-      label: 'Formatted text', category: 'Text Editing', isNew: true,
-      defaults: { fontFamily: 'Lato', content: 'Write your content here. Select text, then use the toolbar above to apply bold, italic, underline, strikethrough, superscript, or subscript.' },
-      fields: [
-        field('fontFamily', 'Text font', 'select', 'Lato is recommended to match the rest of the page.', { options: [['Lato', 'Lato (recommended)'], ['Arial', 'Arial'], ['Verdana', 'Verdana'], ['Tahoma', 'Tahoma']] }),
-        field('content', 'Formatted text', 'richtext', 'Select text, then use the toolbar to format it.')
-      ]
+      fields: [field('content', 'Paragraph text', 'richtext')]
     },
     checklist: {
       label: 'Checklist', category: 'Text',
@@ -989,7 +981,7 @@
     callout: {
       label: 'Callout box', category: 'Featured',
       defaults: { style: 'information', title: 'Good to know', content: 'Use this space to add helpful context or guidance.' },
-      fields: [field('style', 'Callout style', 'select', '', { options: [['information','Information (blue)'],['notice','Important notice (red)'],['tip','Tip (green)'],['example','Example (purple)'],['research','Research and sources (navy)'],['reflection','Reflection (amber)']] }), field('title', 'Callout heading'), field('content', 'Callout content', 'textarea')]
+      fields: [field('style', 'Callout style', 'select', '', { options: [['information','Information (blue)'],['notice','Important notice (red)'],['tip','Tip (green)'],['example','Example (purple)'],['research','Research and sources (navy)'],['reflection','Reflection (amber)']] }), field('title', 'Callout heading'), field('content', 'Callout content', 'richtext')]
     },
     quote: {
       label: 'Blockquote', category: 'Featured',
@@ -1005,12 +997,12 @@
     colored: {
       label: 'Colored block', category: 'Featured',
       defaults: { title: 'Key takeaway', content: 'Summarize the most important idea students should remember.' },
-      fields: [field('title', 'Block heading'), field('content', 'Block content', 'textarea')]
+      fields: [field('title', 'Block heading'), field('content', 'Block content', 'richtext')]
     },
     insight: {
       label: 'Instructor insight', category: 'Featured',
       defaults: { layout: 'image-left', imageWidth: '33', image: '', alt: 'Instructor portrait', title: 'Instructor insight', content: 'Here is a practical tip that can save you time or help you avoid a common mistake.' },
-      fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left'],['image-right','Image right'],['none','No image (text only)']] }), field('imageWidth', 'Image size', 'select', 'How much of the block the image column takes. Ignored when No image is selected.', { options: [['25','25% image'],['33','33% image (default)'],['40','40% image'],['50','50% image']] }), field('image', 'Image URL', 'url'), field('alt', 'Image alternative text', 'textarea'), field('title', 'Insight heading'), field('content', 'Insight or tip', 'textarea')]
+      fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left'],['image-right','Image right'],['none','No image (text only)']] }), field('imageWidth', 'Image size', 'select', 'How much of the block the image column takes. Ignored when No image is selected.', { options: [['25','25% image'],['33','33% image (default)'],['40','40% image'],['50','50% image']] }), field('image', 'Image URL', 'url'), field('alt', 'Image alternative text', 'textarea'), field('title', 'Insight heading'), field('content', 'Insight or tip', 'richtext')]
     },
     instructorInfo: {
       label: 'Instructor information', category: 'Featured', isNew: true,
@@ -1020,7 +1012,7 @@
     imageText: {
       label: 'Content image with text', category: 'Featured', isNew: true,
       defaults: { layout: 'image-left', imageWidth: '33', image: '', alt: 'Describe the instructional image.', title: 'Content heading', content: 'Add informational text that explains or supports the image.' },
-      fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left'],['image-right','Image right'],['none','No image (text only)']] }), field('imageWidth', 'Image size', 'select', 'How much of the block the image column takes. Ignored when No image is selected.', { options: [['25','25% image'],['33','33% image (default)'],['40','40% image'],['50','50% image']] }), field('image', 'Content image URL', 'url'), field('alt', 'Image alternative text', 'textarea'), field('title', 'Content heading'), field('content', 'Informational text', 'textarea')]
+      fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left'],['image-right','Image right'],['none','No image (text only)']] }), field('imageWidth', 'Image size', 'select', 'How much of the block the image column takes. Ignored when No image is selected.', { options: [['25','25% image'],['33','33% image (default)'],['40','40% image'],['50','50% image']] }), field('image', 'Content image URL', 'url'), field('alt', 'Image alternative text', 'textarea'), field('title', 'Content heading'), field('content', 'Informational text', 'richtext')]
     },
     aiPolicy: {
       label: 'AI policy block', category: 'Featured', isNew: true,
@@ -1051,7 +1043,7 @@
         { heading: 'Go big', content: 'The most ambitious version, with the biggest payoff.', level: 4 }
       ] },
       fields: [field('title', 'Section heading', '', 'Leave blank to show only the cards.'), field('label', 'Rating label', '', 'Shown above the dots on every card, for example Scope or Effort.'), field('count', 'Cards (1–6)', 'number', '', { min: 1, max: 6 })],
-      repeater: repeater('items', 'Card', 'count', [field('heading', 'Card heading'), field('content', 'Card text', 'textarea'), field('level', 'Filled dots (1–4)', 'number', '', { min: 1, max: 4 })])
+      repeater: repeater('items', 'Card', 'count', [field('heading', 'Card heading'), field('content', 'Card text', 'richtext'), field('level', 'Filled dots (1–4)', 'number', '', { min: 1, max: 4 })])
     },
     stepBoxes: {
       label: 'Step flow boxes (2–6)', category: 'Featured', isNew: true,
@@ -1061,7 +1053,7 @@
         { label: 'Step three', heading: 'Now what?', content: 'Name what happens next.' }
       ] },
       fields: [field('count', 'Steps (2–6)', 'number', '', { min: 2, max: 6 })],
-      repeater: repeater('items', 'Step', 'count', [field('label', 'Small label'), field('heading', 'Step heading'), field('content', 'Step text', 'textarea')])
+      repeater: repeater('items', 'Step', 'count', [field('label', 'Small label'), field('heading', 'Step heading'), field('content', 'Step text', 'richtext')])
     },
     accordion: {
       label: 'Accordion (1–6)', category: 'Reveal & Explore',
@@ -1137,7 +1129,7 @@
         { option: 'A final distractor', feedback: 'Try again. This response leaves out an important part of the concept.' }
       ] },
       fields: [field('question', 'Question', 'textarea'), field('count', 'Answer choices (2–4)', 'number', '', { min: 2, max: 4 }), field('correct', 'Correct choice', 'dynamic-select')],
-      repeater: repeater('items', 'Choice', 'count', [field('option', 'Answer choice'), field('feedback', 'Feedback', 'textarea')])
+      repeater: repeater('items', 'Choice', 'count', [field('option', 'Answer choice'), field('feedback', 'Feedback', 'richtext')])
     },
     multipleChoice: {
       label: 'Multiple choice question', category: 'Questions & Scenarios', isNew: true,
@@ -1148,7 +1140,7 @@
         { option: 'Final distractor', feedback: 'Not quite. Suggest what the learner should review before trying again.' }
       ] },
       fields: [field('question', 'Question', 'textarea'), field('count', 'Answer choices (2–6)', 'number', '', { min: 2, max: 6 }), field('correct', 'Correct answer', 'dynamic-select')],
-      repeater: repeater('items', 'Answer', 'count', [field('option', 'Answer text'), field('feedback', 'Feedback for this answer', 'textarea')])
+      repeater: repeater('items', 'Answer', 'count', [field('option', 'Answer text'), field('feedback', 'Feedback for this answer', 'richtext')])
     },
     scenario: {
       label: 'Decision scenario', category: 'Questions & Scenarios', isNew: true,
@@ -1158,7 +1150,7 @@
         { option: 'Choose a response that creates a new problem', feedback: 'This response could make the situation worse. Explain what to do instead.' }
       ] },
       fields: [field('title', 'Scenario heading'), field('scenario', 'Scenario', 'textarea'), field('count', 'Choices (2–4)', 'number', '', { min: 2, max: 4 }), field('correct', 'Recommended choice', 'dynamic-select')],
-      repeater: repeater('items', 'Choice', 'count', [field('option', 'Response option'), field('feedback', 'Detailed feedback', 'textarea')])
+      repeater: repeater('items', 'Choice', 'count', [field('option', 'Response option'), field('feedback', 'Detailed feedback', 'richtext')])
     },
     process: {
       label: 'Guided stepper', category: 'Timelines & Steps', isNew: true,
@@ -1243,7 +1235,7 @@
         { heading: 'Check the result', content: 'Verify the answer makes sense.' }
       ] },
       fields: [field('title', 'Example heading'), field('problem', 'Problem statement', 'textarea'), field('shown', 'Steps shown by default (0–6)', 'number', 'Remaining steps are hidden behind "try it, then reveal" buttons.', { min: 0, max: 6 }), field('count', 'Total steps (2–6)', 'number', '', { min: 2, max: 6 })],
-      repeater: repeater('items', 'Step', 'count', [field('heading', 'Step heading'), field('content', 'Step work', 'textarea')])
+      repeater: repeater('items', 'Step', 'count', [field('heading', 'Step heading'), field('content', 'Step work', 'richtext')])
     },
     scenarioReveal: {
       label: 'Scenario reveal boxes (1–6)', category: 'Questions & Scenarios', isNew: true,
@@ -1252,7 +1244,7 @@
         { scenario: 'Describe a second situation that models the right approach.', kind: 'good', verdict: 'Best practice.', explanation: 'Explain why this approach works.' }
       ] },
       fields: [field('title', 'Section heading'), field('instructions', 'Learner instructions', 'textarea'), field('count', 'Scenarios (1–6)', 'number', '', { min: 1, max: 6 })],
-      repeater: repeater('items', 'Scenario', 'count', [field('scenario', 'Scenario text', 'textarea'), field('kind', 'Verdict style', 'select', '', { options: [['bad','Caution (warm orange answer)'],['good','Positive (blue answer)']] }), field('verdict', 'Verdict label', '', 'The bold word shown first, for example Pitfall. or Best practice.'), field('explanation', 'Answer explanation', 'textarea')])
+      repeater: repeater('items', 'Scenario', 'count', [field('scenario', 'Scenario text', 'textarea'), field('kind', 'Verdict style', 'select', '', { options: [['bad','Caution (warm orange answer)'],['good','Positive (blue answer)']] }), field('verdict', 'Verdict label', '', 'The bold word shown first, for example Pitfall. or Best practice.'), field('explanation', 'Answer explanation', 'richtext')])
     },
     pathTimeline: {
       label: 'Interactive path timeline (1–8)', category: 'Timelines & Steps', isNew: true,
@@ -1323,7 +1315,7 @@
     statCard: {
       label: 'Key statistic', category: 'Data & Layout', isNew: true,
       defaults: { stat: '73%', label: 'Add a short description of what this number means.', source: '' },
-      fields: [field('stat', 'The statistic', '', 'A short number or figure, for example 73% or 4 out of 5.'), field('label', 'What it means', 'textarea'), field('source', 'Source (required)', '', 'Where this number comes from. A statistic without a source will be flagged by Check Page.')]
+      fields: [field('stat', 'The statistic', '', 'A short number or figure, for example 73% or 4 out of 5.'), field('label', 'What it means', 'richtext'), field('source', 'Source (required)', '', 'Where this number comes from. A statistic without a source will be flagged by Check Page.')]
     },
     rubricTable: {
       label: 'Grading rubric', category: 'Data & Layout', isNew: true,
@@ -1495,7 +1487,7 @@
   }
 
   const BLOCK_ORDER = [
-    'intro','heading','paragraph','richText','bullets','checklist','annotated','referenceList',
+    'intro','heading','paragraph','bullets','checklist','annotated','referenceList',
     'callout','quote','button','colored','insight','instructorInfo','imageText','aiPolicy','dueDate','courseCards','scopeCards','stepBoxes',
     'accordion','tabs','flip','reveal','carousel',
     'timeline','interactiveTimeline','pathTimeline','process','weeklyRhythm',
@@ -1549,10 +1541,23 @@
         block.data[f.key] = sanitizeRichText(block.data[f.key]);
       }
     });
+    if (def.repeater) {
+      const repeaterItems = block.data[def.repeater.key];
+      if (Array.isArray(repeaterItems)) {
+        repeaterItems.forEach((item) => {
+          if (!item) return;
+          def.repeater.fields.forEach((f) => {
+            if (f.type === 'richtext' && typeof item[f.key] === 'string') {
+              item[f.key] = sanitizeRichText(item[f.key]);
+            }
+          });
+        });
+      }
+    }
   }
   function renderLibrary(filter) {
     const q = String(filter || '').trim().toLowerCase();
-    const cats = ['Text','Text Editing','Featured','Reveal & Explore','Timelines & Steps','Questions & Scenarios','Practice Activities','Media','Data & Layout'];
+    const cats = ['Text','Featured','Reveal & Explore','Timelines & Steps','Questions & Scenarios','Practice Activities','Media','Data & Layout'];
     let total = 0;
     el.library.innerHTML = cats.map(cat => {
       const entries = Object.entries(defs).filter(([,d]) => d.category === cat && (!q || d.label.toLowerCase().includes(q)))
@@ -1644,19 +1649,14 @@
 
     switch (block.type) {
       case 'intro':
-        return '<p style="' + base + ';font-size:21px;color:' + text + ';margin:0 0 24px">' + br(d.content) + '</p>';
+        return '<p style="' + base + ';font-size:21px;color:' + text + ';margin:0 0 24px">' + sanitizeRichText(d.content || '') + '</p>';
       case 'heading': {
         const level = ['2','3','4'].includes(String(d.level)) ? String(d.level) : '2';
         const size = level === '2' ? '30px' : level === '3' ? '24px' : '21px';
         return '<h' + level + ' style="font-family:Lato,Arial,sans-serif;font-size:' + size + ';line-height:1.25;color:' + text + ';background-color:' + background + ';border-bottom:3px solid ' + color + ';padding-bottom:7px;margin:30px 0 12px">' + e(d.text) + '</h' + level + '>';
       }
       case 'paragraph':
-        return '<p style="' + base + ';margin:0 0 22px">' + br(d.content) + '</p>';
-      case 'richText': {
-        const richFontStacks = { Lato: 'Lato,Arial,sans-serif', Arial: 'Arial,Helvetica,sans-serif', Verdana: 'Verdana,Geneva,sans-serif', Tahoma: 'Tahoma,Geneva,sans-serif' };
-        const richFont = richFontStacks[d.fontFamily] || richFontStacks.Lato;
-        return '<p style="font-family:' + richFont + ';font-size:19px;color:' + text + ';margin:0 0 22px;line-height:1.65">' + sanitizeRichText(d.content || '') + '</p>';
-      }
+        return '<p style="' + base + ';margin:0 0 22px">' + sanitizeRichText(d.content || '') + '</p>';
       case 'checklist':
         return '<section style="' + base + ';margin:24px 0"><h3 style="font-family:Lato,Arial,sans-serif;font-size:22px;color:' + text + ';margin:0 0 12px">' + e(d.title) + '</h3><ul role="list" style="margin:0;padding:0;list-style:none;color:' + text + '">' + lines(d.items).map((item, i, all) => '<li style="list-style:none;display:flex;align-items:flex-start;gap:13px;margin:0;padding:12px 0;' + (i < all.length - 1 ? 'border-bottom:1px solid #D7E1E6;' : '') + 'color:' + text + ';font-family:Lato,Arial,sans-serif;font-size:19px;line-height:1.65"><span aria-hidden="true" style="display:block;flex:0 0 19px;width:19px;height:7px;margin-top:12px;border-radius:2px;background-color:' + color + '"></span><span style="display:block;flex:1 1 auto;font-family:Lato,Arial,sans-serif;font-size:19px;color:' + text + '">' + e(item) + '</span></li>').join('') + '</ul></section>';
       case 'annotated': {
@@ -1671,23 +1671,23 @@
           const accent = block.color || palette.accent;
           const iconFontSize = ['\u2713', '\u2727', '\u201C'].includes(palette.icon) ? '26px' : '30px';
           const iconLineHeight = palette.icon === '\u201C' ? '58px' : '48px';
-          return '<aside style="' + base + ';margin:24px 0;padding:20px 22px;border:2px solid ' + accent + ';border-left-width:8px;border-radius:8px;background-color:' + background + '"><table role="presentation" style="border-collapse:collapse;width:100%"><tbody><tr><td style="width:48px;padding:0;vertical-align:top"><span aria-hidden="true" style="display:block;width:48px;height:48px;border-radius:50%;overflow:hidden;color:' + contrast(accent) + ';background-color:' + accent + ';font-family:Lato,Arial,sans-serif;font-size:' + iconFontSize + ';font-weight:800;text-align:center;line-height:' + iconLineHeight + '">' + palette.icon + '</span></td><td style="padding:0 0 0 18px;vertical-align:top"><h3 style="font-family:Lato,Arial,sans-serif;font-size:22px;color:' + text + ';margin:0 0 7px;line-height:1.3">' + e(d.title) + '</h3><p style="font-family:Lato,Arial,sans-serif;color:' + text + ';margin:0;line-height:1.55">' + br(d.content) + '</p></td></tr></tbody></table></aside>';
+          return '<aside style="' + base + ';margin:24px 0;padding:20px 22px;border:2px solid ' + accent + ';border-left-width:8px;border-radius:8px;background-color:' + background + '"><table role="presentation" style="border-collapse:collapse;width:100%"><tbody><tr><td style="width:48px;padding:0;vertical-align:top"><span aria-hidden="true" style="display:block;width:48px;height:48px;border-radius:50%;overflow:hidden;color:' + contrast(accent) + ';background-color:' + accent + ';font-family:Lato,Arial,sans-serif;font-size:' + iconFontSize + ';font-weight:800;text-align:center;line-height:' + iconLineHeight + '">' + palette.icon + '</span></td><td style="padding:0 0 0 18px;vertical-align:top"><h3 style="font-family:Lato,Arial,sans-serif;font-size:22px;color:' + text + ';margin:0 0 7px;line-height:1.3">' + e(d.title) + '</h3><p style="font-family:Lato,Arial,sans-serif;color:' + text + ';margin:0;line-height:1.55">' + sanitizeRichText(d.content || '') + '</p></td></tr></tbody></table></aside>';
         }
       case 'quote':
         return '<figure style="' + base + ';margin:26px 0;padding:22px 25px;border-left:6px solid ' + color + ';background-color:' + background + '"><blockquote style="margin:0 0 9px;font-size:23px;font-style:italic;color:' + text + '">“' + br(d.quote) + '”</blockquote><figcaption style="font-size:16px;color:' + text + '">— ' + e(d.citation) + '</figcaption></figure>';
       case 'button':
         return '<div style="display:grid;grid-template-columns:repeat(' + gridColumns(items.length) + ',1fr);gap:10px;margin:24px 0;font-family:Lato,Arial,sans-serif">' + items.map(item => '<a href="' + safeUrl(item.url, '#') + '" style="display:block;box-sizing:border-box;padding:13px 20px;color:' + text + ';background-color:' + background + ';border:1px solid ' + color + ';border-radius:6px;font-size:18px;font-weight:700;text-align:center;text-decoration:none">' + e(item.label) + '</a>').join('') + '</div>';
       case 'colored':
-        return '<section style="' + base + ';margin:24px 0;padding:22px 24px;color:' + text + ';background-color:' + background + ';border-radius:8px"><h3 style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p></section>';
+        return '<section style="' + base + ';margin:24px 0;padding:22px 24px;color:' + text + ';background-color:' + background + ';border-radius:8px"><h3 style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + sanitizeRichText(d.content || '') + '</p></section>';
       case 'insight':
-        return '<aside style="' + base + ';margin:24px 0">' + imageTextTable(d.image, d.alt, d.layout, '<h3 style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p>', 'Instructor image placeholder', d.imageWidth) + '</aside>';
+        return '<aside style="' + base + ';margin:24px 0">' + imageTextTable(d.image, d.alt, d.layout, '<h3 style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + sanitizeRichText(d.content || '') + '</p>', 'Instructor image placeholder', d.imageWidth) + '</aside>';
       case 'instructorInfo': {
         const email = String(d.email || '').trim();
         const info = '<h3 style="font-size:25px;color:' + text + ';margin:0 0 12px">' + e(d.name) + '</h3><dl style="margin:0;color:' + text + '"><dt style="font-weight:700">Office</dt><dd style="margin:0 0 9px">' + e(d.office) + '</dd><dt style="font-weight:700">Email</dt><dd style="margin:0 0 9px">' + (email ? '<a href="' + safeUrl('mailto:' + email, '#') + '" style="color:' + text + '">' + e(email) + '</a>' : 'Add email address') + '</dd><dt style="font-weight:700">Office hours</dt><dd style="margin:0 0 14px">' + e(d.hours) + '</dd></dl><div style="padding-top:14px;border-top:1px solid #AFC1CA;color:' + text + '">' + br(d.about) + '</div>';
         return '<section style="' + base + ';margin:24px 0">' + imageTextTable(d.image, d.alt, d.layout, info, 'Instructor image placeholder', d.imageWidth) + '</section>';
       }
       case 'imageText':
-        return '<section style="' + base + ';margin:24px 0">' + imageTextTable(d.image, d.alt, d.layout, '<h3 style="font-size:25px;color:' + text + ';margin:0 0 10px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + br(d.content) + '</p>', 'Content image placeholder', d.imageWidth) + '</section>';
+        return '<section style="' + base + ';margin:24px 0">' + imageTextTable(d.image, d.alt, d.layout, '<h3 style="font-size:25px;color:' + text + ';margin:0 0 10px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + sanitizeRichText(d.content || '') + '</p>', 'Content image placeholder', d.imageWidth) + '</section>';
       case 'aiPolicy': {
         const palette = aiPolicyPalette(d.level);
         const accent = block.color || palette.accent;
@@ -1792,9 +1792,9 @@
       case 'workedExample': {
         const shown = Math.max(0, Math.min(items.length, parseInt(d.shown, 10) || 0));
         const steps = items.map((item, i) => {
-          if (i < shown) return '<div style="margin:12px 0;padding:16px;border-left:6px solid ' + color + ';border-radius:0 7px 7px 0;color:#1F2933;background-color:#FFFFFF"><h4 style="margin:0 0 7px;color:' + color + ';font-size:20px">Step ' + (i + 1) + ': ' + e(item.heading) + '</h4><p style="margin:0">' + br(item.content) + '</p></div>';
+          if (i < shown) return '<div style="margin:12px 0;padding:16px;border-left:6px solid ' + color + ';border-radius:0 7px 7px 0;color:#1F2933;background-color:#FFFFFF"><h4 style="margin:0 0 7px;color:' + color + ';font-size:20px">Step ' + (i + 1) + ': ' + e(item.heading) + '</h4><p style="margin:0">' + sanitizeRichText(item.content || '') + '</p></div>';
           const revealCode = 'var p=this.parentNode.querySelector(\'[data-step-panel]\'),open=this.getAttribute(\'aria-expanded\')!==\'true\';this.setAttribute(\'aria-expanded\',open);p.hidden=!open;this.textContent=open?\'Hide step ' + (i + 1) + '\':\'Reveal step ' + (i + 1) + '\'';
-          return '<div style="margin:12px 0;padding:16px;border:1px dashed ' + color + ';border-radius:7px;color:#1F2933;background-color:#F7FAFB"><p style="margin:0 0 10px;font-weight:700;color:#1F2933">Step ' + (i + 1) + ': ' + e(item.heading) + ' — try this step yourself before revealing it.</p><button type="button" aria-expanded="false" onclick="' + attr(revealCode) + '" style="padding:10px 15px;border:0;border-radius:6px;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:16px;font-weight:700;cursor:pointer">Reveal step ' + (i + 1) + '</button><div data-step-panel hidden style="margin-top:12px;padding:14px;border-left:5px solid ' + color + ';background-color:#FFFFFF">' + br(item.content) + '</div></div>';
+          return '<div style="margin:12px 0;padding:16px;border:1px dashed ' + color + ';border-radius:7px;color:#1F2933;background-color:#F7FAFB"><p style="margin:0 0 10px;font-weight:700;color:#1F2933">Step ' + (i + 1) + ': ' + e(item.heading) + ' — try this step yourself before revealing it.</p><button type="button" aria-expanded="false" onclick="' + attr(revealCode) + '" style="padding:10px 15px;border:0;border-radius:6px;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:16px;font-weight:700;cursor:pointer">Reveal step ' + (i + 1) + '</button><div data-step-panel hidden style="margin-top:12px;padding:14px;border-left:5px solid ' + color + ';background-color:#FFFFFF">' + sanitizeRichText(item.content || '') + '</div></div>';
         }).join('');
         return '<section style="' + base + ';margin:26px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px;color:#1F2933;background-color:#FFFFFF"><h3 style="font-size:24px;color:' + color + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="margin:0 0 14px;padding:14px;border:1px solid #C9D7DE;border-radius:7px;color:#1F2933;background-color:#F3F7F8;font-weight:700">' + br(d.problem) + '</p>' + steps + '</section>';
       }
@@ -1818,19 +1818,19 @@
         return '<section data-mcc-reveal style="' + base + ';margin:24px 0;padding:22px;border:1px solid #b8c8d0;border-radius:8px;background-color:#f7fafb"><p style="color:#1F2933;margin:0 0 14px;font-weight:700">' + br(d.prompt) + '</p><button type="button" aria-expanded="false" onclick="var p=this.parentNode.querySelector(\'[data-reveal-panel]\'),open=this.getAttribute(\'aria-expanded\')!==\'true\';this.setAttribute(\'aria-expanded\',open);p.hidden=!open;this.textContent=open?\'Hide explanation\':this.getAttribute(\'data-label\')" data-label="' + attr(d.button) + '" style="padding:11px 16px;border:0;border-radius:6px;color:' + text + ';background-color:' + background + ';font-size:17px;font-weight:700;cursor:pointer">' + e(d.button) + '</button><div data-reveal-panel hidden style="margin-top:15px;padding:16px;border-left:5px solid ' + color + ';color:#1F2933;background-color:#FFFFFF">' + br(d.content) + '</div></section>';
       case 'knowledge': {
         const qid = block.id + '-question';
-        const opts = items.map((item, i) => '<label style="display:block;margin:9px 0;padding:12px;border:1px solid #c3d0d6;border-radius:6px;cursor:pointer"><input type="radio" name="' + qid + '" value="' + (i + 1) + '" data-feedback="' + attr(item.feedback) + '" style="margin-right:9px">' + e(item.option) + '</label>').join('');
-        return '<section data-mcc-quiz data-correct="' + e(d.correct) + '" style="' + base + ';margin:25px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px"><h3 style="font-size:22px;color:' + color + ';margin:0 0 13px">Knowledge check</h3><p style="color:#1F2933;margin:0 0 12px;font-weight:700">' + br(d.question) + '</p><div role="radiogroup" aria-label="Answer choices">' + opts + '</div><button type="button" onclick="var r=this.closest(\'[data-mcc-quiz]\'),c=r.querySelector(\'input:checked\'),f=r.querySelector(\'[data-quiz-feedback]\');if(!c){f.textContent=\'Choose an answer before checking.\';f.style.backgroundColor=\'#fff4d6\';f.hidden=false;return}var ok=c.value===r.getAttribute(\'data-correct\');f.textContent=(ok?\'Correct. \':\'Not quite. \')+c.getAttribute(\'data-feedback\');f.style.backgroundColor=ok?\'#e5f5eb\':\'#fff0ed\';f.hidden=false" style="margin-top:12px;padding:11px 16px;border:0;border-radius:6px;color:' + text + ';background-color:' + background + ';font-size:17px;font-weight:700;cursor:pointer">Check answer</button><div data-quiz-feedback role="status" aria-live="polite" hidden style="margin-top:13px;padding:14px;color:#1F2933;border-radius:6px"></div></section>';
+        const opts = items.map((item, i) => '<label style="display:block;margin:9px 0;padding:12px;border:1px solid #c3d0d6;border-radius:6px;cursor:pointer"><input type="radio" name="' + qid + '" value="' + (i + 1) + '" data-feedback="' + attr(sanitizeRichText(item.feedback || '')) + '" style="margin-right:9px">' + e(item.option) + '</label>').join('');
+        return '<section data-mcc-quiz data-correct="' + e(d.correct) + '" style="' + base + ';margin:25px 0;padding:22px;border:2px solid ' + color + ';border-radius:9px"><h3 style="font-size:22px;color:' + color + ';margin:0 0 13px">Knowledge check</h3><p style="color:#1F2933;margin:0 0 12px;font-weight:700">' + br(d.question) + '</p><div role="radiogroup" aria-label="Answer choices">' + opts + '</div><button type="button" onclick="var r=this.closest(\'[data-mcc-quiz]\'),c=r.querySelector(\'input:checked\'),f=r.querySelector(\'[data-quiz-feedback]\');if(!c){f.textContent=\'Choose an answer before checking.\';f.style.backgroundColor=\'#fff4d6\';f.hidden=false;return}var ok=c.value===r.getAttribute(\'data-correct\');f.innerHTML=(ok?\'Correct. \':\'Not quite. \')+c.getAttribute(\'data-feedback\');f.style.backgroundColor=ok?\'#e5f5eb\':\'#fff0ed\';f.hidden=false" style="margin-top:12px;padding:11px 16px;border:0;border-radius:6px;color:' + text + ';background-color:' + background + ';font-size:17px;font-weight:700;cursor:pointer">Check answer</button><div data-quiz-feedback role="status" aria-live="polite" hidden style="margin-top:13px;padding:14px;color:#1F2933;border-radius:6px"></div></section>';
       }
       case 'multipleChoice': {
         const qid = block.id + '-mcq';
         const correctNumber = Math.max(1, Math.min(items.length, parseInt(d.correct, 10) || 1));
         const correctItem = items[correctNumber - 1] || items[0] || { option: 'Correct answer', feedback: '' };
-        const answers = items.map((item, i) => '<div style="margin:10px 0"><input type="radio" id="' + qid + '-answer-' + i + '" name="' + qid + '-answer" value="' + (i + 1) + '" data-feedback="' + attr(item.feedback) + '" style="width:20px;height:20px;vertical-align:middle;margin:0 8px 0 0;accent-color:' + color + '"> <label for="' + qid + '-answer-' + i + '" style="font-family:Lato,Arial,sans-serif;font-size:19px;color:#1F2933;vertical-align:middle">' + e(item.option) + '</label></div>').join('');
-        const checkCode = "var f=this.form,a=f.querySelector('input[name=\"" + qid + "-answer\"]:checked'),o=f.querySelector('[data-mcq-feedback]'),r=o.querySelector('[data-mcq-result]'),m=o.querySelector('[data-mcq-message]');o.style.display='block';if(!a){r.textContent='Choose an answer.';m.textContent='Select one option before checking.';o.style.borderLeft='6px solid #9A6700';o.style.backgroundColor='#FFF4D6'}else{var ok=a.value===f.getAttribute('data-correct');r.textContent=ok?'Correct.':'Not quite.';m.textContent=a.getAttribute('data-feedback');o.style.borderLeft='6px solid '+(ok?'#18794E':'#B42318');o.style.backgroundColor=ok?'#EAF6EE':'#FCECEC'}o.focus()";
+        const answers = items.map((item, i) => '<div style="margin:10px 0"><input type="radio" id="' + qid + '-answer-' + i + '" name="' + qid + '-answer" value="' + (i + 1) + '" data-feedback="' + attr(sanitizeRichText(item.feedback || '')) + '" style="width:20px;height:20px;vertical-align:middle;margin:0 8px 0 0;accent-color:' + color + '"> <label for="' + qid + '-answer-' + i + '" style="font-family:Lato,Arial,sans-serif;font-size:19px;color:#1F2933;vertical-align:middle">' + e(item.option) + '</label></div>').join('');
+        const checkCode = "var f=this.form,a=f.querySelector('input[name=\"" + qid + "-answer\"]:checked'),o=f.querySelector('[data-mcq-feedback]'),r=o.querySelector('[data-mcq-result]'),m=o.querySelector('[data-mcq-message]');o.style.display='block';if(!a){r.textContent='Choose an answer.';m.textContent='Select one option before checking.';o.style.borderLeft='6px solid #9A6700';o.style.backgroundColor='#FFF4D6'}else{var ok=a.value===f.getAttribute('data-correct');r.textContent=ok?'Correct.':'Not quite.';m.innerHTML=a.getAttribute('data-feedback');o.style.borderLeft='6px solid '+(ok?'#18794E':'#B42318');o.style.backgroundColor=ok?'#EAF6EE':'#FCECEC'}o.focus()";
         return '<section style="' + base + ';margin:28px 0"><h2 style="font-family:Lato,Arial,sans-serif;color:' + color + ';font-size:30px;line-height:1.25;margin:40px 0 12px">Knowledge check</h2><form id="' + qid + '" data-correct="' + correctNumber + '" style="border:1px solid #C9D7DE;border-radius:10px;background-color:#F3F7F8;padding:22px 24px;margin:0 0 28px;box-sizing:border-box" onsubmit="return false"><fieldset style="border:0;padding:0;margin:0"><legend style="font-family:Lato,Arial,sans-serif;color:#001B3B;font-size:22px;font-weight:bold;line-height:1.4;margin:0 0 16px;padding:0">' + br(d.question) + '</legend>' + answers + '<button type="button" onclick="' + attr(checkCode) + '" style="font-family:Lato,Arial,sans-serif;font-size:19px;font-weight:bold;background-color:' + color + ';color:' + contrast(color) + ';border:2px solid ' + color + ';border-radius:7px;padding:12px 20px;margin-top:8px;cursor:pointer">Check my answer</button><div data-mcq-feedback role="status" aria-live="polite" style="display:none;font-family:Lato,Arial,sans-serif;font-size:19px;line-height:1.65;margin:20px 0 0;padding:18px 20px;border-radius:0 8px 8px 0;box-sizing:border-box;color:#1F2933" tabindex="-1"><strong data-mcq-result style="display:block;margin-bottom:4px"></strong><span data-mcq-message></span></div></fieldset></form><noscript><details style="font-family:Lato,Arial,sans-serif;font-size:19px;border:1px solid ' + color + ';border-radius:8px;margin:0 0 28px;overflow:hidden"><summary style="cursor:pointer;background-color:' + color + ';color:' + contrast(color) + ';font-weight:bold;padding:16px 18px">Reveal the knowledge-check answer</summary><div style="font-family:Lato,Arial,sans-serif;font-size:19px;color:#1F2933;line-height:1.65;padding:16px 18px;background-color:#FFFFFF"><p style="margin:0"><strong>Answer: ' + e(correctItem.option) + '.</strong> ' + br(correctItem.feedback) + '</p></div></details></noscript></section>';
       }
       case 'scenario': {
-        const choices = items.map((item, i) => '<button type="button" data-choice="' + (i + 1) + '" data-feedback="' + attr(item.feedback) + '" onclick="var r=this.closest(\'[data-mcc-scenario]\'),f=r.querySelector(\'[data-scenario-feedback]\'),ok=this.getAttribute(\'data-choice\')===r.getAttribute(\'data-correct\');r.querySelectorAll(\'[data-choice]\').forEach(function(b){b.style.outline=\'none\'});this.style.outline=\'3px solid ' + color + '\';f.textContent=(ok?\'Recommended response. \':\'Consider the impact. \')+this.getAttribute(\'data-feedback\');f.style.backgroundColor=ok?\'#e5f5eb\':\'#fff4d6\';f.hidden=false" style="display:block;width:100%;margin:9px 0;padding:13px 15px;border:1px solid ' + color + ';border-radius:6px;color:' + text + ';background-color:' + background + ';text-align:left;font-family:Lato,Arial,sans-serif;font-size:18px;cursor:pointer">' + e(item.option) + '</button>').join('');
+        const choices = items.map((item, i) => '<button type="button" data-choice="' + (i + 1) + '" data-feedback="' + attr(sanitizeRichText(item.feedback || '')) + '" onclick="var r=this.closest(\'[data-mcc-scenario]\'),f=r.querySelector(\'[data-scenario-feedback]\'),ok=this.getAttribute(\'data-choice\')===r.getAttribute(\'data-correct\');r.querySelectorAll(\'[data-choice]\').forEach(function(b){b.style.outline=\'none\'});this.style.outline=\'3px solid ' + color + '\';f.innerHTML=(ok?\'Recommended response. \':\'Consider the impact. \')+this.getAttribute(\'data-feedback\');f.style.backgroundColor=ok?\'#e5f5eb\':\'#fff4d6\';f.hidden=false" style="display:block;width:100%;margin:9px 0;padding:13px 15px;border:1px solid ' + color + ';border-radius:6px;color:' + text + ';background-color:' + background + ';text-align:left;font-family:Lato,Arial,sans-serif;font-size:18px;cursor:pointer">' + e(item.option) + '</button>').join('');
         return '<section data-mcc-scenario data-correct="' + e(d.correct) + '" style="' + base + ';margin:25px 0;padding:22px;border-left:7px solid ' + color + ';border-radius:0 9px 9px 0;background-color:' + background + '"><h3 style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0 0 15px">' + br(d.scenario) + '</p><div aria-label="Scenario responses">' + choices + '</div><div data-scenario-feedback role="status" aria-live="polite" hidden style="margin-top:13px;padding:14px;color:#1F2933;border-radius:6px"></div></section>';
       }
       case 'process': {
@@ -1854,7 +1854,7 @@
           const level = Math.max(1, Math.min(maxDots, parseInt(item.level, 10) || 1));
           let dots = '';
           for (let j = 0; j < maxDots; j++) dots += '<span style="display:inline-block;width:11px;height:11px;border-radius:50%;background-color:' + (j < level ? color : '#D6E8EE') + ';margin-right:4px"></span>';
-          return '<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;background-color:#FFFFFF;border:1px solid #C9D7DE;border-radius:8px;padding:18px 20px;margin:0 0 14px"><div style="flex:0 0 96px"><span style="display:block;font-family:Lato,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.05em;color:' + color + ';text-transform:uppercase;margin-bottom:6px">' + e(d.label) + '</span><span role="img" aria-label="' + attr(d.label) + ' level ' + level + ' of ' + maxDots + '">' + dots + '</span></div><div style="flex:1 1 220px"><h4 style="font-family:Lato,Arial,sans-serif;margin:0 0 6px;font-size:19px;color:' + color + ';line-height:1.3">' + e(item.heading) + '</h4><p style="margin:0;font-family:Lato,Arial,sans-serif;font-size:17px;color:#1F2933;line-height:1.55">' + br(item.content) + '</p></div></div>';
+          return '<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;background-color:#FFFFFF;border:1px solid #C9D7DE;border-radius:8px;padding:18px 20px;margin:0 0 14px"><div style="flex:0 0 96px"><span style="display:block;font-family:Lato,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.05em;color:' + color + ';text-transform:uppercase;margin-bottom:6px">' + e(d.label) + '</span><span role="img" aria-label="' + attr(d.label) + ' level ' + level + ' of ' + maxDots + '">' + dots + '</span></div><div style="flex:1 1 220px"><h4 style="font-family:Lato,Arial,sans-serif;margin:0 0 6px;font-size:19px;color:' + color + ';line-height:1.3">' + e(item.heading) + '</h4><p style="margin:0;font-family:Lato,Arial,sans-serif;font-size:17px;color:#1F2933;line-height:1.55">' + sanitizeRichText(item.content || '') + '</p></div></div>';
         }).join('');
         return '<section style="' + base + ';margin:26px 0">' + (d.title ? '<h3 style="font-size:26px;color:' + color + ';margin:0 0 14px">' + e(d.title) + '</h3>' : '') + scopeRows + '</section>';
       }
@@ -1868,7 +1868,7 @@
         const stepBoxesHtml = items.map((item, i) => {
           const p = stepPalettes[i % stepPalettes.length];
           const arrow = i ? '<div aria-hidden="true" style="flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:24px;color:' + color + ';font-weight:700;padding:0 4px">→</div>' : '';
-          return arrow + '<div style="flex:1 1 200px;background-color:' + p.bg + ';border-radius:8px;padding:18px 16px;text-align:center"><p style="margin:0 0 6px;font-family:Lato,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.05em;color:' + p.label + ';text-transform:uppercase">' + e(item.label) + '</p><p style="margin:0;font-family:Lato,Arial,sans-serif;font-size:19px;font-weight:700;color:' + p.heading + '">' + e(item.heading) + '</p><p style="margin:8px 0 0;font-family:Lato,Arial,sans-serif;font-size:15px;color:' + p.body + ';line-height:1.5">' + br(item.content) + '</p></div>';
+          return arrow + '<div style="flex:1 1 200px;background-color:' + p.bg + ';border-radius:8px;padding:18px 16px;text-align:center"><p style="margin:0 0 6px;font-family:Lato,Arial,sans-serif;font-size:12px;font-weight:700;letter-spacing:.05em;color:' + p.label + ';text-transform:uppercase">' + e(item.label) + '</p><p style="margin:0;font-family:Lato,Arial,sans-serif;font-size:19px;font-weight:700;color:' + p.heading + '">' + e(item.heading) + '</p><p style="margin:8px 0 0;font-family:Lato,Arial,sans-serif;font-size:15px;color:' + p.body + ';line-height:1.5">' + sanitizeRichText(item.content || '') + '</p></div>';
         }).join('');
         return '<div style="' + base + ';display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:26px 0">' + stepBoxesHtml + '</div>';
       }
@@ -1880,7 +1880,7 @@
           const panelId = block.id + '-scenario-' + i;
           const palette = verdictPalette(item.kind);
           const toggle = 'var p=document.getElementById(\'' + panelId + '\'),open=this.getAttribute(\'aria-expanded\')!==\'true\';this.setAttribute(\'aria-expanded\',open);p.hidden=!open;this.textContent=open?\'Hide answer\':\'Reveal answer\'';
-          return '<div style="box-sizing:border-box;display:flex;flex-direction:column;background-color:#FFFFFF;border:1px solid ' + color + ';border-radius:8px;overflow:hidden"><div style="flex:1 1 auto;padding:18px 18px 12px;font-family:Lato,Arial,sans-serif;font-size:17px;color:#1F2933;line-height:1.55"><span style="display:block;font-size:13px;font-weight:800;letter-spacing:.05em;color:' + color + ';text-transform:uppercase;margin-bottom:6px">Scenario ' + (i + 1) + '</span>' + br(item.scenario) + '</div><button type="button" aria-expanded="false" aria-controls="' + panelId + '" onclick="' + attr(toggle) + '" style="width:100%;padding:12px 16px;border:0;border-top:1px solid #001B3B;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:16px;font-weight:700;text-align:left;cursor:pointer">Reveal answer</button><div id="' + panelId + '" hidden style="padding:16px 18px;border-top:3px solid #F7B32B;font-family:Lato,Arial,sans-serif;font-size:17px;line-height:1.55;color:' + palette.text + ';background-color:' + palette.background + '"><strong style="display:block;margin-bottom:4px;color:' + palette.verdict + '">' + e(item.verdict) + '</strong>' + br(item.explanation) + '</div></div>';
+          return '<div style="box-sizing:border-box;display:flex;flex-direction:column;background-color:#FFFFFF;border:1px solid ' + color + ';border-radius:8px;overflow:hidden"><div style="flex:1 1 auto;padding:18px 18px 12px;font-family:Lato,Arial,sans-serif;font-size:17px;color:#1F2933;line-height:1.55"><span style="display:block;font-size:13px;font-weight:800;letter-spacing:.05em;color:' + color + ';text-transform:uppercase;margin-bottom:6px">Scenario ' + (i + 1) + '</span>' + br(item.scenario) + '</div><button type="button" aria-expanded="false" aria-controls="' + panelId + '" onclick="' + attr(toggle) + '" style="width:100%;padding:12px 16px;border:0;border-top:1px solid #001B3B;color:' + text + ';background-color:' + background + ';font-family:Lato,Arial,sans-serif;font-size:16px;font-weight:700;text-align:left;cursor:pointer">Reveal answer</button><div id="' + panelId + '" hidden style="padding:16px 18px;border-top:3px solid #F7B32B;font-family:Lato,Arial,sans-serif;font-size:17px;line-height:1.55;color:' + palette.text + ';background-color:' + palette.background + '"><strong style="display:block;margin-bottom:4px;color:' + palette.verdict + '">' + e(item.verdict) + '</strong>' + sanitizeRichText(item.explanation || '') + '</div></div>';
         }).join('');
         return '<section style="' + base + ';margin:26px 0">' + (d.title ? '<h3 style="font-size:24px;color:' + color + ';margin:0 0 6px">' + e(d.title) + '</h3>' : '') + (d.instructions ? '<p style="margin:0 0 14px;color:#1F2933">' + br(d.instructions) + '</p>' : '') + '<div style="display:grid;grid-template-columns:repeat(' + gridColumns(items.length) + ',1fr);gap:16px">' + scenarioCards + '</div></section>';
       }
@@ -2175,10 +2175,6 @@
       if (block.type === 'table' && !lines(d.headers).length) issues.push(label + ': the table has no column headers.');
       if (block.type === 'audio' && (!String(d.transcript || '').trim() || d.transcript === 'Paste the full transcript here.')) issues.push(label + ': the audio note has no transcript yet. A transcript is required for accessibility.');
       if (block.type === 'annotated' && !/\{\{\d+\}\}/.test(String(d.passage || ''))) issues.push(label + ': the passage has no {{1}}-style markers, so the annotations will never appear.');
-      if (block.type === 'richText') {
-        const richStripped = String(d.content || '').replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').trim();
-        if (!richStripped) issues.push(label + ': this text block has no content yet.');
-      }
       if (block.type === 'dueDate' && d.countdown === 'on') {
         const dueCheck = String(d.dueDateTime || '').trim().match(/^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})$/);
         if (!dueCheck) issues.push(label + ': the live countdown is on but the countdown date is missing or not in YYYY-MM-DD HH:MM format, so students will not see a countdown.');
@@ -2359,7 +2355,10 @@
       if (defs[block.type].repeater && defs[block.type].repeater.countKey === target.dataset.field) { syncRepeater(block); renderEditor(); }
       updatePreviewAndCode();
     } else if (target.dataset.itemField != null) {
-      const index = parseInt(target.dataset.itemIndex, 10); block.data[defs[block.type].repeater.key][index][target.dataset.itemField] = target.value; updatePreviewAndCode();
+      const index = parseInt(target.dataset.itemIndex, 10);
+      const itemValue = target.isContentEditable ? sanitizeRichText(target.innerHTML) : target.value;
+      block.data[defs[block.type].repeater.key][index][target.dataset.itemField] = itemValue;
+      updatePreviewAndCode();
     }
   });
   el.editor.addEventListener('change', (event) => {
@@ -2379,7 +2378,12 @@
     const block = state.blocks.find(b => b.id === state.selectedId); if (!block) return;
     const clean = sanitizeRichText(surface.innerHTML);
     surface.innerHTML = clean;
-    if (surface.dataset.field) block.data[surface.dataset.field] = clean;
+    if (surface.dataset.field) {
+      block.data[surface.dataset.field] = clean;
+    } else if (surface.dataset.itemField != null) {
+      const index = parseInt(surface.dataset.itemIndex, 10);
+      block.data[defs[block.type].repeater.key][index][surface.dataset.itemField] = clean;
+    }
     updatePreviewAndCode();
   }, true);
   el.editor.addEventListener('click', (event) => {
@@ -2390,7 +2394,13 @@
       const surface = wrapper && wrapper.querySelector('.rte-surface');
       if (surface) {
         document.execCommand(rteBtn.dataset.rteCmd, false, null);
-        if (surface.dataset.field) block.data[surface.dataset.field] = sanitizeRichText(surface.innerHTML);
+        const rteClean = sanitizeRichText(surface.innerHTML);
+        if (surface.dataset.field) {
+          block.data[surface.dataset.field] = rteClean;
+        } else if (surface.dataset.itemField != null) {
+          const rteIndex = parseInt(surface.dataset.itemIndex, 10);
+          block.data[defs[block.type].repeater.key][rteIndex][surface.dataset.itemField] = rteClean;
+        }
         updatePreviewAndCode();
       }
       return;
