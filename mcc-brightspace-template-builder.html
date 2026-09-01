@@ -1002,18 +1002,18 @@
     },
     insight: {
       label: 'Instructor insight', category: 'Featured',
-      defaults: { layout: 'image-left', imageWidth: '33', image: '', alt: 'Instructor portrait', title: 'Instructor insight', content: 'Here is a practical tip that can save you time or help you avoid a common mistake.' },
-      fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left'],['image-right','Image right'],['none','No image (text only)']] }), field('imageWidth', 'Image size', 'select', 'How much of the block the image column takes. Ignored when No image is selected.', { options: [['25','25% image'],['33','33% image (default)'],['40','40% image'],['50','50% image']] }), field('image', 'Image URL', 'url'), field('alt', 'Image alternative text', 'textarea'), field('title', 'Insight heading'), field('content', 'Insight or tip', 'richtext')]
+      defaults: { layout: 'image-left', imageWidth: '33', title: 'Instructor insight', content: 'Here is a practical tip that can save you time or help you avoid a common mistake.' },
+      fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left'],['image-right','Image right'],['none','No image (text only)']] }), field('imageWidth', 'Image area size', 'select', 'How much of the block the image area takes. Ignored when No image is selected.', { options: [['25','25% image'],['33','33% image (default)'],['40','40% image'],['50','50% image']] }), field('title', 'Insight heading'), field('content', 'Insight or tip', 'richtext')]
     },
     instructorInfo: {
       label: 'Instructor information', category: 'Featured', isNew: true,
-      defaults: { layout: 'image-left', imageWidth: '33', image: '', alt: 'Instructor portrait', name: 'Instructor Name', office: 'Office number', email: 'instructor@mclennan.edu', hours: 'Office hours', about: 'Share hobbies, interests, professional experience, or anything else that helps students get to know you.' },
-      fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left'],['image-right','Image right'],['none','No image (text only)']] }), field('imageWidth', 'Image size', 'select', 'How much of the block the image column takes. Ignored when No image is selected.', { options: [['25','25% image'],['33','33% image (default)'],['40','40% image'],['50','50% image']] }), field('image', 'Instructor image URL', 'url'), field('alt', 'Image alternative text', 'textarea'), field('name', 'Instructor name'), field('office', 'Office number'), field('email', 'Email address'), field('hours', 'Office hours'), field('about', 'Additional information', 'textarea')]
+      defaults: { layout: 'image-left', imageWidth: '33', name: 'Instructor Name', office: 'Office number', email: 'instructor@mclennan.edu', hours: 'Office hours', about: 'Share hobbies, interests, professional experience, or anything else that helps students get to know you.' },
+      fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left'],['image-right','Image right'],['none','No image (text only)']] }), field('imageWidth', 'Image area size', 'select', 'How much of the block the image area takes. Ignored when No image is selected.', { options: [['25','25% image'],['33','33% image (default)'],['40','40% image'],['50','50% image']] }), field('name', 'Instructor name'), field('office', 'Office number'), field('email', 'Email address'), field('hours', 'Office hours'), field('about', 'Additional information', 'textarea')]
     },
     imageText: {
       label: 'Content image with text', category: 'Featured', isNew: true,
-      defaults: { layout: 'image-left', imageWidth: '33', image: '', alt: 'Describe the instructional image.', title: 'Content heading', content: 'Add informational text that explains or supports the image.' },
-      fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left'],['image-right','Image right'],['none','No image (text only)']] }), field('imageWidth', 'Image size', 'select', 'How much of the block the image column takes. Ignored when No image is selected.', { options: [['25','25% image'],['33','33% image (default)'],['40','40% image'],['50','50% image']] }), field('image', 'Content image URL', 'url'), field('alt', 'Image alternative text', 'textarea'), field('title', 'Content heading'), field('content', 'Informational text', 'richtext')]
+      defaults: { layout: 'image-left', imageWidth: '33', title: 'Content heading', content: 'Add informational text that explains or supports the image.' },
+      fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left'],['image-right','Image right'],['none','No image (text only)']] }), field('imageWidth', 'Image area size', 'select', 'How much of the block the image area takes. Ignored when No image is selected.', { options: [['25','25% image'],['33','33% image (default)'],['40','40% image'],['50','50% image']] }), field('title', 'Content heading'), field('content', 'Informational text', 'richtext')]
     },
     aiPolicy: {
       label: 'AI policy block', category: 'Featured', isNew: true,
@@ -1624,6 +1624,11 @@
   }
 
   function renderBlockHtml(block) {
+    const def = defs[block.type];
+    const commentLabel = String((def && def.label) || block.type).replace(/-{2,}/g, '-');
+    return '<!-- BEGIN: ' + commentLabel + ' -->\n' + renderBlockInner(block) + '\n<!-- END: ' + commentLabel + ' -->\n';
+  }
+  function renderBlockInner(block) {
     const d = block.data;
     const color = blockColor(block);
     const pair = blockColorPair(block);
@@ -1639,31 +1644,19 @@
     const imageOrPlaceholder = (url, altText, label) => url
       ? '<img src="' + safeUrl(url, '#') + '" alt="' + attr(altText) + '" style="display:block;width:100%;height:auto">'
       : placeholder(altText, label);
-    const imageTextTable = (image, altText, layout, inner, label, widthPct) => {
-      if (layout === 'none') return '<div style="padding:24px;border:1px solid #AFC1CA;color:' + text + ';background-color:' + background + '">' + inner + '</div>';
-      const w = ['25','33','40','50'].includes(String(widthPct)) ? parseInt(widthPct, 10) : 33;
-      const imageWidth = w === 33 ? '33.333%' : w + '%';
-      const textWidth = w === 33 ? '66.667%' : (100 - w) + '%';
-      const imageCell = '<td style="width:' + imageWidth + ';padding:0;vertical-align:top;background-color:#EAF2F5">' + imageOrPlaceholder(image, altText, label) + '</td>';
-      const textCell = '<td style="width:' + textWidth + ';padding:24px;vertical-align:top;color:' + text + ';background-color:' + background + '">' + inner + '</td>';
-      return '<table role="presentation" style="width:100%;border-collapse:separate;border-spacing:0;table-layout:fixed;border:1px solid #AFC1CA"><tbody><tr>' + (layout === 'image-right' ? textCell + imageCell : imageCell + textCell) + '</tr></tbody></table>';
-    };
 
-    const photoCardLayout = (image, altText, layout, widthPct, iconLetter, iconLabel, helperText, innerContent) => {
+    const photoCardLayout = (layout, widthPct, placeholderTitle, innerContent) => {
       const tint = mixWithWhite(color, 0.85);
-      const cardOpen = '<div style="width:100%;box-sizing:border-box;margin:24px 0;border:1px solid ' + tint + ';border-top:6px solid ' + color + ';border-radius:8px;overflow:hidden;background-color:#FFFFFF;font-family:' + fontStack + ';color:' + text + '">';
+      const cardStyle = 'width:100%;margin:24px 0;border:1px solid ' + tint + ';border-top:6px solid ' + color + ';border-radius:8px;overflow:hidden;background-color:#FFFFFF;font-family:' + fontStack + ';color:' + text;
       if (layout === 'none') {
-        return cardOpen + '<div style="padding:36px 40px;box-sizing:border-box">' + innerContent + '</div></div>';
+        return '<div style="' + cardStyle + '"><div style="padding:36px 40px">' + innerContent + '</div></div>';
       }
       const w = ['25','33','40','50'].includes(String(widthPct)) ? parseInt(widthPct, 10) : 33;
-      const photoBasis = w + '%';
-      const contentBasis = (100 - w) + '%';
-      const photoInner = image
-        ? '<img src="' + safeUrl(image, '#') + '" alt="' + attr(altText) + '" style="display:block;width:100%;min-height:360px;object-fit:cover;object-position:center">'
-        : '<div role="img" aria-label="' + attr(altText || iconLabel) + '" style="width:100%;min-height:360px;padding:32px 24px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;box-sizing:border-box;color:' + color + '"><div aria-hidden="true" style="width:76px;height:76px;border:3px solid ' + color + ';border-radius:50%;background-color:#FFFFFF;display:flex;align-items:center;justify-content:center;margin-bottom:18px;font-family:' + fontStack + ';font-size:32px;line-height:1;font-weight:800">' + iconLetter + '</div><div style="font-family:' + fontStack + ';font-size:20px;line-height:1.3;font-weight:800">' + e(iconLabel) + '</div><div style="max-width:200px;margin-top:8px;font-family:' + fontStack + ';font-size:14px;line-height:1.5">' + e(helperText) + '</div></div>';
-      const photoSide = '<div style="flex:1 1 ' + photoBasis + ';min-width:260px;background-color:' + tint + ';display:flex;align-items:stretch;justify-content:center">' + photoInner + '</div>';
-      const contentSide = '<div style="flex:2 1 ' + contentBasis + ';min-width:280px;padding:36px 40px;box-sizing:border-box;background-color:#FFFFFF">' + innerContent + '</div>';
-      return cardOpen + '<div style="display:flex;flex-wrap:wrap;width:100%;align-items:stretch">' + (layout === 'image-right' ? contentSide + photoSide : photoSide + contentSide) + '</div></div>';
+      const imageWidthPct = w === 33 ? '33.333%' : w + '%';
+      const textWidthPct = w === 33 ? '66.667%' : (100 - w) + '%';
+      const placeholderCell = '<td style="width:' + imageWidthPct + ';padding:0;vertical-align:middle;background-color:' + tint + '"><div style="padding:40px 24px;text-align:center"><p style="margin:0 0 10px;font-family:' + fontStack + ';font-size:20px;font-weight:800;color:' + color + '">' + e(placeholderTitle) + '</p><p style="margin:0;font-family:' + fontStack + ';font-size:15px;line-height:1.6;color:#173744">In the Brightspace editor, highlight this text and replace it with your image using the Insert Image button. The image will fill this colored area.</p></div></td>';
+      const contentCell = '<td style="width:' + textWidthPct + ';padding:36px 40px;vertical-align:top;background-color:#FFFFFF">' + innerContent + '</td>';
+      return '<div style="' + cardStyle + '"><table role="presentation" style="width:100%;border-collapse:collapse;table-layout:fixed"><tbody><tr>' + (layout === 'image-right' ? contentCell + placeholderCell : placeholderCell + contentCell) + '</tr></tbody></table></div>';
     };
 
     switch (block.type) {
@@ -1698,8 +1691,10 @@
         return '<div style="display:grid;grid-template-columns:repeat(' + gridColumns(items.length) + ',1fr);gap:10px;margin:24px 0;font-family:' + fontStack + '">' + items.map(item => '<a href="' + safeUrl(item.url, '#') + '" style="display:block;box-sizing:border-box;padding:13px 20px;color:' + text + ';background-color:' + background + ';border:1px solid ' + color + ';border-radius:6px;font-size:18px;font-weight:700;text-align:center;text-decoration:none">' + e(item.label) + '</a>').join('') + '</div>';
       case 'colored':
         return '<section style="' + base + ';margin:24px 0;padding:22px 24px;color:' + text + ';background-color:' + background + ';border-radius:8px"><h3 style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + sanitizeRichText(d.content || '') + '</p></section>';
-      case 'insight':
-        return '<aside style="' + base + ';margin:24px 0">' + imageTextTable(d.image, d.alt, d.layout, '<h3 style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="color:' + text + ';margin:0">' + sanitizeRichText(d.content || '') + '</p>', 'Instructor image placeholder', d.imageWidth) + '</aside>';
+      case 'insight': {
+        const info = '<h3 style="font-family:' + fontStack + ';font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h3><p style="font-family:' + fontStack + ';color:' + text + ';margin:0">' + sanitizeRichText(d.content || '') + '</p>';
+        return photoCardLayout(d.layout, d.imageWidth, 'Instructor Photo', info);
+      }
       case 'instructorInfo': {
         const email = String(d.email || '').trim();
         const info = '<p style="margin:0 0 6px;color:' + color + ';font-family:' + fontStack + ';font-size:14px;line-height:1.4;font-weight:800">Your Instructor</p>' +
@@ -1710,11 +1705,11 @@
           '<div aria-hidden="true" style="height:2px;width:100%;margin:4px 0 22px;background-color:' + mixWithWhite(color, 0.85) + '"></div>' +
           '<h3 style="margin:0 0 8px;color:' + color + ';font-family:' + fontStack + ';font-size:19px;line-height:1.4;font-weight:800">A Little About Me</h3>' +
           '<p style="margin:0;max-width:70ch;color:' + text + ';font-family:' + fontStack + ';font-size:17px;line-height:1.7">' + br(d.about) + '</p>';
-        return photoCardLayout(d.image, d.alt, d.layout, d.imageWidth, 'I', 'Instructor Photo', 'Replace this area with your instructor headshot.', info);
+        return photoCardLayout(d.layout, d.imageWidth, 'Instructor Photo', info);
       }
       case 'imageText': {
         const info = '<h2 style="margin:0 0 14px;color:' + text + ';font-family:' + fontStack + ';font-size:28px;line-height:1.2;font-weight:800">' + e(d.title) + '</h2><p style="margin:0;max-width:70ch;color:' + text + ';font-family:' + fontStack + ';font-size:17px;line-height:1.7">' + sanitizeRichText(d.content || '') + '</p>';
-        return photoCardLayout(d.image, d.alt, d.layout, d.imageWidth, '+', 'Add an Image', 'Paste an image URL to replace this placeholder.', info);
+        return photoCardLayout(d.layout, d.imageWidth, 'Content Image', info);
       }
       case 'aiPolicy': {
         const palette = aiPolicyPalette(d.level);
@@ -2014,7 +2009,11 @@
       ? '<header style="padding:28px 38px;background-color:#fff;border-bottom:3px solid ' + state.accent + '"><p style="font-family:Lato,Arial,sans-serif;margin:0 0 6px;color:' + state.accent + ';font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">' + e(state.pageLabel) + '</p><h1 style="font-family:Lato,Arial,sans-serif;margin:0;color:#001B3B;font-size:42px;line-height:1.12;font-weight:500">' + e(state.title) + '</h1></header>'
       : '<header style="padding:32px 40px;color:' + contrast(state.accent) + ';background-color:' + state.accent + ';border-bottom:7px solid #FF6600"><p style="font-family:Lato,Arial,sans-serif;margin:0 0 7px;color:' + contrast(state.accent) + ';font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">' + e(state.pageLabel) + '</p><h1 style="font-family:Lato,Arial,sans-serif;margin:0;color:' + contrast(state.accent) + ';font-size:44px;line-height:1.12;font-weight:400">' + e(state.title) + '</h1></header>';
     const blocks = state.blocks.map(renderBlockHtml).join('');
-    return '<div style="max-width:1100px;margin:0 auto;background-color:#fff;border:1px solid #d5dfe4;font-family:Lato,Arial,sans-serif;font-size:19px;color:#1f2933;line-height:1.65">' + bannerUrl + title + '<main style="padding:32px 40px">' + (blocks || '<p style="font-family:Lato,Arial,sans-serif;font-size:19px">Add your course content here.</p>') + '</main><footer style="padding:16px 40px;color:#fff;background-color:#001B3B;font-family:Lato,Arial,sans-serif;font-size:14px" aria-hidden="true">&nbsp;</footer></div>';
+    return '<div style="max-width:1100px;margin:0 auto;background-color:#fff;border:1px solid #d5dfe4;font-family:Lato,Arial,sans-serif;font-size:19px;color:#1f2933;line-height:1.65">'
+      + (bannerUrl ? '\n<!-- BEGIN: Page banner -->\n' + bannerUrl + '\n<!-- END: Page banner -->\n' : '')
+      + '\n<!-- BEGIN: Page header -->\n' + title + '\n<!-- END: Page header -->\n'
+      + '\n<!-- BEGIN: Page content -->\n<main style="padding:32px 40px">' + (blocks || '<p style="font-family:Lato,Arial,sans-serif;font-size:19px">Add your course content here.</p>') + '</main>\n<!-- END: Page content -->\n'
+      + '\n<!-- BEGIN: Page footer -->\n<footer style="padding:16px 40px;color:#fff;background-color:#001B3B;font-family:Lato,Arial,sans-serif;font-size:14px" aria-hidden="true">&nbsp;</footer>\n<!-- END: Page footer -->\n</div>';
   }
 
   function fullHtml() {
@@ -2196,7 +2195,7 @@
       const ratio = contrastRatio(pair.text, pair.background);
       if (ratio < 4.5) issues.push(label + ': text contrast is ' + ratio.toFixed(2) + ':1, below the 4.5:1 WCAG AA minimum for normal text.');
       if (block.type === 'image' && (!String(d.alt || '').trim() || placeholderAlt.test(d.alt))) issues.push(label + ': alternative text is empty or still reads like a placeholder.');
-      if ((block.type === 'imageText' || block.type === 'insight' || block.type === 'instructorInfo' || block.type === 'hotspot') && d.layout !== 'none' && d.image && placeholderAlt.test(String(d.alt || ''))) issues.push(label + ': the image still uses placeholder alternative text.');
+      if (block.type === 'hotspot' && d.image && placeholderAlt.test(String(d.alt || ''))) issues.push(label + ': the image still uses placeholder alternative text.');
       if (block.type === 'compare' && ((d.imageA && placeholderAlt.test(String(d.altA || ''))) || (d.imageB && placeholderAlt.test(String(d.altB || ''))))) issues.push(label + ': one or both compare images still use placeholder alternative text.');
       if (block.type === 'carousel' || block.type === 'storyboard') {
         (d.items || []).slice(0, parseInt(d.count, 10) || 0).forEach((item, j) => {
