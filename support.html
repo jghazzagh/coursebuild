@@ -12,7 +12,7 @@
   <body>
     <style>
       :root {
-        --blue: #003366;
+        --blue: #003366;--link:#0567aa;
         --navy: #001b3b;
         --teal: #008da7;
         --orange: #ff6600;
@@ -31,6 +31,7 @@
       body {
         margin: 0;
         color: var(--ink);
+        background: #f9f9f9;
         font-family: Poppins, Arial, Helvetica, sans-serif;
         line-height: 1.55;
       }
@@ -105,7 +106,7 @@
         border: 7px solid var(--blue);
         color: var(--blue);
         font-size: 34px;
-        font-weight: 900;
+        font-weight: 500;
       }
       .words {
         color: var(--blue);
@@ -123,7 +124,7 @@
         padding-left: 18px;
         border-left: 1px solid #c7cdd1;
         font-size: 23px;
-        font-weight: 800;
+        font-weight: 700;
         white-space: nowrap;
       }
       .search {
@@ -143,11 +144,11 @@
         border-radius: 0 8px 8px 0;
         color: #fff;
         background: var(--blue);
-        font-weight: 800;
+        font-weight: 500;
         cursor: pointer;
       }
       .nav {
-        background: #06416f;
+        background: #003366;
         border-bottom: 5px solid var(--orange);
       }
       .nav ul {
@@ -179,14 +180,14 @@
       }
       .crumb a {
         color: var(--blue);
-        font-weight: 800;
+        font-weight: 500;
         text-decoration: none;
       }
       .hero {
         position: relative;
         overflow: hidden;
         color: #fff;
-        background: linear-gradient(110deg, #064477, #001b3b 72%);
+        background: linear-gradient(110deg, #003366, #001b3b 72%);
       }
       .hero:before {
         content: "";
@@ -213,7 +214,7 @@
       .eyebrow {
         margin: 0 0 12px;
         font-size: 13px;
-        font-weight: 800;
+        font-weight: 500;
         letter-spacing: 0.16em;
         text-transform: uppercase;
       }
@@ -273,7 +274,7 @@
       }
       .help-card:first-child {
         color: #fff;
-        background: #064477;
+        background: #003366;
       }
       .help-card:first-child h2,
       .help-card:first-child a {
@@ -283,7 +284,7 @@
         margin: 0 0 9px;
         color: var(--teal);
         font-size: 11px;
-        font-weight: 900;
+        font-weight: 500;
         letter-spacing: 0.12em;
         text-transform: uppercase;
       }
@@ -307,7 +308,7 @@
         left: 34px;
         bottom: 27px;
         color: var(--blue);
-        font-weight: 900;
+        font-weight: 500;
       }
       .section-head {
         margin: 75px 0 25px;
@@ -337,7 +338,7 @@
         background: var(--teal);
         border-radius: 4px;
         font-size: 11px;
-        font-weight: 900;
+        font-weight: 500;
       }
       .guide h3 {
         margin: 0 0 8px;
@@ -346,6 +347,34 @@
       }
       .guide p {
         margin: 0;
+        font-size: 15px;
+      }
+      .save-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+      .save-card {
+        padding: 30px;
+        border: 1px solid var(--line);
+        border-top: 6px solid var(--teal);
+        border-radius: 9px;
+        background: #fff;
+      }
+      .save-card h2 {
+        margin: 0 0 9px;
+        color: var(--navy);
+        font-size: 23px;
+        font-weight: 500;
+      }
+      .save-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 15px;
+      }
+      .save-follow {
+        margin: 18px 0 0;
+        color: var(--muted);
         font-size: 15px;
       }
       .widget-help {
@@ -367,7 +396,7 @@
         display: inline-block;
         margin-top: 10px;
         color: var(--blue);
-        font-weight: 900;
+        font-weight: 500;
       }
       .faq {
         display: grid;
@@ -385,7 +414,7 @@
         padding: 17px 20px;
         color: var(--navy);
         background: #f2f7f9;
-        font-weight: 900;
+        font-weight: 500;
       }
       .faq p {
         margin: 0;
@@ -412,12 +441,12 @@
         color: #fff;
         background: var(--orange);
         border-radius: 6px;
-        font-weight: 900;
+        font-weight: 500;
         text-decoration: none;
       }
       footer {
         color: #fff;
-        background: var(--navy);
+        background: #003366;
       }
       .footer-main {
         display: grid;
@@ -429,15 +458,14 @@
       }
       .footer-brand {
         font-size: 25px;
-        font-weight: 800;
+        font-weight: 500;
       }
       .footer-brand small {
         display: block;
         margin-top: 5px;
         font-size: 13px;
         letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
+        }
       .footer-main p {
         max-width: 560px;
         color: #d8e5ec;
@@ -457,10 +485,10 @@
         display: inline-block;
         margin-top: 10px;
         padding: 7px 11px;
-        color: var(--navy);
-        background: var(--gold);
+        color: #003366;
+        background: #d6e8ee;
         border-radius: 4px;
-        font-weight: 900;
+        font-weight: 500;
       }
       .footer-bottom {
         display: flex;
@@ -487,6 +515,9 @@
       @media (max-width: 900px) {
         .guide-grid {
           grid-template-columns: 1fr 1fr;
+        }
+        .save-grid {
+          grid-template-columns: 1fr;
         }
       }
       @media (max-width: 760px) {
@@ -529,7 +560,8 @@
         .help-grid,
         .guide-grid,
         .community-grid,
-        .widget-help {
+        .widget-help,
+        .save-grid {
           grid-template-columns: 1fr;
         }
         .footer-main {
@@ -539,7 +571,8 @@
           flex-direction: column;
         }
       }
-    </style>
+      .page a,.intro a,.card a,.action a:not(.button){color:var(--link)}
+</style>
     <a class="skip" href="#main-content">Skip to main content</a>
     <header>
       <div class="topbar">
@@ -585,21 +618,6 @@
         <a href="index.html">Home</a> &nbsp;/&nbsp; Support
       </div>
     </header>
-    <section class="hero">
-      <div class="hero-inner">
-        <div>
-          <p class="eyebrow">We can help</p>
-          <h1>CourseMaker support</h1>
-          <p>
-            Get help with the builder, Brightspace HTML, accessibility, or
-            course design.
-          </p>
-        </div>
-        <div class="seal" aria-hidden="true">
-          <div><strong>McLennan</strong><small>Community College</small></div>
-        </div>
-      </div>
-    </section>
     <main id="main-content">
       <section class="help-grid">
         <article class="help-card">
@@ -631,24 +649,26 @@
           <h3>Set up the page</h3>
           <p>
             Choose a template, write the page label and Heading 1, select a
-            title style, and optionally add an image URL.
+            title style, and optionally add an image URL. Page Setup collapses
+            after your first block so it stays out of the way.
           </p>
         </article>
         <article class="guide">
           <span class="step">Step 2</span>
           <h3>Add and edit blocks</h3>
           <p>
-            Add blocks from the left panel. Select a block in the preview to
-            edit it, then drag it or use the arrow controls to reorder it.
+            Open a category in the left panel and add blocks. Use the Add block
+            here bars in the preview to insert between blocks, then drag or use
+            the arrow controls to reorder, and the copy control to duplicate.
           </p>
         </article>
         <article class="guide">
           <span class="step">Step 3</span>
           <h3>Check accessibility</h3>
           <p>
-            Use logical headings, meaningful link text, useful image
-            descriptions, accurate captions, and content that does not rely on
-            color alone.
+            Use the Check page button to scan for heading order, color contrast,
+            placeholder text, and empty links. Keep meaningful link text, useful
+            image descriptions, and content that does not rely on color alone.
           </p>
         </article>
         <article class="guide">
@@ -660,6 +680,43 @@
           </p>
         </article>
       </section>
+      <div class="section-head">
+        <p class="tag">Save and reuse</p>
+        <h2>Keep your work with Export and Import</h2>
+      </div>
+      <section class="save-grid">
+        <article class="save-card">
+          <h2>Export JSON</h2>
+          <p>
+            The Export JSON button downloads your whole page as a small .json
+            project file. This is separate from the Brightspace HTML. The HTML
+            is the finished page you paste into a course, and the JSON is the
+            editable source you can reopen later.
+          </p>
+        </article>
+        <article class="save-card">
+          <h2>Import JSON</h2>
+          <p>
+            The Import JSON button loads a .json file back into the builder with
+            every block intact, ready to keep editing. Use it to reuse a strong
+            page next term, or to open one a colleague shared with you.
+          </p>
+        </article>
+        <article class="save-card">
+          <h2>Autosave and Resume</h2>
+          <p>
+            The builder autosaves to this browser as you work. When you return,
+            choose Resume to pick up where you left off. Autosave stays in one
+            browser, so use Export JSON to move a page between computers or
+            people.
+          </p>
+        </article>
+      </section>
+      <p class="save-follow">
+        The Widget Builder has the same Export JSON and Import JSON buttons, so
+        your team can build a shared set of standard homepage widgets and hand
+        them out as files.
+      </p>
       <div class="section-head">
         <p class="tag">Widget help</p>
         <h2>Add widgets to a Brightspace homepage</h2>
@@ -731,6 +788,32 @@
           </p>
         </details>
         <details>
+          <summary>Can I save a page and come back to it later?</summary>
+          <p>
+            Yes. The Page Builder autosaves in your browser and shows a Resume
+            option when you return. For a copy you can keep or move between
+            computers, use Export JSON to download the page as a file, then
+            Import JSON to open it again.
+          </p>
+        </details>
+        <details>
+          <summary>How do I share a page with a colleague?</summary>
+          <p>
+            Use Export JSON to download the page as a .json file and send it to
+            them. They open the Page Builder, choose Import JSON to load it, and
+            customize their own copy. This shares the editable source, not just
+            the finished HTML.
+          </p>
+        </details>
+        <details>
+          <summary>What if I delete or change the wrong block?</summary>
+          <p>
+            Use the Undo button, or press Ctrl+Z (Cmd+Z on a Mac), to step back.
+            You can also duplicate a block with its copy control instead of
+            rebuilding it.
+          </p>
+        </details>
+        <details>
           <summary>Can I edit the page after copying it?</summary>
           <p>
             Yes. The output is standard HTML with inline styles, so it can be
@@ -765,7 +848,7 @@
       <div class="footer-main">
         <div>
           <div class="footer-brand">
-            McLennan<small>Community College</small>
+            McLennan Community College
           </div>
           <p>
             CourseMaker is maintained by Instructional Design &amp; Innovation
@@ -799,11 +882,11 @@
         .addEventListener("submit", function (e) {
           e.preventDefault();
           var q = document.getElementById("search-box").value.toLowerCase();
-          if (/block|accordion|tab|question|timeline|carousel|table|layout/.test(q))
+          if (/block|accordion|tab|question|timeline|carousel|table|layout|sort|sequence|match|poll|audio|reading/.test(q))
             location.href = "building-blocks.html";
           else if (/widget|homepage|instructor/.test(q))
             location.href = "widget-builder.html";
-          else if (/support|help|accessib|brightspace/.test(q))
+          else if (/support|help|accessib|brightspace|json|save|import|export|autosave/.test(q))
             location.href = "support.html";
           else if (/template|policy|module/.test(q))
             location.href = "templates.html";
