@@ -1,15 +1,12 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!DOCTYPE html>
+<!-- saved from url=(0050)index.html -->
+<html lang="en" data-scribe-recorder-ready="true"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>MCC CourseMaker</title>
-    <meta
-      name="description"
-      content="Build accessible, MCC-branded Brightspace pages and widgets."
-    />
+    <meta name="description" content="Build accessible, MCC-branded Brightspace pages and widgets.">
   </head>
-  <body>
+  <body cz-shortcut-listen="true">
     <style>
       :root {
         --blue: #003366;
@@ -105,7 +102,7 @@
         border: 7px solid var(--blue);
         color: var(--blue);
         font-size: 34px;
-        font-weight: 900;
+        font-weight:500;
         line-height: 1;
       }
       .words {
@@ -124,7 +121,7 @@
         padding-left: 18px;
         border-left: 1px solid #c7cdd1;
         font-size: 23px;
-        font-weight: 800;
+        font-weight:500;
         white-space: nowrap;
       }
       .search {
@@ -144,7 +141,7 @@
         border-radius: 0 8px 8px 0;
         color: #fff;
         background: var(--blue);
-        font-weight: 800;
+        font-weight:500;
         cursor: pointer;
       }
       .nav {
@@ -163,7 +160,7 @@
         padding: 14px 18px;
         color: #fff;
         text-decoration: none;
-        font-weight: 700;
+        font-weight:500;
         border-bottom: 3px solid transparent;
       }
       .nav a:hover,
@@ -175,7 +172,7 @@
         position: relative;
         overflow: hidden;
         color: #fff;
-        background: linear-gradient(110deg, #064477 0%, #001b3b 72%);
+        background: linear-gradient(110deg, #003366 0%, #001b3b 72%);
         border-bottom: 5px solid #073a66;
       }
       .hero:before {
@@ -192,7 +189,7 @@
       .hero-inner {
         position: relative;
         display: grid;
-        grid-template-columns: 1.6fr 0.8fr;
+        grid-template-columns: 1fr;
         align-items: center;
         gap: 50px;
         max-width: 1180px;
@@ -204,7 +201,7 @@
         margin: 0 0 12px;
         color: #fff;
         font-size: 13px;
-        font-weight: 800;
+        font-weight:500;
         letter-spacing: 0.16em;
         text-transform: uppercase;
       }
@@ -228,7 +225,7 @@
         background: var(--orange);
         border: 2px solid var(--orange);
         border-radius: 7px;
-        font-weight: 800;
+        font-weight:500;
         text-decoration: none;
       }
       .button:hover {
@@ -277,7 +274,7 @@
       }
       .feature:nth-child(2) {
         color: #fff;
-        background: #064477;
+        background: #003366;
         border-top-color: var(--orange);
       }
       .feature:nth-child(2) h2,
@@ -289,7 +286,7 @@
         margin-bottom: 28px;
         color: var(--teal);
         font-size: 42px;
-        font-weight: 900;
+        font-weight:500;
         line-height: 1;
       }
       .feature:nth-child(2) .number {
@@ -309,7 +306,7 @@
         left: 32px;
         bottom: 28px;
         color: var(--blue);
-        font-weight: 800;
+        font-weight:500;
         text-decoration: none;
       }
       .chooser {
@@ -348,7 +345,7 @@
       }
       .chooser a {
         color: var(--blue);
-        font-weight: 800;
+        font-weight:500;
       }
       footer {
         color: #fff;
@@ -364,7 +361,7 @@
       }
       .footer-brand {
         font-size: 25px;
-        font-weight: 800;
+        font-weight:500;
         line-height: 1.1;
       }
       .footer-brand small {
@@ -396,7 +393,7 @@
         color: var(--navy);
         background: var(--gold);
         border-radius: 4px;
-        font-weight: 900;
+        font-weight:500;
       }
       .footer-bottom {
         display: flex;
@@ -474,38 +471,44 @@
           scroll-behavior: auto !important;
         }
       }
-    </style>
-    <a class="skip" href="#main-content">Skip to main content</a>
+    
+/* MCC visual standards: wordmark, links, calls to action, and footer. */
+body { background: #f9f9f9; }
+h1, h2, h3, h4, h5, h6, strong, b, th { font-weight: 500; }
+.course-name, .brand-name { font-weight: 700; }
+body a, body a:visited, body a:hover, body a:focus { color: #0567aa; }
+header { background: #fff; }
+/* Light surfaces keep blue links readable within dark site sections. */
+.topbar a, .footer-main a { background: #f9f9f9; padding: 3px 8px; width: fit-content; max-width: 100%; overflow-wrap: anywhere; }
+.nav a, .main-nav a { background: #d6e8ee; }
+.nav a:hover, .nav a[aria-current="page"], .main-nav a:hover, .main-nav a[aria-current="page"] { background: #fff; }
+a.skip, a.skip-link { background: #fff; }
+.feature:nth-child(2) a { background: #f9f9f9; padding: 3px 8px; }
+a.button, a.page-builder-cta, .online, .online-tag { background: #d6e8ee; border: 2px solid #d6e8ee; border-radius: 0; color: #0567aa; }
+a.button:hover, a.button:focus-visible, a.page-builder-cta:hover, a.page-builder-cta:focus-visible, .online:hover, .online-tag:hover { background: #fff; border-color: #fff; }
+.chooser { background: transparent; }
+footer, .site-footer, .preview-footer { background: #003366; }
+.footer-brand { text-transform: none; font-weight: 500; line-height: 1.35; }
+
+</style>
+    <a class="skip" href="index.html#main-content">Skip to main content</a>
     <header>
       <div class="topbar">
-        <span>Instructional Design &amp; Innovation</span
-        ><a href="mailto:online@mclennan.edu">online@mclennan.edu</a>
+        <span>Instructional Design &amp; Innovation</span><a href="mailto:online@mclennan.edu">online@mclennan.edu</a>
       </div>
       <div class="brand-row">
         <a class="brand" href="index.html" aria-label="MCC CourseMaker home">
-          <img
-            class="header-logo"
-            src="https://raw.githubusercontent.com/jghazzagh/coursebuild/refs/heads/main/mcclogoidi.png"
-            alt="McLennan Community College"
-          />
+          <img class="header-logo" src="./Index_files/mcclogoidi.png" alt="McLennan Community College">
           <span class="course-name">CourseMaker</span>
         </a>
         <form class="search" id="site-search" role="search">
-          <label
-            for="search-box"
-            style="
+          <label for="search-box" style="
               position: absolute;
               clip: rect(0, 0, 0, 0);
               width: 1px;
               height: 1px;
               overflow: hidden;
-            "
-            >Search CourseMaker</label
-          ><input
-            id="search-box"
-            type="search"
-            placeholder="Search guides and tools"
-          /><button>Search</button>
+            ">Search CourseMaker</label><input id="search-box" type="search" placeholder="Search guides and tools"><button>Search</button>
         </form>
       </div>
       <nav class="nav" aria-label="Main navigation">
@@ -530,12 +533,7 @@
             Create complete course pages or compact homepage widgets. Every
             builder produces editable HTML you control.
           </p>
-          <a class="button" href="mcc-brightspace-template-builder.html"
-            >Open Page Builder</a
-          >
-        </div>
-        <div class="seal" aria-hidden="true">
-          <div><strong>McLennan</strong><small>Community College</small></div>
+          <a class="page-builder-cta button" href="mcc-brightspace-template-builder.html">Open Page Builder</a>
         </div>
       </div>
     </section>
@@ -585,9 +583,7 @@
               <tr>
                 <td>Design a custom page visually</td>
                 <td>
-                  <a href="mcc-brightspace-template-builder.html"
-                    >Page builder</a
-                  >
+                  <a href="mcc-brightspace-template-builder.html">Page builder</a>
                 </td>
                 <td>Beginner to advanced</td>
               </tr>
@@ -604,9 +600,7 @@
     <footer>
       <div class="footer-main">
         <div>
-          <div class="footer-brand">
-            McLennan<small>Community College</small>
-          </div>
+          <div class="footer-brand">McLennan Community College</div>
           <p>
             CourseMaker is maintained by Instructional Design &amp; Innovation
             to help MCC faculty create clear, consistent, and accessible
@@ -616,21 +610,15 @@
         </div>
         <div>
           <h2>Build</h2>
-          <a href="templates.html">Page templates</a
-          ><a href="mcc-brightspace-template-builder.html">Page builder</a
-          ><a href="building-blocks.html">Building block guide</a
-          ><a href="widget-builder.html">Widget builder</a>
+          <a href="templates.html">Page templates</a><a href="mcc-brightspace-template-builder.html">Page builder</a><a href="building-blocks.html">Building block guide</a><a href="widget-builder.html">Widget builder</a>
         </div>
         <div>
           <h2>Need help?</h2>
-          <a href="mailto:online@mclennan.edu">online@mclennan.edu</a
-          ><a href="support.html">Support options</a
-          ><a href="https://www.mclennan.edu/">McLennan.edu</a>
+          <a href="mailto:online@mclennan.edu">online@mclennan.edu</a><a href="support.html">Support options</a><a href="https://www.mclennan.edu/">McLennan.edu</a>
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 McLennan Community College · McLennan Online</span
-        ><span>Designed for WCAG 2.1 AA accessibility</span>
+        <span>© 2026 McLennan Community College · McLennan Online</span><span>Designed for WCAG 2.1 AA accessibility</span>
       </div>
     </footer>
     <script>
@@ -650,5 +638,6 @@
           else location.href = "mcc-brightspace-template-builder.html";
         });
     </script>
-  </body>
-</html>
+  
+
+</body></html>
