@@ -10,6 +10,7 @@
 <style>
   :root {
     --mcc-blue: #003366;
+    --link: #0567aa;
     --mcc-navy: #001b3b;
     --mcc-teal: #008da7;
     --mcc-orange: #ff6600;
@@ -82,7 +83,7 @@
   .mcc-lockup { display:flex; align-items:center; gap:12px; }
   .mcc-mark {
     display:grid; place-items:center; width:61px; height:61px; border:7px solid var(--mcc-blue);
-    color:var(--mcc-blue); font-size:34px; font-weight:900; line-height:1; letter-spacing:-.12em;
+    color:var(--mcc-blue); font-size:34px; font-weight:500; line-height:1; letter-spacing:-.12em;
   }
   .mcc-words { color:var(--mcc-blue); font-size:25px; line-height:1; letter-spacing:.02em; text-transform:uppercase; }
   .mcc-words small { display:block; margin-top:5px; font-size:13px; letter-spacing:.07em; }
@@ -90,7 +91,7 @@
     padding-left: 18px;
     border-left: 1px solid #c7cdd1;
     font-size: 23px;
-    font-weight: 800;
+    font-weight: 700;
     white-space: nowrap;
   }
   .site-search { display: flex; width: min(355px, 100%); }
@@ -107,10 +108,10 @@
     padding: 0 20px;
     color: #fff;
     background: var(--mcc-blue);
-    font-weight: 800;
+    font-weight: 500;
   }
   .main-nav {
-    background: #06416f;
+    background: #003366;
     border-bottom: 5px solid var(--mcc-orange);
   }
   .main-nav ul {
@@ -140,7 +141,7 @@
     color: #65727c;
     font-size: 14px;
   }
-  .breadcrumb a { color: var(--mcc-blue); font-weight: 700; text-decoration: none; }
+  .breadcrumb a { color: var(--link); font-weight: 700; text-decoration: none; }
 
   .builder-shell { background: var(--canvas); padding: 38px 24px 54px; }
   .builder-wrap { max-width: 1180px; margin: 0 auto; }
@@ -155,7 +156,7 @@
     margin: 0 0 8px;
     color: var(--mcc-teal);
     font-size: 13px;
-    font-weight: 800;
+    font-weight: 500;
     letter-spacing: .14em;
     text-transform: uppercase;
   }
@@ -169,7 +170,7 @@
     border-radius: 8px;
     color: var(--mcc-blue);
     background: #fff;
-    font-weight: 800;
+    font-weight: 500;
   }
   .btn:hover { background: #e8f1f5; }
   .btn-primary { border-color: var(--mcc-orange); color: #fff; background: var(--mcc-orange); }
@@ -199,7 +200,7 @@
     margin-bottom: 6px;
     color: var(--mcc-navy);
     font-size: 13px;
-    font-weight: 800;
+    font-weight: 500;
   }
   .control-group input, .control-group select, .control-group textarea,
   .editor-fields input, .editor-fields select, .editor-fields textarea {
@@ -229,10 +230,10 @@
   .contrast-ratio { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 8px 0; }
   .contrast-ratio strong { font-size: 20px; }
   .contrast-badges { display: flex; flex-wrap: wrap; gap: 5px; }
-  .contrast-badge { padding: 3px 6px; border-radius: 4px; font-size: 11px; font-weight: 900; }
+  .contrast-badge { padding: 3px 6px; border-radius: 4px; font-size: 11px; font-weight: 500; }
   .contrast-pass { color: #0b4d2c; background: #dff3e7; }
   .contrast-fail { color: #7d201e; background: #fde4e1; }
-  .contrast-sample { margin-top: 9px; padding: 10px; border: 1px solid #9caab2; border-radius: 5px; font-weight: 800; }
+  .contrast-sample { margin-top: 9px; padding: 10px; border: 1px solid #9caab2; border-radius: 5px; font-weight: 500; }
   .panel-divider { border: 0; border-top: 1px solid #d9e1e5; margin: 19px -17px; }
   .block-search {
     display: flex;
@@ -249,7 +250,7 @@
     margin: 15px 0 7px;
     color: #687680;
     font-size: 11px;
-    font-weight: 800;
+    font-weight: 500;
     letter-spacing: .12em;
     text-transform: uppercase;
   }
@@ -359,14 +360,14 @@
     background: #fff;
     color: var(--mcc-navy);
     font-size: 20px;
-    font-weight: 800;
+    font-weight: 500;
     line-height: 1;
   }
   .drawer-close:hover { color: #fff; background: var(--mcc-blue); }
   .builder-wrap.focus-mode .editor-panel .drawer-close { display: grid; }
   .page-title-preview { padding: 31px 40px; color: #fff; background: var(--mcc-blue); border-bottom: 7px solid var(--mcc-orange); }
   .page-title-preview.text-only { color: var(--mcc-navy); background: #fff; border-bottom: 2px solid var(--mcc-blue); }
-  .page-kicker { margin: 0 0 8px; font-size: 12px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; }
+  .page-kicker { margin: 0 0 8px; font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; }
   .page-title-preview h3 { margin: 0; font-size: clamp(30px, 4vw, 47px); line-height: 1.07; font-weight: 400; }
   .page-banner-image { display: block; width: 100%; max-height: 250px; object-fit: cover; }
   .preview-content { min-height: 430px; padding: 28px 42px; }
@@ -399,7 +400,7 @@
   }
   .insert-bar:hover, .insert-bar:focus-visible, .insert-bar.active { opacity: 1; border-color: var(--mcc-teal); color: var(--mcc-teal); background: #eff9fb; }
   .insert-bar.active { border-style: solid; }
-  .preview-footer { padding: 15px 30px; color: #fff; background: var(--mcc-navy); font-size: 12px; }
+  .preview-footer { padding: 15px 30px; color: #fff; background: #003366; font-size: 12px; }
   .preview-block {
     position: relative;
     margin: 0 0 20px;
@@ -432,7 +433,7 @@
     border-radius: 50%;
     color: var(--mcc-navy);
     background: #fff;
-    font-weight: 800;
+    font-weight: 500;
     box-shadow: 0 2px 6px rgba(0,0,0,.12);
   }
   .block-tool:hover { color: #fff; background: var(--mcc-blue); }
@@ -450,7 +451,7 @@
     background: var(--mcc-teal);
     border-radius: 4px;
     font-size: 11px;
-    font-weight: 800;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: .07em;
   }
@@ -466,7 +467,7 @@
     background: #fff;
     color: var(--ink);
     font-size: 14px;
-    font-weight: 800;
+    font-weight: 500;
     cursor: pointer;
   }
   .rte-btn:hover { background: #eef3f5; border-color: var(--mcc-teal); }
@@ -498,7 +499,7 @@
     white-space: pre-wrap;
     word-break: break-word;
   }
-  .small-button { width: 100%; padding: 9px 10px; border: 1px solid var(--mcc-blue); border-radius: 6px; color: var(--mcc-blue); background: #fff; font-weight: 800; font-size: 12px; }
+  .small-button { width: 100%; padding: 9px 10px; border: 1px solid var(--mcc-blue); border-radius: 6px; color: var(--mcc-blue); background: #fff; font-weight: 500; font-size: 12px; }
   .danger-button { margin-top: 8px; border-color: #a22522; color: #a22522; }
   .resume-banner {
     display: flex;
@@ -547,7 +548,7 @@
     background: #fff8df;
   }
   .tip strong { color: var(--mcc-navy); }
-  .site-footer { color: #fff; background: var(--mcc-navy); }
+  .site-footer { color: #fff; background: #003366; }
   .footer-main {
     display: grid;
     grid-template-columns: 1.6fr .7fr .8fr;
@@ -556,12 +557,12 @@
     margin: 0 auto;
     padding: 42px 0 28px;
   }
-  .footer-brand { color:#fff; font-size:25px; font-weight:800; line-height:1.1; }
-  .footer-brand small { display:block; margin-top:5px; font-size:13px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; }
+  .footer-brand { color:#fff; font-size:25px; font-weight:500; line-height:1.1; }
+  .footer-brand small { display:block; margin-top:5px; font-size:13px; font-weight:500; letter-spacing:.02em; }
   .footer-main p { max-width: 560px; color: #d8e5ec; font-size: 14px; }
   .footer-main h2 { margin: 4px 0 13px; font-size: 15px; }
   .footer-main a { display: block; margin: 8px 0; color: #fff; font-size: 14px; }
-  .online-tag { display: inline-block; margin-top: 12px; padding: 7px 11px; color: var(--mcc-navy); background: var(--mcc-gold); border-radius: 4px; font-weight: 900; letter-spacing: .04em; }
+  .online-tag { display: inline-block; margin-top: 12px; padding: 7px 11px; color: var(--mcc-navy); background: var(--mcc-gold); border-radius: 4px; font-weight: 500; letter-spacing: .04em; }
   .footer-bottom {
     display: flex;
     justify-content: space-between;
@@ -622,7 +623,7 @@
     color: #687680;
     background: #f4f8fa;
     font-size: 11px;
-    font-weight: 800;
+    font-weight: 500;
     letter-spacing: .12em;
     text-transform: uppercase;
   }
@@ -653,7 +654,7 @@
     color: var(--mcc-navy);
     background: #f2f6f8;
     font-size: 14px;
-    font-weight: 800;
+    font-weight: 500;
   }
   .editor-acc > summary::-webkit-details-marker { display: none; }
   .editor-acc > summary::after { content: "\25B8"; color: #687680; font-size: 12px; }
@@ -833,7 +834,7 @@
 <footer class="site-footer">
   <div class="footer-main">
     <div>
-      <div class="footer-brand">McLennan<small>Community College</small></div>
+      <div class="footer-brand">McLennan Community College</div>
       <p>CourseMaker is maintained by Instructional Design &amp; Innovation to help MCC faculty create clear, consistent, and accessible Brightspace courses.</p>
 
     </div>
@@ -956,7 +957,7 @@
       fields: [field('title', 'Checklist heading'), field('items', 'Checklist items', 'textarea', 'Place one item on each line.')]
     },
     annotated: {
-      label: 'Annotated reading', category: 'Text', isNew: true,
+      label: 'Annotated reading', category: 'Text',
       defaults: { intro: 'Read the passage and select each highlighted phrase to see its annotation.', passage: 'This passage contains a {{1}} that students can explore, along with a {{2}} placed later in the text.', count: 2, items: [
         { phrase: 'highlighted phrase', explanation: 'Explain why this phrase matters, what it means in context, or what students should notice.' },
         { phrase: 'second key phrase', explanation: 'Add the second annotation here.' }
@@ -965,7 +966,7 @@
       repeater: repeater('items', 'Annotation', 'count', [field('phrase', 'Highlighted phrase'), field('explanation', 'Annotation', 'textarea')])
     },
     bullets: {
-      label: 'Bullet list (1–10)', category: 'Text', isNew: true,
+      label: 'Bullet list (1–10)', category: 'Text',
       defaults: { title: 'Key points', style: 'disc', layout: 'plain', count: 3, items: [
         { text: 'Add the first point' },
         { text: 'Add the second point' },
@@ -980,53 +981,53 @@
       repeater: repeater('items', 'Item', 'count', [field('text', 'Item text')])
     },
     callout: {
-      label: 'Callout box', category: 'Featured',
+      label: 'Callout box', category: 'Text',
       defaults: { style: 'information', title: 'Good to know', content: 'Use this space to add helpful context or guidance.' },
       fields: [field('style', 'Callout style', 'select', '', { options: [['information','Information (blue)'],['notice','Important notice (red)'],['tip','Tip (green)'],['example','Example (purple)'],['research','Research and sources (navy)'],['reflection','Reflection (amber)']] }), field('title', 'Callout heading'), field('content', 'Callout content', 'richtext')]
     },
     quote: {
-      label: 'Blockquote', category: 'Featured',
+      label: 'Blockquote', category: 'Text',
       defaults: { quote: 'Add a meaningful quotation or student voice here.', citation: 'Source or speaker' },
       fields: [field('quote', 'Quotation', 'textarea'), field('citation', 'Citation')]
     },
     button: {
-      label: 'Button links (1–4)', category: 'Featured',
+      label: 'Button links (1–4)', category: 'Data & Layout',
       defaults: { count: 1, items: [{ label: 'Open resource', url: 'https://www.mclennan.edu/' }] },
       fields: [field('count', 'Buttons (1–4)', 'number', '', { min: 1, max: 4 })],
       repeater: repeater('items', 'Button', 'count', [field('label', 'Button label'), field('url', 'Link URL', 'url')])
     },
     colored: {
-      label: 'Colored block', category: 'Featured',
+      label: 'Colored block', category: 'Text',
       defaults: { title: 'Key takeaway', content: 'Summarize the most important idea students should remember.' },
       fields: [field('title', 'Block heading'), field('content', 'Block content', 'richtext')]
     },
     insight: {
-      label: 'Instructor insight', category: 'Featured',
+      label: 'Instructor insight', category: 'Media',
       defaults: { layout: 'image-left', imageWidth: '33', title: 'Instructor insight', content: 'Here is a practical tip that can save you time or help you avoid a common mistake.' },
       fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left'],['image-right','Image right'],['none','No image (text only)']] }), field('imageWidth', 'Image area size', 'select', 'How much of the block the image area takes. Ignored when No image is selected.', { options: [['25','25% image'],['33','33% image (default)'],['40','40% image'],['50','50% image']] }), field('title', 'Insight heading'), field('content', 'Insight or tip', 'richtext')]
     },
     instructorInfo: {
-      label: 'Instructor information', category: 'Featured', isNew: true,
+      label: 'Instructor information', category: 'Media',
       defaults: { layout: 'image-left', imageWidth: '33', name: 'Instructor Name', office: 'Office number', email: 'instructor@mclennan.edu', hours: 'Office hours', about: 'Share hobbies, interests, professional experience, or anything else that helps students get to know you.' },
       fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left'],['image-right','Image right'],['none','No image (text only)']] }), field('imageWidth', 'Image area size', 'select', 'How much of the block the image area takes. Ignored when No image is selected.', { options: [['25','25% image'],['33','33% image (default)'],['40','40% image'],['50','50% image']] }), field('name', 'Instructor name'), field('office', 'Office number'), field('email', 'Email address'), field('hours', 'Office hours'), field('about', 'Additional information', 'textarea')]
     },
     imageText: {
-      label: 'Content image with text', category: 'Featured', isNew: true,
+      label: 'Content image with text', category: 'Media',
       defaults: { layout: 'image-left', imageWidth: '33', title: 'Content heading', content: 'Add informational text that explains or supports the image.' },
       fields: [field('layout', 'Image placement', 'select', '', { options: [['image-left','Image left'],['image-right','Image right'],['none','No image (text only)']] }), field('imageWidth', 'Image area size', 'select', 'How much of the block the image area takes. Ignored when No image is selected.', { options: [['25','25% image'],['33','33% image (default)'],['40','40% image'],['50','50% image']] }), field('title', 'Content heading'), field('content', 'Informational text', 'richtext')]
     },
     aiPolicy: {
-      label: 'AI policy block', category: 'Featured', isNew: true,
+      label: 'AI policy block', category: 'Text',
       defaults: { level: 'yellow', parameters: 'Describe the specific ways students may use AI for this work.' },
       fields: [field('level', 'AI use level', 'select', '', { options: [['red','Red: No AI Allowed'],['yellow','Yellow: Restricted AI Use'],['green','Green: Full AI Use Allowed']] }), field('parameters', 'Instructor-defined parameters for Yellow', 'textarea', 'This text appears only when Yellow is selected.')]
     },
     dueDate: {
-      label: 'Due date reminder', category: 'Featured', isNew: true,
+      label: 'Due date reminder', category: 'Text',
       defaults: { label: 'Assignment due', date: 'Friday at 11:59 p.m.', note: 'Submit your work in the Brightspace assignment folder.', countdown: 'off', dueDateTime: '' },
       fields: [field('label', 'Reminder label'), field('date', 'Due date and time', '', 'The date students read, written out as text.'), field('note', 'Additional details', 'textarea'), field('countdown', 'Live countdown', 'select', 'The countdown requires a real date below. When you copy this page to a new term, update that date or students will see "past due" on day one.', { options: [['off','Off (static text only)'],['on','On (live countdown)']] }), field('dueDateTime', 'Countdown date and time', '', 'Format: YYYY-MM-DD HH:MM in 24-hour Central Time, for example 2026-09-04 23:59. Required when the countdown is on.')]
     },
     courseCards: {
-      label: 'Colored course cards (1–6)', category: 'Featured', isNew: true,
+      label: 'Colored course cards (1–6)', category: 'Data & Layout',
       defaults: { title: 'During this course, you will', count: 4, items: [
         { heading: 'Understand the concept', content: 'Describe the first big outcome students can expect.' },
         { heading: 'Practice the skills', content: 'Explain how students will apply what they learn.' },
@@ -1037,7 +1038,7 @@
       repeater: repeater('items', 'Card', 'count', [field('heading', 'Card heading'), field('content', 'Card text', 'textarea')])
     },
     scopeCards: {
-      label: 'Scope rating cards (1–6)', category: 'Featured', isNew: true,
+      label: 'Scope rating cards (1–6)', category: 'Data & Layout',
       defaults: { title: 'Ideas, from small to ambitious', label: 'Scope', count: 3, items: [
         { heading: 'Start small', content: 'A low-lift first step with quick value.', level: 1 },
         { heading: 'Build the habit', content: 'A repeatable version that grows over time.', level: 2 },
@@ -1047,7 +1048,7 @@
       repeater: repeater('items', 'Card', 'count', [field('heading', 'Card heading'), field('content', 'Card text', 'richtext'), field('level', 'Filled dots (1–4)', 'number', '', { min: 1, max: 4 })])
     },
     stepBoxes: {
-      label: 'Step flow boxes (2–6)', category: 'Featured', isNew: true,
+      label: 'Step flow boxes (2–6)', category: 'Timelines & Steps',
       defaults: { count: 3, items: [
         { label: 'Step one', heading: 'What?', content: 'Describe the first step.' },
         { label: 'Step two', heading: 'So what?', content: 'Explain why it matters.' },
@@ -1097,17 +1098,17 @@
       repeater: repeater('items', 'Timeline item', 'count', [field('heading', 'Heading'), field('content', 'Content', 'textarea')])
     },
     carousel: {
-      label: 'Story or image carousel', category: 'Reveal & Explore', isNew: true,
+      label: 'Story or image carousel', category: 'Reveal & Explore',
       defaults: { title: 'Explore the story', instructions: 'Use Previous and Next to move through the slides.', count: 3, items: [
         { heading: 'Opening', content: 'Introduce the story, concept, or first image.', image: '', alt: 'Describe the first image.' },
         { heading: 'Development', content: 'Explain what changes or what learners should notice next.', image: '', alt: 'Describe the second image.' },
         { heading: 'Takeaway', content: 'Conclude the story and reinforce the central idea.', image: '', alt: 'Describe the final image.' }
       ] },
-      fields: [field('title', 'Carousel heading'), field('instructions', 'Learner instructions', 'textarea'), field('count', 'Slides (2–6)', 'number', '', { min: 2, max: 6 })],
+      fields: [field('title', 'Carousel heading'), field('instructions', 'Learner instructions', 'textarea'), field('count', 'Slides (2–10)', 'number', '', { min: 2, max: 10 })],
       repeater: repeater('items', 'Slide', 'count', [field('heading', 'Slide heading'), field('content', 'Slide text', 'textarea'), field('image', 'Optional image URL', 'url'), field('alt', 'Image alternative text', 'textarea')])
     },
     interactiveTimeline: {
-      label: 'Interactive timeline', category: 'Timelines & Steps', isNew: true,
+      label: 'Interactive timeline', category: 'Timelines & Steps',
       defaults: { title: 'Explore the timeline', instructions: 'Select each milestone to reveal its details.', count: 3, items: [
         { label: 'First', heading: 'Milestone 1', content: 'Describe the first milestone, date, or phase.' },
         { label: 'Next', heading: 'Milestone 2', content: 'Explain what happens next and why it matters.' },
@@ -1117,12 +1118,12 @@
       repeater: repeater('items', 'Milestone', 'count', [field('label', 'Button label or date'), field('heading', 'Milestone heading'), field('content', 'Milestone details', 'textarea')])
     },
     reveal: {
-      label: 'Click and reveal', category: 'Reveal & Explore', isNew: true,
+      label: 'Click and reveal', category: 'Reveal & Explore',
       defaults: { prompt: 'Think about your answer before revealing the explanation.', button: 'Reveal explanation', content: 'Explain the answer, key idea, or instructor reasoning here.' },
       fields: [field('prompt', 'Prompt', 'textarea'), field('button', 'Reveal button label'), field('content', 'Revealed content', 'textarea')]
     },
     knowledge: {
-      label: 'Knowledge check', category: 'Questions & Scenarios', isNew: true,
+      label: 'Knowledge check', category: 'Questions & Scenarios',
       defaults: { question: 'Which option best demonstrates the concept?', count: 4, correct: 1, items: [
         { option: 'The best answer', feedback: 'This choice applies the concept accurately.' },
         { option: 'A plausible distractor', feedback: 'Revisit the key distinction in the content above.' },
@@ -1133,7 +1134,7 @@
       repeater: repeater('items', 'Choice', 'count', [field('option', 'Answer choice'), field('feedback', 'Feedback', 'richtext')])
     },
     multipleChoice: {
-      label: 'Multiple choice question', category: 'Questions & Scenarios', isNew: true,
+      label: 'Multiple choice question', category: 'Questions & Scenarios',
       defaults: { question: 'Which answer best demonstrates the concept?', count: 4, correct: 1, items: [
         { option: 'Correct answer', feedback: 'Correct. Explain why this answer best applies the concept.' },
         { option: 'Plausible distractor', feedback: 'Not quite. Address the misconception and point learners back to the relevant idea.' },
@@ -1144,7 +1145,7 @@
       repeater: repeater('items', 'Answer', 'count', [field('option', 'Answer text'), field('feedback', 'Feedback for this answer', 'richtext')])
     },
     scenario: {
-      label: 'Decision scenario', category: 'Questions & Scenarios', isNew: true,
+      label: 'Decision scenario', category: 'Questions & Scenarios',
       defaults: { title: 'What would you do?', scenario: 'Describe a realistic situation and ask students to choose the strongest response.', count: 3, correct: 1, items: [
         { option: 'Choose the strongest response', feedback: 'Good choice. Explain why this response works well.' },
         { option: 'Choose a tempting but incomplete response', feedback: 'This might help, but it misses an important consideration.' },
@@ -1154,7 +1155,7 @@
       repeater: repeater('items', 'Choice', 'count', [field('option', 'Response option'), field('feedback', 'Detailed feedback', 'richtext')])
     },
     process: {
-      label: 'Guided stepper', category: 'Timelines & Steps', isNew: true,
+      label: 'Guided stepper', category: 'Timelines & Steps',
       defaults: { title: 'Explore the process', count: 4, items: [
         { heading: 'Prepare', content: 'Gather what you need and review the goal.' },
         { heading: 'Plan', content: 'Choose an approach and identify the next action.' },
@@ -1165,7 +1166,7 @@
       repeater: repeater('items', 'Step', 'count', [field('heading', 'Step label'), field('content', 'Step content', 'textarea')])
     },
     interactiveChecklist: {
-      label: 'Interactive checklist', category: 'Practice Activities', isNew: true,
+      label: 'Interactive checklist', category: 'Practice Activities',
       defaults: { title: 'Track your progress', count: 4, items: [
         { text: 'Review the learning objectives' },
         { text: 'Read or watch the lesson content' },
@@ -1176,7 +1177,7 @@
       repeater: repeater('items', 'Checklist item', 'count', [field('text', 'Item text')])
     },
     sorting: {
-      label: 'Drag and drop sorting', category: 'Practice Activities', isNew: true,
+      label: 'Drag and drop sorting', category: 'Practice Activities',
       defaults: { title: 'Sort the items', instructions: 'Select an item, then choose its category. You can also drag items into a category.', categories: 'Category A | Category B', count: 4, items: [
         { text: 'First item', cat: 1 },
         { text: 'Second item', cat: 1 },
@@ -1187,7 +1188,7 @@
       repeater: repeater('items', 'Item', 'count', [field('text', 'Item text'), field('cat', 'Correct category (1–3)', 'number', '', { min: 1, max: 3 })])
     },
     sequence: {
-      label: 'Sequence ordering', category: 'Practice Activities', isNew: true,
+      label: 'Sequence ordering', category: 'Practice Activities',
       defaults: { title: 'Put the steps in order', instructions: 'Use the up and down buttons to arrange the steps, then check your order. Enter the steps in the correct order; the activity shuffles them for students.', count: 4, items: [
         { text: 'First step in the correct sequence' },
         { text: 'Second step in the correct sequence' },
@@ -1198,17 +1199,17 @@
       repeater: repeater('items', 'Step', 'count', [field('text', 'Step text')])
     },
     estimate: {
-      label: 'Estimation slider', category: 'Practice Activities', isNew: true,
+      label: 'Estimation slider', category: 'Practice Activities',
       defaults: { question: 'What percent of students who complete week one go on to pass the course?', min: '0', max: '100', unit: '%', answer: '50', explanation: 'Explain the actual answer, where it comes from, and why it matters.' },
       fields: [field('question', 'Prediction question', 'textarea'), field('min', 'Slider minimum'), field('max', 'Slider maximum'), field('unit', 'Unit label', '', 'Shown after values, for example % or hours.'), field('answer', 'Actual answer'), field('explanation', 'Explanation of the answer', 'textarea')]
     },
     compare: {
-      label: 'Before and after compare', category: 'Media', isNew: true,
+      label: 'Before and after compare', category: 'Media',
       defaults: { title: 'Compare the two views', labelA: 'Before', imageA: '', altA: 'Describe the first image.', labelB: 'After', imageB: '', altB: 'Describe the second image.', caption: '' },
       fields: [field('title', 'Compare heading'), field('labelA', 'First view label'), field('imageA', 'First image URL', 'url'), field('altA', 'First image alternative text', 'textarea'), field('labelB', 'Second view label'), field('imageB', 'Second image URL', 'url'), field('altB', 'Second image alternative text', 'textarea'), field('caption', 'Optional caption')]
     },
     selfCheck: {
-      label: 'Self-assessment rubric', category: 'Practice Activities', isNew: true,
+      label: 'Self-assessment rubric', category: 'Practice Activities',
       defaults: { title: 'Rate your confidence', button: 'See my review plan', count: 3, items: [
         { criterion: 'I can explain the key concept in my own words' },
         { criterion: 'I can apply the concept to a new example' },
@@ -1218,7 +1219,7 @@
       repeater: repeater('items', 'Criterion', 'count', [field('criterion', 'Criterion text')])
     },
     matching: {
-      label: 'Matching memory grid', category: 'Practice Activities', isNew: true,
+      label: 'Matching memory grid', category: 'Practice Activities',
       defaults: { title: 'Match each term to its definition', instructions: 'Select two cards at a time to find each matching pair.', count: 3, items: [
         { term: 'Term 1', match: 'Definition 1' },
         { term: 'Term 2', match: 'Definition 2' },
@@ -1228,7 +1229,7 @@
       repeater: repeater('items', 'Pair', 'count', [field('term', 'Term'), field('match', 'Matching definition', 'textarea')])
     },
     workedExample: {
-      label: 'Worked example (fading steps)', category: 'Questions & Scenarios', isNew: true,
+      label: 'Worked example (fading steps)', category: 'Questions & Scenarios',
       defaults: { title: 'Worked example', problem: 'State the problem or task here.', shown: 2, count: 4, items: [
         { heading: 'Understand the problem', content: 'Restate what is being asked in plain language.' },
         { heading: 'Set up the approach', content: 'Show the setup, formula, or first move.' },
@@ -1239,7 +1240,7 @@
       repeater: repeater('items', 'Step', 'count', [field('heading', 'Step heading'), field('content', 'Step work', 'richtext')])
     },
     scenarioReveal: {
-      label: 'Scenario reveal boxes (1–6)', category: 'Questions & Scenarios', isNew: true,
+      label: 'Scenario reveal boxes (1–6)', category: 'Questions & Scenarios',
       defaults: { title: 'Pitfall or best practice?', instructions: 'Read each scenario and decide, then reveal the call.', count: 2, items: [
         { scenario: 'Describe a realistic situation for students to judge.', kind: 'bad', verdict: 'Pitfall.', explanation: 'Explain why this approach causes problems.' },
         { scenario: 'Describe a second situation that models the right approach.', kind: 'good', verdict: 'Best practice.', explanation: 'Explain why this approach works.' }
@@ -1248,7 +1249,7 @@
       repeater: repeater('items', 'Scenario', 'count', [field('scenario', 'Scenario text', 'textarea'), field('kind', 'Verdict style', 'select', '', { options: [['bad','Caution (warm orange answer)'],['good','Positive (blue answer)']] }), field('verdict', 'Verdict label', '', 'The bold word shown first, for example Pitfall. or Best practice.'), field('explanation', 'Answer explanation', 'richtext')])
     },
     pathTimeline: {
-      label: 'Interactive path timeline (1–8)', category: 'Timelines & Steps', isNew: true,
+      label: 'Interactive path timeline (1–8)', category: 'Timelines & Steps',
       defaults: { title: 'The full path, in one picture', intro: 'Select each marker to see its details.', count: 5, items: [
         { label: 'Start', details: 'Describe the first milestone on the path.' },
         { label: 'Plan', details: 'Describe the planning stage.' },
@@ -1260,7 +1261,7 @@
       repeater: repeater('items', 'Marker', 'count', [field('label', 'Marker label'), field('details', 'Marker details', 'textarea')])
     },
     weeklyRhythm: {
-      label: 'Weekly rhythm stepper (2–8)', category: 'Timelines & Steps', isNew: true,
+      label: 'Weekly rhythm stepper (2–8)', category: 'Timelines & Steps',
       defaults: { title: 'Weekly structure at a glance', intro: 'Each module follows one predictable rhythm. Use Previous and Next to walk through it.', count: 3, items: [
         { heading: 'Read', content: 'Targeted readings, case studies, and real-world examples.' },
         { heading: 'Watch or explore', content: 'Videos, demonstrations, and interactive guides.' },
@@ -1270,7 +1271,7 @@
       repeater: repeater('items', 'Step', 'count', [field('heading', 'Step heading'), field('content', 'Step text', 'textarea')])
     },
     storyboard: {
-      label: 'Sticky storyboard', category: 'Internal', isNew: true,
+      label: 'Sticky storyboard', category: 'Internal',
       defaults: { title: 'Explore the story', count: 3, items: [
         { heading: 'First idea', content: 'Introduce the first concept or moment in the story.', image: '', alt: 'Describe the first visual.' },
         { heading: 'Next idea', content: 'Explain how the story, process, or concept develops.', image: '', alt: 'Describe the second visual.' },
@@ -1280,12 +1281,12 @@
       repeater: repeater('items', 'Story section', 'count', [field('heading', 'Section heading'), field('content', 'Section text', 'textarea'), field('image', 'Image URL', 'url'), field('alt', 'Image alternative text', 'textarea')])
     },
     decoder: {
-      label: 'Secret decoder reveal', category: 'Internal', isNew: true,
+      label: 'Secret decoder reveal', category: 'Internal',
       defaults: { prompt: 'Decode the hidden explanation', hint: 'Think about the question before opening the decoder.', content: 'Place the optional hint, answer, or explanation here.' },
       fields: [field('prompt', 'Decoder label'), field('hint', 'Visible prompt or hint', 'textarea'), field('content', 'Revealed answer', 'textarea')]
     },
     hotspot: {
-      label: 'Accessible image hotspots', category: 'Internal', isNew: true,
+      label: 'Accessible image hotspots', category: 'Internal',
       defaults: { image: '', alt: 'Describe the full image and its instructional purpose.', count: 2, items: [
         { label: 'Hotspot 1', content: 'Explain the first highlighted area.', x: 28, y: 35 },
         { label: 'Hotspot 2', content: 'Explain the second highlighted area.', x: 70, y: 62 }
@@ -1294,7 +1295,7 @@
       repeater: repeater('items', 'Hotspot', 'count', [field('label', 'Accessible label'), field('content', 'Reveal text', 'textarea'), field('x', 'Horizontal position (%)', 'number', '', { min: 5, max: 95 }), field('y', 'Vertical position (%)', 'number', '', { min: 5, max: 95 })])
     },
     branching: {
-      label: 'Branching scenario', category: 'Internal', isNew: true,
+      label: 'Branching scenario', category: 'Internal',
       defaults: { title: 'Choose your path', scenario: 'Describe the situation and ask the learner to choose a response.', choiceA: 'Choose path A', outcomeA: 'Explain the immediate result of path A.', followA: 'What should happen next?', a1: 'Follow-up choice A1', a1Outcome: 'Explain the result of this follow-up choice.', a2: 'Follow-up choice A2', a2Outcome: 'Explain the result of this follow-up choice.', choiceB: 'Choose path B', outcomeB: 'Explain the immediate result of path B.', followB: 'What should happen next?', b1: 'Follow-up choice B1', b1Outcome: 'Explain the result of this follow-up choice.', b2: 'Follow-up choice B2', b2Outcome: 'Explain the result of this follow-up choice.' },
       fields: [field('title', 'Scenario heading'), field('scenario', 'Starting situation', 'textarea'), field('choiceA', 'First choice A'), field('outcomeA', 'Path A outcome', 'textarea'), field('followA', 'Path A follow-up question'), field('a1', 'Path A follow-up choice 1'), field('a1Outcome', 'Path A follow-up result 1', 'textarea'), field('a2', 'Path A follow-up choice 2'), field('a2Outcome', 'Path A follow-up result 2', 'textarea'), field('choiceB', 'First choice B'), field('outcomeB', 'Path B outcome', 'textarea'), field('followB', 'Path B follow-up question'), field('b1', 'Path B follow-up choice 1'), field('b1Outcome', 'Path B follow-up result 1', 'textarea'), field('b2', 'Path B follow-up choice 2'), field('b2Outcome', 'Path B follow-up result 2', 'textarea')]
     },
@@ -1309,22 +1310,22 @@
       fields: [field('mode', 'Video source', 'select', '', { options: [['embed','Embed a YouTube or video URL'],['brightspace','Brightspace or YuJa video placeholder']] }), field('url', 'YouTube or embed URL', 'url', 'Used only when Embed URL is selected.'), field('title', 'Accessible video title')]
     },
     audio: {
-      label: 'Audio note with transcript', category: 'Media', isNew: true,
+      label: 'Audio note with transcript', category: 'Media',
       defaults: { url: '', title: 'Audio note from your instructor', transcript: 'Paste the full transcript here.' },
       fields: [field('url', 'Audio file URL', 'url', 'Direct link to an mp3 or other audio file, for example from YuJa.'), field('title', 'Accessible audio title'), field('transcript', 'Transcript', 'textarea', 'Required for accessibility. Shown in an expandable section under the player.')]
     },
     statCard: {
-      label: 'Key statistic', category: 'Data & Layout', isNew: true,
+      label: 'Key statistic', category: 'Data & Layout',
       defaults: { stat: '73%', label: 'Add a short description of what this number means.', source: '' },
       fields: [field('stat', 'The statistic', '', 'A short number or figure, for example 73% or 4 out of 5.'), field('label', 'What it means', 'richtext'), field('source', 'Source (required)', '', 'Where this number comes from. A statistic without a source will be flagged by Check Page.')]
     },
     rubricTable: {
-      label: 'Grading rubric', category: 'Data & Layout', isNew: true,
+      label: 'Grading rubric', category: 'Data & Layout',
       defaults: { title: 'Grading rubric', levels: 'Exemplary | Proficient | Developing | Beginning', rows: 'Thesis and focus | Clear, specific, and arguable | Clear but somewhat general | Present but vague | Missing or unclear\nUse of evidence | Strong, well-integrated evidence | Adequate evidence | Limited or unclear evidence | Little to no evidence\nOrganization | Logical and easy to follow | Mostly organized | Some organizational issues | Difficult to follow' },
       fields: [field('title', 'Rubric heading'), field('levels', 'Performance levels', '', 'Column headers from strongest to weakest, separated by a vertical bar (|).'), field('rows', 'Criteria', 'textarea', 'One criterion per line: criterion name, then a description for each level, separated by vertical bars (|). Example: Thesis | Clear and specific | Mostly clear | Vague | Missing')]
     },
     referenceList: {
-      label: 'Reference list', category: 'Text', isNew: true,
+      label: 'Reference list', category: 'Text',
       defaults: { title: 'References', entries: 'Author, A. A. (Year). Title of the work. Publisher.\nAuthor, B. B., & Author, C. C. (Year). Title of the article. Journal Name, Volume(Issue), pages.' },
       fields: [field('title', 'Section heading'), field('entries', 'Reference entries', 'textarea', 'One full citation per line. Each line renders with a hanging indent.')]
     },
@@ -1337,7 +1338,7 @@
       label: 'Divider', category: 'Data & Layout', defaults: {}, fields: []
     },
     columns: {
-      label: 'Two-column content', category: 'Data & Layout', isNew: true,
+      label: 'Two-column content', category: 'Data & Layout',
       defaults: { leftTitle: 'First idea', leftContent: 'Add content for the first column.', rightTitle: 'Second idea', rightContent: 'Add content for the second column.' },
       fields: [field('leftTitle', 'Left heading'), field('leftContent', 'Left content', 'textarea'), field('rightTitle', 'Right heading'), field('rightContent', 'Right content', 'textarea')]
     }
@@ -1488,14 +1489,13 @@
   }
 
   const BLOCK_ORDER = [
-    'intro','heading','paragraph','bullets','checklist','annotated','referenceList',
-    'callout','quote','button','colored','insight','instructorInfo','imageText','aiPolicy','dueDate','courseCards','scopeCards','stepBoxes',
+    'intro','heading','paragraph','bullets','checklist','annotated','referenceList','callout','quote','colored','aiPolicy','dueDate',
     'accordion','tabs','flip','reveal','carousel',
-    'timeline','interactiveTimeline','pathTimeline','process','weeklyRhythm',
+    'timeline','interactiveTimeline','pathTimeline','process','weeklyRhythm','stepBoxes',
     'knowledge','multipleChoice','scenario','scenarioReveal','workedExample',
     'sorting','sequence','matching','estimate','selfCheck','interactiveChecklist',
-    'image','video','audio','compare',
-    'statCard','rubricTable','table','divider','columns'
+    'image','video','audio','compare','insight','instructorInfo','imageText',
+    'statCard','rubricTable','table','courseCards','scopeCards','button','divider','columns'
   ];
   const orderIndex = (key) => { const i = BLOCK_ORDER.indexOf(key); return i < 0 ? 999 : i; };
   let openCategory = 'Text';
@@ -1558,14 +1558,14 @@
   }
   function renderLibrary(filter) {
     const q = String(filter || '').trim().toLowerCase();
-    const cats = ['Text','Featured','Reveal & Explore','Timelines & Steps','Questions & Scenarios','Practice Activities','Media','Data & Layout'];
+    const cats = ['Text','Reveal & Explore','Timelines & Steps','Questions & Scenarios','Practice Activities','Media','Data & Layout'];
     let total = 0;
     el.library.innerHTML = cats.map(cat => {
       const entries = Object.entries(defs).filter(([,d]) => d.category === cat && (!q || d.label.toLowerCase().includes(q)))
         .sort((a, b) => orderIndex(a[0]) - orderIndex(b[0]));
       if (!entries.length) return '';
       total += entries.length;
-      const buttons = entries.map(([key,d]) => '<button class="add-block" type="button" data-add="' + key + '"><span class="plus" aria-hidden="true">+</span><span>' + e(d.label) + '</span>' + (d.isNew ? '<span class="new-tag">New</span>' : '') + '</button>').join('');
+      const buttons = entries.map(([key,d]) => '<button class="add-block" type="button" data-add="' + key + '"><span class="plus" aria-hidden="true">+</span><span>' + e(d.label) + '</span></button>').join('');
       const open = q ? true : openCategory === cat;
       return '<details class="cat-acc" data-cat="' + e(cat) + '"' + (open ? ' open' : '') + '><summary>' + e(cat) + '<span class="cat-count">' + entries.length + '</span></summary><div class="block-library">' + buttons + '</div></details>';
     }).join('');
