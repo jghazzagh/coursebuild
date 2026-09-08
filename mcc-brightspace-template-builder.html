@@ -753,11 +753,43 @@
       <aside class="panel control-panel" aria-label="Page controls and building blocks">
         <div class="panel-body">
           <h2 id="interactive-blocks">Building blocks</h2>
-          <p class="field-help">Start with a Page Header, then open a category and select a block to add it to your page. Use the "Add block here" bars in the preview to insert between blocks, or drag blocks to reorder them.</p>
+          <p class="field-help">Edit the page header below, then open a category and select a block to add it to your page. Use the "Add block here" bars in the preview to insert between blocks, or drag blocks to reorder them.</p>
           <label class="block-search" for="block-search">
             <span aria-hidden="true">⌕</span>
             <input id="block-search" type="search" placeholder="Filter blocks">
           </label>
+          <details class="cat-acc" id="header-details">
+            <summary>Page Header<span class="cat-count">edit</span></summary>
+            <div class="setup-body" style="padding:12px">
+              <div class="control-group">
+                <label for="starter-template">Starter template</label>
+                <select id="starter-template"></select>
+              </div>
+              <div class="control-group">
+                <label for="page-label">Page label</label>
+                <input id="page-label" type="text" value="Course content">
+              </div>
+              <div class="control-group">
+                <label for="page-title">Page title</label>
+                <input id="page-title" type="text" value="Blank page">
+              </div>
+              <div class="control-group">
+                <label for="title-style">Title style</label>
+                <select id="title-style">
+                  <option value="banner">MCC color banner</option>
+                  <option value="text">Text only</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label for="banner-url">Optional banner image URL</label>
+                <input id="banner-url" type="url" placeholder="https://...">
+              </div>
+              <fieldset class="control-group" style="border:0;padding:0;margin-left:0;margin-right:0">
+                <legend class="field-label">Accent color</legend>
+                <div class="palette" id="accent-palette"></div>
+              </fieldset>
+            </div>
+          </details>
           <div id="block-library"></div>
         </div>
       </aside>
@@ -902,16 +934,6 @@
   const repeater = (key, title, countKey, fields) => ({ key, title, countKey, fields });
 
   const defs = {
-    bannerHeader: {
-      label: 'Banner header', category: 'Page Header',
-      defaults: { pageLabel: 'Course content', title: 'Page title', bannerImage: '' },
-      fields: [field('pageLabel', 'Page label', '', 'Small uppercase label above the title.'), field('title', 'Page title'), field('bannerImage', 'Optional banner image URL', 'url', 'Shown above the colored banner. Leave blank for no image.')]
-    },
-    textHeader: {
-      label: 'Text header', category: 'Page Header',
-      defaults: { pageLabel: 'Course content', title: 'Page title' },
-      fields: [field('pageLabel', 'Page label', '', 'Small uppercase label above the title.'), field('title', 'Page title')]
-    },
     intro: {
       label: 'Intro text', category: 'Text',
       defaults: { content: 'Use this short introduction to orient students to the page.' },
@@ -1455,10 +1477,14 @@
     if (el.title) el.title.value = state.title;
     if (el.titleStyle) el.titleStyle.value = state.titleStyle;
     if (el.banner) el.banner.value = state.bannerUrl;
+    renderAccentPalette();
+  }
+
+  function renderAccentPalette() {
+    if (el.accent) el.accent.innerHTML = COLORS.map(color => '<button type="button" class="color-button" style="background-color:' + color + '" data-accent="' + color + '" aria-label="Use accent color ' + color + '" aria-pressed="' + (state.accent.toLowerCase() === color.toLowerCase()) + '"></button>').join('');
   }
 
   const BLOCK_ORDER = [
-    'bannerHeader','textHeader',
     'intro','heading','paragraph','bullets','checklist','annotated','referenceList','callout','quote','colored','aiPolicy','dueDate',
     'accordion','tabs','flip','reveal','carousel',
     'timeline','interactiveTimeline','pathTimeline','process','weeklyRhythm','stepBoxes',
@@ -1528,7 +1554,7 @@
   }
   function renderLibrary(filter) {
     const q = String(filter || '').trim().toLowerCase();
-    const cats = ['Page Header','Text','Reveal & Explore','Timelines & Steps','Questions & Scenarios','Practice Activities','Media','Data & Layout'];
+    const cats = ['Text','Reveal & Explore','Timelines & Steps','Questions & Scenarios','Practice Activities','Media','Data & Layout'];
     let total = 0;
     el.library.innerHTML = cats.map(cat => {
       const entries = Object.entries(defs).filter(([,d]) => d.category === cat && (!q || d.label.toLowerCase().includes(q)))
@@ -1542,7 +1568,7 @@
     if (!total) el.library.innerHTML = '<div class="empty-search">No blocks match that search.</div>';
   }
 
-  function blockColor(block) { return block.color || '#003366'; }
+  function blockColor(block) { return block.color || state.accent; }
 
   const CONTROL_BACKGROUND_TYPES = new Set(['button','colored','accordion','tabs','flip','timeline','carousel','interactiveTimeline','reveal','knowledge','multipleChoice','scenario','process','table','decoder','branching','sorting','sequence','estimate','compare','selfCheck','matching','workedExample','scenarioReveal','weeklyRhythm']);
   function aiPolicyPalette(level) {
@@ -1630,12 +1656,6 @@
     };
 
     switch (block.type) {
-      case 'bannerHeader': {
-        const bannerImg = d.bannerImage ? '<img src="' + safeUrl(d.bannerImage, '') + '" alt="" style="display:block;width:100%;max-height:340px;object-fit:cover">' : '';
-        return bannerImg + '<header style="padding:32px 40px;color:' + contrast(color) + ';background-color:' + color + ';border-bottom:7px solid #FF6600"><p style="font-family:' + fontStack + ';margin:0 0 7px;color:' + contrast(color) + ';font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">' + e(d.pageLabel) + '</p><h1 style="font-family:' + fontStack + ';margin:0;color:' + contrast(color) + ';font-size:44px;line-height:1.12;font-weight:400">' + e(d.title) + '</h1></header>';
-      }
-      case 'textHeader':
-        return '<header style="padding:28px 38px;background-color:#fff;border-bottom:3px solid ' + color + '"><p style="font-family:' + fontStack + ';margin:0 0 6px;color:' + color + ';font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">' + e(d.pageLabel) + '</p><h1 style="font-family:' + fontStack + ';margin:0;color:#001B3B;font-size:42px;line-height:1.12;font-weight:500">' + e(d.title) + '</h1></header>';
       case 'intro':
         return '<p style="' + base + ';font-size:21px;color:' + text + ';margin:0 0 24px">' + sanitizeRichText(d.content || '') + '</p>';
       case 'heading': {
@@ -1979,14 +1999,15 @@
     }
   }
 
-  const HEADER_TYPES = new Set(['bannerHeader', 'textHeader']);
   function generatedBody() {
-    const headerBlock = state.blocks.find(b => HEADER_TYPES.has(b.type));
-    const contentBlocks = state.blocks.filter(b => !HEADER_TYPES.has(b.type));
-    const headerHtml = headerBlock ? renderBlockHtml(headerBlock) : '';
-    const blocks = contentBlocks.map(renderBlockHtml).join('');
+    const bannerUrl = state.bannerUrl ? '<img src="' + safeUrl(state.bannerUrl, '') + '" alt="" style="display:block;width:100%;max-height:340px;object-fit:cover">' : '';
+    const title = state.titleStyle === 'text'
+      ? '<header style="padding:28px 38px;background-color:#fff;border-bottom:3px solid ' + state.accent + '"><p style="font-family:Lato,Arial,sans-serif;margin:0 0 6px;color:' + state.accent + ';font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">' + e(state.pageLabel) + '</p><h1 style="font-family:Lato,Arial,sans-serif;margin:0;color:#001B3B;font-size:42px;line-height:1.12;font-weight:500">' + e(state.title) + '</h1></header>'
+      : '<header style="padding:32px 40px;color:' + contrast(state.accent) + ';background-color:' + state.accent + ';border-bottom:7px solid #FF6600"><p style="font-family:Lato,Arial,sans-serif;margin:0 0 7px;color:' + contrast(state.accent) + ';font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase">' + e(state.pageLabel) + '</p><h1 style="font-family:Lato,Arial,sans-serif;margin:0;color:' + contrast(state.accent) + ';font-size:44px;line-height:1.12;font-weight:400">' + e(state.title) + '</h1></header>';
+    const blocks = state.blocks.map(renderBlockHtml).join('');
     return '<div style="max-width:1100px;margin:0 auto;background-color:#fff;border:1px solid #d5dfe4;font-family:Lato,Arial,sans-serif;font-size:19px;color:#1f2933;line-height:1.65">'
-      + (headerHtml ? '\n' + headerHtml : '')
+      + (bannerUrl ? '\n<!-- BEGIN: Page banner -->\n' + bannerUrl + '\n<!-- END: Page banner -->\n' : '')
+      + '\n<!-- BEGIN: Page header -->\n' + title + '\n<!-- END: Page header -->\n'
       + '\n<!-- BEGIN: Page content -->\n<main style="padding:32px 40px">' + (blocks || '<p style="font-family:Lato,Arial,sans-serif;font-size:19px">Add your course content here.</p>') + '</main>\n<!-- END: Page content -->\n'
       + '\n<!-- BEGIN: Page footer -->\n<footer style="padding:16px 40px;color:#fff;background-color:#001B3B;font-family:Lato,Arial,sans-serif;font-size:14px" aria-hidden="true">&nbsp;</footer>\n<!-- END: Page footer -->\n</div>';
   }
@@ -2008,8 +2029,8 @@
       parts.push('<div class="preview-block' + (selected ? ' is-selected' : '') + '" data-block-id="' + block.id + '" draggable="true" tabindex="0" aria-label="' + e(defs[block.type].label) + ' block">' +
         '<div class="block-tools" aria-label="' + e(defs[block.type].label) + ' controls">' +
         '<button type="button" class="block-tool drag-handle" title="Drag to reorder" aria-label="Drag block to reorder">⋮⋮</button>' +
-        '<button type="button" class="block-tool" data-action="up" aria-label="Move block up"' + ((index === 0 || HEADER_TYPES.has(block.type) || (index === 1 && HEADER_TYPES.has(state.blocks[0].type))) ? ' disabled' : '') + '>↑</button>' +
-        '<button type="button" class="block-tool" data-action="down" aria-label="Move block down"' + ((index === state.blocks.length - 1 || HEADER_TYPES.has(block.type)) ? ' disabled' : '') + '>↓</button>' +
+        '<button type="button" class="block-tool" data-action="up" aria-label="Move block up"' + (index === 0 ? ' disabled' : '') + '>↑</button>' +
+        '<button type="button" class="block-tool" data-action="down" aria-label="Move block down"' + (index === state.blocks.length - 1 ? ' disabled' : '') + '>↓</button>' +
         '<button type="button" class="block-tool" data-action="duplicate" title="Duplicate block" aria-label="Duplicate block">⧉</button>' +
         '<button type="button" class="block-tool delete" data-action="delete" aria-label="Delete block">×</button></div>' + renderBlockHtml(block) + '</div>');
     });
@@ -2138,9 +2159,6 @@
     const i = state.blocks.findIndex(b => b.id === id);
     const next = i + delta;
     if (i < 0 || next < 0 || next >= state.blocks.length) return;
-    const hasHeader = HEADER_TYPES.has(state.blocks[0] && state.blocks[0].type);
-    if (HEADER_TYPES.has(state.blocks[i].type)) { toast('The page header stays at the top.'); return; }
-    if (hasHeader && next === 0) { toast('The page header stays at the top.'); return; }
     snapshot();
     const temp = state.blocks[i]; state.blocks[i] = state.blocks[next]; state.blocks[next] = temp;
     renderAll();
@@ -2219,6 +2237,11 @@
   if (el.title) el.title.addEventListener('input', () => { state.title = el.title.value; renderPreview(); });
   if (el.titleStyle) el.titleStyle.addEventListener('change', () => { state.titleStyle = el.titleStyle.value; renderPreview(); });
   if (el.banner) el.banner.addEventListener('input', () => { state.bannerUrl = el.banner.value; renderPreview(); });
+  if (el.accent) el.accent.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-accent]'); if (!button) return;
+    snapshot();
+    state.accent = button.dataset.accent; renderAccentPalette(); renderAll();
+  });
   el.library.addEventListener('click', (event) => {
     const summary = event.target.closest('.cat-acc > summary');
     if (summary) {
@@ -2233,18 +2256,9 @@
       return;
     }
     const button = event.target.closest('[data-add]'); if (!button) return;
-    const addType = button.dataset.add;
-    const isHeader = HEADER_TYPES.has(addType);
-    if (isHeader && state.blocks.some(b => HEADER_TYPES.has(b.type))) {
-      toast('This page already has a header. Remove it before adding a different one.');
-      return;
-    }
     snapshot();
-    const block = makeBlock(addType); syncRepeater(block);
-    if (isHeader) {
-      state.blocks.unshift(block);
-      state.insertAt = null;
-    } else if (state.insertAt != null && state.insertAt <= state.blocks.length) {
+    const block = makeBlock(button.dataset.add); syncRepeater(block);
+    if (state.insertAt != null && state.insertAt <= state.blocks.length) {
       state.blocks.splice(state.insertAt, 0, block);
       state.insertAt = null;
     } else {
@@ -2331,11 +2345,7 @@
   el.preview.addEventListener('drop', (event) => {
     const target = event.target.closest('[data-block-id]'); if (!target || !draggedId) return;
     event.preventDefault(); const from = state.blocks.findIndex(b => b.id === draggedId); const to = state.blocks.findIndex(b => b.id === target.dataset.blockId);
-    if (from < 0 || to < 0 || from === to) return;
-    const hasHeader = HEADER_TYPES.has(state.blocks[0] && state.blocks[0].type);
-    if (HEADER_TYPES.has(state.blocks[from].type)) { toast('The page header stays at the top.'); return; }
-    if (hasHeader && to === 0) { toast('The page header stays at the top.'); return; }
-    snapshot(); const block = state.blocks.splice(from, 1)[0]; state.blocks.splice(to, 0, block); state.selectedId = block.id; renderAll();
+    if (from >= 0 && to >= 0 && from !== to) { snapshot(); const block = state.blocks.splice(from, 1)[0]; state.blocks.splice(to, 0, block); state.selectedId = block.id; renderAll(); }
   });
 
   el.editor.addEventListener('toggle', (event) => {
