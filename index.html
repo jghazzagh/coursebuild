@@ -478,14 +478,15 @@ h1, h2, h3, h4, h5, h6, strong, b, th { font-weight: 500; }
 .course-name, .brand-name { font-weight: 700; }
 body a, body a:visited, body a:hover, body a:focus { color: #0567aa; }
 header { background: #fff; }
-/* Light surfaces keep blue links readable within dark site sections. */
-.topbar a, .footer-main a { background: #f9f9f9; padding: 3px 8px; width: fit-content; max-width: 100%; overflow-wrap: anywhere; }
-.nav a, .main-nav a { background: #d6e8ee; }
-.nav a:hover, .nav a[aria-current="page"], .main-nav a:hover, .main-nav a[aria-current="page"] { background: #fff; }
+/* Plain links on dark surfaces; no colored backing behind link text. */
+body .topbar a, body .footer-main a, body .nav a, body .main-nav a,
+body .feature:nth-child(2) a { color: #fff; background: transparent; }
+body .topbar a:hover, body .footer-main a:hover, body .feature:nth-child(2) a:hover { text-decoration: underline; }
+body .nav a:hover, body .nav a[aria-current="page"],
+body .main-nav a:hover, body .main-nav a[aria-current="page"] { background: rgba(0, 0, 0, 0.13); border-bottom-color: #ff6600; }
 a.skip, a.skip-link { background: #fff; }
-.feature:nth-child(2) a { background: #f9f9f9; padding: 3px 8px; }
-a.button, a.page-builder-cta, .online, .online-tag { background: #d6e8ee; border: 2px solid #d6e8ee; border-radius: 0; color: #0567aa; }
-a.button:hover, a.button:focus-visible, a.page-builder-cta:hover, a.page-builder-cta:focus-visible, .online:hover, .online-tag:hover { background: #fff; border-color: #fff; }
+body a.button, body a.page-builder-cta, .online, .online-tag { background: #fff; border: 2px solid #fff; border-radius: 0; color: #0567aa; }
+body a.button:hover, body a.button:focus-visible, body a.page-builder-cta:hover, body a.page-builder-cta:focus-visible { background: #f9f9f9; border-color: #fff; }
 .chooser { background: transparent; }
 footer, .site-footer, .preview-footer { background: #003366; }
 .footer-brand { text-transform: none; font-weight: 500; line-height: 1.35; }
@@ -498,7 +499,7 @@ footer, .site-footer, .preview-footer { background: #003366; }
       </div>
       <div class="brand-row">
         <a class="brand" href="index.html" aria-label="MCC CourseMaker home">
-          <img class="header-logo" src="./Index_files/mcclogoidi.png" alt="McLennan Community College">
+          <img class="header-logo" src="https://jghazzagh.github.io/coursebuild/mcclogoidi.png" alt="McLennan Community College">
           <span class="course-name">CourseMaker</span>
         </a>
         <form class="search" id="site-search" role="search">
