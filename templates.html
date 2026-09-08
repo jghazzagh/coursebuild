@@ -12,7 +12,7 @@
   <body>
     <style>
       :root {
-        --blue: #003366;
+        --blue: #003366;--link:#0567aa;
         --navy: #001b3b;
         --teal: #008da7;
         --orange: #ff6600;
@@ -31,6 +31,7 @@
       body {
         margin: 0;
         color: var(--ink);
+        background: #f9f9f9;
         font-family: Poppins, Arial, Helvetica, sans-serif;
         line-height: 1.55;
       }
@@ -104,7 +105,7 @@
         border: 7px solid var(--blue);
         color: var(--blue);
         font-size: 34px;
-        font-weight: 900;
+        font-weight: 500;
       }
       .words {
         color: var(--blue);
@@ -122,7 +123,7 @@
         padding-left: 18px;
         border-left: 1px solid #c7cdd1;
         font-size: 23px;
-        font-weight: 800;
+        font-weight: 700;
         white-space: nowrap;
       }
       .search {
@@ -142,11 +143,11 @@
         border-radius: 0 8px 8px 0;
         color: #fff;
         background: var(--blue);
-        font-weight: 800;
+        font-weight: 500;
         cursor: pointer;
       }
       .nav {
-        background: #06416f;
+        background: #003366;
         border-bottom: 5px solid var(--orange);
       }
       .nav ul {
@@ -178,14 +179,14 @@
       }
       .crumb a {
         color: var(--blue);
-        font-weight: 800;
+        font-weight: 500;
         text-decoration: none;
       }
       .hero {
         position: relative;
         overflow: hidden;
         color: #fff;
-        background-color: #064477;
+        background-color: #003366;
       }
       .hero-inner {
         position: relative;
@@ -201,7 +202,7 @@
       .eyebrow {
         margin: 0 0 12px;
         font-size: 13px;
-        font-weight: 800;
+        font-weight: 500;
         letter-spacing: 0.16em;
         text-transform: uppercase;
       }
@@ -266,7 +267,7 @@
       .reuse-note a {
         flex: 0 0 auto;
         color: var(--blue);
-        font-weight: 900;
+        font-weight: 500;
         text-decoration: none;
         white-space: nowrap;
       }
@@ -324,7 +325,7 @@
         margin: 15px auto 4px;
         border-radius: 50%;
         color: #fff;
-        font-weight: 900;
+        font-weight: 500;
         font-size: 25px;
       }
       .template-copy {
@@ -335,7 +336,7 @@
         margin: 0 0 10px;
         color: var(--teal);
         font-size: 11px;
-        font-weight: 900;
+        font-weight: 500;
         letter-spacing: 0.11em;
         text-transform: uppercase;
       }
@@ -354,7 +355,7 @@
         left: 32px;
         bottom: 25px;
         color: var(--blue);
-        font-weight: 900;
+        font-weight: 500;
         text-decoration: none;
       }
       .template a:hover {
@@ -362,7 +363,7 @@
       }
       footer {
         color: #fff;
-        background: var(--navy);
+        background: #003366;
       }
       .footer-main {
         display: grid;
@@ -374,7 +375,7 @@
       }
       .footer-brand {
         font-size: 25px;
-        font-weight: 800;
+        font-weight: 500;
         line-height: 1.1;
       }
       .footer-brand small {
@@ -382,8 +383,7 @@
         margin-top: 5px;
         font-size: 13px;
         letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
+        }
       .footer-main p {
         max-width: 560px;
         color: #d8e5ec;
@@ -403,10 +403,10 @@
         display: inline-block;
         margin-top: 10px;
         padding: 7px 11px;
-        color: var(--navy);
-        background: var(--gold);
+        color: #003366;
+        background: #d6e8ee;
         border-radius: 4px;
-        font-weight: 900;
+        font-weight: 500;
       }
       .footer-bottom {
         display: flex;
@@ -489,7 +489,8 @@
           flex-direction: column;
         }
       }
-    </style>
+      .page a,.intro a,.card a,.action a:not(.button){color:var(--link)}
+</style>
     <a class="skip" href="#main-content">Skip to main content</a>
     <header>
       <div class="topbar">
@@ -688,7 +689,7 @@
       <div class="footer-main">
         <div>
           <div class="footer-brand">
-            McLennan<small>Community College</small>
+            McLennan Community College
           </div>
           <p>
             CourseMaker is maintained by Instructional Design &amp; Innovation
