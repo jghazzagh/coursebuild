@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0050)index.html -->
-<html lang="en" data-scribe-recorder-ready="true"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>MCC CourseMaker</title>
@@ -485,9 +484,14 @@ body .topbar a:hover, body .footer-main a:hover, body .feature:nth-child(2) a:ho
 body .nav a:hover, body .nav a[aria-current="page"],
 body .main-nav a:hover, body .main-nav a[aria-current="page"] { background: rgba(0, 0, 0, 0.13); border-bottom-color: #ff6600; }
 a.skip, a.skip-link { background: #fff; }
-body a.button, body a.page-builder-cta, .online, .online-tag { background: #fff; border: 2px solid #fff; border-radius: 0; color: #0567aa; }
-body a.button:hover, body a.button:focus-visible, body a.page-builder-cta:hover, body a.page-builder-cta:focus-visible { background: #f9f9f9; border-color: #fff; }
+.online, .online-tag { background: #fff; border: 2px solid #fff; border-radius: 0; color: #0567aa; }
+body a.button, body a.page-builder-cta { display: inline-block; padding: 14px 20px; background: #d6e8ee; border: 1px solid #d6e8ee; border-radius: 0; color: #003366; font-weight: 500; text-decoration: none; transition: background-color .15s, border-color .15s; }
+body a.button:hover, body a.button:focus-visible, body a.page-builder-cta:hover, body a.page-builder-cta:focus-visible { background: #fff; border-color: #fff; color: #003366; }
 .chooser { background: transparent; }
+.intro-block { margin: 0 0 64px; }
+.intro-block .eyebrow { margin: 0 0 12px; color: var(--blue); font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; }
+.intro-block h1 { max-width: 760px; margin: 0; color: var(--navy); font-size: clamp(40px, 5vw, 60px); line-height: 1.08; letter-spacing: -0.03em; }
+.intro-block .lede { max-width: 740px; margin: 18px 0 26px; color: var(--ink); font-size: 21px; }
 footer, .site-footer, .preview-footer { background: #003366; }
 .footer-brand { text-transform: none; font-weight: 500; line-height: 1.35; }
 
@@ -525,20 +529,16 @@ footer, .site-footer, .preview-footer { background: #003366; }
         </ul>
       </nav>
     </header>
-    <section class="hero">
-      <div class="hero-inner">
-        <div>
-          <p class="eyebrow">MCC Brightspace course design</p>
-          <h1>Build your Brightspace page</h1>
-          <p>
-            Create complete course pages or compact homepage widgets. Every
-            builder produces editable HTML you control.
-          </p>
-          <a class="page-builder-cta button" href="mcc-brightspace-template-builder.html">Open Page Builder</a>
-        </div>
-      </div>
-    </section>
     <main id="main-content">
+      <section class="intro-block" aria-label="Introduction">
+        <p class="eyebrow">MCC Brightspace course design</p>
+        <h1>Build your Brightspace page</h1>
+        <p class="lede">
+          Create complete course pages or compact homepage widgets. Every
+          builder produces editable HTML you control.
+        </p>
+        <a class="page-builder-cta button" href="mcc-brightspace-template-builder.html">Open Page Builder</a>
+      </section>
       <section class="feature-grid" aria-label="CourseMaker tools">
         <article class="feature">
           <span class="number">01</span>
