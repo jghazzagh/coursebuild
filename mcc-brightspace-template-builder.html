@@ -2142,7 +2142,7 @@
           if (markerStyle === 'dash') return '<span aria-hidden="true" style="display:block;flex:0 0 18px;width:18px;height:7px;margin-top:12px;margin-right:12px;border-radius:2px;background-color:' + color + '"></span>';
           if (markerStyle === 'check') return '<span aria-hidden="true" style="flex:0 0 auto;margin-right:12px;color:' + color + ';font-size:20px;font-weight:800;line-height:1.5">✓</span>';
           if (markerStyle === 'arrow') return '<span aria-hidden="true" style="flex:0 0 auto;margin-right:12px;color:' + color + ';font-size:19px;font-weight:800;line-height:1.6">→</span>';
-          if (markerStyle === 'number') return '<span aria-hidden="true" style="display:grid;place-items:center;flex:0 0 26px;width:26px;height:26px;margin-top:2px;margin-right:12px;border-radius:50%;overflow:hidden;color:' + contrast(color) + ';background-color:' + color + ';font-family:' + fontStack + ';font-size:14px;font-weight:800">' + (i + 1) + '</span>';
+          if (markerStyle === 'number') return '<span aria-hidden="true" style="display:inline-block;box-sizing:border-box;flex:0 0 26px;width:26px;height:26px;margin-top:2px;margin-right:12px;border-radius:50%;overflow:hidden;text-align:center;vertical-align:middle;white-space:nowrap;color:' + contrast(color) + ';background-color:' + color + ';font-family:' + fontStack + ';font-size:14px;font-weight:800;line-height:26px">' + (i + 1) + '</span>';
           return '<span aria-hidden="true" style="display:block;flex:0 0 11px;width:11px;height:11px;margin-top:10px;margin-right:12px;border-radius:50%;background-color:' + color + '"></span>';
         };
         const bulletRowStyle = (i) => {
