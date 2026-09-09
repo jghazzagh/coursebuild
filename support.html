@@ -6,7 +6,7 @@
     <title>Support | MCC CourseMaker</title>
     <meta
       name="description"
-      content="Get help with CourseMaker, Brightspace HTML, accessibility, and course design."
+      content="Copy your CourseMaker page into Brightspace with simple steps. No HTML knowledge needed. Find help with pasting, saving, and updating your page."
     />
   </head>
   <body>
@@ -572,6 +572,29 @@
         }
       }
       .page a,.intro a,.card a,.action a:not(.button){color:var(--link)}
+
+      /* BEGIN: Faculty-first support layout */
+      main{padding-top:42px}main a{color:#0567aa}main section[id],#replace-page{scroll-margin-top:24px}
+      .support-intro h1{margin:0 0 20px;max-width:960px;color:var(--navy);font-size:clamp(34px,4.8vw,54px);font-weight:500;line-height:1.13}
+      .support-intro .lead{font-size:21px;max-width:880px}.support-links{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0}
+      .support-links a{padding:9px 14px;border:1px solid #a9bdc7;border-radius:20px;background:white;font-weight:500;text-decoration:none}
+      main p,main li{overflow-wrap:anywhere}.section-head{margin-top:52px}.tag{color:#006578}
+      .notice{padding:18px 22px;border-left:5px solid var(--orange);background:#edf4f7}
+      .transfer-steps{list-style:none;counter-reset:transfer;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;padding:0;margin:24px 0}
+      .transfer-steps>li{counter-increment:transfer;position:relative;padding:28px 26px;border:1px solid var(--line);border-top:6px solid var(--blue);border-radius:9px;background:white}
+      .transfer-steps>li:before{content:counter(transfer);display:inline-grid;place-items:center;width:32px;height:32px;margin-right:10px;border-radius:50%;background:var(--blue);color:white;font-weight:700}
+      .transfer-steps .step{background:#006578;margin-bottom:8px}.transfer-steps h3{font-size:24px;line-height:1.25;color:var(--navy);margin:12px 0}.checkpoint{padding-top:12px;border-top:1px solid var(--line);font-size:15px;color:#314b5a}
+      kbd{font:inherit;font-size:.9em;border:1px solid #a9bdc7;border-radius:4px;padding:1px 5px;background:#f2f7f9;white-space:nowrap}
+      .reference-note{font-size:14px;color:var(--muted)}.editor-comparison{display:grid;grid-template-columns:1fr 1fr;gap:20px}.editor-example{padding:24px;border:1px solid var(--line);border-radius:9px;background:#fff;min-width:0}
+      .editor-example h3{font-size:23px;color:var(--navy);margin-top:0}.editor-illustration{min-height:190px;border:1px solid #b6c8d2;border-radius:6px;padding:18px;background:#f5f8fa}.illustration-label{display:block;font-size:13px;color:#41566a;border-bottom:1px solid #c9d6df;padding-bottom:12px}.example-heading{font-size:23px;font-weight:700;color:var(--blue)}.source-illustration{border:2px solid var(--blue)}.paste-label{font-weight:700;color:var(--blue)}
+      .faq{max-width:none}.faq-body{padding:8px 20px 18px}.faq-body p{padding:0}.faq-body li{margin:10px 0}.faq a{font-weight:500}.finish-list{padding:24px 24px 24px 46px;background:white;border:1px solid var(--line);border-radius:9px}.finish-list li{padding:5px 0}
+      .table-wrap{max-width:100%;overflow:auto;margin:24px 0}table{width:100%;border-collapse:collapse;background:white}caption{text-align:left;font-weight:700;color:var(--navy);margin-bottom:10px}th,td{padding:15px;text-align:left;vertical-align:top;border:1px solid var(--line)}thead{background:var(--blue);color:white}tbody th{color:var(--navy);font-weight:500}
+      .save-card h3,.widget-card h3,.help-card h3,.community-card h3{font-size:24px;line-height:1.25;font-weight:500;color:var(--navy);margin:0 0 12px}.help-card:first-child h3{color:white}
+      .help-card,.community-card{display:flex;flex-direction:column;min-height:0}.help-card a,.community-card a{position:static;margin-top:auto;align-self:flex-start}.help-card p,.community-card p{margin-bottom:18px}
+      .cta .button{background:#d6e8ee;color:#003366}.cta .button:hover{background:white}.cta p{margin-bottom:22px}
+      @media(max-width:760px){.transfer-steps,.editor-comparison{grid-template-columns:1fr}.transfer-steps>li{padding:22px}.section-head h2{font-size:30px}.cta{padding:26px}.support-links a{font-size:14px}th,td{padding:10px;font-size:14px}}
+      @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+      /* END: Faculty-first support layout */
 </style>
     <a class="skip" href="#main-content">Skip to main content</a>
     <header>
@@ -618,232 +641,115 @@
         <a href="index.html">Home</a> &nbsp;/&nbsp; Support
       </div>
     </header>
+
+    <!-- BEGIN: Welcome and quick navigation -->
     <main id="main-content">
-      <section class="help-grid">
-        <article class="help-card">
-          <p class="tag">Instructional design</p>
-          <h2>Plan or improve a course page</h2>
-          <p>
-            Get help with organization, accessibility, student directions, and
-            the learning experience.
-          </p>
-          <a href="mailto:online@mclennan.edu">Email online@mclennan.edu</a>
-        </article>
-        <article class="help-card">
-          <p class="tag">Brightspace support</p>
-          <h2>Troubleshoot the page</h2>
-          <p>
-            We can help when content does not paste, display, or behave the way
-            you expected.
-          </p>
-          <a href="mailto:online@mclennan.edu">Request technical help</a>
-        </article>
+      <section class="support-intro" aria-labelledby="support-title">
+        <p class="tag">CourseMaker support</p>
+        <h1 id="support-title">Create your page. Copy it. Paste it into Brightspace.</h1>
+        <p class="lead"><strong>You do not need to write or understand HTML.</strong> CourseMaker creates the code for you. You only need to know which button copies it and where to paste it.</p>
+        <p>Keep CourseMaker and your Brightspace course open in separate tabs so you can switch between them.</p>
+        <nav class="support-links" aria-label="Support topics">
+          <a href="#copy-paste">Add a course page</a><a href="#troubleshooting">Fix a problem</a><a href="#save-reuse">Save for later</a><a href="#edit-later">Update a page</a><a href="#widget-help">Add a homepage widget</a><a href="#contact-help">Ask for help</a>
+        </nav>
       </section>
-      <div class="section-head">
-        <p class="tag">Quick guides</p>
-        <h2>Build, check, and publish</h2>
-      </div>
-      <section class="guide-grid">
-        <article class="guide">
-          <span class="step">Step 1</span>
-          <h3>Set up the page</h3>
-          <p>
-            Choose a template, write the page label and Heading 1, select a
-            title style, and optionally add an image URL. Page Setup collapses
-            after your first block so it stays out of the way.
-          </p>
-        </article>
-        <article class="guide">
-          <span class="step">Step 2</span>
-          <h3>Add and edit blocks</h3>
-          <p>
-            Open a category in the left panel and add blocks. Use the Add block
-            here bars in the preview to insert between blocks, then drag or use
-            the arrow controls to reorder, and the copy control to duplicate.
-          </p>
-        </article>
-        <article class="guide">
-          <span class="step">Step 3</span>
-          <h3>Check accessibility</h3>
-          <p>
-            Use the Check page button to scan for heading order, color contrast,
-            placeholder text, and empty links. Keep meaningful link text, useful
-            image descriptions, and content that does not rely on color alone.
-          </p>
-        </article>
-        <article class="guide">
-          <span class="step">Step 4</span>
-          <h3>Move it to Brightspace</h3>
-          <p>
-            Copy the page HTML, paste it into the Brightspace HTML source
-            editor, save it, and preview the result as a learner.
-          </p>
-        </article>
+      <!-- END: Welcome and quick navigation -->
+
+      <!-- BEGIN: Primary copy-and-paste walkthrough -->
+      <section id="copy-paste" aria-labelledby="copy-title">
+        <div class="section-head"><p class="tag">Start here</p><h2 id="copy-title">Put your first page into Brightspace</h2></div>
+        <p class="notice"><strong>Start with a new, blank content page.</strong> This walkthrough adds a complete page. If you already have content to keep, use the <a href="#replace-page">existing-page instructions</a> instead.</p>
+        <ol class="transfer-steps">
+          <li><span class="step">In CourseMaker</span><h3>Build and check your page</h3><p>Open <strong>Start a page</strong> to choose a template. Use <strong>Page Header</strong> for the page title and colors. Add blocks, select them in the page preview, and edit their details. Select <strong>Check page</strong> and review the results.</p><p class="checkpoint"><strong>Ready to continue:</strong> Your page contains your own directions and content.</p></li>
+          <li><span class="step">In CourseMaker</span><h3>Select Copy page HTML</h3><p>Use <strong>Copy page HTML</strong> near the top of the builder. This copies the whole page for you. You do not need to select the code yourself.</p><p>For this walkthrough, you do not need <strong>Download HTML</strong> or <strong>Export JSON</strong>.</p><p class="checkpoint"><strong>What to expect:</strong> A message confirms the page was copied.</p></li>
+          <li><span class="step">In Brightspace</span><h3>Create a blank page</h3><p>Open <strong>Content</strong>, select the unit or lesson where the page belongs, then choose <strong>Create New → Page</strong>. Enter the page title.</p><p class="checkpoint"><strong>What to expect:</strong> An editing area with a toolbar.</p></li>
+          <li><span class="step">In Brightspace</span><h3>Open the HTML Source Editor</h3><p>Find the <strong>HTML Source Editor</strong> control, usually shown as <strong>&lt;/&gt;</strong>. If needed, expand the toolbar or use Fullscreen. Hover over controls to read their names.</p><p class="checkpoint"><strong>What to expect:</strong> A plain-text window. Some starter code may already be there.</p></li>
+          <li><span class="step">In the source window</span><h3>Paste the copied page</h3><p>Click inside the source window. <strong>For this new blank page only,</strong> select its starter code with <kbd>Ctrl</kbd> + <kbd>A</kbd> (Mac: <kbd>Cmd</kbd> + <kbd>A</kbd>), then paste with <kbd>Ctrl</kbd> + <kbd>V</kbd> (Mac: <kbd>Cmd</kbd> + <kbd>V</kbd>).</p><p class="checkpoint"><strong>What to expect:</strong> Lots of code. That is normal. You do not need to read or change it.</p></li>
+          <li><span class="step">Back in Brightspace</span><h3>Apply, save, and check</h3><p>Apply the source-window change, then save the Brightspace page. Reopen the saved page and test its links and activities.</p><p class="checkpoint"><strong>Success looks like:</strong> The formatted page appears instead of code.</p></li>
+        </ol>
+        <p class="reference-note">Brightspace reference: <a href="https://community.d2l.com/brightspace/kb/articles/3681-add-and-organize-learning-materials-in-the-new-content-experience">Create a page in the New Content Experience</a> and <a href="https://community.d2l.com/brightspace/kb/articles/3652-about-brightspace-editor">Find the HTML Source Editor</a>. Your course’s controls may look slightly different.</p>
       </section>
-      <div class="section-head">
-        <p class="tag">Save and reuse</p>
-        <h2>Keep your work with Export and Import</h2>
-      </div>
-      <section class="save-grid">
-        <article class="save-card">
-          <h2>Export JSON</h2>
-          <p>
-            The Export JSON button downloads your whole page as a small .json
-            project file. This is separate from the Brightspace HTML. The HTML
-            is the finished page you paste into a course, and the JSON is the
-            editable source you can reopen later.
-          </p>
-        </article>
-        <article class="save-card">
-          <h2>Import JSON</h2>
-          <p>
-            The Import JSON button loads a .json file back into the builder with
-            every block intact, ready to keep editing. Use it to reuse a strong
-            page next term, or to open one a colleague shared with you.
-          </p>
-        </article>
-        <article class="save-card">
-          <h2>Autosave and Resume</h2>
-          <p>
-            The builder autosaves to this browser as you work. When you return,
-            choose Resume to pick up where you left off. Autosave stays in one
-            browser, so use Export JSON to move a page between computers or
-            people.
-          </p>
-        </article>
+      <!-- END: Primary copy-and-paste walkthrough -->
+
+      <!-- BEGIN: Editor comparison; replace illustration areas with annotated MCC screenshots when available -->
+      <section id="editor-views" aria-labelledby="views-title">
+        <div class="section-head"><p class="tag">Know where to paste</p><h2 id="views-title">One editor, two views</h2></div>
+        <p>These are simplified guides, not screenshots of the Brightspace interface.</p>
+        <div class="editor-comparison">
+          <article class="editor-example"><h3>Where you normally type</h3><div class="editor-illustration"><span class="illustration-label">Regular editing view</span><p class="example-heading">Welcome to this week</p><p>Your headings, paragraphs, and images appear as a formatted page.</p></div><p>Use this view for small wording changes after adding your page. Paste the CourseMaker code in the source window described next.</p></article>
+          <article class="editor-example"><h3>Where you paste the code</h3><div class="editor-illustration source-illustration"><span class="illustration-label">HTML Source Editor · &lt;/&gt;</span><p class="paste-label">Your copied page code goes here.</p><p>Click inside this window, then paste.</p></div><p>Open this view, paste everything CourseMaker copied, and apply the change. No code editing required.</p></article>
+        </div>
       </section>
-      <p class="save-follow">
-        The Widget Builder has the same Export JSON and Import JSON buttons, so
-        your team can build a shared set of standard homepage widgets and hand
-        them out as files.
-      </p>
-      <div class="section-head">
-        <p class="tag">Widget help</p>
-        <h2>Add widgets to a Brightspace homepage</h2>
-      </div>
-      <section class="widget-help">
-        <article class="widget-card">
-          <p class="tag">Video guide</p>
-          <h2>Watch the widget walkthrough</h2>
-          <p>
-            See how to open the homepage editor and add or update a custom
-            widget.
-          </p>
-          <a href="https://youtu.be/ItXixUVR300?si=0_dC1Wr00gIqMuvj"
-            >Watch the Brightspace video</a
-          >
-        </article>
-        <article class="widget-card">
-          <p class="tag">Step-by-step guide</p>
-          <h2>Follow the Scribe walkthrough</h2>
-          <p>
-            Use the visual instructions for editing a course homepage and its
-            Instructor Widget.
-          </p>
-          <a
-            href="https://scribehow.com/embed/Brightspace_how_to_edit_a_course_homepage_and_edit_Instructor_Widget__QgXLWjDySP-rgZySQU1oNQ"
-            >Open the Scribe walkthrough</a
-          >
-        </article>
+      <!-- END: Editor comparison -->
+
+      <!-- BEGIN: Troubleshooting -->
+      <section id="troubleshooting" aria-labelledby="trouble-title">
+        <div class="section-head"><p class="tag">Quick fixes</p><h2 id="trouble-title">What are you seeing?</h2></div>
+        <div class="faq">
+          <details><summary>My page shows code instead of the design.</summary><p>If you are still inside the source window, seeing code is expected. Apply the change to return to the regular editor. If code appears on the saved page, it may have been pasted into the regular editing area. Try the walkthrough on a new blank page and paste into <strong>HTML Source Editor</strong>. Keep any existing work until your new copy looks right. <a href="#contact-help">Still stuck? Ask us.</a></p></details>
+          <details><summary>I can’t find the HTML Source Editor button.</summary><p>Make sure you are editing a content page, rather than just viewing it. Look for the source-editor control; it may become available when the editor is expanded. <a href="https://community.d2l.com/brightspace/kb/articles/3652-about-brightspace-editor">D2L’s editor guide shows the control and editor views.</a> If your screen looks different, <a href="#contact-help">send us a screenshot of the toolbar</a>.</p></details>
+          <details><summary>Nothing happened when I pasted.</summary><p>Return to CourseMaker and select <strong>Copy page HTML</strong> again. Switch to Brightspace, click inside the source window, and use the paste keyboard shortcut. On Windows, use <kbd>Ctrl</kbd> + <kbd>V</kbd>; on a Mac, use <kbd>Cmd</kbd> + <kbd>V</kbd>. If copying produces no confirmation, <a href="#contact-help">contact support</a>.</p></details>
+          <details><summary>The page looks different after saving.</summary><p>Open the saved page outside the editing area first. If the layout still looks wrong, confirm that you copied the whole page with <strong>Copy page HTML</strong>. Try it on a new blank page without adding another template in Brightspace. If the problem continues, send us screenshots of the CourseMaker preview and the saved page through <a href="#contact-help">support</a>.</p></details>
+          <details><summary>The buttons or activities aren’t responding.</summary><p>Save the page and test it outside the editor. If the same activity works in CourseMaker but not on the saved Brightspace page, <a href="#contact-help">tell us the block name and where you pasted it</a>. You do not need to troubleshoot its code. Practice blocks do not send scores to the Brightspace gradebook.</p></details>
+          <details><summary>My image still says placeholder.</summary><p>The placeholder marks a spot for your own image. Follow that block’s image instructions in Brightspace’s regular editor, or supply an image address if the block has an Image URL field in CourseMaker. Include a useful image description. If you are unsure how to replace the placeholder, <a href="#contact-help">send us the block name</a>.</p></details>
+          <details><summary>I changed CourseMaker, but Brightspace shows the old version.</summary><p>The copies do not update automatically. Copy the revised page again and follow <a href="#replace-page">Update an existing page</a>. Keep any changes made only in Brightspace before replacing its content.</p></details>
+          <details><summary>I changed or deleted the wrong block.</summary><p>Use <strong>Undo</strong> in CourseMaker to step back. For a page from a previous session, reopen your saved project with <strong>Import JSON</strong>. If you changed the Brightspace copy, stop before saving unwanted changes and <a href="#contact-help">ask for help</a> if you are unsure how to recover.</p></details>
+        </div>
       </section>
-      <div class="section-head">
-        <p class="tag">Community</p>
-        <h2>Help CourseMaker keep getting better</h2>
-      </div>
-      <section class="community-grid">
-        <article class="community-card">
-          <p class="tag">Suggest an addition</p>
-          <h2>Request a template or block</h2>
-          <p>
-            Tell us what you keep rebuilding in Brightspace. Strong, repeatable
-            ideas can become shared CourseMaker components.
-          </p>
-          <a href="mailto:online@mclennan.edu?subject=CourseMaker%20Suggestion"
-            >Send a suggestion</a
-          >
-        </article>
-        <article class="community-card">
-          <p class="tag">Share a practice</p>
-          <h2>Show us what works</h2>
-          <p>
-            Have a clear course page or teaching pattern that others could use?
-            Share it with Instructional Design &amp; Innovation.
-          </p>
-          <a
-            href="mailto:online@mclennan.edu?subject=CourseMaker%20Community%20Example"
-            >Share an example</a
-          >
-        </article>
+      <!-- END: Troubleshooting -->
+
+      <!-- BEGIN: Final checks -->
+      <section id="final-check" aria-labelledby="check-title">
+        <div class="section-head"><p class="tag">Before students use it</p><h2 id="check-title">Give the finished page a quick check</h2></div>
+        <ul class="finish-list"><li>Replace example text, image placeholders, and sample links.</li><li>Check dates, directions, and the location of any assignment or discussion.</li><li>Open links and confirm students can access their destinations.</li><li>Check image descriptions, video captions, and audio transcripts.</li><li>Try interactive activities on the saved page, including with a keyboard.</li><li>Review the page as a learner and confirm its visibility settings.</li></ul>
+        <p class="notice"><strong>Check page is a helpful first pass.</strong> It can flag common issues in CourseMaker, but it cannot replace reviewing the finished page in your course.</p>
       </section>
-      <div class="section-head">
-        <p class="tag">Frequently asked questions</p>
-        <h2>Answers before the panic button</h2>
-      </div>
-      <section class="faq">
-        <details>
-          <summary>Do I need to know HTML?</summary>
-          <p>
-            No. The Page Builder handles the HTML while you edit the page
-            through form fields and a visual preview.
-          </p>
-        </details>
-        <details>
-          <summary>Can I save a page and come back to it later?</summary>
-          <p>
-            Yes. The Page Builder autosaves in your browser and shows a Resume
-            option when you return. For a copy you can keep or move between
-            computers, use Export JSON to download the page as a file, then
-            Import JSON to open it again.
-          </p>
-        </details>
-        <details>
-          <summary>How do I share a page with a colleague?</summary>
-          <p>
-            Use Export JSON to download the page as a .json file and send it to
-            them. They open the Page Builder, choose Import JSON to load it, and
-            customize their own copy. This shares the editable source, not just
-            the finished HTML.
-          </p>
-        </details>
-        <details>
-          <summary>What if I delete or change the wrong block?</summary>
-          <p>
-            Use the Undo button, or press Ctrl+Z (Cmd+Z on a Mac), to step back.
-            You can also duplicate a block with its copy control instead of
-            rebuilding it.
-          </p>
-        </details>
-        <details>
-          <summary>Can I edit the page after copying it?</summary>
-          <p>
-            Yes. The output is standard HTML with inline styles, so it can be
-            revised in Brightspace or rebuilt in CourseMaker.
-          </p>
-        </details>
-        <details>
-          <summary>Will this work with the New Content Experience?</summary>
-          <p>
-            The generated pages use responsive, self-contained HTML intended to
-            display inside Brightspace content pages. Always preview the
-            finished page in your course.
-          </p>
-        </details>
-        <details>
-          <summary>Can I use other colors?</summary>
-          <p>
-            The builder uses approved MCC colors. Keeping the palette limited
-            supports brand consistency and accessible contrast.
-          </p>
-        </details>
+      <!-- END: Final checks -->
+
+      <!-- BEGIN: Saving and reopening -->
+      <section id="save-reuse" aria-labelledby="save-title">
+        <div class="section-head"><p class="tag">Keep your work</p><h2 id="save-title">Save a copy you can edit later</h2></div>
+        <p>Select <strong>Export JSON</strong> after building or revising a page. Give the downloaded file a useful name and keep it with your course materials. <strong>You never need to open or edit the file yourself.</strong> CourseMaker reads it for you.</p>
+        <div class="table-wrap"><table><caption>Choose the button that matches your goal</caption><thead><tr><th scope="col">I want to…</th><th scope="col">Use this button</th><th scope="col">What it does</th></tr></thead><tbody>
+          <tr><th scope="row">Put my page into Brightspace</th><td>Copy page HTML</td><td>Copies the finished page for pasting into Brightspace.</td></tr>
+          <tr><th scope="row">Keep an editable copy</th><td>Export JSON</td><td>Saves a CourseMaker project file to your computer.</td></tr>
+          <tr><th scope="row">Reopen or reuse a saved project</th><td>Import JSON</td><td>Opens that project in CourseMaker with its blocks ready to edit.</td></tr>
+          <tr><th scope="row">Download a finished webpage file</th><td>Download HTML</td><td>Saves an HTML file. This is an optional alternative, not required for the copy-and-paste walkthrough.</td></tr>
+        </tbody></table></div>
+        <div class="save-grid"><article class="save-card"><h3>Come back later</h3><p>CourseMaker also autosaves in the current browser. If a saved page is available when you return, select <strong>Resume page</strong>. Keep an exported project as your dependable copy.</p></article><article class="save-card"><h3>Use another computer</h3><p>Bring your exported project file with you, open CourseMaker, and select <strong>Import JSON</strong>. Browser autosave and favorites do not travel between computers.</p></article><article class="save-card"><h3>Share with a colleague</h3><p>Give them the exported project file. They select <strong>Import JSON</strong> in CourseMaker and customize their own copy. No one needs to read the file’s contents.</p></article></div>
       </section>
-      <section class="cta">
-        <p class="tag">Ready when you are</p>
-        <h2>Make your next Brightspace page the easy one.</h2>
-        <a class="button" href="mcc-brightspace-template-builder.html"
-          >Start building</a
-        >
+      <!-- END: Saving and reopening -->
+
+      <!-- BEGIN: Editing and replacing existing content -->
+      <section id="edit-later" aria-labelledby="edit-title">
+        <div class="section-head"><p class="tag">Making changes</p><h2 id="edit-title">Update a page after publishing</h2></div>
+        <div class="widget-help"><article class="widget-card"><h3>Small wording changes</h3><p>Use Brightspace’s regular editing view to revise a sentence, fix a typo, or adjust a link. Save and check the result. You do not need to open the code to change ordinary text.</p></article><article class="widget-card"><h3>Bigger layout changes</h3><p>Open the saved CourseMaker project with <strong>Import JSON</strong>. Add, remove, or rearrange blocks there. Export an updated project before transferring the revised page.</p></article></div>
+        <p class="notice"><strong>CourseMaker and Brightspace are separate copies.</strong> Changes made in Brightspace do not return to your CourseMaker project. Keep track of those edits before replacing a page.</p>
+        <div class="faq" id="replace-page"><details><summary>Update an existing page without losing content</summary><div class="faq-body"><ol><li>Keep a copy of the current Brightspace page and any images or text you need. Ask support if you are unsure how.</li><li>Bring any changes made only in Brightspace into your CourseMaker project.</li><li>Copy the revised page and check it on a new blank Brightspace page first.</li><li>When you are ready to replace the <strong>entire</strong> existing page, open that page for editing, open its HTML Source Editor, select the content inside that source window, and paste the revised copy.</li><li>Apply the change, save, and recheck links, media, and activities.</li></ol><p>If you only want to insert one block into an existing page, <a href="#contact-help">ask us to help with placement</a>. You do not need to work out where to insert code.</p></div></details></div>
       </section>
+      <!-- END: Editing and replacing existing content -->
+
+      <!-- BEGIN: Optional builder tips -->
+      <section aria-labelledby="builder-tips-title"><div class="section-head"><p class="tag">Useful shortcuts</p><h2 id="builder-tips-title">Get comfortable in CourseMaker</h2></div>
+        <div class="guide-grid"><article class="guide"><h3>Try a preview</h3><p>Select <strong>Preview</strong> beside a block to see a sample before adding it.</p></article><article class="guide"><h3>Keep favorites</h3><p>Select <strong>Favorite</strong>. Find those choices and your last five additions in <strong>Favorites &amp; recently used</strong>.</p></article><article class="guide"><h3>Find a block</h3><p>Search by name or purpose, such as “instructor,” “rubric,” or “office hours.”</p></article><article class="guide"><h3>Read its guidance</h3><p>The editor’s <strong>How this block works</strong> note explains whether a block displays directions, provides practice, or links to another activity.</p></article></div>
+        <p><a href="building-blocks.html">Explore the Building Block Guide</a></p>
+      </section>
+      <!-- END: Optional builder tips -->
+
+      <!-- BEGIN: Separate homepage widget help -->
+      <section id="widget-help" aria-labelledby="widget-title"><div class="section-head"><p class="tag">A different task</p><h2 id="widget-title">Add a homepage widget</h2></div><p>Widgets appear on the course homepage. Follow these guides for that task; use the <a href="#copy-paste">course-page walkthrough above</a> for pages inside Content.</p>
+      <div class="widget-help"><article class="widget-card"><p class="tag">Video guide</p><h3>Watch the widget walkthrough</h3><p>Follow the demonstration of editing a homepage and its custom widget.</p><a href="https://youtu.be/ItXixUVR300?si=0_dC1Wr00gIqMuvj">Watch the homepage widget video</a></article><article class="widget-card"><p class="tag">Visual steps</p><h3>Follow the Scribe walkthrough</h3><p>Use the step-by-step guide to editing a course homepage and Instructor Widget.</p><a href="https://scribehow.com/embed/Brightspace_how_to_edit_a_course_homepage_and_edit_Instructor_Widget__QgXLWjDySP-rgZySQU1oNQ">Open the homepage widget guide</a></article></div></section>
+      <!-- END: Separate homepage widget help -->
+
+      <!-- BEGIN: Human support and community -->
+      <section id="contact-help" aria-labelledby="contact-title"><div class="section-head"><p class="tag">We can help</p><h2 id="contact-title">Tell us where you got stuck</h2></div><p>You do not need to diagnose the problem. Tell us the course and page name, what you clicked, and what happened. A screenshot helps; leave out student names, grades, and other student information.</p>
+      <div class="help-grid"><article class="help-card"><p class="tag">CourseMaker and Brightspace</p><h3>Get help with a page</h3><p>Open an email with prompts already filled in. Add your details before sending.</p><a href="mailto:online@mclennan.edu?subject=CourseMaker%20help&amp;body=Course%20name%20and%20section%3A%20%0APage%20name%3A%20%0AWhat%20I%20clicked%3A%20%0AWhat%20I%20expected%3A%20%0AWhat%20happened%20instead%3A%20%0A%0AI%20can%20attach%20a%20screenshot%20with%20student%20information%20removed.%0A">Start a support email</a></article><article class="help-card"><p class="tag">Instructional design</p><h3>Plan or improve a page</h3><p>We can help with organization, student directions, accessibility, and choosing useful blocks.</p><a href="mailto:online@mclennan.edu">Email online@mclennan.edu</a></article></div>
+      <p>No email app opens? Email <a href="mailto:online@mclennan.edu">online@mclennan.edu</a> and include those details.</p></section>
+      <section aria-labelledby="community-title"><div class="section-head"><p class="tag">Your ideas</p><h2 id="community-title">Help CourseMaker get better</h2></div><div class="community-grid"><article class="community-card"><h3>Request a template or block</h3><p>Tell us what you keep rebuilding and how it would help your students.</p><a href="mailto:online@mclennan.edu?subject=CourseMaker%20Suggestion">Send a suggestion</a></article><article class="community-card"><h3>Share a useful example</h3><p>Show us a course page or teaching approach that other faculty could adapt.</p><a href="mailto:online@mclennan.edu?subject=CourseMaker%20Community%20Example">Share an example</a></article></div></section>
+      <!-- END: Human support and community -->
+      <section class="cta"><h2>Ready to build your page?</h2><p>Choose a template, make it yours, and come back to the copy-and-paste steps when you are ready.</p><a class="button" href="mcc-brightspace-template-builder.html">Open Page Builder</a></section>
     </main>
+
     <footer>
       <div class="footer-main">
         <div>
@@ -877,21 +783,18 @@
       </div>
     </footer>
     <script>
-      document
-        .getElementById("site-search")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          var q = document.getElementById("search-box").value.toLowerCase();
-          if (/block|accordion|tab|question|timeline|carousel|table|layout|sort|sequence|match|poll|audio|reading/.test(q))
-            location.href = "building-blocks.html";
-          else if (/widget|homepage|instructor/.test(q))
-            location.href = "widget-builder.html";
-          else if (/support|help|accessib|brightspace|json|save|import|export|autosave/.test(q))
-            location.href = "support.html";
-          else if (/template|policy|module/.test(q))
-            location.href = "templates.html";
-          else location.href = "mcc-brightspace-template-builder.html";
-        });
+      document.getElementById('site-search').addEventListener('submit',function(event){
+        event.preventDefault();var q=document.getElementById('search-box').value.trim().toLowerCase();
+        if(/paste|copy|html|source|editor/.test(q)) location.href='#copy-paste';
+        else if(/broken|problem|blank|wrong|trouble|not work/.test(q)) location.href='#troubleshooting';
+        else if(/json|save|resume|import|export|share/.test(q)) location.href='#save-reuse';
+        else if(/update|edit|replace/.test(q)) location.href='#edit-later';
+        else if(/widget|homepage/.test(q)) location.href='#widget-help';
+        else if(/help|support|accessib|brightspace/.test(q)) location.href='#contact-help';
+        else if(/block|accordion|tab|question|timeline|carousel|table|layout|sort|sequence|match|audio|reading|instructor|rubric|objective/.test(q)) location.href='building-blocks.html';
+        else if(/template|policy|module/.test(q)) location.href='templates.html';
+        else location.href='#contact-help';
+      });
     </script>
   </body>
 </html>
