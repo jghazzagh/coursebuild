@@ -733,7 +733,7 @@
   #block-example::backdrop {background:rgba(0,27,59,.55);}
   .example-heading {display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
   #block-example-title {font-size:24px;margin:0;color:#003366;}
-  #block-example-frame {display:block;width:100%;height:420px;border:1px solid #c9d4da;border-radius:6px;background:#fff;margin:16px 0;}
+  #block-example-content {display:block;width:100%;height:420px;overflow:auto;padding:16px;border:1px solid #c9d4da;border-radius:6px;background:#fff;margin:16px 0;overflow-wrap:anywhere;}
 </style>
 
 <a class="skip-link" href="#builder">Skip to main content</a>
@@ -913,7 +913,7 @@
   <div class="example-heading"><h2 id="block-example-title">Block preview</h2><button type="button" class="btn" id="close-block-example">Close preview</button></div>
   <p class="field-help">Sample content only. Try the example, then add a fresh block to your page.</p>
   <div id="example-behavior"></div>
-  <iframe id="block-example-frame" title="Example of the selected building block" sandbox="allow-scripts"></iframe>
+  <div id="block-example-content" role="region" aria-label="Example of the selected building block" tabindex="0"></div>
   <button type="button" class="btn btn-primary" id="insert-block-example">Add this block</button>
 </dialog>
 
@@ -1711,13 +1711,21 @@
     document.getElementById('block-example-title').textContent = defs[key].label;
     document.getElementById('example-behavior').innerHTML = behaviorHtml(key);
     const sample = makeBlock(key); syncRepeater(sample);
-    document.getElementById('block-example-frame').srcdoc = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Block example</title></head><body style="margin:0;padding:16px;overflow-wrap:anywhere">'+renderBlockHtml(sample)+'</body></html>';
+    document.getElementById('block-example-content').innerHTML = renderBlockHtml(sample);
+    document.getElementById('block-example-content').scrollTop = 0;
     exampleDialog.showModal();
     document.getElementById('close-block-example').focus();
   }
+  // Sample links should not navigate away from the builder.
+  document.getElementById('block-example-content').addEventListener('click', event => {
+    if (event.target.closest('a')) {
+      event.preventDefault();
+      toast('Example link only. Add the block to set your own destination.');
+    }
+  });
   document.getElementById('close-block-example').addEventListener('click',()=>exampleDialog.close());
   exampleDialog.addEventListener('close',()=>{
-    document.getElementById('block-example-frame').srcdoc = '';
+    document.getElementById('block-example-content').replaceChildren();
     if (exampleOpener && exampleOpener.isConnected) exampleOpener.focus();
   });
   document.getElementById('insert-block-example').addEventListener('click',()=>{
