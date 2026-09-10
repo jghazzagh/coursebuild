@@ -791,6 +791,24 @@
   #clear-block-search[hidden] {display:none;}
   @media (prefers-reduced-motion:reduce) {#block-library .category-chevron {transition:none;}}
   /* END: Block library navigation */
+
+  /* Compact catalog actions, browser-local shortcuts, and block preview. */
+  .library-card {border:1px solid #d0d9de;border-radius:6px;background:#fff;overflow:hidden;}
+  #block-library .library-card .add-block, #block-shortcuts .add-block {border:0;border-radius:0;}
+  .library-card-actions {display:flex;justify-content:flex-end;gap:6px;padding:0 8px 8px;}
+  .library-card-actions button {font-size:12px;padding:5px 8px;min-height:32px;color:#003366;background:#f2f6f8;border:1px solid #c9d4da;border-radius:4px;cursor:pointer;}
+  .library-card-actions button:hover {border-color:var(--mcc-teal);background:#eff9fb;}
+  .library-card-actions button[aria-pressed="true"] {background:#d6e8ee;border-color:#003366;}
+  #block-shortcuts .block-description {display:none;}
+  #block-shortcuts .block-name {font-size:13px;}
+  #block-shortcuts .library-card {margin-bottom:7px;}
+  #block-shortcuts h3 {font-size:14px;margin:10px 0 8px;}
+  .behavior-note {font-size:13px;line-height:1.5;margin:12px 0;padding:12px;border-left:4px solid #003366;background:#edf4f7;color:#182936;}
+  #block-example {width:min(850px,94vw);max-height:90vh;overflow:auto;border:1px solid #c9d4da;border-radius:8px;padding:22px;color:#182936;}
+  #block-example::backdrop {background:rgba(0,27,59,.55);}
+  .example-heading {display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  #block-example-title {font-size:24px;margin:0;color:#003366;}
+  #block-example-content {display:block;width:100%;height:420px;overflow:auto;padding:16px;border:1px solid #c9d4da;border-radius:6px;background:#fff;margin:16px 0;overflow-wrap:anywhere;}
 </style>
 
 <a class="skip-link" href="#builder">Skip to main content</a>
@@ -890,6 +908,10 @@
           </details>
           <!-- BEGIN: Categorized building block library -->
           <div class="library-tools"><p id="library-status" role="status" aria-live="polite" aria-atomic="true"></p><button type="button" id="clear-block-search" hidden>Clear search</button></div>
+          <details class="cat-acc" id="shortcut-details">
+            <summary>Favorites &amp; recently used</summary>
+            <div id="block-shortcuts" style="padding:8px"></div>
+          </details>
           <div id="block-library"></div>
           <!-- END: Categorized building block library -->
         </div>
@@ -958,6 +980,14 @@
   </div>
 </footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<dialog id="block-example" aria-labelledby="block-example-title">
+  <div class="example-heading"><h2 id="block-example-title">Block preview</h2><button type="button" class="btn" id="close-block-example">Close preview</button></div>
+  <p class="field-help">Sample content only. Try the example, then add a fresh block to your page.</p>
+  <div id="example-behavior"></div>
+  <div id="block-example-content" role="region" aria-label="Example of the selected building block" tabindex="0"></div>
+  <button type="button" class="btn btn-primary" id="insert-block-example">Add this block</button>
+</dialog>
 <script>
 (function () {
   'use strict';
@@ -1685,6 +1715,99 @@
       }
     }
   }
+  // Catalog preferences are browser-local and separate from page autosave.
+  const CATALOG_KEY = 'mcc-coursemaker-catalog-v1';
+  let favorites = [], recentBlocks = [];
+  const selectableBlock = key => !!defs[key] && !defs[key].internal;
+  try {
+    const preferences = JSON.parse(localStorage.getItem(CATALOG_KEY) || '{}');
+    if (Array.isArray(preferences.favorites)) favorites = [...new Set(preferences.favorites.filter(selectableBlock))];
+    if (Array.isArray(preferences.recent)) recentBlocks = [...new Set(preferences.recent.filter(selectableBlock))].slice(0,5);
+  } catch (_) {}
+  function saveCatalog() {
+    try { localStorage.setItem(CATALOG_KEY, JSON.stringify({favorites, recent:recentBlocks})); }
+    catch (_) { toast('Browser storage is unavailable. Shortcuts will last for this session only.'); }
+  }
+  function libraryCard(key, location) {
+    const d = defs[key], favorite = favorites.includes(key);
+    const helpId = location + '-help-' + key;
+    return '<div class="library-card"><button class="add-block" type="button" data-add="' + key + '" aria-label="Add ' + attr(d.label) + '" aria-describedby="' + helpId + '"><span class="plus" aria-hidden="true">+</span><span class="block-copy"><span class="block-name">' + e(d.label) + '</span><span class="block-description" id="' + helpId + '">' + e(d.description) + '</span></span></button><div class="library-card-actions"><button type="button" data-example="' + key + '" aria-label="Preview ' + attr(d.label) + '">Preview</button><button type="button" data-favorite="' + key + '" aria-label="Favorite ' + attr(d.label) + '" aria-pressed="' + favorite + '">' + (favorite ? 'Favorited' : 'Favorite') + '</button></div></div>';
+  }
+  function renderShortcuts() {
+    document.getElementById('block-shortcuts').innerHTML = '<p class="field-help">Saved in this browser. Recent blocks shows your last five choices.</p><h3>Favorites</h3>' + (favorites.map(key => libraryCard(key,'favorite')).join('') || '<p class="field-help">Select Favorite beside any block.</p>') + '<h3>Recently used</h3>' + (recentBlocks.map(key => libraryCard(key,'recent')).join('') || '<p class="field-help">Add a block to start this list.</p>');
+  }
+  const RESPONSE_TYPES = new Set(['knowledge','multipleChoice','scenario','sorting','sequence','matching','estimate','selfCheck','interactiveChecklist','branching']);
+  const REVEAL_TYPES = new Set(['annotated','accordion','tabs','flip','reveal','carousel','interactiveTimeline','pathTimeline','process','weeklyRhythm','workedExample','scenarioReveal','decoder','hotspot','storyboard','compare']);
+  function behaviorText(type) {
+    if (RESPONSE_TYPES.has(type)) return 'Practice only. This block has no response-saving, submission, or Brightspace gradebook connection. Do not rely on answers or progress remaining after a reload or return visit. Use a Brightspace assessment to collect graded work.';
+    if (REVEAL_TYPES.has(type)) return 'Exploration only. This block does not save progress or report completion or grades to Brightspace. Expanded sections and current steps are not stored by the block.';
+    if (type === 'discussionPrompt') return 'Instructions only. Students post and reply in a separate Brightspace discussion; this block does not collect posts or assign grades.';
+    if (type === 'assignmentBrief') return 'Instructions only. Students submit work through the assignment tool you specify; this block does not collect files or assign grades.';
+    if (type === 'rubricTable') return 'Display only. This table explains criteria; it is not connected to a Brightspace rubric or gradebook.';
+    if (type === 'dueDate') return 'Display only. This reminder does not set Brightspace due dates. Update dates when reusing a page in another term.';
+    if (['video','audio'].includes(type)) return 'Embedded media. This block does not record completion or grades. Any tracking provided by the media service is separate.';
+    return 'Content only. This block does not collect responses or report grades or completion to Brightspace.';
+  }
+  function behaviorHtml(type) { return '<p class="behavior-note"><strong>How this block works</strong><br>' + e(behaviorText(type)) + '</p>'; }
+  function addLibraryBlock(key) {
+    if (!selectableBlock(key)) return;
+    snapshot();
+    const block = makeBlock(key); syncRepeater(block);
+    if (state.insertAt != null && state.insertAt <= state.blocks.length) {
+      state.blocks.splice(state.insertAt, 0, block);
+      state.insertAt = null;
+    } else {
+      state.blocks.push(block);
+    }
+    state.selectedId = block.id;
+    recentBlocks = [key, ...recentBlocks.filter(k => k !== key)].slice(0,5);
+    saveCatalog(); renderShortcuts(); renderAll(); toast(defs[key].label + ' added.');
+    setTimeout(() => document.querySelector('[data-block-id="' + block.id + '"]')?.scrollIntoView({behavior:'smooth',block:'center'}), 20);
+  }
+  function handleLibraryAction(event) {
+    const favorite = event.target.closest('[data-favorite]');
+    if (favorite) {
+      const key = favorite.dataset.favorite;
+      const source = favorite.closest('#block-shortcuts') ? 'block-shortcuts' : 'block-library';
+      favorites = favorites.includes(key) ? favorites.filter(k => k !== key) : [...favorites,key];
+      saveCatalog(); renderLibrary(el.search.value);
+      (document.getElementById(source).querySelector('[data-favorite="' + key + '"]') || document.querySelector('#shortcut-details summary')).focus();
+      return;
+    }
+    const example = event.target.closest('[data-example]');
+    if (example) { showBlockExample(example.dataset.example, example); return; }
+    const add = event.target.closest('[data-add]');
+    if (add) addLibraryBlock(add.dataset.add);
+  }
+  let exampleKey = null, exampleOpener = null;
+  const exampleDialog = document.getElementById('block-example');
+  function showBlockExample(key, opener) {
+    if (!selectableBlock(key)) return;
+    exampleKey = key; exampleOpener = opener;
+    document.getElementById('block-example-title').textContent = defs[key].label;
+    document.getElementById('example-behavior').innerHTML = behaviorHtml(key);
+    const sample = makeBlock(key); syncRepeater(sample);
+    document.getElementById('block-example-content').innerHTML = renderBlockHtml(sample);
+    document.getElementById('block-example-content').scrollTop = 0;
+    exampleDialog.showModal();
+    document.getElementById('close-block-example').focus();
+  }
+  // Sample links should not navigate away from the builder.
+  document.getElementById('block-example-content').addEventListener('click', event => {
+    if (event.target.closest('a')) {
+      event.preventDefault();
+      toast('Example link only. Add the block to set your own destination.');
+    }
+  });
+  document.getElementById('close-block-example').addEventListener('click', () => exampleDialog.close());
+  exampleDialog.addEventListener('close', () => {
+    document.getElementById('block-example-content').replaceChildren();
+    if (exampleOpener && exampleOpener.isConnected) exampleOpener.focus();
+  });
+  document.getElementById('insert-block-example').addEventListener('click', () => {
+    const key = exampleKey; exampleDialog.close(); addLibraryBlock(key);
+  });
+
   // Each block has one primary category. Internal blocks remain unavailable in the menu.
   const LIBRARY_CATEGORIES = ["Text & Layout", "Instructor Information", "Course Organization", "Callouts & Key Ideas", "Media & Visuals", "Reveal & Explore", "Timelines & Processes", "Practice & Feedback", "Scenarios & Examples", "Resources & Data"];
   const SEARCH_ALIASES = {
@@ -1712,13 +1835,14 @@
       }).sort((a, b) => orderIndex(a[0]) - orderIndex(b[0]));
       if (!entries.length) return '';
       total += entries.length;
-      const buttons = entries.map(([key,d]) => '<button class="add-block" type="button" data-add="' + key + '" aria-label="Add ' + attr(d.label) + '" aria-describedby="block-help-' + key + '"><span class="plus" aria-hidden="true">+</span><span class="block-copy"><span class="block-name">' + e(d.label) + '</span><span class="block-description" id="block-help-' + key + '">' + e(d.description) + '</span></span></button>').join('');
+      const buttons = entries.map(([key]) => libraryCard(key, 'catalog')).join('');
       const open = q ? true : openCategory === cat;
       return '<details class="cat-acc" data-cat="' + e(cat) + '"' + (open ? ' open' : '') + '><summary><span class="category-name"><span class="category-chevron" aria-hidden="true">\u203a</span>' + e(cat) + '</span><span class="cat-count" aria-label="' + entries.length + ' blocks">' + entries.length + '</span></summary><div class="block-library">' + buttons + '</div></details>';
     }).join('');
     if (!total) el.library.innerHTML = '<div class="empty-search">No matching blocks. Try a broader term such as \u201cimage,\u201d \u201ctasks,\u201d or \u201cquestions,\u201d or clear your search.</div>';
     document.getElementById('library-status').textContent = total + (q ? ' matching blocks' : ' blocks in ' + LIBRARY_CATEGORIES.length + ' categories');
     document.getElementById('clear-block-search').hidden = !q;
+    renderShortcuts();
   }
 
   function blockColor(block) { return block.color || state.accent; }
@@ -2409,19 +2533,9 @@
       }
       return;
     }
-    const button = event.target.closest('[data-add]'); if (!button) return;
-    snapshot();
-    const block = makeBlock(button.dataset.add); syncRepeater(block);
-    if (state.insertAt != null && state.insertAt <= state.blocks.length) {
-      state.blocks.splice(state.insertAt, 0, block);
-      state.insertAt = null;
-    } else {
-      state.blocks.push(block);
-    }
-    state.selectedId = block.id;
-    renderAll(); toast(defs[block.type].label + ' added.');
-    setTimeout(() => document.querySelector('[data-block-id="' + block.id + '"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 20);
+    handleLibraryAction(event);
   });
+  document.getElementById('block-shortcuts').addEventListener('click', handleLibraryAction);
   el.search.addEventListener('input', () => renderLibrary(el.search.value));
   document.getElementById('clear-block-search').addEventListener('click', () => {
     el.search.value = '';
@@ -2651,7 +2765,7 @@
       : 'The browser blocked the pop-up. Allow pop-ups for this site to open the preview.');
   });
   document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || !focusMode) return;
+    if (event.key !== 'Escape' || !focusMode || document.getElementById('block-example').open) return;
     if (document.querySelector('.audit-overlay')) return;
     if (state.selectedId) {
       state.selectedId = null;
