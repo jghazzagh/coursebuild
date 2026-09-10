@@ -720,9 +720,40 @@
   #show-library { display: none; }
   .builder-wrap.library-hidden #show-library { display: inline-block; }
   .builder-wrap.library-hidden .control-panel { display: none; }
+  /* A slim, always-in-the-DOM rail sits where the panel used to be. It stays
+     collapsed to nothing while the panel is visible, and becomes a narrow,
+     easy-to-spot strip in that exact same spot once the panel is hidden, so
+     restoring it doesn't require hunting somewhere else on the page. */
+  .collapsed-rail {
+    display: none;
+    width: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  .builder-wrap.library-hidden .collapsed-rail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: 100%;
+    min-height: 220px;
+    padding: 14px 4px;
+    border: 1px solid #cad5da;
+    border-radius: 12px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    color: var(--mcc-navy);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .collapsed-rail:hover { border-color: var(--mcc-teal); background: #eff9fb; }
+  .collapsed-rail span[aria-hidden] { font-size: 22px; line-height: 1; }
+  .collapsed-rail .rail-label { writing-mode: vertical-rl; text-orientation: mixed; letter-spacing: .04em; }
   /* With the library hidden, give the preview and editor the reclaimed space and
      lay the editor's fields out side by side so it scrolls far less. */
-  .builder-wrap.library-hidden .builder-grid { grid-template-columns: minmax(400px, 1fr) 460px; }
+  .builder-wrap.library-hidden .builder-grid { grid-template-columns: 44px minmax(400px, 1fr) 460px; }
   .builder-wrap.library-hidden .editor-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
   .builder-wrap.library-hidden .editor-fields > .editor-acc { grid-column: 1 / -1; margin: 0; }
   .builder-wrap.library-hidden .editor-acc-body { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
@@ -735,6 +766,9 @@
     /* The two-column grid already collapses here; keep the toggle from fighting it. */
     .builder-wrap.library-hidden .builder-grid { grid-template-columns: minmax(380px, 1fr); }
     .builder-wrap.library-hidden .editor-acc-body { display: block; }
+    /* No room for a narrow vertical rail at this width; make it a normal full-width button instead. */
+    .builder-wrap.library-hidden .collapsed-rail { flex-direction: row; width: 100%; min-height: 0; padding: 11px 14px; }
+    .builder-wrap.library-hidden .collapsed-rail .rail-label { writing-mode: horizontal-tb; }
   }
   /* END: Collapsible left column */
 
@@ -810,6 +844,7 @@
     </div>
 
     <div class="builder-grid">
+      <button type="button" class="collapsed-rail" id="show-library-rail" title="Show the building blocks panel"><span aria-hidden="true">&rsaquo;</span><span class="rail-label">Show blocks</span></button>
       <aside class="panel control-panel" aria-label="Page controls and building blocks">
         <div class="panel-body">
           <div class="panel-head">
@@ -2590,7 +2625,9 @@
     const hideBtn = document.getElementById('hide-library');
     if (hideBtn) hideBtn.setAttribute('aria-expanded', String(!hidden));
     // Move focus to the control that is actually visible so keyboard users are not stranded.
-    const target = document.getElementById(hidden ? 'show-library' : 'hide-library');
+    // The rail sits in the panel's original spot, so send focus there first; it's the
+    // most natural place to look for a way back once the panel has vanished.
+    const target = document.getElementById(hidden ? 'show-library-rail' : 'hide-library');
     if (target) target.focus();
     toast(hidden
       ? 'Building blocks hidden. The preview and editor now use the full width.'
@@ -2598,6 +2635,7 @@
   }
   document.getElementById('hide-library').addEventListener('click', () => setLibraryHidden(true));
   document.getElementById('show-library').addEventListener('click', () => setLibraryHidden(false));
+  document.getElementById('show-library-rail').addEventListener('click', () => setLibraryHidden(false));
   document.getElementById('focus-toggle').addEventListener('click', () => setFocusMode(!focusMode));
   document.getElementById('drawer-close').addEventListener('click', () => {
     state.selectedId = null;
