@@ -698,6 +698,46 @@
     *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
   }
 
+  /* BEGIN: Collapsible left column */
+  .panel-collapse {
+    padding: 6px 10px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--mcc-navy);
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .panel-collapse:hover { border-color: var(--mcc-teal); }
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 0 0 16px;
+  }
+  .panel-head h2 { margin: 0; }
+  #show-library { display: none; }
+  .builder-wrap.library-hidden #show-library { display: inline-block; }
+  .builder-wrap.library-hidden .control-panel { display: none; }
+  /* With the library hidden, give the preview and editor the reclaimed space and
+     lay the editor's fields out side by side so it scrolls far less. */
+  .builder-wrap.library-hidden .builder-grid { grid-template-columns: minmax(400px, 1fr) 460px; }
+  .builder-wrap.library-hidden .editor-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+  .builder-wrap.library-hidden .editor-fields > .editor-acc { grid-column: 1 / -1; margin: 0; }
+  .builder-wrap.library-hidden .editor-acc-body { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+  .builder-wrap.library-hidden .editor-acc-body > .editor-field,
+  .builder-wrap.library-hidden .editor-acc-body > .repeater-group { margin: 0; }
+  .builder-wrap.library-hidden .editor-acc-body > .contrast-card,
+  .builder-wrap.library-hidden .editor-acc-body > .snippet-box { grid-column: 1 / -1; margin: 0; }
+  .builder-wrap.library-hidden .editor-acc-body > fieldset { margin: 0; }
+  @media (max-width: 1050px) {
+    /* The two-column grid already collapses here; keep the toggle from fighting it. */
+    .builder-wrap.library-hidden .builder-grid { grid-template-columns: minmax(380px, 1fr); }
+    .builder-wrap.library-hidden .editor-acc-body { display: block; }
+  }
+  /* END: Collapsible left column */
+
   /* BEGIN: Block library navigation; header styling is unchanged. */
   #block-library .cat-acc > summary {font-size:13px;font-weight:700;letter-spacing:0;text-transform:none;gap:10px;min-height:46px;}
   #block-library .category-name {display:flex;align-items:center;gap:8px;}
@@ -717,23 +757,6 @@
   #clear-block-search[hidden] {display:none;}
   @media (prefers-reduced-motion:reduce) {#block-library .category-chevron {transition:none;}}
   /* END: Block library navigation */
-
-  /* Compact catalog actions and optional preview */
-  .library-card {border:1px solid #d0d9de;border-radius:6px;background:#fff;overflow:hidden;}
-  #block-library .library-card .add-block, #block-shortcuts .add-block {border:0;border-radius:0;}
-  .library-card-actions {display:flex;justify-content:flex-end;gap:6px;padding:0 8px 8px;}
-  .library-card-actions button {font-size:12px;padding:5px 8px;min-height:32px;color:#003366;background:#f2f6f8;border:1px solid #c9d4da;border-radius:4px;}
-  .library-card-actions button[aria-pressed="true"] {background:#d6e8ee;border-color:#003366;}
-  #block-shortcuts .block-description {display:none;}
-  #block-shortcuts .block-name {font-size:13px;}
-  #block-shortcuts .library-card {margin-bottom:7px;}
-  #block-shortcuts h3 {font-size:14px;margin:10px 0 8px;}
-  .behavior-note {font-size:13px;line-height:1.5;margin:12px 0;padding:12px;border-left:4px solid #003366;background:#edf4f7;color:#182936;}
-  #block-example {width:min(850px,94vw);max-height:90vh;overflow:auto;border:1px solid #c9d4da;border-radius:8px;padding:22px;color:#182936;}
-  #block-example::backdrop {background:rgba(0,27,59,.55);}
-  .example-heading {display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
-  #block-example-title {font-size:24px;margin:0;color:#003366;}
-  #block-example-content {display:block;width:100%;height:420px;overflow:auto;padding:16px;border:1px solid #c9d4da;border-radius:6px;background:#fff;margin:16px 0;overflow-wrap:anywhere;}
 </style>
 
 <a class="skip-link" href="#builder">Skip to main content</a>
@@ -789,26 +812,22 @@
     <div class="builder-grid">
       <aside class="panel control-panel" aria-label="Page controls and building blocks">
         <div class="panel-body">
-          <h2 id="interactive-blocks">Building blocks</h2>
+          <div class="panel-head">
+            <h2 id="interactive-blocks">Building blocks</h2>
+            <button type="button" class="panel-collapse" id="hide-library" title="Hide the building blocks panel to give the preview and editor more room">Hide</button>
+          </div>
           <p class="field-help">Edit the page header below, then open a category and select a block to add it to your page. Use the "Add block here" bars in the preview to insert between blocks, or drag blocks to reorder them.</p>
           <label class="block-search" for="block-search">
             <span aria-hidden="true">⌕</span>
-            <input id="block-search" type="search" placeholder="Search blocks or purposes" aria-label="Search building blocks" aria-describedby="block-search-help">
+            <input id="block-search" type="search" placeholder="Search blocks or purposes" aria-label="Search building blocks">
           </label>
-          <details class="cat-acc" id="starter-details">
-            <summary>Start a page</summary>
+          <details class="cat-acc" id="header-details">
+            <summary>Page Header<span class="cat-count">edit</span></summary>
             <div class="setup-body" style="padding:12px">
-              <p class="field-help">Choose a complete starting layout. Applying a template replaces the current page; Undo restores it.</p>
               <div class="control-group">
                 <label for="starter-template">Starter template</label>
                 <select id="starter-template"></select>
               </div>
-            </div>
-          </details>
-          <details class="cat-acc" id="header-details">
-            <summary>Page Header<span class="cat-count">edit</span></summary>
-            <div class="setup-body" style="padding:12px">
-
               <div class="control-group">
                 <label for="page-label">Page label</label>
                 <input id="page-label" type="text" value="Course content">
@@ -835,12 +854,7 @@
             </div>
           </details>
           <!-- BEGIN: Categorized building block library -->
-          <p class="field-help" id="block-search-help">Search by name, category, or purpose. Try “instructor,” “rubric,” or “feedback.”</p>
           <div class="library-tools"><p id="library-status" role="status" aria-live="polite" aria-atomic="true"></p><button type="button" id="clear-block-search" hidden>Clear search</button></div>
-          <details class="cat-acc" id="shortcut-details">
-            <summary>Favorites &amp; recently used</summary>
-            <div id="block-shortcuts" style="padding:8px"></div>
-          </details>
           <div id="block-library"></div>
           <!-- END: Categorized building block library -->
         </div>
@@ -860,6 +874,7 @@
               <button type="button" data-width="w1000" aria-pressed="false" title="Typical Brightspace content width">1000px</button>
               <button type="button" data-width="w1200" aria-pressed="false" title="Wide Brightspace content width">1200px</button>
             </div>
+            <button type="button" class="focus-btn" id="show-library" title="Show the building blocks panel again">Show building blocks</button>
             <button type="button" class="focus-btn" id="focus-toggle" aria-pressed="false" title="Hide the side panels so the preview can use the full page width">Focus mode</button>
             <button type="button" class="tab-btn" id="open-tab" title="Open a full-size snapshot of this page in a new browser tab">Open in tab</button>
             <span class="block-count" id="block-count">0 blocks</span>
@@ -908,15 +923,6 @@
   </div>
 </footer>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<dialog id="block-example" aria-labelledby="block-example-title">
-  <div class="example-heading"><h2 id="block-example-title">Block preview</h2><button type="button" class="btn" id="close-block-example">Close preview</button></div>
-  <p class="field-help">Sample content only. Try the example, then add a fresh block to your page.</p>
-  <div id="example-behavior"></div>
-  <div id="block-example-content" role="region" aria-label="Example of the selected building block" tabindex="0"></div>
-  <button type="button" class="btn btn-primary" id="insert-block-example">Add this block</button>
-</dialog>
-
 <script>
 (function () {
   'use strict';
@@ -995,34 +1001,6 @@
   const repeater = (key, title, countKey, fields) => ({ key, title, countKey, fields });
 
   const defs = {
-    assignmentBrief: {
-      label: 'Assignment brief', category: 'Course Organization', description: 'Explain the purpose, task, submission, and success criteria.',
-      defaults: { title:'Assignment brief', purpose:'Explain what students will learn and why it matters.', task:'Describe what students should create or do.', submission:'Specify the file format and where to submit the work.', criteria:'List the qualities of a successful submission.' },
-      fields:[field('title','Assignment heading'),field('purpose','Purpose','richtext'),field('task','Task instructions','richtext'),field('submission','Submission requirements','richtext'),field('criteria','Success criteria','richtext')]
-    },
-    discussionPrompt: {
-      label:'Discussion prompt', category:'Practice & Feedback', description:'Set the question, posting expectations, replies, and criteria.',
-      defaults:{title:'Join the discussion',question:'Pose a question that invites explanation, evidence, or a decision.',initial:'Explain what the initial post should include.',replies:'Describe how students should respond to their colleagues.',criteria:'Explain what makes a thoughtful contribution.'},
-      fields:[field('title','Discussion heading'),field('question','Opening question','richtext'),field('initial','Initial-post expectations','richtext'),field('replies','Reply guidance','richtext'),field('criteria','Evaluation criteria','richtext')]
-    },
-    learningObjectives: {
-      label:'Learning objectives', category:'Course Organization', description:'Connect measurable objectives to practice and assessment.',
-      defaults:{title:'Learning objectives',count:2,items:[{objective:'Explain the central concept in your own words.',practice:'Analyze a worked example.',assessment:'Apply the concept in the module assignment.'},{objective:'Apply the concept to a new situation.',practice:'Complete a decision scenario.',assessment:'Explain and justify your decision.'}]},
-      fields:[field('title','Objectives heading'),field('count','Objectives (1–10)','number','',{min:1,max:10})],
-      repeater:repeater('items','Objective','count',[field('objective','Measurable objective','textarea'),field('practice','Practice connection (optional)','textarea','Leave blank to omit.'),field('assessment','Assessment connection (optional)','textarea','Leave blank to omit.')])
-    },
-    studentSupport: {
-      label:'Student support', category:'Resources & Data', description:'Share support services, contact details, and useful links.',
-      defaults:{title:'Help is available',count:2,items:[{name:'Technical support',description:'Get help accessing course technology.',contact:'Add the verified support email or phone number.',label:'Open technical support',url:''},{name:'Tutoring',description:'Connect with help for course concepts and assignments.',contact:'Add the verified tutoring contact information.',label:'Explore tutoring options',url:''}]},
-      fields:[field('title','Support heading'),field('count','Services (1–6)','number','',{min:1,max:6})],
-      repeater:repeater('items','Service','count',[field('name','Service name'),field('description','How this service helps','textarea'),field('contact','Contact details','textarea'),field('label','Link label'),field('url','Verified service URL (optional)','url','Leave blank to omit the button.')])
-    },
-    lessonWrapUp: {
-      label:'Lesson wrap-up', category:'Course Organization', description:'Summarize takeaways, invite reflection, and explain the next step.',
-      defaults:{title:'Before you move on',takeaways:'Add the first key takeaway.\nAdd the second key takeaway.',reflection:'What can you now explain or do that you could not do before?',next:'Explain what students should do next.',label:'Continue to the next activity',url:''},
-      fields:[field('title','Wrap-up heading'),field('takeaways','Key takeaways','textarea','One takeaway per line.'),field('reflection','Reflection question','textarea'),field('next','Next step','textarea'),field('label','Next-step link label'),field('url','Next-step URL (optional)','url','Leave blank to omit the button.')]
-    },
-
     intro: {
       label: 'Intro text', category: "Text & Layout", description: "Orient students to the page.",
       defaults: { content: 'Use this short introduction to orient students to the page.' },
@@ -1210,7 +1188,7 @@
       fields: [field('prompt', 'Prompt', 'textarea'), field('button', 'Reveal button label'), field('content', 'Revealed content', 'textarea')]
     },
     knowledge: {
-      legacy: true, label: 'Knowledge check', category: "Practice & Feedback", description: "Offer a quick check with 2\u20134 answer choices.",
+      label: 'Knowledge check', category: "Practice & Feedback", description: "Offer a quick check with 2\u20134 answer choices.",
       defaults: { question: 'Which option best demonstrates the concept?', count: 4, correct: 1, items: [
         { option: 'The best answer', feedback: 'This choice applies the concept accurately.' },
         { option: 'A plausible distractor', feedback: 'Revisit the key distinction in the content above.' },
@@ -1433,12 +1411,12 @@
 
   const templates = {
     module: { label: 'Module Overview', pageLabel: 'Module overview', title: 'Module Overview', blocks: [
-      ['heading', { text: 'Module Objectives', level: '2' }],
-      ['checklist', { title: 'By the end of this module, you will be able to', items: 'Add the first module objective\nAdd the second module objective\nAdd the third module objective' }],
-      ['heading', { text: 'Task List', level: '2' }],
-      ['interactiveChecklist', { title: 'Complete these module tasks', count: 4, items: [{text:'Review the module overview and objectives'},{text:'Complete the instructional materials'},{text:'Participate in the learning activity'},{text:'Submit the module assessment'}] }],
-      ['heading', { text: 'Brief Summary', level: '2' }],
-      ['paragraph', { content: 'Add a concise summary explaining what students will learn, why it matters, and how the module connects to the course.' }]
+      ['intro', { content: 'Add a brief overview explaining what students will learn in this module, why it matters, and how it connects to the course.' }],
+      ['bullets', { title: 'By the end of this module, you will be able to', style: 'dash', layout: 'plain', count: 3, items: [
+        { text: 'Add the first module objective' },
+        { text: 'Add the second module objective' },
+        { text: 'Add the third module objective' }
+      ] }]
     ] },
     instructor: { label: 'Instructor Information', pageLabel: 'Course information', title: 'Instructor Information', blocks: [
       ['instructorInfo', { layout:'image-left', image:'', alt:'Instructor portrait', name:'Instructor Name', office:'Office number', email:'instructor@mclennan.edu', hours:'Office hours', about:'Add a brief welcome or teaching philosophy.' }],
@@ -1449,7 +1427,7 @@
       ['intro', { content: 'Add a brief overview that introduces the content, connects it to the learning objectives, and explains why it matters.' }],
       ['imageText', { layout:'image-left', image:'', alt:'Describe the instructional image.', title:'Content Heading', content:'Add informational text that explains the key idea shown in the image.' }],
       ['tabs', { orientation:'horizontal', count:3, items:[{heading:'Key Idea',content:'Explain the first important concept.'},{heading:'Example',content:'Show how the concept works in practice.'},{heading:'Apply It',content:'Invite students to connect or apply the idea.'}] }],
-      ['multipleChoice', { question:'Which choice best demonstrates the concept presented on this page?', count:4, correct:1, items:[{option:'Add the correct answer',feedback:'Correct. Explain why this choice demonstrates the concept.'},{option:'Add a plausible distractor',feedback:'Not quite. Explain the misconception and direct students back to the relevant content.'},{option:'Add another distractor',feedback:'Not quite. Provide specific corrective feedback.'},{option:'Add a final distractor',feedback:'Try again. Explain what the learner should reconsider.'}] }]
+      ['knowledge', { question:'Which choice best demonstrates the concept presented on this page?', count:4, correct:1, items:[{option:'Add the correct answer',feedback:'Correct. Explain why this choice demonstrates the concept.'},{option:'Add a plausible distractor',feedback:'Not quite. Explain the misconception and direct students back to the relevant content.'},{option:'Add another distractor',feedback:'Not quite. Provide specific corrective feedback.'},{option:'Add a final distractor',feedback:'Try again. Explain what the learner should reconsider.'}] }]
     ] },
     weekly: { label: 'Weekly Task List', pageLabel: 'Weekly overview', title: 'Weekly Task List', blocks: [
       ['intro', { content: 'Add a brief overview of the week, the central focus, and any important due dates or reminders.' }],
@@ -1459,6 +1437,24 @@
       ['intro', { content: 'Introduce the video, explain what students should watch for, and connect it to the lesson objectives.' }],
       ['video', { mode:'brightspace', url:'', title:'Course video' }]
     ] },
+    scenarioPage: { label: 'Interactive Scenario Page', pageLabel: 'Applied practice', title: 'Interactive Scenario', blocks: [
+      ['imageText', { layout:'image-left', imageWidth:'33', title:'Set the Scene', content:'Describe the context students need before they make a decision. Explain the situation, the people involved, and what is at stake.' }],
+      ['scenario', { title:'What would you do?', scenario:'Describe a realistic situation and ask students to choose the strongest response.', count:3, correct:1, items:[
+        {option:'Choose the strongest response', feedback:'Good choice. Explain why this response works well and what principle it applies.'},
+        {option:'Choose a tempting but incomplete response', feedback:'This might help, but it misses an important consideration. Explain what was overlooked.'},
+        {option:'Choose a response that creates a new problem', feedback:'This response could make the situation worse. Explain what to do instead.'}
+      ] }]
+    ] },
+    lowStakes: { label: 'Low Stakes Assessment', pageLabel: 'Check your understanding', title: 'Low Stakes Assessment', blocks: [
+      ['paragraph', { content: 'Add a short explanation of the concept students are about to check. Keep it focused on the one idea the question assesses.' }],
+      ['knowledge', { question:'Which choice best demonstrates the concept?', count:4, correct:1, items:[
+        {option:'Add the correct answer', feedback:'Correct. Explain why this choice demonstrates the concept.'},
+        {option:'Add a plausible distractor', feedback:'Not quite. Address the misconception and point students back to the relevant idea.'},
+        {option:'Add another distractor', feedback:'Not quite. Explain what makes this option incomplete.'},
+        {option:'Add a final distractor', feedback:'Try again. Suggest what the student should review before retrying.'}
+      ] }]
+    ] },
+    randomPage: { label: 'Random Page', pageLabel: 'Course content', title: 'Random Page', random: 5 },
     blank: { label: 'Blank Page', pageLabel: 'Course content', title: 'Blank Page', blocks: [] }
   };
 
@@ -1539,6 +1535,19 @@
     if ('correct' in block.data) block.data.correct = Math.max(1, Math.min(n, parseInt(block.data.correct, 10) || 1));
   }
 
+  function randomBlocks(count) {
+    // Pick from menu-visible blocks only; skip internal blocks and the divider,
+    // which is decorative and makes for a poor sample page.
+    const pool = Object.keys(defs).filter(key => !defs[key].internal && key !== 'divider');
+    const picked = [];
+    const remaining = pool.slice();
+    for (let i = 0; i < count && remaining.length; i++) {
+      const index = Math.floor(Math.random() * remaining.length);
+      picked.push(remaining.splice(index, 1)[0]);
+    }
+    return picked.map(type => makeBlock(type));
+  }
+
   function applyTemplate(key) {
     const t = templates[key] || templates.blank;
     snapshot();
@@ -1549,7 +1558,7 @@
     state.titleStyle = 'banner';
     state.bannerUrl = '';
     state.insertAt = null;
-    state.blocks = t.blocks.map(([type, data]) => makeBlock(type, data));
+    state.blocks = t.random ? randomBlocks(t.random) : t.blocks.map(([type, data]) => makeBlock(type, data));
     state.blocks.forEach(syncRepeater);
     state.selectedId = state.blocks[0] ? state.blocks[0].id : null;
     syncSetupInputs();
@@ -1574,7 +1583,6 @@
   }
 
   const BLOCK_ORDER = [
-    'assignmentBrief','discussionPrompt','learningObjectives','studentSupport','lessonWrapUp',
     'intro','heading','paragraph','bullets','checklist','annotated','referenceList','callout','quote','colored','aiPolicy','dueDate',
     'accordion','tabs','flip','reveal','carousel',
     'timeline','interactiveTimeline','pathTimeline','process','weeklyRhythm','stepBoxes',
@@ -1642,105 +1650,9 @@
       }
     }
   }
-  // Catalog preferences are browser-local and separate from page autosave.
-  const CATALOG_KEY = 'mcc-coursemaker-catalog-v1';
-  let favorites = [], recentBlocks = [];
-  const selectableBlock = key => !!defs[key] && !defs[key].internal && !defs[key].legacy;
-  try {
-    const preferences = JSON.parse(localStorage.getItem(CATALOG_KEY) || '{}');
-    if (Array.isArray(preferences.favorites)) favorites = [...new Set(preferences.favorites.filter(selectableBlock))];
-    if (Array.isArray(preferences.recent)) recentBlocks = [...new Set(preferences.recent.filter(selectableBlock))].slice(0,5);
-  } catch (_) {}
-  function saveCatalog() {
-    try { localStorage.setItem(CATALOG_KEY, JSON.stringify({favorites, recent:recentBlocks})); }
-    catch (_) { toast('Browser storage is unavailable. Shortcuts will last for this session only.'); }
-  }
-  function libraryCard(key, location) {
-    const d = defs[key], favorite = favorites.includes(key);
-    const helpId = location + '-help-' + key;
-    return '<div class="library-card"><button class="add-block" type="button" data-add="' + key + '" aria-label="Add ' + attr(d.label) + '" aria-describedby="' + helpId + '"><span class="plus" aria-hidden="true">+</span><span class="block-copy"><span class="block-name">' + e(d.label) + '</span><span class="block-description" id="' + helpId + '">' + e(d.description) + '</span></span></button><div class="library-card-actions"><button type="button" data-example="' + key + '" aria-label="Preview ' + attr(d.label) + '">Preview</button><button type="button" data-favorite="' + key + '" aria-label="Favorite ' + attr(d.label) + '" aria-pressed="' + favorite + '">' + (favorite ? 'Favorited' : 'Favorite') + '</button></div></div>';
-  }
-  function renderShortcuts() {
-    document.getElementById('block-shortcuts').innerHTML = '<p class="field-help">Saved in this browser. Recent blocks shows your last five choices.</p><h3>Favorites</h3>' + (favorites.map(key=>libraryCard(key,'favorite')).join('') || '<p class="field-help">Select Favorite beside any block.</p>') + '<h3>Recently used</h3>' + (recentBlocks.map(key=>libraryCard(key,'recent')).join('') || '<p class="field-help">Add a block to start this list.</p>');
-  }
-  const RESPONSE_TYPES = new Set(['knowledge','multipleChoice','scenario','sorting','sequence','matching','estimate','selfCheck','interactiveChecklist','branching']);
-  const REVEAL_TYPES = new Set(['annotated','accordion','tabs','flip','reveal','carousel','interactiveTimeline','pathTimeline','process','weeklyRhythm','workedExample','scenarioReveal','decoder','hotspot','storyboard','compare']);
-  function behaviorText(type) {
-    if (RESPONSE_TYPES.has(type)) return 'Practice only. This block has no response-saving, submission, or Brightspace gradebook connection. Do not rely on answers or progress remaining after a reload or return visit. Use a Brightspace assessment to collect graded work.';
-    if (REVEAL_TYPES.has(type)) return 'Exploration only. This block does not save progress or report completion or grades to Brightspace. Expanded sections and current steps are not stored by the block.';
-    if (type === 'discussionPrompt') return 'Instructions only. Students post and reply in a separate Brightspace discussion; this block does not collect posts or assign grades.';
-    if (type === 'assignmentBrief') return 'Instructions only. Students submit work through the assignment tool you specify; this block does not collect files or assign grades.';
-    if (type === 'rubricTable') return 'Display only. This table explains criteria; it is not connected to a Brightspace rubric or gradebook.';
-    if (type === 'dueDate') return 'Display only. This reminder does not set Brightspace due dates. Update dates when reusing a page in another term.';
-    if (['video','audio'].includes(type)) return 'Embedded media. This block does not record completion or grades. Any tracking provided by the media service is separate.';
-    return 'Content only. This block does not collect responses or report grades or completion to Brightspace.';
-  }
-  function behaviorHtml(type) { return '<p class="behavior-note"><strong>How this block works</strong><br>' + e(behaviorText(type)) + '</p>'; }
-  function addLibraryBlock(key) {
-    if (!selectableBlock(key)) return;
-    snapshot();
-    const block = makeBlock(key); syncRepeater(block);
-    if (state.insertAt != null && state.insertAt <= state.blocks.length) {
-      state.blocks.splice(state.insertAt,0,block); state.insertAt = null;
-    } else state.blocks.push(block);
-    state.selectedId = block.id;
-    recentBlocks = [key,...recentBlocks.filter(k=>k!==key)].slice(0,5);
-    saveCatalog(); renderShortcuts(); renderAll(); toast(defs[key].label + ' added.');
-    setTimeout(()=>document.querySelector('[data-block-id="'+block.id+'"]')?.scrollIntoView({behavior:'smooth',block:'center'}),20);
-  }
-  function handleLibraryAction(event) {
-    const favorite = event.target.closest('[data-favorite]');
-    if (favorite) {
-      const key = favorite.dataset.favorite;
-      const source = favorite.closest('#block-shortcuts') ? 'block-shortcuts' : 'block-library';
-      favorites = favorites.includes(key) ? favorites.filter(k=>k!==key) : [...favorites,key];
-      saveCatalog(); renderLibrary(el.search.value);
-      (document.getElementById(source).querySelector('[data-favorite="'+key+'"]') || document.querySelector('#shortcut-details summary')).focus();
-      return;
-    }
-    const example = event.target.closest('[data-example]');
-    if (example) { showBlockExample(example.dataset.example, example); return; }
-    const add = event.target.closest('[data-add]');
-    if (add) addLibraryBlock(add.dataset.add);
-  }
-  let exampleKey = null, exampleOpener = null;
-  const exampleDialog = document.getElementById('block-example');
-  function showBlockExample(key, opener) {
-    if (!selectableBlock(key)) return;
-    exampleKey = key; exampleOpener = opener;
-    document.getElementById('block-example-title').textContent = defs[key].label;
-    document.getElementById('example-behavior').innerHTML = behaviorHtml(key);
-    const sample = makeBlock(key); syncRepeater(sample);
-    document.getElementById('block-example-content').innerHTML = renderBlockHtml(sample);
-    document.getElementById('block-example-content').scrollTop = 0;
-    exampleDialog.showModal();
-    document.getElementById('close-block-example').focus();
-  }
-  // Sample links should not navigate away from the builder.
-  document.getElementById('block-example-content').addEventListener('click', event => {
-    if (event.target.closest('a')) {
-      event.preventDefault();
-      toast('Example link only. Add the block to set your own destination.');
-    }
-  });
-  document.getElementById('close-block-example').addEventListener('click',()=>exampleDialog.close());
-  exampleDialog.addEventListener('close',()=>{
-    document.getElementById('block-example-content').replaceChildren();
-    if (exampleOpener && exampleOpener.isConnected) exampleOpener.focus();
-  });
-  document.getElementById('insert-block-example').addEventListener('click',()=>{
-    const key = exampleKey; exampleDialog.close(); addLibraryBlock(key);
-  });
-
   // Each block has one primary category. Internal blocks remain unavailable in the menu.
   const LIBRARY_CATEGORIES = ["Text & Layout", "Instructor Information", "Course Organization", "Callouts & Key Ideas", "Media & Visuals", "Reveal & Explore", "Timelines & Processes", "Practice & Feedback", "Scenarios & Examples", "Resources & Data"];
   const SEARCH_ALIASES = {
-    multipleChoice: 'knowledge check quiz question answers feedback',
-    assignmentBrief: 'assignment instructions purpose task criteria submission',
-    discussionPrompt: 'discussion forum post replies participation',
-    learningObjectives: 'outcomes goals alignment learning',
-    lessonWrapUp: 'summary reflection conclusion next',
-    studentSupport: 'help tutoring assistance technical accessibility contact',
     instructorInfo: 'teacher faculty bio biography contact email office hours',
     insight: 'teacher faculty presence tip advice',
     aiPolicy: 'artificial intelligence stoplight red yellow green rules',
@@ -1761,18 +1673,17 @@
     el.library.innerHTML = LIBRARY_CATEGORIES.map(cat => {
       const entries = Object.entries(defs).filter(([key,d]) => {
         const searchable = [d.label, d.category, d.description, SEARCH_ALIASES[key] || ''].join(' ').toLowerCase();
-        return !d.internal && !d.legacy && d.category === cat && words.every(word => searchable.includes(word));
+        return !d.internal && d.category === cat && words.every(word => searchable.includes(word));
       }).sort((a, b) => orderIndex(a[0]) - orderIndex(b[0]));
       if (!entries.length) return '';
       total += entries.length;
-      const buttons = entries.map(([key]) => libraryCard(key, 'catalog')).join('');
+      const buttons = entries.map(([key,d]) => '<button class="add-block" type="button" data-add="' + key + '" aria-label="Add ' + attr(d.label) + '" aria-describedby="block-help-' + key + '"><span class="plus" aria-hidden="true">+</span><span class="block-copy"><span class="block-name">' + e(d.label) + '</span><span class="block-description" id="block-help-' + key + '">' + e(d.description) + '</span></span></button>').join('');
       const open = q ? true : openCategory === cat;
-      return '<details class="cat-acc" data-cat="' + e(cat) + '"' + (open ? ' open' : '') + '><summary><span class="category-name"><span class="category-chevron" aria-hidden="true">›</span>' + e(cat) + '</span><span class="cat-count" aria-label="' + entries.length + ' blocks">' + entries.length + '</span></summary><div class="block-library">' + buttons + '</div></details>';
+      return '<details class="cat-acc" data-cat="' + e(cat) + '"' + (open ? ' open' : '') + '><summary><span class="category-name"><span class="category-chevron" aria-hidden="true">\u203a</span>' + e(cat) + '</span><span class="cat-count" aria-label="' + entries.length + ' blocks">' + entries.length + '</span></summary><div class="block-library">' + buttons + '</div></details>';
     }).join('');
-    if (!total) el.library.innerHTML = '<div class="empty-search">No matching blocks. Try a broader term such as “image,” “tasks,” or “questions,” or clear your search.</div>';
+    if (!total) el.library.innerHTML = '<div class="empty-search">No matching blocks. Try a broader term such as \u201cimage,\u201d \u201ctasks,\u201d or \u201cquestions,\u201d or clear your search.</div>';
     document.getElementById('library-status').textContent = total + (q ? ' matching blocks' : ' blocks in ' + LIBRARY_CATEGORIES.length + ' categories');
     document.getElementById('clear-block-search').hidden = !q;
-    renderShortcuts();
   }
 
   function blockColor(block) { return block.color || state.accent; }
@@ -1843,16 +1754,6 @@
     const base = 'font-family:' + fontStack + ';font-size:19px;color:' + rootText + ';background-color:' + rootBackground + ';line-height:1.65';
     const items = (d.items || []).slice(0, parseInt(d.count, 10) || (d.items || []).length);
 
-
-    const panelTitle = value => '<h2 style="margin:0 0 16px;font-family:' + fontStack + ';font-size:28px;line-height:1.25;color:' + color + '">' + e(value) + '</h2>';
-    const subsection = (label, value, rich) => value ? '<div style="margin:18px 0"><h3 style="margin:0 0 6px;font-size:21px;line-height:1.3;color:' + rootText + '">' + e(label) + '</h3><p style="margin:0">' + (rich ? sanitizeRichText(value) : br(value)) + '</p></div>' : '';
-    const resourceLink = (label, url) => url && String(url).trim() ? '<a href="' + safeUrl(url, '#') + '" style="display:inline-block;max-width:100%;overflow-wrap:anywhere;margin-top:12px;padding:10px 16px;border-radius:6px;background-color:' + color + ';color:' + contrast(color) + ';font-weight:700;text-decoration:underline">' + e(label || 'Open resource') + '</a>' : '';
-    const panel = content => '<section style="' + base + ';margin:24px 0;padding:24px;border:1px solid #C9D7DE;border-top:5px solid ' + color + ';border-radius:8px;overflow-wrap:anywhere">' + content + '</section>';
-    if (block.type === 'assignmentBrief') return panel(panelTitle(d.title) + subsection('Purpose',d.purpose,true) + subsection('Your task',d.task,true) + subsection('How to submit',d.submission,true) + subsection('Success criteria',d.criteria,true));
-    if (block.type === 'discussionPrompt') return panel(panelTitle(d.title) + subsection('Consider this question',d.question,true) + subsection('Your initial post',d.initial,true) + subsection('Reply to your colleagues',d.replies,true) + subsection('What makes a strong contribution',d.criteria,true));
-    if (block.type === 'learningObjectives') return panel(panelTitle(d.title) + '<ol style="margin:0;padding-left:25px">' + items.map(item => '<li style="padding:10px 0"><strong>' + e(item.objective) + '</strong>' + (item.practice ? '<p style="margin:6px 0 0"><strong>Practice:</strong> ' + br(item.practice) + '</p>' : '') + (item.assessment ? '<p style="margin:6px 0 0"><strong>Assessment:</strong> ' + br(item.assessment) + '</p>' : '') + '</li>').join('') + '</ol>');
-    if (block.type === 'studentSupport') return panel(panelTitle(d.title) + '<div style="display:flex;flex-wrap:wrap;gap:16px">' + items.map(item => '<div style="flex:1 1 240px;min-width:0;padding:18px;border:1px solid #C9D7DE;border-radius:6px"><h3 style="font-size:21px;margin:0 0 8px;color:' + rootText + '">' + e(item.name) + '</h3><p style="margin:0 0 10px">' + br(item.description) + '</p>' + (item.contact ? '<p style="margin:0">' + br(item.contact) + '</p>' : '') + resourceLink(item.label,item.url) + '</div>').join('') + '</div>');
-    if (block.type === 'lessonWrapUp') return panel(panelTitle(d.title) + '<ul style="padding-left:25px;margin:0">' + lines(d.takeaways).map(item=>'<li style="margin:6px 0">'+e(item)+'</li>').join('') + subsection('Reflect',d.reflection,false) + subsection('Next step',d.next,false) + resourceLink(d.label,d.url));
     const placeholder = (altText, label) => '<div role="img" aria-label="' + attr(altText || label || 'Image placeholder') + '" style="display:grid;place-items:center;min-height:220px;padding:18px;border:2px dashed #7395A4;color:#173744;background-color:#EAF2F5;font-family:' + fontStack + ';font-size:18px;font-weight:700;text-align:center">' + e(label || 'Image placeholder') + '</div>';
     const imageOrPlaceholder = (url, altText, label) => url
       ? '<img src="' + safeUrl(url, '#') + '" alt="' + attr(altText) + '" style="display:block;width:100%;height:auto">'
@@ -2142,7 +2043,7 @@
           if (markerStyle === 'dash') return '<span aria-hidden="true" style="display:block;flex:0 0 18px;width:18px;height:7px;margin-top:12px;margin-right:12px;border-radius:2px;background-color:' + color + '"></span>';
           if (markerStyle === 'check') return '<span aria-hidden="true" style="flex:0 0 auto;margin-right:12px;color:' + color + ';font-size:20px;font-weight:800;line-height:1.5">✓</span>';
           if (markerStyle === 'arrow') return '<span aria-hidden="true" style="flex:0 0 auto;margin-right:12px;color:' + color + ';font-size:19px;font-weight:800;line-height:1.6">→</span>';
-          if (markerStyle === 'number') return '<span aria-hidden="true" style="display:inline-block;box-sizing:border-box;flex:0 0 26px;width:26px;height:26px;margin-top:2px;margin-right:12px;border-radius:50%;overflow:hidden;text-align:center;vertical-align:middle;white-space:nowrap;color:' + contrast(color) + ';background-color:' + color + ';font-family:' + fontStack + ';font-size:14px;font-weight:800;line-height:26px">' + (i + 1) + '</span>';
+          if (markerStyle === 'number') return '<span aria-hidden="true" style="display:grid;place-items:center;flex:0 0 26px;width:26px;height:26px;margin-top:2px;margin-right:12px;border-radius:50%;overflow:hidden;color:' + contrast(color) + ';background-color:' + color + ';font-family:' + fontStack + ';font-size:14px;font-weight:800">' + (i + 1) + '</span>';
           return '<span aria-hidden="true" style="display:block;flex:0 0 11px;width:11px;height:11px;margin-top:10px;margin-right:12px;border-radius:50%;background-color:' + color + '"></span>';
         };
         const bulletRowStyle = (i) => {
@@ -2334,7 +2235,7 @@
       contrastResultsHtml(block) +
       '</div></details>');
     sections.push('<details class="editor-acc" data-section="code"' + isOpen('code') + '><summary>Code snippet and actions</summary><div class="editor-acc-body"><div class="snippet-box" style="margin-top:0;padding-top:0;border-top:0"><h3>Customized code snippet</h3><p>This updates as you edit the selected block.</p><pre id="block-code"></pre><button type="button" class="small-button" data-copy-block>Copy block HTML</button><button type="button" class="small-button danger-button" data-delete-selected>Delete this block</button></div></div></details>');
-    el.editor.innerHTML = '<span class="selected-kind">' + e(def.label) + '</span>' + behaviorHtml(block.type) + '<div class="editor-fields">' + sections.join('') + '</div>';
+    el.editor.innerHTML = '<span class="selected-kind">' + e(def.label) + '</span><div class="editor-fields">' + sections.join('') + '</div>';
     document.getElementById('block-code').textContent = renderBlockHtml(block);
   }
 
@@ -2473,9 +2374,19 @@
       }
       return;
     }
-    handleLibraryAction(event);
+    const button = event.target.closest('[data-add]'); if (!button) return;
+    snapshot();
+    const block = makeBlock(button.dataset.add); syncRepeater(block);
+    if (state.insertAt != null && state.insertAt <= state.blocks.length) {
+      state.blocks.splice(state.insertAt, 0, block);
+      state.insertAt = null;
+    } else {
+      state.blocks.push(block);
+    }
+    state.selectedId = block.id;
+    renderAll(); toast(defs[block.type].label + ' added.');
+    setTimeout(() => document.querySelector('[data-block-id="' + block.id + '"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 20);
   });
-  document.getElementById('block-shortcuts').addEventListener('click', handleLibraryAction);
   el.search.addEventListener('input', () => renderLibrary(el.search.value));
   document.getElementById('clear-block-search').addEventListener('click', () => {
     el.search.value = '';
@@ -2674,6 +2585,19 @@
       }
     });
   });
+  function setLibraryHidden(hidden) {
+    wrapEl.classList.toggle('library-hidden', hidden);
+    const hideBtn = document.getElementById('hide-library');
+    if (hideBtn) hideBtn.setAttribute('aria-expanded', String(!hidden));
+    // Move focus to the control that is actually visible so keyboard users are not stranded.
+    const target = document.getElementById(hidden ? 'show-library' : 'hide-library');
+    if (target) target.focus();
+    toast(hidden
+      ? 'Building blocks hidden. The preview and editor now use the full width.'
+      : 'Building blocks panel restored.');
+  }
+  document.getElementById('hide-library').addEventListener('click', () => setLibraryHidden(true));
+  document.getElementById('show-library').addEventListener('click', () => setLibraryHidden(false));
   document.getElementById('focus-toggle').addEventListener('click', () => setFocusMode(!focusMode));
   document.getElementById('drawer-close').addEventListener('click', () => {
     state.selectedId = null;
@@ -2689,7 +2613,7 @@
       : 'The browser blocked the pop-up. Allow pop-ups for this site to open the preview.');
   });
   document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || !focusMode || document.getElementById('block-example').open) return;
+    if (event.key !== 'Escape' || !focusMode) return;
     if (document.querySelector('.audit-overlay')) return;
     if (state.selectedId) {
       state.selectedId = null;
@@ -2744,7 +2668,7 @@
   renderTemplateOptions();
   renderLibrary('');
   const requestedTemplate = new URLSearchParams(window.location.search).get('template');
-  const templateMap = { content:'course', instructor:'instructor', module:'module', weekly:'weekly', video:'videoPage', blank:'blank' };
+  const templateMap = { content:'course', instructor:'instructor', module:'module', weekly:'weekly', video:'videoPage', scenario:'scenarioPage', assessment:'lowStakes', random:'randomPage', blank:'blank' };
   applyTemplate(templateMap[requestedTemplate] || 'blank');
   ready = true;
 
