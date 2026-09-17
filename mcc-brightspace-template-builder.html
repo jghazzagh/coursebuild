@@ -1112,8 +1112,8 @@
     },
     callout: {
       label: 'Callout box', category: "Callouts & Key Ideas", description: "Emphasize a tip, notice, example, or reflection.",
-      defaults: { style: 'information', title: 'Good to know', content: 'Use this space to add helpful context or guidance.' },
-      fields: [field('style', 'Callout style', 'select', '', { options: [['information','Information (blue)'],['notice','Important notice (red)'],['tip','Tip (green)'],['example','Example (purple)'],['research','Research and sources (navy)'],['reflection','Reflection (amber)']] }), field('title', 'Callout heading'), field('content', 'Callout content', 'richtext')]
+      defaults: { style: 'information', customIcon: '', title: 'Good to know', content: 'Use this space to add helpful context or guidance.' },
+      fields: [field('style', 'Callout style', 'select', '', { options: [['information','Information (blue)'],['notice','Important notice (red)'],['tip','Tip (green)'],['example','Example (purple)'],['research','Research and sources (navy)'],['reflection','Reflection (amber)'],['idea','Idea (light bulb)'],['pause','Pause (stop sign)'],['custom','Custom icon']] }), field('customIcon', 'Your icon', 'text', 'Paste an emoji or symbol here. Leave blank to keep the star placeholder. Used with the Custom icon style.'), field('title', 'Callout heading'), field('content', 'Callout content', 'richtext')]
     },
     quote: {
       label: 'Blockquote', category: "Text & Layout", description: "Highlight a quotation and its source.",
@@ -1204,7 +1204,7 @@
         { heading: 'Example', content: 'Show students a practical example.' },
         { heading: 'Try it', content: 'Invite students to apply what they learned.' }
       ] },
-      fields: [field('title', 'Section heading', 'text', 'Give each tab group a distinct title so students can tell sections apart.'), field('orientation', 'Tab layout', 'select', '', { options: [['horizontal','Horizontal tabs'],['vertical','Vertical tabs']] }), field('count', 'Tabs (2–3)', 'number', '', { min: 2, max: 3 })],
+      fields: [field('title', 'Section heading', 'text', 'Give each tab group a distinct title so students can tell sections apart.'), field('orientation', 'Tab layout', 'select', '', { options: [['horizontal','Horizontal tabs'],['vertical','Vertical tabs']] }), field('count', 'Tabs (2–5)', 'number', '', { min: 2, max: 5 })],
       repeater: repeater('items', 'Tab', 'count', [field('heading', 'Tab label'), field('content', 'Tab content', 'textarea')])
     },
     flip: {
@@ -1861,6 +1861,9 @@
       example: { background: '#EEEAF6', text: '#2C2246', accent: '#5B4B9A', icon: '\u2727', label: 'Example' },
       research: { background: '#E6EEF4', text: '#0F2A44', accent: '#003366', icon: '\u201C', label: 'Research' },
       reflection: { background: '#FCF1DC', text: '#4A3200', accent: '#8A5A00', icon: '\u270E', label: 'Reflect' },
+      idea: { background: '#FFF8DB', text: '#4A3200', accent: '#8A6500', icon: '\uD83D\uDCA1', label: 'Idea' },
+      pause: { background: '#FDECEB', text: '#4A1716', accent: '#A22522', icon: '\uD83D\uDED1', label: 'Pause' },
+      custom: { background: '#EEF6F8', text: '#173744', accent: '#246B7A', icon: '\u2606', label: 'Custom' },
       information: { background: '#EEF6F8', text: '#173744', accent: '#246B7A', icon: 'i', label: 'Note' }
     };
     return palettes[style] || palettes.information;
@@ -1954,6 +1957,7 @@
       case 'callout':
         {
           const palette = calloutPalette(d.style);
+          if (d.style === 'custom' && String(d.customIcon || '').trim()) palette.icon = e(String(d.customIcon).trim());
           const accent = block.color || palette.accent;
           const iconFontSize = ['\u2713', '\u2727', '\u201C'].includes(palette.icon) ? '26px' : '30px';
           const iconLineHeight = palette.icon === '\u201C' ? '58px' : '48px';
