@@ -1199,12 +1199,12 @@
     },
     tabs: {
       label: 'Tabbed sections', category: "Reveal & Explore", description: "Switch between related content panels.",
-      defaults: { orientation: 'horizontal', count: 3, items: [
+      defaults: { title: 'Explore this topic', orientation: 'horizontal', count: 3, items: [
         { heading: 'Overview', content: 'Introduce the topic or activity.' },
         { heading: 'Example', content: 'Show students a practical example.' },
         { heading: 'Try it', content: 'Invite students to apply what they learned.' }
       ] },
-      fields: [field('orientation', 'Tab layout', 'select', '', { options: [['horizontal','Horizontal tabs'],['vertical','Vertical tabs']] }), field('count', 'Tabs (2–3)', 'number', '', { min: 2, max: 3 })],
+      fields: [field('title', 'Section heading', 'text', 'Give each tab group a distinct title so students can tell sections apart.'), field('orientation', 'Tab layout', 'select', '', { options: [['horizontal','Horizontal tabs'],['vertical','Vertical tabs']] }), field('count', 'Tabs (2–3)', 'number', '', { min: 2, max: 3 })],
       repeater: repeater('items', 'Tab', 'count', [field('heading', 'Tab label'), field('content', 'Tab content', 'textarea')])
     },
     flip: {
@@ -1898,7 +1898,8 @@
 
   function renderBlockHtml(block) {
     const def = defs[block.type];
-    const commentLabel = String((def && def.label) || block.type).replace(/-{2,}/g, '-');
+    const label = ((def && def.label) || block.type) + (block.type === 'tabs' ? ': ' + (String(block.data.title || '').trim() || 'Explore this topic') + ' [' + block.id + ']' : '');
+    const commentLabel = String(label).replace(/[<>]/g, '').replace(/-{2,}/g, '-');
     return '<!-- BEGIN: ' + commentLabel + ' -->\n' + renderBlockInner(block) + '\n<!-- END: ' + commentLabel + ' -->\n';
   }
   function renderBlockInner(block) {
@@ -2014,25 +2015,26 @@
       case 'accordion':
         return '<div style="' + base + ';margin:24px 0">' + items.map(item => '<details style="font-family:' + fontStack + ';font-size:19px;border:1px solid ' + color + ';border-radius:8px;margin:0 0 10px;overflow:hidden"><summary style="cursor:pointer;background-color:' + background + ';color:' + text + ';font-weight:700;padding:16px 18px">' + e(item.heading) + '</summary><div style="padding:16px 18px;color:#1F2933;background-color:#FFFFFF">' + br(item.content) + '</div></details>').join('') + '</div>';
       case 'tabs': {
-        const id = block.id;
+        const id = attr(block.id);
+        const title = String(d.title || '').trim() || 'Explore this topic';
         const vertical = d.orientation === 'vertical';
         const nextKey = vertical ? 'ArrowDown' : 'ArrowRight';
         const previousKey = vertical ? 'ArrowUp' : 'ArrowLeft';
-        const stripBg = color;
-        const stripText = contrast(color);
-        const activeBg = String(color).toUpperCase() === '#FF6600' ? '#003366' : '#FF6600';
-        const activeText = contrast(activeBg);
-        const panelBg = '#E6EEF4';
-        const panelText = '#001B3B';
-        const tabStyle = (i) => (vertical ? 'display:block;width:100%;text-align:left;' : '') + 'padding:14px 22px;border:0;background-color:' + (i === 0 ? activeBg : stripBg) + ';color:' + (i === 0 ? activeText : stripText) + ';font-family:' + fontStack + ';font-weight:700;font-size:17px;line-height:1.2;cursor:pointer';
-        const onClickJs = 'var r=this.closest(\'[data-mcc-tabs]\');r.querySelectorAll(\'[role=tab]\').forEach(function(t){t.setAttribute(\'aria-selected\',\'false\');t.tabIndex=-1;t.style.backgroundColor=\'' + stripBg + '\';t.style.color=\'' + stripText + '\'});r.querySelectorAll(\'[role=tabpanel]\').forEach(function(p){p.hidden=true});this.setAttribute(\'aria-selected\',\'true\');this.tabIndex=0;this.style.backgroundColor=\'' + activeBg + '\';this.style.color=\'' + activeText + '\';document.getElementById(this.getAttribute(\'aria-controls\')).hidden=false';
-        const onKeyJs = 'if(event.key===\'' + nextKey + '\'||event.key===\'' + previousKey + '\'){event.preventDefault();var a=Array.from(this.parentNode.querySelectorAll(\'[role=tab]\')),i=a.indexOf(this),n=event.key===\'' + nextKey + '\'?(i+1)%a.length:(i-1+a.length)%a.length;a[n].click();a[n].focus()}';
-        const tabButtons = items.map((item, i) => '<button type="button" role="tab" id="' + id + '-tab-' + i + '" aria-controls="' + id + '-panel-' + i + '" aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? '0' : '-1') + '" onclick="' + attr(onClickJs) + '" onkeydown="' + attr(onKeyJs) + '" style="' + tabStyle(i) + '">' + e(item.heading) + '</button>').join('');
-        const panels = items.map((item, i) => '<div role="tabpanel" id="' + id + '-panel-' + i + '" aria-labelledby="' + id + '-tab-' + i + '"' + (i ? ' hidden' : '') + ' style="padding:24px 26px;background-color:' + panelBg + ';color:' + panelText + ';font-family:' + fontStack + ';font-size:17px;line-height:1.55">' + br(item.content) + '</div>').join('');
-        if (vertical) {
-          return '<div data-mcc-tabs="' + id + '" style="' + base + ';display:flex;flex-wrap:wrap;align-items:stretch;gap:0;margin:24px 0;border-radius:6px;overflow:hidden"><div role="tablist" aria-label="Tabbed content" aria-orientation="vertical" style="display:flex;flex:1 1 190px;flex-direction:column;align-items:stretch;gap:0;background-color:' + stripBg + '">' + tabButtons + '</div><div style="flex:3 1 340px;background-color:' + panelBg + '">' + panels + '</div></div>';
-        }
-        return '<div data-mcc-tabs="' + id + '" style="' + base + ';margin:24px 0;border-radius:6px;overflow:hidden"><div role="tablist" aria-label="Tabbed content" aria-orientation="horizontal" style="display:flex;flex-wrap:wrap;align-items:stretch;gap:0;background-color:' + stripBg + '">' + tabButtons + '</div><div>' + panels + '</div></div>';
+        // Existing background/text controls customize the selected tab.
+        const activeBg = background, activeText = text;
+        const inactiveBg = mixWithWhite(background, 0.9);
+        const inactiveText = contrastRatio(color, inactiveBg) >= 4.5 ? color : '#1F2933';
+        const headingColor = contrastRatio(color, '#FFFFFF') >= 3 ? color : '#1F2933';
+        const borderColor = contrastRatio(color, '#FFFFFF') >= 3 ? color : '#52616D';
+        const tabStyle = (i) => (vertical ? 'display:block;width:100%;text-align:left;border-radius:7px 0 0 7px;' : 'flex:1 1 220px;border-radius:7px 7px 0 0;') + 'padding:12px 16px;border:1px solid ' + borderColor + ';border-bottom-width:' + (i === 0 ? '4' : '1') + 'px;background-color:' + (i === 0 ? activeBg : inactiveBg) + ';color:' + (i === 0 ? activeText : inactiveText) + ';font-family:' + fontStack + ';font-weight:700;font-size:18px;line-height:1.4;cursor:pointer';
+        // Resolve panels inside this group, never through a page-wide ID lookup.
+        const onClickJs = 'var r=this.closest(\'[data-mcc-tabs]\');r.querySelectorAll(\'[role=tab]\').forEach(function(t){t.setAttribute(\'aria-selected\',\'false\');t.tabIndex=-1;t.style.backgroundColor=\'' + inactiveBg + '\';t.style.color=\'' + inactiveText + '\';t.style.borderBottomWidth=\'1px\'});r.querySelectorAll(\'[role=tabpanel]\').forEach(function(p){p.hidden=true});this.setAttribute(\'aria-selected\',\'true\');this.tabIndex=0;this.style.backgroundColor=\'' + activeBg + '\';this.style.color=\'' + activeText + '\';this.style.borderBottomWidth=\'4px\';var target=this.getAttribute(\'aria-controls\');r.querySelectorAll(\'[role=tabpanel]\').forEach(function(p){if(p.id===target)p.hidden=false})';
+        const onKeyJs = 'if(event.key===\'' + nextKey + '\'||event.key===\'' + previousKey + '\'||event.key===\'Home\'||event.key===\'End\'){event.preventDefault();var a=Array.from(this.parentNode.querySelectorAll(\'[role=tab]\')),i=a.indexOf(this),n=event.key===\'Home\'?0:event.key===\'End\'?a.length-1:event.key===\'' + nextKey + '\'?(i+1)%a.length:(i-1+a.length)%a.length;a[n].click();a[n].focus()}';
+        const tabButtons = items.map((item, i) => '<button type="button" role="tab" id="' + id + '-tab-' + i + '" aria-controls="' + id + '-panel-' + i + '" aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? '0' : '-1') + '" onclick="' + attr(onClickJs) + '" onkeydown="' + attr(onKeyJs) + '" style="' + tabStyle(i) + '">' + e(item.heading) + '</button>').join('\n');
+        const panels = items.map((item, i) => '<div role="tabpanel" id="' + id + '-panel-' + i + '" aria-labelledby="' + id + '-tab-' + i + '" tabindex="0"' + (i ? ' hidden' : '') + ' style="padding:21px;border:1px solid #9FB5C0;border-top:5px solid ' + borderColor + ';background-color:#FFFFFF;color:#1F2933;font-family:' + fontStack + ';font-size:19px;line-height:1.65;overflow-wrap:anywhere"><p style="margin:0">' + br(item.content) + '</p></div>').join('\n');
+        const heading = '<h2 id="' + id + '-heading" style="font-family:' + fontStack + ';font-size:30px;line-height:1.25;color:' + headingColor + ';border-bottom:3px solid ' + borderColor + ';padding-bottom:7px;margin:0 0 14px">' + e(title) + '</h2>';
+        const tablist = '<div role="tablist" aria-labelledby="' + id + '-heading" aria-orientation="' + (vertical ? 'vertical' : 'horizontal') + '" style="display:flex;' + (vertical ? 'flex:1 1 190px;flex-direction:column;' : 'flex-wrap:wrap;') + 'gap:6px;align-items:stretch">' + tabButtons + '</div>';
+        return '<section data-mcc-tabs="' + id + '" aria-labelledby="' + id + '-heading" style="' + base + ';margin:32px 0">' + heading + (vertical ? '<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:flex-start">' + tablist + '<div style="flex:3 1 340px;min-width:0">' + panels + '</div></div>' : tablist + panels) + '</section>';
       }
       case 'flip':
         return '<div style="' + base + ';display:grid;grid-template-columns:repeat(' + gridColumns(items.length) + ',1fr);gap:14px;margin:24px 0">' + items.map((item, i) => '<button type="button" aria-pressed="false" onclick="var f=this.querySelector(\'[data-front]\'),b=this.querySelector(\'[data-back]\'),show=this.getAttribute(\'aria-pressed\')!==\'true\';this.setAttribute(\'aria-pressed\',show);f.hidden=show;b.hidden=!show" style="min-height:170px;padding:22px;border:2px solid ' + color + ';border-radius:10px;color:' + text + ';background-color:' + background + ';font-family:' + fontStack + ';font-size:19px;cursor:pointer"><span data-front><strong style="display:block;color:' + text + ';font-size:22px">' + e(item.front) + '</strong><small style="display:block;margin-top:14px;color:' + text + '">Select to reveal</small></span><span data-back hidden><strong style="display:block;color:' + text + ';font-size:18px;margin-bottom:8px">' + e(item.front) + '</strong>' + br(item.back) + '<small style="display:block;margin-top:14px;color:' + text + '">Select to flip back</small></span></button>').join('') + '<p style="margin:14px 0 0;font-family:' + fontStack + ';color:#5A6872;font-size:14px;font-style:italic">Cards reset when you leave the page.</p></div>';
