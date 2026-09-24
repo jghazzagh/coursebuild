@@ -16,35 +16,6 @@
   @media(max-width:1220px){.brand-row,.crumb,.hero-inner,.page,.footer-main,.footer-bottom{margin-left:24px;margin-right:24px}}@media(max-width:920px){.cards{grid-template-columns:repeat(2,1fr)}.intro{grid-template-columns:1fr}}@media(max-width:700px){.brand-row{align-items:stretch;flex-direction:column}.brand{flex-wrap:wrap}.course-name{font-size:18px}.search{width:100%}.nav{overflow-x:auto}.nav ul{min-width:max-content}.cards{grid-template-columns:1fr}.category-head{align-items:start;flex-direction:column}.footer-main{grid-template-columns:1fr}.footer-bottom{flex-direction:column}}
   .page a,.intro a,.card a,.action a:not(.button){color:var(--link)}
 </style>
-<style>
-/* Interactive page anatomy: scoped to this addition */
-  .anatomy{border:1px solid var(--line);border-top:6px solid var(--teal);border-radius:12px;background:#fff;padding:30px;margin:0 0 58px}
-  .anatomy h2{margin:0;color:var(--navy);font-size:32px;line-height:1.2;font-weight:500}
-  .anatomy-kicker{color:#276171;font-size:13px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;margin:0 0 10px}
-  .anatomy-controls{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:22px 0}
-  .anatomy [hidden]{display:none!important}
-  .anatomy button{padding:10px 14px;min-height:44px;border:1px solid var(--blue);border-radius:6px;color:var(--blue);background:white;cursor:pointer}
-  .anatomy #anatomy-tour{background:var(--blue);color:white}
-  .anatomy-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:30px;align-items:start}
-  .anatomy-picture svg{display:block;width:100%;max-width:450px;margin:auto;font-family:Arial,sans-serif}
-  .anatomy-caption{font-size:14px;color:var(--muted);margin:10px 12px}
-  .anatomy-zone{fill:#f0f5f7;stroke:#9db3bf;stroke-width:1.5}
-  .anatomy-hotspot{cursor:pointer}
-  .anatomy-hotspot:hover .anatomy-zone{fill:#e3eef3}
-  .anatomy-hotspot[aria-pressed=true] .anatomy-zone{fill:#fff4e9;stroke:#a44700;stroke-width:3}
-  .anatomy-hotspot:focus .anatomy-zone{stroke:#003366;stroke-width:4;stroke-dasharray:6 3}
-  .anatomy-hotspot:focus{outline:none}
-  .anatomy-hotspot.is-animating .anatomy-zone{animation:anatomy-trace .8s ease-out}
-  @keyframes anatomy-trace{from{stroke-dasharray:920;stroke-dashoffset:920}to{stroke-dasharray:920;stroke-dashoffset:0}}
-  .anatomy-detail{padding:24px;background:#edf4f7;border-left:5px solid var(--orange);border-radius:0 8px 8px 0;margin-bottom:18px}
-  .anatomy-detail h3{font-size:27px;line-height:1.2;color:var(--navy);margin:0 0 20px}
-  .anatomy-detail h4{font-size:16px;color:var(--blue);margin:18px 0 4px}
-  .anatomy-detail p{margin:6px 0 14px}
-  .anatomy-bottom{border-top:1px solid var(--line);padding-top:18px;margin-bottom:0}
-  #anatomy-status{font-size:14px;color:var(--muted)}
-  @media(max-width:760px){.anatomy-layout{grid-template-columns:1fr}.anatomy{padding:18px}.anatomy h2{font-size:27px}}
-  @media(prefers-reduced-motion:reduce){.anatomy *{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
-</style>
 <a class="skip" href="#main-content">Skip to main content</a>
 <header>
   <div class="topbar"><span>Instructional Design &amp; Innovation</span><a href="mailto:online@mclennan.edu">online@mclennan.edu</a></div>
@@ -62,44 +33,6 @@
   <nav class="toc" aria-label="Building block categories"><a href="#text">Text &amp; Layout</a><a href="#instructor">Instructor Information</a><a href="#organization">Course Organization</a><a href="#callouts">Callouts &amp; Key Ideas</a><a href="#media">Media &amp; Visuals</a><a href="#reveal">Reveal &amp; Explore</a><a href="#timelines">Timelines &amp; Processes</a><a href="#practice">Practice &amp; Feedback</a><a href="#questions">Scenarios &amp; Examples</a><a href="#data">Resources &amp; Data</a></nav></div><aside class="tip"><strong>Accessibility reminder</strong>Keep essential directions visible. Use logical headings, meaningful link labels, useful image descriptions, and accurate media captions or transcripts. Check the finished page with a keyboard and in the learner view.
   <strong style="margin-top:18px">Practice and progress</strong>Page interactions do not save responses or send grades or completion to Brightspace. Do not rely on answers or progress remaining after a reload or return visit. Use Brightspace assessments to collect graded work. The builder’s How this block works note explains each block’s behavior.</aside></section>
   <!-- END: Guide introduction and category navigation -->
-<!-- BEGIN: Interactive page anatomy -->
-  <section id="page-anatomy" class="anatomy" aria-labelledby="anatomy-title">
-    <p class="anatomy-kicker">See how the pieces work together</p>
-    <h2 id="anatomy-title">Anatomy of an effective course page</h2>
-    <p>This is an example, not a required template. Choose the components your lesson needs. Select a numbered region or explore the optional tour.</p>
-    <div class="anatomy-controls" hidden><button type="button" id="anatomy-tour">Start guided tour</button><button type="button" id="anatomy-prev">Previous region</button><button type="button" id="anatomy-next">Next region</button><span id="anatomy-status" role="status" aria-live="polite"></span></div>
-    <div class="anatomy-layout">
-      <div class="anatomy-picture">
-        <svg viewBox="0 0 450 770" xmlns="http://www.w3.org/2000/svg" role="group" aria-labelledby="anatomy-svg-title anatomy-svg-desc">
-          <title id="anatomy-svg-title">Explore a sample course content page</title>
-          <desc id="anatomy-svg-desc">Eight numbered regions correspond to explanations alongside or below the diagram. Use Tab then Enter or Space to select a region.</desc>
-          <rect x="12" y="12" width="426" height="746" rx="14" fill="white" stroke="#cbd6dc" stroke-width="2"/>
-          <path d="M26 12H424Q438 12 438 26V65H12V26Q12 12 26 12" fill="#003366"/>
-          <text x="32" y="44" fill="white" font-size="18" font-weight="700">YOUR COURSE · SAMPLE LESSON</text>
-          <g class="anatomy-hotspot" role="button" tabindex="0" aria-pressed="false" aria-controls="anatomy-detail-0" aria-label="1. Page title and introduction" data-anatomy-index="0"><rect class="anatomy-zone" x="32" y="82" width="386" height="70" rx="7"/><circle cx="57" cy="106" r="13" fill="#003366"/><text x="57" y="111" text-anchor="middle" fill="white" font-size="14">1</text><text x="82" y="110" fill="#001b3b" font-size="17" font-weight="700">Orientation</text><path d="M82 125H390 M82 135H330" stroke="#a9bdc7" stroke-width="4" stroke-linecap="round"/></g>
-<g class="anatomy-hotspot" role="button" tabindex="0" aria-pressed="false" aria-controls="anatomy-detail-1" aria-label="2. Learning objectives" data-anatomy-index="1"><rect class="anatomy-zone" x="32" y="164" width="386" height="70" rx="7"/><circle cx="57" cy="188" r="13" fill="#003366"/><text x="57" y="193" text-anchor="middle" fill="white" font-size="14">2</text><text x="82" y="192" fill="#001b3b" font-size="17" font-weight="700">Objectives</text><path d="M82 207H390 M82 217H330" stroke="#a9bdc7" stroke-width="4" stroke-linecap="round"/></g>
-<g class="anatomy-hotspot" role="button" tabindex="0" aria-pressed="false" aria-controls="anatomy-detail-2" aria-label="3. Instructional content" data-anatomy-index="2"><rect class="anatomy-zone" x="32" y="246" width="386" height="70" rx="7"/><circle cx="57" cy="270" r="13" fill="#003366"/><text x="57" y="275" text-anchor="middle" fill="white" font-size="14">3</text><text x="82" y="274" fill="#001b3b" font-size="17" font-weight="700">Instruction</text><path d="M82 289H390 M82 299H330" stroke="#a9bdc7" stroke-width="4" stroke-linecap="round"/></g>
-<g class="anatomy-hotspot" role="button" tabindex="0" aria-pressed="false" aria-controls="anatomy-detail-3" aria-label="4. Instructor insight" data-anatomy-index="3"><rect class="anatomy-zone" x="32" y="328" width="386" height="70" rx="7"/><circle cx="57" cy="352" r="13" fill="#003366"/><text x="57" y="357" text-anchor="middle" fill="white" font-size="14">4</text><text x="82" y="356" fill="#001b3b" font-size="17" font-weight="700">Instructor voice</text><path d="M82 371H390 M82 381H330" stroke="#a9bdc7" stroke-width="4" stroke-linecap="round"/></g>
-<g class="anatomy-hotspot" role="button" tabindex="0" aria-pressed="false" aria-controls="anatomy-detail-4" aria-label="5. Knowledge check" data-anatomy-index="4"><rect class="anatomy-zone" x="32" y="410" width="386" height="70" rx="7"/><circle cx="57" cy="434" r="13" fill="#003366"/><text x="57" y="439" text-anchor="middle" fill="white" font-size="14">5</text><text x="82" y="438" fill="#001b3b" font-size="17" font-weight="700">Practice</text><path d="M82 453H390 M82 463H330" stroke="#a9bdc7" stroke-width="4" stroke-linecap="round"/></g>
-<g class="anatomy-hotspot" role="button" tabindex="0" aria-pressed="false" aria-controls="anatomy-detail-5" aria-label="6. Task list and wrap-up" data-anatomy-index="5"><rect class="anatomy-zone" x="32" y="492" width="386" height="70" rx="7"/><circle cx="57" cy="516" r="13" fill="#003366"/><text x="57" y="521" text-anchor="middle" fill="white" font-size="14">6</text><text x="82" y="520" fill="#001b3b" font-size="17" font-weight="700">Next steps</text><path d="M82 535H390 M82 545H330" stroke="#a9bdc7" stroke-width="4" stroke-linecap="round"/></g>
-<g class="anatomy-hotspot" role="button" tabindex="0" aria-pressed="false" aria-controls="anatomy-detail-6" aria-label="7. Help and resources" data-anatomy-index="6"><rect class="anatomy-zone" x="32" y="574" width="386" height="70" rx="7"/><circle cx="57" cy="598" r="13" fill="#003366"/><text x="57" y="603" text-anchor="middle" fill="white" font-size="14">7</text><text x="82" y="602" fill="#001b3b" font-size="17" font-weight="700">Support</text><path d="M82 617H390 M82 627H330" stroke="#a9bdc7" stroke-width="4" stroke-linecap="round"/></g>
-          <g class="anatomy-hotspot" role="button" tabindex="0" aria-pressed="false" aria-controls="anatomy-detail-7" aria-label="8. Accessibility across the page" data-anatomy-index="7"><rect class="anatomy-zone" x="32" y="664" width="386" height="70" rx="7"/><text x="50" y="692" fill="#001b3b" font-size="17" font-weight="700">8. Accessibility throughout</text><text x="50" y="715" fill="#173744" font-size="15">Headings · Contrast · Media · Keyboard</text></g>
-        </svg>
-        <p class="anatomy-caption">An illustrative content page, not the Brightspace interface. A banner is optional; clear structure is not.</p>
-      </div>
-      <div id="anatomy-details"><article class="anatomy-detail" id="anatomy-detail-0" aria-labelledby="anatomy-heading-0"><p class="anatomy-kicker">1 / 8 · Orientation</p><h3 id="anatomy-heading-0">Page title and introduction</h3><h4>Why it matters</h4><p>Tell students where they are and why this lesson matters.</p><h4>What to include</h4><p>Include a descriptive title, a brief purpose statement, and a connection to prior learning.</p><h4>Watch out for</h4><p>A decorative banner cannot replace a meaningful text heading.</p><p><strong>CourseMaker connection:</strong> Intro text and Section heading</p><a href="#text">Explore related building blocks</a></article>
-<article class="anatomy-detail" id="anatomy-detail-1" aria-labelledby="anatomy-heading-1"><p class="anatomy-kicker">2 / 8 · Objectives</p><h3 id="anatomy-heading-1">Learning objectives</h3><h4>Why it matters</h4><p>Make the intended learning explicit before asking students to work.</p><h4>What to include</h4><p>Use measurable actions and connect each objective to practice and assessment.</p><h4>Watch out for</h4><p>Avoid vague verbs such as understand without describing what students will do.</p><p><strong>CourseMaker connection:</strong> Learning objectives</p><a href="#organization">Explore related building blocks</a></article>
-<article class="anatomy-detail" id="anatomy-detail-2" aria-labelledby="anatomy-heading-2"><p class="anatomy-kicker">3 / 8 · Instruction</p><h3 id="anatomy-heading-2">Instructional content</h3><h4>Why it matters</h4><p>Explain and model the concept students will need to apply.</p><h4>What to include</h4><p>Combine a focused explanation with a relevant example, diagram, or captioned demonstration.</p><h4>Watch out for</h4><p>A collection of links is not a substitute for instructional explanation.</p><p><strong>CourseMaker connection:</strong> Paragraph, Content image with text, and Video</p><a href="#media">Explore related building blocks</a></article>
-<article class="anatomy-detail" id="anatomy-detail-3" aria-labelledby="anatomy-heading-3"><p class="anatomy-kicker">4 / 8 · Instructor voice</p><h3 id="anatomy-heading-3">Instructor insight</h3><h4>Why it matters</h4><p>Make your expertise visible through specific coaching.</p><h4>What to include</h4><p>Add a practical tip, common misconception, or explanation of how you approach a problem.</p><h4>Watch out for</h4><p>Repeating the paragraph above adds length without adding guidance.</p><p><strong>CourseMaker connection:</strong> Instructor insight</p><a href="#instructor">Explore related building blocks</a></article>
-<article class="anatomy-detail" id="anatomy-detail-4" aria-labelledby="anatomy-heading-4"><p class="anatomy-kicker">5 / 8 · Practice</p><h3 id="anatomy-heading-4">Knowledge check</h3><h4>Why it matters</h4><p>Let students apply the idea and get useful feedback before graded work.</p><h4>What to include</h4><p>Ask an aligned question and explain why each answer is right or wrong.</p><h4>Watch out for</h4><p>Correct or incorrect alone does not tell a student how to improve. These checks do not send grades to Brightspace.</p><p><strong>CourseMaker connection:</strong> Multiple choice question and Knowledge check</p><a href="#practice">Explore related building blocks</a></article>
-<article class="anatomy-detail" id="anatomy-detail-5" aria-labelledby="anatomy-heading-5"><p class="anatomy-kicker">6 / 8 · Next steps</p><h3 id="anatomy-heading-5">Task list and wrap-up</h3><h4>Why it matters</h4><p>Help students finish the lesson and know what to do next.</p><h4>What to include</h4><p>Summarize the main point, list required tasks, and link to the next activity.</p><h4>Watch out for</h4><p>An interactive checklist is a temporary personal tracker, not saved completion evidence.</p><p><strong>CourseMaker connection:</strong> Checklist, Interactive checklist, and Lesson wrap-up</p><a href="#organization">Explore related building blocks</a></article>
-<article class="anatomy-detail" id="anatomy-detail-6" aria-labelledby="anatomy-heading-6"><p class="anatomy-kicker">7 / 8 · Support</p><h3 id="anatomy-heading-6">Help and resources</h3><h4>Why it matters</h4><p>Give students a clear route to assistance at the point of need.</p><h4>What to include</h4><p>Include verified tutoring or technical-support contacts and descriptive resource links.</p><h4>Watch out for</h4><p>Do not assume students know which office handles a problem.</p><p><strong>CourseMaker connection:</strong> Student support and Button links</p><a href="#data">Explore related building blocks</a></article>
-<article class="anatomy-detail" id="anatomy-detail-7" aria-labelledby="anatomy-heading-7"><p class="anatomy-kicker">8 / 8 · Throughout</p><h3 id="anatomy-heading-7">Accessibility across the page</h3><h4>Why it matters</h4><p>Make every part usable, not just a final accessibility box.</p><h4>What to include</h4><p>Use logical headings, readable contrast, meaningful alt text, accurate captions or transcripts, and keyboard-operable controls.</p><h4>Watch out for</h4><p>An automated check alone cannot establish accessibility. Review the learner view and test with a keyboard.</p><p><strong>CourseMaker connection:</strong> Apply these checks to every block</p><a href="#text">Explore related building blocks</a></article></div>
-    </div>
-    <noscript><p>JavaScript is off. All eight explanations are shown below the diagram.</p></noscript>
-    <p class="anatomy-bottom"><a href="mcc-brightspace-template-builder.html">Open Page Builder</a> to assemble your own page. Guide links explain block choices; they do not automatically add blocks.</p>
-  </section>
-  <!-- END: Interactive page anatomy -->
 
   <!-- BEGIN: Text &amp; Layout -->
   <section class="category" id="text" aria-labelledby="text-heading"><div class="category-head"><h2 id="text-heading">Text &amp; Layout</h2><p>Core content and page structure</p></div><div class="cards">
@@ -218,43 +151,6 @@ document.getElementById('site-search').addEventListener('submit',function(event)
   else if(/template|module/.test(q)) location.href='templates.html';
   else location.href='mcc-brightspace-template-builder.html';
 });
-</script>
-<script>
-(function(){
-  'use strict';
-  var root=document.getElementById('page-anatomy');
-  var spots=Array.from(root.querySelectorAll('[data-anatomy-index]'));
-  var panels=Array.from(root.querySelectorAll('.anatomy-detail'));
-  var tour=document.getElementById('anatomy-tour'),status=document.getElementById('anatomy-status');
-  var motion=window.matchMedia('(prefers-reduced-motion: reduce)');
-  var index=0,timer=null;
-  function stop(){clearInterval(timer);timer=null;tour.textContent='Start guided tour';}
-  function select(next,announce){
-    index=(next+spots.length)%spots.length;
-    spots.forEach(function(s,i){s.setAttribute('aria-pressed',String(i===index));s.classList.remove('is-animating');});
-    panels.forEach(function(p,i){p.hidden=i!==index;});
-    if(!motion.matches){void spots[index].getBoundingClientRect();spots[index].classList.add('is-animating');}
-    if(announce)status.textContent=(index+1)+' of '+spots.length+': '+panels[index].querySelector('h3').textContent;
-  }
-  function manual(next){stop();select(next,true);}
-  spots.forEach(function(s,i){
-    s.addEventListener('click',function(){manual(i);});
-    s.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();manual(i);}});
-  });
-  document.getElementById('anatomy-prev').addEventListener('click',function(){manual(index-1);});
-  document.getElementById('anatomy-next').addEventListener('click',function(){manual(index+1);});
-  tour.addEventListener('click',function(){
-    if(timer){stop();status.textContent='Tour paused. Explore at your own pace.';return;}
-    if(motion.matches){status.textContent='Reduced motion is enabled. Use Previous or Next to explore at your own pace.';return;}
-    select(0,true);tour.textContent='Pause guided tour';
-    timer=setInterval(function(){if(index===spots.length-1){stop();status.textContent='Tour complete. Select any region to revisit it.';}else{select(index+1,true);}},6000);
-  });
-  root.addEventListener('keydown',function(e){if(e.key==='Escape'){stop();status.textContent='Tour paused.';}});
-  document.addEventListener('visibilitychange',function(){if(document.hidden)stop();});
-  motion.addEventListener('change',function(){stop();select(index,false);});
-  root.querySelector('.anatomy-controls').hidden=false;
-  select(0,false);
-})();
 </script>
 </body>
 </html>
