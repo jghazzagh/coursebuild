@@ -810,55 +810,32 @@
   #block-example-title {font-size:24px;margin:0;color:#003366;}
   #block-example-content {display:block;width:100%;height:420px;overflow:auto;padding:16px;border:1px solid #c9d4da;border-radius:6px;background:#fff;margin:16px 0;overflow-wrap:anywhere;}
 
-  /* BEGIN: How CourseMaker works animated explainer */
-  .cm-howitworks {
-    margin: 0 0 24px;
-    padding: 20px 24px 16px;
-    background: #fff;
-    border: 1px solid #cad5da;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
+  /* BEGIN: Animated empty-state drag illustration */
+  .cm-empty-anim { display: block; width: 100%; max-width: 220px; height: auto; margin: 0 auto 16px; opacity: .6; }
+  .cm-empty-cursor-group { animation: cmEmptyDrag 4.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .cm-empty-target { animation: cmEmptyTarget 4.5s ease-in-out infinite; }
+  @keyframes cmEmptyDrag {
+    0%   { transform: translateX(0) scale(1); opacity: 1; }
+    8%   { transform: translateX(0) scale(1); opacity: 1; }
+    45%  { transform: translateX(156px) scale(1); opacity: 1; }
+    52%  { transform: translateX(156px) scale(1.08); opacity: 1; }
+    58%  { transform: translateX(156px) scale(1); opacity: 1; }
+    80%  { transform: translateX(156px) scale(1); opacity: 1; }
+    92%  { transform: translateX(156px) scale(1); opacity: 0; }
+    100% { transform: translateX(156px) scale(1); opacity: 0; }
   }
-  .cm-howitworks-svg { display: block; width: 100%; height: auto; max-width: 900px; margin: 0 auto; }
-  .cm-stage-label { font: 700 15px/1.3 Poppins, Arial, Helvetica, sans-serif; fill: var(--mcc-navy); }
-  .cm-howitworks-caption { margin: 10px 4px 0; color: var(--muted); font-size: 13px; text-align: center; }
-  .cm-anim { animation-duration: 8s; animation-timing-function: linear; animation-iteration-count: infinite; }
-  .cm-block-travel { animation-name: cmBlockTravel; }
-  .cm-preview-highlight { animation-name: cmPreviewHighlight; }
-  .cm-doc-travel { animation-name: cmDocTravel; }
-  .cm-export-check { animation-name: cmExportCheck; transform-box: fill-box; transform-origin: center; }
-  @keyframes cmBlockTravel {
-    0%   { transform: translateX(0); opacity: 1; }
-    25%  { transform: translateX(360px); opacity: 1; }
-    32%  { transform: translateX(360px); opacity: 0; }
-    100% { transform: translateX(360px); opacity: 0; }
+  @keyframes cmEmptyTarget {
+    0%, 44%   { opacity: .35; }
+    52%, 80%  { opacity: 1; }
+    92%, 100% { opacity: .35; }
   }
-  @keyframes cmPreviewHighlight {
-    0%, 24% { opacity: 0; }
-    28%, 45% { opacity: 1; }
-    50%, 100% { opacity: 0; }
-  }
-  @keyframes cmDocTravel {
-    0%, 44% { opacity: 0; transform: translateX(0); }
-    48%     { opacity: 1; transform: translateX(0); }
-    74%     { opacity: 1; transform: translateX(360px); }
-    80%, 100% { opacity: 0; transform: translateX(360px); }
-  }
-  @keyframes cmExportCheck {
-    0%, 74%  { opacity: 0; transform: scale(.6); }
-    80%      { opacity: 1; transform: scale(1); }
-    92%      { opacity: 1; transform: scale(1); }
-    100%     { opacity: 0; transform: scale(.6); }
-  }
-  /* Reduced motion: hide the traveling/pulsing pieces entirely and leave the
-     three static stage icons, connectors, and labels as a plain step diagram. */
+  /* Reduced motion: freeze on a plain, non-moving illustration so the CTA
+     text above still has quiet visual support without any motion. */
   @media (prefers-reduced-motion: reduce) {
-    .cm-howitworks .cm-anim { animation: none !important; opacity: 0 !important; }
+    .cm-empty-cursor-group, .cm-empty-target { animation: none !important; }
+    .cm-empty-target { opacity: .35 !important; }
   }
-  @media (max-width: 760px) {
-    .cm-howitworks { padding: 16px 14px; }
-  }
-  /* END: How CourseMaker works animated explainer */
+  /* END: Animated empty-state drag illustration */
 </style>
 
 <a class="skip-link" href="#builder">Skip to main content</a>
@@ -910,59 +887,6 @@
         <input type="file" id="import-file" accept=".json,application/json" hidden>
       </div>
     </div>
-
-    <!-- BEGIN: How CourseMaker works animated explainer -->
-    <section class="cm-howitworks" aria-label="How CourseMaker works">
-      <svg class="cm-howitworks-svg" viewBox="0 0 900 165" role="img" focusable="false" aria-label="Diagram showing how CourseMaker works: choose a block from the library, watch it appear in the live preview, then export the finished page as self-contained HTML.">
-        <defs>
-          <marker id="cmArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-            <path d="M0,0 L10,5 L0,10 z" fill="#9FB0B8"></path>
-          </marker>
-        </defs>
-
-        <!-- Connectors -->
-        <line x1="140" y1="70" x2="393" y2="70" stroke="#9FB0B8" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#cmArrow)"></line>
-        <line x1="500" y1="70" x2="753" y2="70" stroke="#9FB0B8" stroke-width="2" stroke-dasharray="6 6" marker-end="url(#cmArrow)"></line>
-
-        <!-- Stage 1: Building block library -->
-        <rect x="40" y="30" width="100" height="80" rx="10" fill="#F3F7F8" stroke="#C9D7DE" stroke-width="2"></rect>
-        <rect x="55" y="45" width="70" height="14" rx="4" fill="#003366"></rect>
-        <rect x="55" y="64" width="70" height="14" rx="4" fill="#008DA7"></rect>
-        <rect x="55" y="83" width="70" height="14" rx="4" fill="#FF6600"></rect>
-        <text x="90" y="145" text-anchor="middle" class="cm-stage-label">1. Choose a block</text>
-
-        <!-- Stage 2: Live preview -->
-        <rect x="400" y="30" width="100" height="80" rx="10" fill="#F3F7F8" stroke="#C9D7DE" stroke-width="2"></rect>
-        <rect x="410" y="40" width="80" height="12" rx="3" fill="#001B3B"></rect>
-        <rect x="410" y="60" width="80" height="6" rx="3" fill="#D6E8EE"></rect>
-        <rect x="410" y="72" width="60" height="6" rx="3" fill="#D6E8EE"></rect>
-        <rect x="410" y="84" width="70" height="6" rx="3" fill="#D6E8EE"></rect>
-        <rect class="cm-anim cm-preview-highlight" x="405" y="35" width="90" height="70" rx="6" fill="#FFF4D6" opacity="0"></rect>
-        <text x="450" y="145" text-anchor="middle" class="cm-stage-label">2. See it live</text>
-
-        <!-- Stage 3: Export HTML -->
-        <rect x="760" y="30" width="100" height="80" rx="10" fill="#F3F7F8" stroke="#C9D7DE" stroke-width="2"></rect>
-        <polygon points="833,40 850,40 850,57" fill="#EAF2F5" stroke="#003366" stroke-width="1.5"></polygon>
-        <rect x="790" y="40" width="60" height="60" rx="6" fill="#FFFFFF" stroke="#003366" stroke-width="3"></rect>
-        <rect x="800" y="58" width="35" height="5" rx="2" fill="#C9D7DE"></rect>
-        <rect x="800" y="68" width="25" height="5" rx="2" fill="#C9D7DE"></rect>
-        <rect x="800" y="78" width="30" height="5" rx="2" fill="#C9D7DE"></rect>
-        <circle cx="843" cy="97" r="14" fill="#FF6600"></circle>
-        <path d="M843,90 L843,102" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round"></path>
-        <path d="M837,96 L843,102 L849,96" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
-        <g class="cm-anim cm-export-check">
-          <circle cx="845" cy="42" r="13" fill="#008DA7"></circle>
-          <path d="M839,42 L843,47 L851,37" stroke="#FFFFFF" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
-        </g>
-        <text x="810" y="145" text-anchor="middle" class="cm-stage-label">3. Export HTML</text>
-
-        <!-- Traveling elements -->
-        <rect class="cm-anim cm-block-travel" x="55" y="98" width="70" height="10" rx="3" fill="#008DA7"></rect>
-        <rect class="cm-anim cm-doc-travel" x="415" y="94" width="70" height="12" rx="3" fill="#001B3B"></rect>
-      </svg>
-      <p class="cm-howitworks-caption">Choose a block, watch it land in the live preview, then export the page as ready-to-paste HTML. This loops automatically and needs no clicks.</p>
-    </section>
-    <!-- END: How CourseMaker works animated explainer -->
 
     <div class="builder-grid">
       <button type="button" class="collapsed-rail" id="show-library-rail" title="Show the building blocks panel"><span aria-hidden="true">&rsaquo;</span><span class="rail-label">Show blocks</span></button>
@@ -2429,7 +2353,14 @@
     const banner = state.bannerUrl ? '<img class="page-banner-image" src="' + safeUrl(state.bannerUrl, '') + '" alt="">' : '';
     const titleClass = state.titleStyle === 'text' ? ' text-only' : '';
     const starterCards = ['module','instructor','course','weekly'].map(key => '<button type="button" class="starter-card" data-start-template="' + key + '">' + e(templates[key].label) + '</button>').join('');
-    const emptyState = '<div class="preview-empty"><strong>Your page is ready for content.</strong><br>Add a building block from the left panel, or start from a template:<div class="starter-cards">' + starterCards + '</div></div>';
+    const emptyStateAnim = '<svg class="cm-empty-anim" viewBox="0 0 240 74" role="presentation" aria-hidden="true" focusable="false">' +
+      '<rect x="170" y="13" width="50" height="40" rx="6" fill="none" stroke="#9FB0B8" stroke-width="2" stroke-dasharray="5 5"></rect>' +
+      '<rect class="cm-empty-target" x="170" y="13" width="50" height="40" rx="6" fill="#D6E8EE"></rect>' +
+      '<g class="cm-empty-cursor-group">' +
+      '<rect x="20" y="18" width="38" height="28" rx="5" fill="#008DA7"></rect>' +
+      '<path transform="translate(46,32)" d="M0,0 L0,14 L3.5,10.7 L6,16 L8,15 L5.5,9.7 L10,9.7 Z" fill="#182936" stroke="#FFFFFF" stroke-width="1"></path>' +
+      '</g></svg>';
+    const emptyState = '<div class="preview-empty">' + emptyStateAnim + '<strong>Your page is ready for content.</strong><br>Add a building block from the left panel, or start from a template:<div class="starter-cards">' + starterCards + '</div></div>';
     el.preview.innerHTML = banner + '<div class="page-title-preview' + titleClass + '" style="' + (state.titleStyle === 'banner' ? 'background-color:' + state.accent + ';color:' + contrast(state.accent) + ';border-bottom-color:#FF6600' : 'border-bottom-color:' + state.accent) + '"><p class="page-kicker">' + e(state.pageLabel) + '</p><h3>' + e(state.title) + '</h3></div><div class="preview-content' + (state.selectedId ? ' has-selection' : '') + '">' + (blocksHtml || emptyState) + '</div><div class="preview-footer" aria-hidden="true"></div>';
     el.count.textContent = countText(state.blocks.length);
     saveLocal();
