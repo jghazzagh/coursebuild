@@ -196,7 +196,15 @@
   .panel-body { padding: 17px; }
   .panel h2 { margin: 0 0 16px; color: var(--mcc-navy); font-size: 20px; font-weight: 500; }
   .control-panel { max-height: calc(100vh - 28px); overflow: auto; position: sticky; top: 14px; }
-  .editor-panel { min-height: 260px; position: sticky; top: 14px; }
+  .editor-panel { min-height: 260px; position: sticky; top: 14px; max-height: calc(100vh - 28px); overflow: auto; overscroll-behavior: contain; scrollbar-gutter: stable; }
+  .editor-panel .panel-body > h2 { position: sticky; top: -17px; z-index: 5; margin: -17px -17px 12px; padding: 14px 44px 9px 17px; font-size: 17px; line-height: 1.25; background: var(--surface); border-bottom: 1px solid #dbe4e8; }
+  .editor-panel .drawer-close { z-index: 6; }
+  details.repeater-group { padding: 0; }
+  details.repeater-group > summary { cursor: pointer; padding: 10px 12px; color: var(--mcc-blue); font-size: 14px; font-weight: 700; list-style-position: inside; }
+  details.repeater-group > summary .cm-item-label { font-weight: 400; color: #3c4a54; }
+  details.repeater-group[open] > summary { border-bottom: 1px solid #d4e0e5; margin-bottom: 10px; }
+  details.repeater-group > :not(summary) { margin-left: 11px; margin-right: 11px; }
+  details.repeater-group > :last-child { margin-bottom: 11px; }
   .control-group { margin-bottom: 16px; }
   .control-group label, .field-label {
     display: block;
@@ -620,7 +628,7 @@
   @media (max-width: 1050px) {
     .brand-row, .breadcrumb, .footer-main, .footer-bottom { margin-left: 24px; margin-right: 24px; }
     .builder-grid { grid-template-columns: 250px minmax(380px, 1fr); }
-    .editor-panel { grid-column: 1 / -1; position: static; }
+    .editor-panel { grid-column: 1 / -1; position: static; max-height: none; overflow: visible; }
     .editor-fields { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
     .editor-fields .editor-field, .editor-fields .repeater-group, .editor-fields .snippet-box { margin: 0; }
     .editor-fields .editor-acc { grid-column: 1 / -1; }
@@ -2609,10 +2617,16 @@ window.CMUX = (() => {
 
   // Repeater section, shared by the editor render and by count changes (which must not rebuild the
   // count field itself, or the person typing in it loses their place).
+  const itemOpen = {};
+  function itemLabel(def, item) {
+    const f = def.repeater.fields.find(x => typeof item[x.key] === 'string' && item[x.key].replace(/<[^>]*>/g, '').trim());
+    const t = f ? item[f.key].replace(/<[^>]*>/g, '').trim() : '';
+    return t ? ': ' + (t.length > 36 ? t.slice(0, 36) + '…' : t) : '';
+  }
   function itemsSectionHtml(block) {
     const def = defs[block.type];
     const list = block.data[def.repeater.key] || [];
-    const html = list.map((item, index) => '<fieldset class="repeater-group"><legend class="repeater-title">' + e(def.repeater.title) + ' ' + (index + 1) + '</legend>' + def.repeater.fields.filter(f => !f.showIf || f.showIf(item)).map(f => inputHtml(block, f, item[f.key], index)).join('') + '</fieldset>').join('');
+    const html = list.map((item, index) => { const k = block.id + ':' + index; const open = k in itemOpen ? itemOpen[k] : (list.length <= 3 || index === 0); return '<details class="repeater-group" data-item-key="' + k + '"' + (open ? ' open' : '') + '><summary>' + e(def.repeater.title) + ' ' + (index + 1) + '<span class="cm-item-label">' + e(itemLabel(def, item)) + '</span></summary>' + def.repeater.fields.filter(f => !f.showIf || f.showIf(item)).map(f => inputHtml(block, f, item[f.key], index)).join('') + '</details>'; }).join('');
     return '<details class="editor-acc" data-section="items"' + (openEditorSections.has('items') ? ' open' : '') + '><summary>' + e(pluralizeTitle(def.repeater.title)) + '<span class="cat-count">' + list.length + '</span></summary><div class="editor-acc-body">' + html + '</div></details>';
   }
   function refreshRepeaterUi(block) {
@@ -3015,6 +3029,7 @@ window.CMUX = (() => {
 
   el.editor.addEventListener('toggle', (event) => {
     const details = event.target;
+    if (details.dataset && details.dataset.itemKey) return;
     if (!details.classList || !details.classList.contains('editor-acc')) return;
     const key = details.dataset.section;
     if (!key) return;
@@ -3055,6 +3070,8 @@ window.CMUX = (() => {
       const index = parseInt(target.dataset.itemIndex, 10);
       const itemValue = target.isContentEditable ? sanitizeRichText(target.innerHTML) : target.value;
       block.data[def.repeater.key][index][target.dataset.itemField] = itemValue;
+      const lab = target.closest('details.repeater-group') && target.closest('details.repeater-group').querySelector('.cm-item-label');
+      if (lab) lab.textContent = itemLabel(def, block.data[def.repeater.key][index]);
       updatePreviewAndCode();
     }
   });
@@ -3070,7 +3087,11 @@ window.CMUX = (() => {
         const n = parseInt(target.value, 10);
         block.data[key] = isNaN(n) ? (f.min != null ? f.min : 0) : Math.max(lo, Math.min(hi, n));
         target.value = block.data[key];
-        if (def.repeater && def.repeater.countKey === key) { syncRepeater(block); refreshRepeaterUi(block); }
+        if (def.repeater && def.repeater.countKey === key) {
+          const before = el.editor.querySelectorAll('[data-section="items"] details.repeater-group').length;
+          syncRepeater(block);
+          if (before !== (block.data[def.repeater.key] || []).length) refreshRepeaterUi(block);
+        }
         updatePreviewAndCode();
         return;
       }
@@ -3108,6 +3129,8 @@ window.CMUX = (() => {
     updatePreviewAndCode();
   }, true);
   el.editor.addEventListener('click', (event) => {
+    const sum = event.target.closest && event.target.closest('details.repeater-group > summary');
+    if (sum) { const d = sum.parentElement; itemOpen[d.dataset.itemKey] = !d.open; return; }
     const block = state.blocks.find(b => b.id === state.selectedId); if (!block) return;
     const rteBtn = event.target.closest('[data-rte-cmd]');
     if (rteBtn) {
@@ -3241,12 +3264,19 @@ window.CMUX = (() => {
   // Interface helpers deliberately stay outside generatedBody()/fullHtml().
   function focusBlockEditor(field, section) {
     const pane=document.querySelector('.editor-panel');
-    document.querySelectorAll('#block-editor details').forEach(d=>{if(d.dataset.section===(section||'content')||d.dataset.section==='items')d.open=true;});
+    const smooth=window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth';
+    const pb=document.querySelector('.preview-block.is-selected');
+    if(pb){const r=pb.getBoundingClientRect();if(r.top<90||r.bottom>window.innerHeight-20)pb.scrollIntoView({block:r.height>window.innerHeight*.7?'start':'center',behavior:smooth});}
+    document.querySelectorAll('#block-editor details.editor-acc').forEach(d=>{if(d.dataset.section===(section||'content')||d.dataset.section==='items')d.open=true;});
     const candidates=field?field.split('|'):[];let target=null;
     for(const key of candidates){target=el.editor.querySelector('[data-field="'+key+'"],[data-item-field="'+key+'"],[data-block-custom="'+key+'"]');if(target)break;}
     target=target||el.editor.querySelector('input:not([type=color]),textarea,select,[contenteditable=true]');
-    if(target){let parent=target.parentElement;while(parent&&parent!==pane){if(parent.tagName==='DETAILS')parent.open=true;parent=parent.parentElement;}target.focus();target.scrollIntoView({block:'center',behavior:'smooth'});}
-    else{document.getElementById('editor-heading').focus();pane.scrollIntoView({block:'start',behavior:'smooth'});}
+    if(target){let parent=target.parentElement;while(parent&&parent!==pane){if(parent.tagName==='DETAILS')parent.open=true;parent=parent.parentElement;}
+      target.focus({preventScroll:true});
+      const head=pane.querySelector('.panel-body > h2');const pr=pane.getBoundingClientRect(),tr=target.getBoundingClientRect();
+      if(pane.scrollHeight>pane.clientHeight)pane.scrollTo({top:pane.scrollTop+(tr.top-pr.top)-(head?head.offsetHeight:0)-30,behavior:smooth});
+      else if(pr.top<0||pr.bottom>window.innerHeight)pane.scrollIntoView({block:'nearest',behavior:smooth});}
+    else{document.getElementById('editor-heading').focus({preventScroll:true});pane.scrollTo({top:0,behavior:smooth});}
   }
   function selectBlock(id, focus) {
     state.selectedId=id;
