@@ -1,879 +1,1054 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Support | MCC Course Builder</title>
-    <meta
-      name="description"
-      content="Copy your Course Builder page into Brightspace with simple steps. No HTML knowledge needed. Find help with pasting, saving, and updating your page."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:wght@400;500;600;700&display=swap">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Support | MCC Course Builder</title>
+<meta name="description" content="Tour the Course Builder, then copy or download your page and add it to Brightspace with simple, interactive steps. No HTML knowledge needed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Poppins:wght@400;500;600;700&display=swap">
 </head>
-  <body>
-    <style>
-      :root {
-        --blue: #003366;--link:#0567aa;
-        --navy: #001b3b;
-        --teal: #008da7;
-        --orange: #ff6600;
-        --gold: #f7b32b;
-        --ink: #182936;
-        --muted: #5b6973;
-        --line: #cbd6dc;
-        --soft: #edf4f7;
-      }
-      * {
-        box-sizing: border-box;
-      }
-      html {
-        scroll-behavior: smooth;
-      }
-      body {
-        margin: 0;
-        color: var(--ink);
-        background: #f9f9f9;
-        font-family: Poppins, Arial, Helvetica, sans-serif;
-        line-height: 1.55;
-      }
-      button,
-      input {
-        font: inherit;
-      }
-      a:focus-visible,
-      button:focus-visible,
-      input:focus-visible,
-      summary:focus-visible {
-        outline: 3px solid var(--gold);
-        outline-offset: 3px;
-      }
-      .skip {
-        position: fixed;
-        left: 12px;
-        top: -80px;
-        z-index: 999;
-        padding: 11px 16px;
-        color: #fff;
-        background: var(--navy);
-      }
-      .skip:focus {
-        top: 0;
-      }
-      .topbar {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        padding: 8px max(24px, calc((100% - 1180px) / 2));
-        color: #fff;
-        background: var(--navy);
-        font-size: 13px;
-      }
-      .topbar a {
-        color: #fff;
-        text-decoration: none;
-      }
-      .brand-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 30px;
-        max-width: 1180px;
-        min-height: 100px;
-        margin: auto;
-        padding: 18px 0;
-      }
-      .brand {
-        display: flex;
-        align-items: center;
-        gap: 18px;
-        color: var(--navy);
-        text-decoration: none;
-      }
-      .header-logo {
-        display: block;
-        width: min(285px, 55vw);
-        height: auto;
-      }
-      .lockup {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-      }
-      .mark {
-        display: grid;
-        place-items: center;
-        width: 61px;
-        height: 61px;
-        border: 7px solid var(--blue);
-        color: var(--blue);
-        font-size: 34px;
-        font-weight: 500;
-      }
-      .words {
-        color: var(--blue);
-        font-size: 25px;
-        line-height: 1;
-        text-transform: uppercase;
-      }
-      .words small {
-        display: block;
-        margin-top: 5px;
-        font-size: 13px;
-        letter-spacing: 0.07em;
-      }
-      .course-name {
-        padding-left: 18px;
-        border-left: 1px solid #c7cdd1;
-        font-size: 23px;
-        font-weight: 700;
-        white-space: nowrap;
-      }
-      .search {
-        display: flex;
-        width: min(355px, 100%);
-      }
-      .search input {
-        min-width: 0;
-        flex: 1;
-        padding: 13px 15px;
-        border: 1px solid #9eacb5;
-        border-radius: 8px 0 0 8px;
-      }
-      .search button {
-        padding: 0 20px;
-        border: 0;
-        border-radius: 0 8px 8px 0;
-        color: #fff;
-        background: var(--blue);
-        font-weight: 500;
-        cursor: pointer;
-      }
-      .nav {
-        background: #003366;
-        border-bottom: 5px solid var(--orange);
-      }
-      .nav ul {
-        display: flex;
-        max-width: 1180px;
-        margin: auto;
-        padding: 0;
-        list-style: none;
-      }
-      .nav a {
-        display: block;
-        padding: 14px 18px;
-        color: #fff;
-        text-decoration: none;
-        font-weight: 700;
-        border-bottom: 3px solid transparent;
-      }
-      .nav a:hover,
-      .nav a[aria-current="page"] {
-        background: rgba(0, 0, 0, 0.13);
-        border-bottom-color: var(--orange);
-      }
-      .crumb {
-        max-width: 1180px;
-        margin: auto;
-        padding: 14px 0;
-        color: #65727c;
-        font-size: 14px;
-      }
-      .crumb a {
-        color: var(--blue);
-        font-weight: 500;
-        text-decoration: none;
-      }
-      .hero {
-        position: relative;
-        overflow: hidden;
-        color: #fff;
-        background: linear-gradient(110deg, #003366, #001b3b 72%);
-      }
-      .hero:before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-image: radial-gradient(
-          rgba(255, 255, 255, 0.12) 1px,
-          transparent 1px
-        );
-        background-size: 28px 28px;
-        opacity: 0.35;
-      }
-      .hero-inner {
-        position: relative;
-        display: grid;
-        grid-template-columns: 1.6fr 0.8fr;
-        align-items: center;
-        gap: 50px;
-        max-width: 1180px;
-        min-height: 415px;
-        margin: auto;
-        padding: 48px 0;
-      }
-      .eyebrow {
-        margin: 0 0 12px;
-        font-size: 13px;
-        font-weight: 500;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-      }
-      .hero h1 {
-        margin: 0;
-        font-size: clamp(47px, 6vw, 72px);
-        font-weight: 400;
-        line-height: 1.05;
-        letter-spacing: -0.04em;
-      }
-      .hero p {
-        max-width: 760px;
-        margin: 20px 0 0;
-        font-size: 21px;
-      }
-      .seal {
-        display: grid;
-        place-items: center;
-        width: 270px;
-        height: 270px;
-        margin: auto;
-        border: 1px solid rgba(255, 255, 255, 0.28);
-        border-radius: 50%;
-        box-shadow: inset 0 0 0 28px rgba(255, 255, 255, 0.04);
-        text-align: center;
-      }
-      .seal strong {
-        font-size: 26px;
-      }
-      .seal small {
-        display: block;
-        font-size: 13px;
-        letter-spacing: 0.07em;
-        text-transform: uppercase;
-      }
-      main {
-        max-width: 1180px;
-        margin: auto;
-        padding: 80px 0;
-      }
-      .help-grid,
-      .guide-grid,
-      .community-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-      }
-      .help-card,
-      .community-card {
-        position: relative;
-        min-height: 230px;
-        padding: 34px;
-        border: 1px solid var(--line);
-        border-radius: 10px;
-        background: #fff;
-        box-shadow: 0 7px 22px rgba(0, 27, 59, 0.07);
-      }
-      .help-card:first-child {
-        color: #fff;
-        background: #003366;
-      }
-      .help-card:first-child h2,
-      .help-card:first-child a {
-        color: #fff;
-      }
-      .tag {
-        margin: 0 0 9px;
-        color: var(--teal);
-        font-size: 11px;
-        font-weight: 500;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-      }
-      .help-card:first-child .tag {
-        color: #fff;
-      }
-      .help-card h2,
-      .community-card h2 {
-        margin: 0 0 10px;
-        color: var(--navy);
-        font-size: 26px;
-        font-weight: 500;
-      }
-      .help-card p,
-      .community-card p {
-        margin: 0 0 25px;
-      }
-      .help-card a,
-      .community-card a {
-        position: absolute;
-        left: 34px;
-        bottom: 27px;
-        color: var(--blue);
-        font-weight: 500;
-      }
-      .section-head {
-        margin: 75px 0 25px;
-      }
-      .section-head .tag {
-        margin-bottom: 5px;
-      }
-      .section-head h2 {
-        margin: 0;
-        color: var(--navy);
-        font-size: 37px;
-        font-weight: 500;
-      }
-      .guide-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
-      .guide {
-        padding: 26px 23px;
-        border-top: 6px solid var(--blue);
-        background: var(--soft);
-      }
-      .step {
-        display: inline-block;
-        margin-bottom: 16px;
-        padding: 5px 9px;
-        color: #fff;
-        background: var(--teal);
-        border-radius: 4px;
-        font-size: 11px;
-        font-weight: 500;
-      }
-      .guide h3 {
-        margin: 0 0 8px;
-        color: var(--navy);
-        font-size: 21px;
-      }
-      .guide p {
-        margin: 0;
-        font-size: 15px;
-      }
-      .save-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-      }
-      .save-card {
-        padding: 30px;
-        border: 1px solid var(--line);
-        border-top: 6px solid var(--teal);
-        border-radius: 9px;
-        background: #fff;
-      }
-      .save-card h2 {
-        margin: 0 0 9px;
-        color: var(--navy);
-        font-size: 23px;
-        font-weight: 500;
-      }
-      .save-card p {
-        margin: 0;
-        color: var(--muted);
-        font-size: 15px;
-      }
-      .save-follow {
-        margin: 18px 0 0;
-        color: var(--muted);
-        font-size: 15px;
-      }
-      .widget-help {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-      }
-      .widget-card {
-        padding: 30px;
-        border: 1px solid var(--line);
-        border-radius: 9px;
-      }
-      .widget-card h2 {
-        margin: 0 0 8px;
-        color: var(--navy);
-        font-size: 25px;
-      }
-      .widget-card a {
-        display: inline-block;
-        margin-top: 10px;
-        color: var(--blue);
-        font-weight: 500;
-      }
-      .faq {
-        display: grid;
-        gap: 10px;
-        max-width: 900px;
-      }
-      .faq details {
-        overflow: hidden;
-        border: 1px solid var(--line);
-        border-radius: 8px;
-        background: #fff;
-      }
-      .faq summary {
-        cursor: pointer;
-        padding: 17px 20px;
-        color: var(--navy);
-        background: #f2f7f9;
-        font-weight: 500;
-      }
-      .faq p {
-        margin: 0;
-        padding: 17px 20px;
-      }
-      .cta {
-        margin-top: 70px;
-        padding: 42px;
-        color: #fff;
-        background: var(--blue);
-        border-radius: 10px;
-      }
-      .cta .tag {
-        color: #fff;
-      }
-      .cta h2 {
-        margin: 0 0 17px;
-        font-size: 35px;
-        font-weight: 500;
-      }
-      .button {
-        display: inline-block;
-        padding: 13px 18px;
-        color: #fff;
-        background: var(--orange);
-        border-radius: 6px;
-        font-weight: 500;
-        text-decoration: none;
-      }
-      footer {
-        color: #fff;
-        background: #003366;
-      }
-      .footer-main {
-        display: grid;
-        grid-template-columns: 1.6fr 0.7fr 0.8fr;
-        gap: 38px;
-        max-width: 1180px;
-        margin: auto;
-        padding: 42px 0 28px;
-      }
-      .footer-brand {
-        font-size: 25px;
-        font-weight: 500;
-      }
-      .footer-brand small {
-        display: block;
-        margin-top: 5px;
-        font-size: 13px;
-        letter-spacing: 0.08em;
-        }
-      .footer-main p {
-        max-width: 560px;
-        color: #d8e5ec;
-        font-size: 14px;
-      }
-      .footer-main h2 {
-        margin: 4px 0 13px;
-        font-size: 15px;
-      }
-      .footer-main a {
-        display: block;
-        margin: 8px 0;
-        color: #fff;
-        font-size: 14px;
-      }
-      .online {
-        display: inline-block;
-        margin-top: 10px;
-        padding: 7px 11px;
-        color: #003366;
-        background: #d6e8ee;
-        border-radius: 4px;
-        font-weight: 500;
-      }
-      .footer-bottom {
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-        max-width: 1180px;
-        margin: auto;
-        padding: 18px 0 24px;
-        border-top: 1px solid #34506a;
-        color: #c9d6dd;
-        font-size: 12px;
-      }
-      @media (max-width: 1220px) {
-        .brand-row,
-        .crumb,
-        .hero-inner,
-        main,
-        .footer-main,
-        .footer-bottom {
-          margin-left: 24px;
-          margin-right: 24px;
-        }
-      }
-      @media (max-width: 900px) {
-        .guide-grid {
-          grid-template-columns: 1fr 1fr;
-        }
-        .save-grid {
-          grid-template-columns: 1fr;
-        }
-      }
-      @media (max-width: 760px) {
-        .brand-row {
-          align-items: stretch;
-          flex-direction: column;
-        }
-        .brand {
-          flex-wrap: wrap;
-        }
-        .mark {
-          width: 52px;
-          height: 52px;
-          border-width: 6px;
-          font-size: 29px;
-        }
-        .words {
-          font-size: 20px;
-        }
-        .course-name {
-          font-size: 18px;
-        }
-        .search {
-          width: 100%;
-        }
-        .nav {
-          overflow-x: auto;
-        }
-        .nav ul {
-          min-width: max-content;
-        }
-        .hero-inner {
-          grid-template-columns: 1fr;
-          min-height: auto;
-          padding: 58px 0;
-        }
-        .seal {
-          display: none;
-        }
-        .help-grid,
-        .guide-grid,
-        .community-grid,
-        .widget-help,
-        .save-grid {
-          grid-template-columns: 1fr;
-        }
-        .footer-main {
-          grid-template-columns: 1fr;
-        }
-        .footer-bottom {
-          flex-direction: column;
-        }
-      }
-      .page a,.intro a,.card a,.action a:not(.button){color:var(--link)}
+<body>
+<style>
+:root{--blue:#003366;--link:#0567aa;--navy:#001b3b;--teal:#008da7;--orange:#ff6600;--gold:#f7b32b;--ink:#182936;--muted:#5b6973;--line:#cbd6dc;--soft:#edf4f7;--bsblue:#006fbf}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);background:#f9f9f9;font-family:Poppins,Arial,Helvetica,sans-serif;line-height:1.55}
+button,input{font:inherit}
+[hidden]{display:none!important}
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:3px solid #9a6700;outline-offset:3px}
+.skip{position:fixed;left:12px;top:-80px;z-index:999;padding:11px 16px;color:#fff;background:var(--navy)}
+.skip:focus{top:0}
+.sr-only{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
-      /* BEGIN: Faculty-first support layout */
-      main{padding-top:42px}main a{color:#0567aa}main section[id],#replace-page{scroll-margin-top:24px}
-      .support-intro h1{margin:0 0 20px;max-width:960px;color:var(--navy);font-size:clamp(34px,4.8vw,54px);font-weight:500;line-height:1.13}
-      .support-intro .lead{font-size:21px;max-width:880px}.support-links{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0}
-      .support-links a{padding:9px 14px;border:1px solid #a9bdc7;border-radius:20px;background:white;font-weight:500;text-decoration:none}
-      main p,main li{overflow-wrap:anywhere}.section-head{margin-top:52px}.tag{color:#006578}
-      .notice{padding:18px 22px;border-left:5px solid var(--orange);background:#edf4f7}
-      .transfer-steps{list-style:none;counter-reset:transfer;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;padding:0;margin:24px 0}
-      .transfer-steps>li{counter-increment:transfer;position:relative;padding:28px 26px;border:1px solid var(--line);border-top:6px solid var(--blue);border-radius:9px;background:white}
-      .transfer-steps>li:before{content:counter(transfer);display:inline-grid;place-items:center;width:32px;height:32px;margin-right:10px;border-radius:50%;background:var(--blue);color:white;font-weight:700}
-      .transfer-steps .step{background:#006578;margin-bottom:8px}.transfer-steps h3{font-size:24px;line-height:1.25;color:var(--navy);margin:12px 0}.checkpoint{padding-top:12px;border-top:1px solid var(--line);font-size:15px;color:#314b5a}
-      kbd{font:inherit;font-size:.9em;border:1px solid #a9bdc7;border-radius:4px;padding:1px 5px;background:#f2f7f9;white-space:nowrap}
-      .reference-note{font-size:14px;color:var(--muted)}.editor-comparison{display:grid;grid-template-columns:1fr 1fr;gap:20px}.editor-example{padding:24px;border:1px solid var(--line);border-radius:9px;background:#fff;min-width:0}
-      .editor-example h3{font-size:23px;color:var(--navy);margin-top:0}.editor-illustration{min-height:190px;border:1px solid #b6c8d2;border-radius:6px;padding:18px;background:#f5f8fa}.illustration-label{display:block;font-size:13px;color:#41566a;border-bottom:1px solid #c9d6df;padding-bottom:12px}.example-heading{font-size:23px;font-weight:700;color:var(--blue)}.source-illustration{border:2px solid var(--blue)}.paste-label{font-weight:700;color:var(--blue)}
-      .faq{max-width:none}.faq-body{padding:8px 20px 18px}.faq-body p{padding:0}.faq-body li{margin:10px 0}.faq a{font-weight:500}.finish-list{padding:24px 24px 24px 46px;background:white;border:1px solid var(--line);border-radius:9px}.finish-list li{padding:5px 0}
-      .table-wrap{max-width:100%;overflow:auto;margin:24px 0}table{width:100%;border-collapse:collapse;background:white}caption{text-align:left;font-weight:700;color:var(--navy);margin-bottom:10px}th,td{padding:15px;text-align:left;vertical-align:top;border:1px solid var(--line)}thead{background:var(--blue);color:white}tbody th{color:var(--navy);font-weight:500}
-      .save-card h3,.widget-card h3,.help-card h3,.community-card h3{font-size:24px;line-height:1.25;font-weight:500;color:var(--navy);margin:0 0 12px}.help-card:first-child h3{color:white}
-      .help-card,.community-card{display:flex;flex-direction:column;min-height:0}.help-card a,.community-card a{position:static;margin-top:auto;align-self:flex-start}.help-card p,.community-card p{margin-bottom:18px}
-      .cta .button{background:#d6e8ee;color:#003366}.cta .button:hover{background:white}.cta p{margin-bottom:22px}
-      @media(max-width:760px){.transfer-steps,.editor-comparison{grid-template-columns:1fr}.transfer-steps>li{padding:22px}.section-head h2{font-size:30px}.cta{padding:26px}.support-links a{font-size:14px}th,td{padding:10px;font-size:14px}}
-      @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-      /* END: Faculty-first support layout */
+/* ===== Site shell (unchanged from the other Course Builder pages) ===== */
+.topbar{display:flex;justify-content:space-between;gap:20px;padding:8px max(24px,calc((100% - 1180px)/2));color:#fff;background:var(--navy);font-size:13px}
+.topbar a{color:#fff;text-decoration:none}
+.brand-row{display:flex;align-items:center;justify-content:space-between;gap:30px;max-width:1180px;min-height:100px;margin:auto;padding:18px 0}
+.brand{display:flex;align-items:center;gap:18px;color:var(--navy);text-decoration:none}
+.header-logo{display:block;width:min(285px,55vw);height:auto}
+.course-name{padding-left:18px;border-left:1px solid #c7cdd1;font-size:23px;font-weight:700;white-space:nowrap}
+.search{display:flex;width:min(355px,100%)}
+.search input{min-width:0;flex:1;padding:13px 15px;border:1px solid #9eacb5;border-radius:8px 0 0 8px}
+.search button{padding:0 20px;border:0;border-radius:0 8px 8px 0;color:#fff;background:var(--blue);font-weight:500;cursor:pointer}
+.nav{background:#003366;border-bottom:5px solid var(--orange)}
+.nav ul{display:flex;max-width:1180px;margin:auto;padding:0;list-style:none}
+.nav a{display:block;padding:14px 18px;color:#fff;text-decoration:none;font-weight:700;border-bottom:3px solid transparent}
+.nav a:hover,.nav a[aria-current="page"]{background:rgba(0,0,0,.13);border-bottom-color:var(--orange)}
+.crumb{max-width:1180px;margin:auto;padding:14px 0;color:#65727c;font-size:14px}
+.crumb a{color:var(--blue);font-weight:500;text-decoration:none}
+footer{color:#fff;background:#003366}
+.footer-main{display:grid;grid-template-columns:1.6fr .7fr .8fr;gap:38px;max-width:1180px;margin:auto;padding:42px 0 28px}
+.footer-brand{font-size:25px;font-weight:500}
+.footer-main p{max-width:560px;color:#d8e5ec;font-size:14px}
+.footer-main h2{margin:4px 0 13px;font-size:15px}
+.footer-main a{display:block;margin:8px 0;color:#fff;font-size:14px}
+.online{display:inline-block;margin-top:10px;padding:7px 11px;color:#003366;background:#d6e8ee;border-radius:4px;font-weight:500}
+.footer-bottom{display:flex;justify-content:space-between;gap:20px;max-width:1180px;margin:auto;padding:18px 0 24px;border-top:1px solid #34506a;color:#c9d6dd;font-size:12px}
+
+/* ===== Page layout ===== */
+main{max-width:1180px;margin:auto;padding:42px 0 80px}
+main a{color:#0567aa}
+main section[id],main article[id],#replace-page{scroll-margin-top:24px}
+main p,main li{overflow-wrap:anywhere}
+.tag{margin:0 0 6px;color:#006578;font-size:11px;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+.support-intro h1{margin:0 0 18px;max-width:960px;color:var(--navy);font-size:clamp(34px,4.8vw,54px);font-weight:500;line-height:1.13}
+.support-intro .lead{font-size:20px;max-width:860px}
+.support-links{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 0}
+.support-links a{padding:9px 14px;border:1px solid #a9bdc7;border-radius:20px;background:#fff;font-weight:500;text-decoration:none}
+.support-links a:hover{background:var(--soft)}
+.section-head{margin:64px 0 18px}
+.section-head h2{margin:0;color:var(--navy);font-size:clamp(28px,3.4vw,37px);font-weight:500;line-height:1.2}
+.notice{padding:16px 20px;border-left:5px solid var(--orange);background:var(--soft);border-radius:0 8px 8px 0}
+.note-sm{font-size:14px;color:var(--muted)}
+kbd{font:inherit;font-size:.9em;border:1px solid #a9bdc7;border-radius:4px;padding:1px 5px;background:#f2f7f9;white-space:nowrap}
+.button{display:inline-block;padding:13px 18px;color:#fff;background:var(--orange);border-radius:6px;font-weight:500;text-decoration:none}
+
+/* ===== Interactive map ===== */
+.map{position:relative;margin:20px 0 0;padding:16px;background:var(--soft);border:1px solid var(--line);border-radius:12px}
+.sim{padding:14px;background:#fff;border:1px solid #cad5da;border-radius:10px;font-size:12px;line-height:1.4}
+.sim-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:10px}
+.eb{margin:0 0 3px;color:#008da7;font-size:10px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+.sim-h{margin:0;color:var(--navy);font-size:26px;font-weight:500;line-height:1.1}
+.sim-actions,.sim-save,.pv-tools{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.sim-save{margin-bottom:12px}
+.tiny{margin:0;color:#687680;font-size:11px}
+.hs{position:relative;cursor:pointer;font:inherit;color:inherit;text-align:left}
+.hs:hover{outline:2px dashed #003366;outline-offset:2px}
+.hs.is-on{outline:3px solid #001b3b;outline-offset:2px;box-shadow:0 0 0 7px rgba(255,102,0,.35)}
+.hs:focus-visible{outline:3px solid #9a6700;outline-offset:3px}
+.sb{padding:6px 10px;border:2px solid #003366;border-radius:6px;background:#fff;color:#003366;font-size:12px;font-weight:500;line-height:1.3}
+.sb.sm{padding:4px 8px;border-width:1px;font-size:11px}
+.sb.or{background:#ff6600;border-color:#ff6600;color:#fff}
+.sb.tl{background:#008da7;border-color:#008da7;color:#fff}
+.savestat{padding:4px 8px;border-radius:5px;background:#fff;color:#52636e;font-size:11px;border:1px solid transparent}
+.sim-grid{display:grid;grid-template-columns:200px minmax(0,1fr) 225px;gap:10px;align-items:start}
+.sp{padding:10px;border:1px solid #cad5da;border-radius:10px;background:#fff;box-shadow:0 3px 10px rgba(0,27,59,.07)}
+.sp-h{margin:0;color:var(--navy);font-size:14px;font-weight:500}
+.sp-head{display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:8px}
+.fld{display:block;width:100%;margin:0 0 6px;padding:7px 8px;border:1px solid #aebcc4;border-radius:5px;background:#fff;color:#52636e;font-size:11px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:6px;width:100%;margin:0 0 6px;padding:8px 9px;border:1px solid #d9e1e5;border-radius:6px;background:#f4f8fa;color:#687680;font-size:10px;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+.cnt{display:inline-block;min-width:20px;padding:1px 6px;border-radius:9px;background:#008da7;color:#fff;font-size:10px;text-align:center}
+.cats{padding:4px 0}
+.cat{display:block;padding:6px 8px;border:1px solid #d0d9de;border-radius:5px;margin:0 0 5px;color:var(--navy);font-size:11px;font-weight:700}
+.pv-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:8px;margin:0 0 8px}
+.frame{border:1px solid #c8d3d9;border-radius:10px;background:#fff;box-shadow:0 3px 10px rgba(0,27,59,.07);overflow:visible}
+.ttl{display:block;width:100%;padding:16px 18px;border-radius:9px 9px 0 0;color:#fff;background:#003366;border-bottom:5px solid #ff6600}
+.kick{margin:0 0 4px;font-size:9px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+.ptitle{margin:0;font-size:22px;line-height:1.1}
+.frame-body{padding:16px 18px}
+.addbar{display:block;width:100%;margin:6px 0;padding:4px;border:1px dashed #a6b4bd;border-radius:5px;background:transparent;color:#3c4a54;font-size:10px;font-weight:700;text-align:center}
+.blockwrap{position:relative;margin:10px 0}
+.blk{display:block;width:100%;padding:12px;border:2px solid transparent;border-radius:8px;background:#fff}
+.blk.sel{border-color:#008da7;box-shadow:0 0 0 3px rgba(0,141,167,.16)}
+.chip{display:inline-block;margin:0 0 8px;padding:2px 9px;border:1px solid #b7c4ca;border-radius:12px;background:#d6e8ee;color:#003366;font-size:10px}
+.mini-acc{margin:5px 0;padding:8px 10px;border:1px solid #003366;border-radius:6px;background:#003366;color:#fff;font-size:11px;font-weight:700}
+.tools{position:absolute;top:-12px;right:-4px;z-index:3;display:flex;gap:3px;padding:2px;border:0;background:transparent}
+.tools span{display:grid;place-items:center;min-width:24px;height:24px;padding:0 5px;border:1px solid #b7c4ca;border-radius:12px;background:#fff;color:#003366;font-size:11px;box-shadow:0 2px 6px rgba(0,0,0,.12)}
+.sel-chip{display:inline-block;margin:0 0 8px;padding:3px 7px;border-radius:4px;background:#008da7;color:#fff;font-size:9px;letter-spacing:.07em;text-transform:uppercase}
+.ed-head{display:block;width:100%;margin:0 0 8px;padding:2px}
+.mapnote{margin:10px 0 0;color:#52636e;font-size:13px}
+.pop{position:absolute;z-index:30;width:300px;max-width:calc(100% - 16px);padding:12px 14px;background:#fff;border:2px solid #ff6600;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.22);pointer-events:none}
+.pop strong{display:block;margin:0 0 3px;color:#003366;font-size:15px;line-height:1.3}
+.pop span{display:block;font-size:13.5px;line-height:1.5}
+.mappanel{margin-top:16px;padding:20px 22px;background:#fff;border:1px solid var(--line);border-left:7px solid var(--orange);border-radius:8px}
+.mappanel h3{margin:0 0 6px;color:var(--blue);font-size:23px;line-height:1.3}
+.mappanel p{margin:0}
+.mappanel .tag{color:#52636d;font-weight:800}
+.mappanel a{display:inline-block;margin-top:10px;font-weight:500}
+
+/* ===== Walkthroughs ===== */
+.methods{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
+.methods button{padding:12px 18px;border:2px solid var(--blue);border-radius:8px;background:#fff;color:var(--blue);font-weight:500;cursor:pointer;text-align:left}
+.methods button[aria-selected="true"]{background:var(--blue);color:#fff}
+.methods small{display:block;font-size:11px;font-weight:400;letter-spacing:.04em}
+.walk{padding:22px;background:#fff;border:1px solid var(--line);border-radius:12px}
+.walk-nav{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px;padding:0;list-style:none}
+.walk-nav button{padding:8px 12px;border:1px solid #a9bdc7;border-radius:20px;background:#fff;color:var(--blue);font-size:14px;font-weight:500;cursor:pointer}
+.walk-nav button[aria-current="step"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.where{display:inline-block;margin:0 0 8px;padding:4px 9px;border-radius:4px;background:#006578;color:#fff;font-size:11px;font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+.wstep h3{margin:0 0 8px;color:var(--navy);font-size:25px;line-height:1.25}
+.wstep h3:focus{outline:none}
+.screen{margin:16px 0 10px;padding:18px;background:#f4f7f9;border:1px solid #c6d2d9;border-radius:10px;overflow-x:auto}
+.hint{margin:8px 0;padding:10px 14px;border-left:5px solid var(--teal);background:var(--soft);border-radius:0 6px 6px 0;font-size:15px}
+.checkpoint{margin:10px 0 0;padding-top:10px;border-top:1px solid var(--line);color:#314b5a;font-size:15px}
+.step-foot{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.small-btn{padding:7px 12px;border:1px solid #a9bdc7;border-radius:6px;background:#fff;color:var(--blue);font-size:13px;font-weight:500;cursor:pointer}
+.small-btn:hover:not(:disabled){background:var(--soft)}
+.small-btn:disabled{opacity:.5;cursor:not-allowed}
+.walk-controls{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.walk-controls .small-btn{padding:10px 16px;font-size:15px}
+.walk-controls .next{background:var(--blue);border-color:var(--blue);color:#fff}
+.walk-controls .next:hover:not(:disabled){background:#00264d}
+.walk-status{margin-left:auto;color:var(--muted);font-size:14px;font-weight:500}
+
+/* Recreated Course Builder buttons */
+.cbbar{display:flex;flex-wrap:wrap;gap:8px;min-width:0}
+.cbbtn{padding:10px 14px;border:2px solid #003366;border-radius:8px;background:#fff;color:#003366;font-weight:500;font-size:14px;cursor:pointer}
+.cbbtn.tl{background:#008da7;border-color:#008da7;color:#fff}
+.cbbtn.or{background:#ff6600;border-color:#ff6600;color:#fff}
+.cbtoast{display:flex;align-items:center;gap:10px;margin-top:14px;padding:12px 16px;border-left:5px solid var(--orange);border-radius:7px;background:var(--navy);color:#fff;font-size:14px}
+.filechip{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:5px;background:#fff;color:var(--navy);font-weight:500}
+
+/* Target highlight, like the red boxes in the screenshots */
+.target{outline:4px solid #e0002a;outline-offset:4px}
+.target.done{outline-color:#167442}
+
+/* Recreated Brightspace screens */
+.bs{font-family:Lato,Arial,sans-serif;color:#202122;font-size:15px;line-height:1.45}
+.bs-card{padding:20px;background:#fff;border:1px solid #d3d9e3;border-radius:8px}
+.bs-crumb{margin:0 0 4px;color:#565a5c;font-size:13px}
+.bs-h{margin:0 0 14px;font-size:22px;font-weight:700}
+.bsbar{display:flex;flex-wrap:wrap;gap:12px}
+.bsb{padding:12px 22px;border:0;border-radius:6px;background:#e3e9f1;color:#202122;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.bsb.primary{background:var(--bsblue);color:#fff}
+.bsmenu{display:flex;flex-direction:column;width:260px;max-width:100%;margin:10px 0 0 140px;padding:6px;background:#fff;border:1px solid #cdd5dc;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.15)}
+.bsm{padding:10px 12px;border:0;border-radius:6px;background:#fff;color:#202122;font-family:inherit;font-size:15px;text-align:left;cursor:pointer}
+.bsm:hover{background:#eef3f8}
+.bsm-muted{padding:8px 12px;color:#6e7376;font-size:13px}
+.bsform{margin-top:16px;padding-top:14px;border-top:1px solid #e3e9f1}
+.bsform label{display:block;margin:0 0 4px;font-size:14px;font-weight:700}
+.bsform input{width:100%;max-width:420px;padding:10px 12px;border:1px solid #8c9aa5;border-radius:6px;font-family:inherit;font-size:15px}
+.edbox{margin-top:12px;padding:26px;border:1px dashed #b5bfc8;border-radius:6px;color:#6e7376;font-size:14px}
+.rte{min-width:620px}
+.rte-top{display:flex;justify-content:space-between;align-items:center;margin:0 0 6px;font-size:14px;font-weight:700}
+.rte-top a{color:#006fbf;font-weight:700;text-decoration:none}
+.tb-wrap{padding:8px 10px;background:#fff;border:1px solid #b5bfc8;border-radius:8px 8px 0 0}
+.tbrow{display:flex;align-items:center;flex-wrap:nowrap;gap:2px;margin:0 0 6px;white-space:nowrap}
+.tbrow:last-child{margin:0}
+.tb{display:inline-grid;place-items:center;min-width:32px;height:32px;padding:0 7px;border:0;border-radius:5px;background:transparent;color:#202122;font-size:15px}
+.tb.sel{min-width:110px;justify-content:space-between;display:inline-flex;gap:6px}
+.sep{width:1px;height:24px;margin:0 6px;background:#cdd5dc}
+.badge{position:relative;display:inline-block}
+.badge b{position:absolute;top:-8px;right:-6px;display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:#4b2a86;color:#fff;font-size:11px}
+.srcbtn{display:inline-grid;place-items:center;min-width:38px;height:34px;padding:0 8px;border:1px solid #cdd5dc;border-radius:5px;background:#fff;color:#202122;font-weight:700;cursor:pointer}
+.rte-body{padding:20px;border:1px solid #b5bfc8;border-top:0;border-radius:0 0 8px 8px;background:#fff;color:#6e7376;font-size:14px}
+.dlg{max-width:760px;padding:22px;background:#fff;border:1px solid #cdd5dc;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.18)}
+.dlg-head{display:flex;justify-content:space-between;align-items:center;margin:0 0 14px}
+.dlg-title{margin:0;font-size:21px;font-weight:700}
+.dlg-x{font-size:24px;line-height:1}
+.code{height:230px;overflow:auto;border:2px solid var(--bsblue);border-radius:4px;background:#fff;font-family:Consolas,Menlo,monospace;font-size:13px;line-height:1.6}
+.cl{display:flex}
+.ln{flex:0 0 38px;padding-right:9px;background:#f3f5f7;color:#7b838a;text-align:right;user-select:none}
+.tx{flex:1;padding-left:8px;white-space:pre-wrap;word-break:break-all}
+.code.sel .tx{background:#b3d4fc}
+.t{color:#8a1a8a}.s{color:#a31515}.c{color:#a0522d}.k{color:#1e4fa3}
+.dlg-btns{display:flex;gap:10px;margin-top:14px}
+.dlg .bsb{padding:10px 24px}
+.helpers{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.tools-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:14px 8px;margin:0 0 18px;text-align:center;font-size:14px}
+.ico{display:block;width:26px;height:26px;margin:0 auto 6px;border:2px solid #565a5c;border-radius:6px}
+.drop{display:block;width:100%;padding:34px 16px;border:2px dashed #333;border-radius:8px;background:#fff;color:#202122;font-family:inherit;font-size:16px;text-align:center;cursor:pointer}
+.drop u{color:var(--bsblue)}
+.drop svg{display:block;margin:0 auto 10px}
+.upnote{margin:6px 0 0;color:#565a5c;font-size:13px}
+.upfile{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px;border:1px solid #167442;border-radius:6px;background:#e5f5eb;color:#103b25;font-weight:700}
+.minipage{margin:0 0 14px;border:1px solid #d5dfe4;border-radius:6px;overflow:hidden}
+.mini-h{padding:14px 18px;background:#003e6f;border-bottom:5px solid #ff6600;color:#fff}
+.mini-h span{display:block;font-size:10px;letter-spacing:.12em}
+.mini-h b{font-size:22px;font-weight:400}
+.mini-b{padding:14px 18px;font-size:14px}
+.filerow{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #d3d9e3;border-radius:6px;font-weight:700}
+.checklist{margin:14px 0 0;padding:16px 18px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.checklist h4{margin:0 0 8px;color:var(--navy);font-size:18px}
+.checklist label{display:flex;align-items:flex-start;gap:10px;margin:8px 0;font-size:15px;cursor:pointer}
+.checklist input{flex:0 0 20px;width:20px;height:20px;margin-top:2px;accent-color:var(--blue)}
+.cprog{margin:10px 0 0;color:var(--muted);font-size:14px;font-weight:500}
+
+/* ===== Compact reference sections ===== */
+.table-wrap{max-width:100%;overflow:auto;margin:18px 0}
+table{width:100%;border-collapse:collapse;background:#fff}
+caption{margin-bottom:10px;color:var(--navy);font-weight:700;text-align:left}
+th,td{padding:13px;text-align:left;vertical-align:top;border:1px solid var(--line)}
+thead{background:var(--blue);color:#fff}
+tbody th{color:var(--navy);font-weight:500}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{padding:24px;border:1px solid var(--line);border-top:6px solid var(--teal);border-radius:9px;background:#fff}
+.card h3{margin:0 0 8px;color:var(--navy);font-size:21px;font-weight:500;line-height:1.25}
+.card p{margin:0 0 10px;font-size:15px}
+.card p:last-child{margin:0}
+.card.two{grid-column:span 1}
+.faq{display:grid;gap:10px}
+.faq details{overflow:hidden;border:1px solid var(--line);border-radius:8px;background:#fff}
+.faq summary{cursor:pointer;padding:16px 20px;background:#f2f7f9;color:var(--navy);font-weight:500}
+.faq .body{padding:6px 20px 16px}
+.faq .body li{margin:8px 0}
+.help-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.help-card{display:flex;flex-direction:column;padding:24px;border:1px solid var(--line);border-radius:10px;background:#fff;box-shadow:0 7px 22px rgba(0,27,59,.07)}
+.help-card.first{color:#fff;background:#003366}
+.help-card.first h3,.help-card.first .tag,.help-card.first a{color:#fff}
+.help-card h3{margin:0 0 8px;color:var(--navy);font-size:21px;font-weight:500;line-height:1.25}
+.help-card p{margin:0 0 16px;font-size:15px}
+.help-card a{margin-top:auto;align-self:flex-start;font-weight:500}
+.widget-row{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+
+@media(max-width:1220px){.brand-row,.crumb,main,.footer-main,.footer-bottom{margin-left:24px;margin-right:24px}}
+@media(max-width:900px){.sim-grid{grid-template-columns:1fr}.cards,.help-cards{grid-template-columns:1fr}.footer-main{grid-template-columns:1fr}}
+@media(max-width:760px){
+ .brand-row{align-items:stretch;flex-direction:column}.brand{flex-wrap:wrap}.course-name{font-size:18px}.search{width:100%}
+ .nav{overflow-x:auto}.nav ul{min-width:max-content}.footer-bottom{flex-direction:column}
+ .widget-row{grid-template-columns:1fr}.walk{padding:16px}.bsmenu{margin-left:0}.walk-status{margin-left:0;width:100%}
+ th,td{padding:10px;font-size:14px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style>
 <style>
-/* Course Builder navigation and workflow refinements. Exported course HTML is unchanged. */
-[hidden]{display:none!important}
+/* Search dialog and mobile menu used across Course Builder pages */
 .cm-dialog{box-sizing:border-box;width:min(760px,calc(100vw - 32px));max-height:88vh;padding:26px;border:1px solid #cbd6dc;border-top:5px solid #ff6600;border-radius:8px;background:#fff;color:#182936;font-family:Arial,Helvetica,sans-serif;line-height:1.55;overflow:auto}
 .cm-dialog::backdrop{background:rgba(0,27,59,.55)}
-.cm-dialog h2{margin:0;color:#003366;font-size:25px}.cm-dialog-head{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:16px}
-.cm-dialog button,.cm-dialog input,.cm-dialog select{font:inherit}.cm-dialog input[type=search]{width:100%;padding:12px;border:1px solid #8e9da6;border-radius:5px}
-.cm-dialog a{color:#0567aa}.cm-dialog .cm-result{display:block;padding:14px 4px;border-bottom:1px solid #d7e0e5;text-decoration:none}.cm-result strong,.cm-result span{display:block}.cm-result small{color:#52636e}.cm-result:hover strong{text-decoration:underline}
-.cm-result-list{padding:0;list-style:none}.cm-dialog button:focus-visible,.cm-dialog a:focus-visible,.cm-dialog input:focus-visible,.cm-button:focus-visible,.cm-task select:focus-visible{outline:3px solid #9a6700;outline-offset:3px}
-.cm-button,.cm-menu>summary{display:inline-block;box-sizing:border-box;padding:10px 14px;border:1px solid #a8bac5;border-radius:6px;background:#fff;color:#003366;font:inherit;font-size:14px;line-height:1.4;cursor:pointer;text-decoration:none}
-.cm-button:hover,.cm-menu>summary:hover{background:#edf4f7}.cm-menu{position:relative}.cm-menu>summary{list-style:none}.cm-menu>summary::after{content:' ▾'}.cm-menu[open]>summary{background:#edf4f7}
-.cm-menu-body{position:absolute;z-index:100;right:0;top:calc(100% + 6px);width:270px;max-width:calc(100vw - 40px);padding:16px;background:#fff;border:1px solid #cbd6dc;border-radius:7px;box-shadow:0 8px 24px #001b3b26}
-.cm-menu-body button{width:100%;margin:4px 0}.cm-menu-body p{font-size:13px;color:#52636e;line-height:1.5;margin:10px 0}.cm-menu-body .viewport-toggle{display:flex;flex-wrap:wrap}.cm-menu-body .viewport-toggle button{width:auto;flex:1 1 90px}
-.cm-workflow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;padding:0;list-style:none;margin:24px 0 36px}.cm-workflow li{background:#edf4f7;border-top:3px solid #003366;padding:18px;border-radius:5px}.cm-workflow strong{display:block;color:#003366;margin-bottom:7px}.cm-workflow p{margin:0;font-size:15px}
-.cm-task{padding:20px;border:1px solid #cbd6dc;border-left:5px solid #008da7;border-radius:6px;margin:24px 0;background:#fff}.cm-task h2{margin:0 0 12px;color:#003366;font-size:23px}.cm-goals{display:flex;flex-wrap:wrap;gap:9px}.cm-goals a{padding:9px 12px;border:1px solid #afc5ce;border-radius:5px;background:#fff;color:#0567aa;font-size:15px;text-decoration:none}.cm-goals a:hover{text-decoration:underline;background:#edf4f7}
-.cm-task label{display:block;font-size:13px;color:#003366;margin-bottom:6px}.cm-task select{width:100%;padding:10px;border:1px solid #a8bac5;border-radius:5px;background:#fff;color:#182936;font:inherit;font-size:14px}
-.cm-builder-steps{display:flex;flex-wrap:wrap;gap:10px 22px;padding:12px 16px;border:1px solid #cbd6dc;background:#edf4f7;border-radius:6px;margin:0 0 16px;color:#003366;font-size:14px}.cm-builder-steps span{white-space:normal}
-.cm-save-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:0 0 18px;font-size:13px;color:#52636e}.cm-save-row button{font-size:13px;padding:7px 10px}.cm-save-row [data-state=error]{color:#8e211f}.cm-save-row p{margin:0}.cm-save-row .cm-save-note{font-size:12px}
-.cm-handoff{padding:22px;background:#edf4f7;border:1px solid #b6ccd7;border-left:5px solid #008da7;margin:18px 0;border-radius:6px}.cm-handoff h2{color:#003366;font-size:22px;margin:0 0 10px}.cm-handoff ol{padding-left:24px}.cm-handoff a{color:#0567aa}.cm-handoff .cm-button{float:right}
-.cm-picker{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.cm-picker button{background:#fff;text-align:left;border:1px solid #bdcdd5;border-radius:6px;padding:14px;color:#003366;cursor:pointer}.cm-picker button span{display:block;font-size:13px;color:#52636e}.cm-picker button:hover{background:#edf4f7}
-.cm-audit-item{padding:14px 0;border-bottom:1px solid #d7e0e5}.cm-audit-item p{margin:6px 0 10px}.cm-severity{font-size:13px;font-weight:700;color:#8e211f}.cm-severity.review{color:#785100}
-.cm-edit-label{display:block;padding:7px 10px;background:#edf4f7;color:#003366;font-size:13px;border-bottom:1px solid #cbd6dc}.preview-block.is-selected>.cm-edit-label{background:#d6e8ee}.preview-block:focus-visible{outline:3px solid #9a6700;outline-offset:3px}
-.preview-block:focus-within .block-tools{opacity:1;pointer-events:auto}.cm-editor-nudge{margin:4px 0 12px;font-size:13px;color:#52636e}.cm-guide-actions{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}.cm-guide-actions a{position:static!important;font-size:14px}
-.cm-guide-search{margin:20px 0}.cm-guide-search label{display:block;color:#003366;margin-bottom:8px}.cm-guide-search input{box-sizing:border-box;width:100%;max-width:520px;padding:12px;font:inherit;border:1px solid #9eacb5;border-radius:5px}
-.cm-nav-toggle{display:none}.cm-empty-actions{display:flex;justify-content:center;flex-wrap:wrap;gap:10px;margin:20px 0}.cm-inline-links{display:flex;gap:18px;flex-wrap:wrap;margin:12px 0;font-size:14px}
-@media(max-width:1050px){.cm-workflow{grid-template-columns:repeat(2,minmax(0,1fr))}.cm-menu-body{right:0}.editor-panel{scroll-margin-top:20px}}
-@media(max-width:800px){.cm-nav-toggle{display:block;margin:8px 18px;background:transparent;border:1px solid #ffffff88;color:#fff;padding:10px 14px;border-radius:5px;font:inherit}.cm-navigation ul{min-width:0!important;flex-wrap:wrap!important}.cm-navigation a{padding:12px 16px!important}.cm-navigation.cm-collapsed ul{display:none}.topbar{flex-wrap:wrap;gap:5px 16px}.cm-workflow{grid-template-columns:1fr}.cm-picker{grid-template-columns:1fr}.cm-dialog{padding:18px}.cm-menu-body{position:fixed;top:auto;right:16px;left:auto;max-height:60vh;overflow:auto}.cm-save-row{align-items:flex-start}.brand{flex-wrap:wrap}.cm-builder-steps{font-size:13px}.cm-guide-actions{display:block}.cm-guide-actions a{margin-bottom:8px}}
-@media(prefers-reduced-motion:reduce){.cm-dialog *, .cm-workflow *, .cm-handoff *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
-
+.cm-dialog h2{margin:0;color:#003366;font-size:25px}
+.cm-dialog-head{display:flex;justify-content:space-between;align-items:center;gap:20px;margin-bottom:16px}
+.cm-dialog button,.cm-dialog input{font:inherit}
+.cm-dialog input[type=search]{width:100%;padding:12px;border:1px solid #8e9da6;border-radius:5px}
+.cm-dialog a{color:#0567aa}
+.cm-dialog .cm-result{display:block;padding:14px 4px;border-bottom:1px solid #d7e0e5;text-decoration:none}
+.cm-result strong,.cm-result span{display:block}
+.cm-result small{color:#52636e}
+.cm-result:hover strong{text-decoration:underline}
+.cm-result-list{padding:0;list-style:none}
+.cm-button{display:inline-block;box-sizing:border-box;padding:10px 14px;border:1px solid #a8bac5;border-radius:6px;background:#fff;color:#003366;font:inherit;font-size:14px;line-height:1.4;cursor:pointer}
+.cm-button:hover{background:#edf4f7}
+.cm-nav-toggle{display:none}
+@media(max-width:800px){.cm-nav-toggle{display:block;margin:8px 18px;background:transparent;border:1px solid #ffffff88;color:#fff;padding:10px 14px;border-radius:5px;font:inherit}.cm-navigation ul{min-width:0!important;flex-wrap:wrap!important}.cm-navigation a{padding:12px 16px!important}.cm-navigation.cm-collapsed ul{display:none}.topbar{flex-wrap:wrap;gap:5px 16px}.cm-dialog{padding:18px}}
 </style>
 <script>
-const CM_SEARCH=[{"title": "Course Builder home", "text": "Choose a tool and follow the four steps to Brightspace.", "type": "Page", "href": "index.html"}, {"title": "Page Builder", "text": "Build and edit a custom course page.", "type": "Tool", "href": "coursebuilder.html"}, {"title": "Widget Builder", "text": "Create a course homepage widget.", "type": "Tool", "href": "widget-builder.html"}, {"title": "Building Block Guide", "text": "Choose an interaction for your learning goal.", "type": "Guide", "href": "building-blocks.html"}, {"title": "Intro text", "text": "Orient students to the page.", "type": "Block", "href": "coursebuilder.html?block=intro", "keywords": "Text & Layout "}, {"title": "Section heading", "text": "Organize content with heading levels.", "type": "Block", "href": "coursebuilder.html?block=heading", "keywords": "Text & Layout "}, {"title": "Paragraph", "text": "Add explanations and supporting text.", "type": "Block", "href": "coursebuilder.html?block=paragraph", "keywords": "Text & Layout "}, {"title": "Checklist", "text": "Display a static list of goals or tasks.", "type": "Block", "href": "coursebuilder.html?block=checklist", "keywords": "Course Organization "}, {"title": "Annotated reading", "text": "Explain highlighted phrases within a reading.", "type": "Block", "href": "coursebuilder.html?block=annotated", "keywords": "Reveal & Explore "}, {"title": "Bullet list (1–10)", "text": "Present a scannable list of ideas.", "type": "Block", "href": "coursebuilder.html?block=bullets", "keywords": "Text & Layout "}, {"title": "Callout box", "text": "Emphasize a tip, notice, example, or reflection.", "type": "Block", "href": "coursebuilder.html?block=callout", "keywords": "Callouts & Key Ideas "}, {"title": "Blockquote", "text": "Highlight a quotation and its source.", "type": "Block", "href": "coursebuilder.html?block=quote", "keywords": "Text & Layout "}, {"title": "Button links (1–4)", "text": "Link students to resources or the next activity.", "type": "Block", "href": "coursebuilder.html?block=button", "keywords": "Resources & Data "}, {"title": "Colored block", "text": "Highlight a key takeaway in a colored panel.", "type": "Block", "href": "coursebuilder.html?block=colored", "keywords": "Callouts & Key Ideas "}, {"title": "Instructor insight", "text": "Share instructor advice or a personal perspective.", "type": "Block", "href": "coursebuilder.html?block=insight", "keywords": "Instructor Information "}, {"title": "Instructor information", "text": "Introduce yourself, contact details, and office hours.", "type": "Block", "href": "coursebuilder.html?block=instructorInfo", "keywords": "Instructor Information teacher faculty bio contact office"}, {"title": "Content image with text", "text": "Pair an instructional image with an explanation.", "type": "Block", "href": "coursebuilder.html?block=imageText", "keywords": "Media & Visuals "}, {"title": "AI policy block", "text": "Explain the permitted level of AI use.", "type": "Block", "href": "coursebuilder.html?block=aiPolicy", "keywords": "Course Organization "}, {"title": "Due date reminder", "text": "Highlight a deadline and submission reminder.", "type": "Block", "href": "coursebuilder.html?block=dueDate", "keywords": "Course Organization deadline countdown date"}, {"title": "Colored course cards (1–6)", "text": "Summarize course goals or key themes.", "type": "Block", "href": "coursebuilder.html?block=courseCards", "keywords": "Course Organization "}, {"title": "Scope rating cards (1–6)", "text": "Compare options using a scope or effort rating.", "type": "Block", "href": "coursebuilder.html?block=scopeCards", "keywords": "Resources & Data "}, {"title": "Step flow boxes (2–6)", "text": "Show a short process in connected boxes.", "type": "Block", "href": "coursebuilder.html?block=stepBoxes", "keywords": "Timelines & Processes "}, {"title": "Accordion (1–10)", "text": "Expand optional details in stacked sections.", "type": "Block", "href": "coursebuilder.html?block=accordion", "keywords": "Reveal & Explore faq expand collapse"}, {"title": "Tabbed sections", "text": "Switch between related content panels.", "type": "Block", "href": "coursebuilder.html?block=tabs", "keywords": "Reveal & Explore tab horizontal vertical panels"}, {"title": "Flip card", "text": "Reveal definitions or answers on cards.", "type": "Block", "href": "coursebuilder.html?block=flip", "keywords": "Reveal & Explore "}, {"title": "Timeline", "text": "Show steps or events in a visible sequence.", "type": "Block", "href": "coursebuilder.html?block=timeline", "keywords": "Timelines & Processes "}, {"title": "Story or image carousel", "text": "Present a story or image series one slide at a time.", "type": "Block", "href": "coursebuilder.html?block=carousel", "keywords": "Media & Visuals "}, {"title": "Interactive timeline", "text": "Reveal details for each milestone.", "type": "Block", "href": "coursebuilder.html?block=interactiveTimeline", "keywords": "Timelines & Processes "}, {"title": "Click and reveal", "text": "Show a hint or explanation when selected.", "type": "Block", "href": "coursebuilder.html?block=reveal", "keywords": "Reveal & Explore "}, {"title": "Knowledge check", "text": "Offer a quick check with 2–4 answer choices.", "type": "Block", "href": "coursebuilder.html?block=knowledge", "keywords": "Practice & Feedback "}, {"title": "Multiple choice question", "text": "Ask a question with 2–6 choices and feedback.", "type": "Block", "href": "coursebuilder.html?block=multipleChoice", "keywords": "Practice & Feedback quiz knowledge check question assessment"}, {"title": "Decision scenario", "text": "Choose a response to a realistic situation.", "type": "Block", "href": "coursebuilder.html?block=scenario", "keywords": "Scenarios & Examples "}, {"title": "Guided stepper", "text": "Guide students through a process one step at a time.", "type": "Block", "href": "coursebuilder.html?block=process", "keywords": "Timelines & Processes "}, {"title": "Interactive checklist", "text": "Let students check off tasks on the page.", "type": "Block", "href": "coursebuilder.html?block=interactiveChecklist", "keywords": "Course Organization tasks weekly checkboxes"}, {"title": "Drag and drop sorting", "text": "Sort items by selecting or dragging them.", "type": "Block", "href": "coursebuilder.html?block=sorting", "keywords": "Practice & Feedback "}, {"title": "Sequence ordering", "text": "Arrange steps in the correct order.", "type": "Block", "href": "coursebuilder.html?block=sequence", "keywords": "Practice & Feedback "}, {"title": "Estimation slider", "text": "Make a numeric prediction, then reveal the answer.", "type": "Block", "href": "coursebuilder.html?block=estimate", "keywords": "Practice & Feedback "}, {"title": "Before and after compare", "text": "Compare two labeled images.", "type": "Block", "href": "coursebuilder.html?block=compare", "keywords": "Media & Visuals "}, {"title": "Self-assessment rubric", "text": "Rate confidence and generate a review plan.", "type": "Block", "href": "coursebuilder.html?block=selfCheck", "keywords": "Practice & Feedback "}, {"title": "Matching memory grid", "text": "Match pairs of terms and definitions.", "type": "Block", "href": "coursebuilder.html?block=matching", "keywords": "Practice & Feedback "}, {"title": "Worked example (fading steps)", "text": "Study a solution with progressively revealed steps.", "type": "Block", "href": "coursebuilder.html?block=workedExample", "keywords": "Scenarios & Examples "}, {"title": "Scenario reveal boxes (1–6)", "text": "Judge a situation, then reveal the explanation.", "type": "Block", "href": "coursebuilder.html?block=scenarioReveal", "keywords": "Scenarios & Examples "}, {"title": "Interactive path timeline (1–8)", "text": "Explore milestones along a visual path.", "type": "Block", "href": "coursebuilder.html?block=pathTimeline", "keywords": "Timelines & Processes "}, {"title": "Weekly rhythm stepper (2–8)", "text": "Walk students through the weekly routine.", "type": "Block", "href": "coursebuilder.html?block=weeklyRhythm", "keywords": "Course Organization "}, {"title": "Image", "text": "Add an image placeholder or an image link, with alternative text and a caption.", "type": "Block", "href": "coursebuilder.html?block=image", "keywords": "Media & Visuals "}, {"title": "Video", "text": "Add a Brightspace or YuJa video placeholder, or embed a YouTube video.", "type": "Block", "href": "coursebuilder.html?block=video", "keywords": "Media & Visuals "}, {"title": "Audio note with transcript", "text": "Add an audio recording and its transcript.", "type": "Block", "href": "coursebuilder.html?block=audio", "keywords": "Media & Visuals recording podcast transcript"}, {"title": "Key statistic", "text": "Highlight a number with context and a source.", "type": "Block", "href": "coursebuilder.html?block=statCard", "keywords": "Resources & Data "}, {"title": "Grading rubric", "text": "Display assessment criteria and performance levels.", "type": "Block", "href": "coursebuilder.html?block=rubricTable", "keywords": "Practice & Feedback "}, {"title": "Reference list", "text": "List source citations with hanging indents.", "type": "Block", "href": "coursebuilder.html?block=referenceList", "keywords": "Resources & Data citation bibliography"}, {"title": "Table", "text": "Organize information in labeled rows and columns.", "type": "Block", "href": "coursebuilder.html?block=table", "keywords": "Resources & Data "}, {"title": "Divider", "text": "Separate sections visually.", "type": "Block", "href": "coursebuilder.html?block=divider", "keywords": "Text & Layout "}, {"title": "Two-column content", "text": "Place two related ideas side by side.", "type": "Block", "href": "coursebuilder.html?block=columns", "keywords": "Text & Layout "}, {"title": "Module Overview", "text": "Start an editable module overview.", "type": "Template", "href": "coursebuilder.html?template=module"}, {"title": "Instructor Information", "text": "Start an editable instructor information.", "type": "Template", "href": "coursebuilder.html?template=instructor"}, {"title": "Instructional Content", "text": "Start an editable instructional content.", "type": "Template", "href": "coursebuilder.html?template=content"}, {"title": "Weekly Task List", "text": "Start an editable weekly task list.", "type": "Template", "href": "coursebuilder.html?template=weekly"}, {"title": "Video Page", "text": "Start an editable video page.", "type": "Template", "href": "coursebuilder.html?template=video"}, {"title": "Interactive Scenario Page", "text": "Start an editable interactive scenario page.", "type": "Template", "href": "coursebuilder.html?template=scenario"}, {"title": "Low Stakes Assessment", "text": "Start an editable low stakes assessment.", "type": "Template", "href": "coursebuilder.html?template=assessment"}, {"title": "Random Page", "text": "Start an editable random page.", "type": "Template", "href": "coursebuilder.html?template=random"}, {"title": "Blank Page", "text": "Start an editable blank page.", "type": "Template", "href": "coursebuilder.html?template=blank"}, {"title": "Assignment Brief", "text": "Use Paragraph and Section heading blocks for Purpose, Your task, How to submit, and Success criteria. Add Button links for the assignment destination.", "type": "Layout guide", "href": "building-blocks.html#idea-assignment-brief", "keywords": "assignment brief "}, {"title": "Learning Objectives", "text": "Use the Bullet list block with numbered circles for measurable objectives. Add practice and assessment connections in each item or a nearby paragraph.", "type": "Layout guide", "href": "building-blocks.html#idea-learning-objectives", "keywords": "learning objectives outcomes goals"}, {"title": "Lesson Wrap-Up", "text": "Combine Paragraph, Callout box, and Button links blocks for key takeaways, a reflection question, and the next activity.", "type": "Layout guide", "href": "building-blocks.html#idea-lesson-wrap-up", "keywords": "lesson wrap-up "}, {"title": "Discussion Prompt", "text": "Use Paragraph and Section heading blocks for the opening question, initial-post expectations, reply guidance, and evaluation criteria. Students post in Brightspace Discussions.", "type": "Layout guide", "href": "building-blocks.html#idea-discussion-prompt", "keywords": "discussion prompt "}, {"title": "Student Support", "text": "Combine Paragraph and Button links blocks for service descriptions, verified contact information, and resource links.", "type": "Layout guide", "href": "building-blocks.html#idea-student-support", "keywords": "student support "}, {"title": "Instructor information", "text": "Photo, contact details, and a Teams message button, in four designs: classic, split card, photo banner, or monogram.", "type": "Widget", "href": "widget-builder.html?template=instructor", "keywords": "Instructor homepage"}, {"title": "Co-instructor team", "text": "Two compact instructor profiles in one widget for team-taught courses. Leave an image URL blank to show initials instead.", "type": "Widget", "href": "widget-builder.html?template=coinstructor", "keywords": "Instructor homepage"}, {"title": "Important links", "text": "A compact set of buttons for the course syllabus and MCC student services. The MCC service links are built in.", "type": "Widget", "href": "widget-builder.html?template=links", "keywords": "Course information homepage"}, {"title": "AI policy stoplight", "text": "The MCC AI Stoplight Framework as a homepage badge: the course level, what it means, and your parameters for Yellow. Set once per course.", "type": "Widget", "href": "widget-builder.html?template=aipolicy", "keywords": "Course information homepage"}, {"title": "Where do I…?", "text": "Task-based buttons written the way new online students actually think: submit work, check grades, email the instructor, find the syllabus.", "type": "Widget", "href": "widget-builder.html?template=wayfinding", "keywords": "Course information homepage"}, {"title": "Course FAQ", "text": "Expandable questions and answers using native HTML, no scripts. Great for deflecting the questions you answer by email every semester.", "type": "Widget", "href": "widget-builder.html?template=faq", "keywords": "Course information homepage"}, {"title": "Grading at a glance", "text": "A static snapshot of grade categories and the letter grade scale. Students check this constantly before finals.", "type": "Widget", "href": "widget-builder.html?template=grading", "keywords": "Course information homepage"}, {"title": "Key semester dates", "text": "Census date, drop and withdrawal deadlines, and finals week as static text. Update once per term.", "type": "Widget", "href": "widget-builder.html?template=dates", "keywords": "Course information homepage"}, {"title": "Office hours schedule", "text": "A compact weekly schedule with an optional booking button, so office hours are one glance from the homepage.", "type": "Widget", "href": "widget-builder.html?template=hours", "keywords": "Course information homepage"}, {"title": "Communication expectations", "text": "Your response-time promise and where to ask what. Static, and it puts your instructor-presence practices on the front page.", "type": "Widget", "href": "widget-builder.html?template=netiquette", "keywords": "Course information homepage"}, {"title": "Student support", "text": "Tutoring, tech support, and campus resources with MCC standard links built in, plus optional counseling and advising links.", "type": "Widget", "href": "widget-builder.html?template=support", "keywords": "Student support homepage"}, {"title": "Library and research", "text": "Library homepage, databases, and citation help. Completely static and high value in writing-heavy courses.", "type": "Widget", "href": "widget-builder.html?template=library", "keywords": "Student support homepage"}, {"title": "Tech readiness", "text": "System check, tech support, and video help links: the widget that prevents week-one panic tickets.", "type": "Widget", "href": "widget-builder.html?template=tech", "keywords": "Student support homepage"}, {"title": "Blank widget", "text": "A simple title, text area, and optional button for a custom widget.", "type": "Widget", "href": "widget-builder.html?template=blank", "keywords": "Custom homepage"}, {"title": "Copy a page into Brightspace", "text": "Follow the course-page walkthrough.", "type": "Help", "href": "support.html#copy-paste", "keywords": "html publish paste source editor"}, {"title": "Fix a problem", "text": "Find help for common editing and publishing problems.", "type": "Help", "href": "support.html#troubleshooting", "keywords": "help error broken accessibility"}, {"title": "Save and reopen an editable page", "text": "Save JSON to edit later or move to another computer.", "type": "Help", "href": "support.html#save-reuse", "keywords": "json export import autosave backup resume"}, {"title": "Update a published page", "text": "Choose the right way to revise a page in Brightspace.", "type": "Help", "href": "support.html#edit-later", "keywords": "edit change replace"}, {"title": "Add a homepage widget", "text": "Watch the widget video or follow the Scribe walkthrough.", "type": "Help", "href": "support.html#widget-help", "keywords": "homepage paste widget"}, {"title": "Ask for help", "text": "Contact Instructional Design & Innovation.", "type": "Help", "href": "support.html#contact-help", "keywords": "support email"}];
-/* Common tools are embedded so every HTML file remains independently deployable. */
-window.CMUX = (() => {
-  const api = {};
-  const make = (tag, cls, text) => { const n=document.createElement(tag); if(cls)n.className=cls;if(text!=null)n.textContent=text;return n; };
-  api.modal = (title, content, opener) => {
-    const d=make('dialog','cm-dialog'); const head=make('div','cm-dialog-head');
-    const h=make('h2','',title);h.id='cm-dialog-'+Math.random().toString(36).slice(2);d.setAttribute('aria-labelledby',h.id);
-    const close=make('button','cm-button','Close');close.type='button';head.append(h,close);d.append(head);
-    if(typeof content==='string'){const body=make('div');body.innerHTML=content;d.append(body);}else d.append(content);
-    const returnTo=opener||document.activeElement;document.body.append(d);
-    close.onclick=()=>d.close();d.addEventListener('close',()=>{d.remove();if(returnTo?.isConnected)returnTo.focus();});
+const CM_SEARCH=[{"title":"Course Builder home","text":"Choose a tool and follow the four steps to Brightspace.","type":"Page","href":"index.html"},{"title":"Page Builder","text":"Build and edit a custom course page.","type":"Tool","href":"coursebuilder.html"},{"title":"Widget Builder","text":"Create a course homepage widget.","type":"Tool","href":"widget-builder.html"},{"title":"Building Block Guide","text":"Choose an interaction for your learning goal.","type":"Guide","href":"building-blocks.html"},{"title":"Intro text","text":"Orient students to the page.","type":"Block","href":"coursebuilder.html?block=intro","keywords":"Text & Layout "},{"title":"Section heading","text":"Organize content with heading levels.","type":"Block","href":"coursebuilder.html?block=heading","keywords":"Text & Layout "},{"title":"Paragraph","text":"Add explanations and supporting text.","type":"Block","href":"coursebuilder.html?block=paragraph","keywords":"Text & Layout "},{"title":"Checklist","text":"Display a static list of goals or tasks.","type":"Block","href":"coursebuilder.html?block=checklist","keywords":"Course Organization "},{"title":"Annotated reading","text":"Explain highlighted phrases within a reading.","type":"Block","href":"coursebuilder.html?block=annotated","keywords":"Reveal & Explore "},{"title":"Bullet list (1–10)","text":"Present a scannable list of ideas.","type":"Block","href":"coursebuilder.html?block=bullets","keywords":"Text & Layout "},{"title":"Callout box","text":"Emphasize a tip, notice, example, or reflection.","type":"Block","href":"coursebuilder.html?block=callout","keywords":"Callouts & Key Ideas "},{"title":"Blockquote","text":"Highlight a quotation and its source.","type":"Block","href":"coursebuilder.html?block=quote","keywords":"Text & Layout "},{"title":"Button links (1–4)","text":"Link students to resources or the next activity.","type":"Block","href":"coursebuilder.html?block=button","keywords":"Resources & Data "},{"title":"Colored block","text":"Highlight a key takeaway in a colored panel.","type":"Block","href":"coursebuilder.html?block=colored","keywords":"Callouts & Key Ideas "},{"title":"Instructor insight","text":"Share instructor advice or a personal perspective.","type":"Block","href":"coursebuilder.html?block=insight","keywords":"Instructor Information "},{"title":"Instructor information","text":"Introduce yourself, contact details, and office hours.","type":"Block","href":"coursebuilder.html?block=instructorInfo","keywords":"Instructor Information teacher faculty bio contact office"},{"title":"Content image with text","text":"Pair an instructional image with an explanation.","type":"Block","href":"coursebuilder.html?block=imageText","keywords":"Media & Visuals "},{"title":"AI policy block","text":"Explain the permitted level of AI use.","type":"Block","href":"coursebuilder.html?block=aiPolicy","keywords":"Course Organization "},{"title":"Due date reminder","text":"Highlight a deadline and submission reminder.","type":"Block","href":"coursebuilder.html?block=dueDate","keywords":"Course Organization deadline countdown date"},{"title":"Colored course cards (1–6)","text":"Summarize course goals or key themes.","type":"Block","href":"coursebuilder.html?block=courseCards","keywords":"Course Organization "},{"title":"Scope rating cards (1–6)","text":"Compare options using a scope or effort rating.","type":"Block","href":"coursebuilder.html?block=scopeCards","keywords":"Resources & Data "},{"title":"Step flow boxes (2–6)","text":"Show a short process in connected boxes.","type":"Block","href":"coursebuilder.html?block=stepBoxes","keywords":"Timelines & Processes "},{"title":"Accordion (1–10)","text":"Expand optional details in stacked sections.","type":"Block","href":"coursebuilder.html?block=accordion","keywords":"Reveal & Explore faq expand collapse"},{"title":"Tabbed sections","text":"Switch between related content panels.","type":"Block","href":"coursebuilder.html?block=tabs","keywords":"Reveal & Explore tab horizontal vertical panels"},{"title":"Flip card","text":"Reveal definitions or answers on cards.","type":"Block","href":"coursebuilder.html?block=flip","keywords":"Reveal & Explore "},{"title":"Timeline","text":"Show steps or events in a visible sequence.","type":"Block","href":"coursebuilder.html?block=timeline","keywords":"Timelines & Processes "},{"title":"Story or image carousel","text":"Present a story or image series one slide at a time.","type":"Block","href":"coursebuilder.html?block=carousel","keywords":"Media & Visuals "},{"title":"Interactive timeline","text":"Reveal details for each milestone.","type":"Block","href":"coursebuilder.html?block=interactiveTimeline","keywords":"Timelines & Processes "},{"title":"Click and reveal","text":"Show a hint or explanation when selected.","type":"Block","href":"coursebuilder.html?block=reveal","keywords":"Reveal & Explore "},{"title":"Knowledge check","text":"Offer a quick check with 2–4 answer choices.","type":"Block","href":"coursebuilder.html?block=knowledge","keywords":"Practice & Feedback "},{"title":"Multiple choice question","text":"Ask a question with 2–6 choices and feedback.","type":"Block","href":"coursebuilder.html?block=multipleChoice","keywords":"Practice & Feedback quiz knowledge check question assessment"},{"title":"Decision scenario","text":"Choose a response to a realistic situation.","type":"Block","href":"coursebuilder.html?block=scenario","keywords":"Scenarios & Examples "},{"title":"Guided stepper","text":"Guide students through a process one step at a time.","type":"Block","href":"coursebuilder.html?block=process","keywords":"Timelines & Processes "},{"title":"Interactive checklist","text":"Let students check off tasks on the page.","type":"Block","href":"coursebuilder.html?block=interactiveChecklist","keywords":"Course Organization tasks weekly checkboxes"},{"title":"Drag and drop sorting","text":"Sort items by selecting or dragging them.","type":"Block","href":"coursebuilder.html?block=sorting","keywords":"Practice & Feedback "},{"title":"Mapping activity","text":"Place items into the correct labeled space by selecting or dragging them.","type":"Block","href":"coursebuilder.html?block=mapPlacement","keywords":"Practice & Feedback placement widget layout spaces slots drag drop mapping"},{"title":"Sequence ordering","text":"Arrange steps in the correct order.","type":"Block","href":"coursebuilder.html?block=sequence","keywords":"Practice & Feedback "},{"title":"Estimation slider","text":"Make a numeric prediction, then reveal the answer.","type":"Block","href":"coursebuilder.html?block=estimate","keywords":"Practice & Feedback "},{"title":"Before and after compare","text":"Compare two labeled images.","type":"Block","href":"coursebuilder.html?block=compare","keywords":"Media & Visuals "},{"title":"Self-assessment rubric","text":"Rate confidence and generate a review plan.","type":"Block","href":"coursebuilder.html?block=selfCheck","keywords":"Practice & Feedback "},{"title":"Matching memory grid","text":"Match pairs of terms and definitions.","type":"Block","href":"coursebuilder.html?block=matching","keywords":"Practice & Feedback "},{"title":"Matching activity","text":"Select an item, then select its match from a second list.","type":"Block","href":"coursebuilder.html?block=matchPairs","keywords":"Practice & Feedback pairing pair up connect terms"},{"title":"Worked example (fading steps)","text":"Study a solution with progressively revealed steps.","type":"Block","href":"coursebuilder.html?block=workedExample","keywords":"Scenarios & Examples "},{"title":"Scenario reveal boxes (1–6)","text":"Judge a situation, then reveal the explanation.","type":"Block","href":"coursebuilder.html?block=scenarioReveal","keywords":"Scenarios & Examples "},{"title":"Interactive path timeline (1–8)","text":"Explore milestones along a visual path.","type":"Block","href":"coursebuilder.html?block=pathTimeline","keywords":"Timelines & Processes "},{"title":"Weekly rhythm stepper (2–8)","text":"Walk students through the weekly routine.","type":"Block","href":"coursebuilder.html?block=weeklyRhythm","keywords":"Course Organization "},{"title":"Image","text":"Add an image placeholder or an image link, with alternative text and a caption.","type":"Block","href":"coursebuilder.html?block=image","keywords":"Media & Visuals "},{"title":"Video","text":"Add a Brightspace or YuJa video placeholder, or embed a YouTube video.","type":"Block","href":"coursebuilder.html?block=video","keywords":"Media & Visuals "},{"title":"Audio note with transcript","text":"Add an audio recording and its transcript.","type":"Block","href":"coursebuilder.html?block=audio","keywords":"Media & Visuals recording podcast transcript"},{"title":"Key statistic","text":"Highlight a number with context and a source.","type":"Block","href":"coursebuilder.html?block=statCard","keywords":"Resources & Data "},{"title":"Grading rubric","text":"Display assessment criteria and performance levels.","type":"Block","href":"coursebuilder.html?block=rubricTable","keywords":"Practice & Feedback "},{"title":"Reference list","text":"List source citations with hanging indents.","type":"Block","href":"coursebuilder.html?block=referenceList","keywords":"Resources & Data citation bibliography"},{"title":"Table","text":"Organize information in labeled rows and columns.","type":"Block","href":"coursebuilder.html?block=table","keywords":"Resources & Data "},{"title":"Divider","text":"Separate sections visually.","type":"Block","href":"coursebuilder.html?block=divider","keywords":"Text & Layout "},{"title":"Two-column content","text":"Place two related ideas side by side.","type":"Block","href":"coursebuilder.html?block=columns","keywords":"Text & Layout "},{"title":"Module Overview","text":"Start an editable module overview.","type":"Template","href":"coursebuilder.html?template=module"},{"title":"Instructor Information","text":"Start an editable instructor information.","type":"Template","href":"coursebuilder.html?template=instructor"},{"title":"Instructional Content","text":"Start an editable instructional content.","type":"Template","href":"coursebuilder.html?template=content"},{"title":"Weekly Task List","text":"Start an editable weekly task list.","type":"Template","href":"coursebuilder.html?template=weekly"},{"title":"Video Page","text":"Start an editable video page.","type":"Template","href":"coursebuilder.html?template=video"},{"title":"Interactive Scenario Page","text":"Start an editable interactive scenario page.","type":"Template","href":"coursebuilder.html?template=scenario"},{"title":"Low Stakes Assessment","text":"Start an editable low stakes assessment.","type":"Template","href":"coursebuilder.html?template=assessment"},{"title":"Random Page","text":"Start an editable random page.","type":"Template","href":"coursebuilder.html?template=random"},{"title":"Blank Page","text":"Start an editable blank page.","type":"Template","href":"coursebuilder.html?template=blank"},{"title":"Assignment Brief","text":"Use Paragraph and Section heading blocks for Purpose, Your task, How to submit, and Success criteria. Add Button links for the assignment destination.","type":"Layout guide","href":"building-blocks.html#idea-assignment-brief","keywords":"assignment brief "},{"title":"Learning Objectives","text":"Use the Bullet list block with numbered circles for measurable objectives. Add practice and assessment connections in each item or a nearby paragraph.","type":"Layout guide","href":"building-blocks.html#idea-learning-objectives","keywords":"learning objectives outcomes goals"},{"title":"Lesson Wrap-Up","text":"Combine Paragraph, Callout box, and Button links blocks for key takeaways, a reflection question, and the next activity.","type":"Layout guide","href":"building-blocks.html#idea-lesson-wrap-up","keywords":"lesson wrap-up "},{"title":"Discussion Prompt","text":"Use Paragraph and Section heading blocks for the opening question, initial-post expectations, reply guidance, and evaluation criteria. Students post in Brightspace Discussions.","type":"Layout guide","href":"building-blocks.html#idea-discussion-prompt","keywords":"discussion prompt "},{"title":"Student Support","text":"Combine Paragraph and Button links blocks for service descriptions, verified contact information, and resource links.","type":"Layout guide","href":"building-blocks.html#idea-student-support","keywords":"student support "},{"title":"Instructor information","text":"Photo, contact details, and a Teams message button, in four designs: classic, split card, photo banner, or monogram.","type":"Widget","href":"widget-builder.html?template=instructor","keywords":"Instructor homepage"},{"title":"Co-instructor team","text":"Two compact instructor profiles in one widget for team-taught courses. Leave an image URL blank to show initials instead.","type":"Widget","href":"widget-builder.html?template=coinstructor","keywords":"Instructor homepage"},{"title":"Important links","text":"A compact set of buttons for the course syllabus and MCC student services. The MCC service links are built in.","type":"Widget","href":"widget-builder.html?template=links","keywords":"Course information homepage"},{"title":"AI policy stoplight","text":"The MCC AI Stoplight Framework as a homepage badge: the course level, what it means, and your parameters for Yellow. Set once per course.","type":"Widget","href":"widget-builder.html?template=aipolicy","keywords":"Course information homepage"},{"title":"Where do I…?","text":"Task-based buttons written the way new online students actually think: submit work, check grades, email the instructor, find the syllabus.","type":"Widget","href":"widget-builder.html?template=wayfinding","keywords":"Course information homepage"},{"title":"Course FAQ","text":"Expandable questions and answers using native HTML, no scripts. Great for deflecting the questions you answer by email every semester.","type":"Widget","href":"widget-builder.html?template=faq","keywords":"Course information homepage"},{"title":"Grading at a glance","text":"A static snapshot of grade categories and the letter grade scale. Students check this constantly before finals.","type":"Widget","href":"widget-builder.html?template=grading","keywords":"Course information homepage"},{"title":"Key semester dates","text":"Census date, drop and withdrawal deadlines, and finals week as static text. Update once per term.","type":"Widget","href":"widget-builder.html?template=dates","keywords":"Course information homepage"},{"title":"Office hours schedule","text":"A compact weekly schedule with an optional booking button, so office hours are one glance from the homepage.","type":"Widget","href":"widget-builder.html?template=hours","keywords":"Course information homepage"},{"title":"Communication expectations","text":"Your response-time promise and where to ask what. Static, and it puts your instructor-presence practices on the front page.","type":"Widget","href":"widget-builder.html?template=netiquette","keywords":"Course information homepage"},{"title":"Student support","text":"Tutoring, tech support, and campus resources with MCC standard links built in, plus optional counseling and advising links.","type":"Widget","href":"widget-builder.html?template=support","keywords":"Student support homepage"},{"title":"Library and research","text":"Library homepage, databases, and citation help. Completely static and high value in writing-heavy courses.","type":"Widget","href":"widget-builder.html?template=library","keywords":"Student support homepage"},{"title":"Tech readiness","text":"System check, tech support, and video help links: the widget that prevents week-one panic tickets.","type":"Widget","href":"widget-builder.html?template=tech","keywords":"Student support homepage"},{"title":"Blank widget","text":"A simple title, text area, and optional button for a custom widget.","type":"Widget","href":"widget-builder.html?template=blank","keywords":"Custom homepage"},{"title":"Tour the Page Builder","text":"Click through a simulated Page Builder to learn what each button and panel does.","type":"Help","href":"support.html#tour","keywords":"tour map buttons panels interface"},{"title":"Copy a page into Brightspace","text":"Follow the interactive copy-and-paste walkthrough.","type":"Help","href":"support.html#copy-paste","keywords":"html publish paste source editor"},{"title":"Download HTML and upload it","text":"Follow the interactive download-and-upload walkthrough.","type":"Help","href":"support.html#copy-paste","keywords":"download file upload add existing"},{"title":"Fix a problem","text":"Find help for common editing and publishing problems.","type":"Help","href":"support.html#troubleshooting","keywords":"help error broken accessibility"},{"title":"Save and reopen an editable page","text":"Save JSON to edit later or move to another computer.","type":"Help","href":"support.html#save-reuse","keywords":"json export import autosave backup resume"},{"title":"Update a published page","text":"Choose the right way to revise a page in Brightspace.","type":"Help","href":"support.html#edit-later","keywords":"edit change replace"},{"title":"Add a homepage widget","text":"Watch the widget video or follow the Scribe walkthrough.","type":"Help","href":"support.html#widget-help","keywords":"homepage paste widget"},{"title":"Ask for help","text":"Contact Instructional Design & Innovation.","type":"Help","href":"support.html#contact-help","keywords":"support email"}];
+window.CMUX=(function(){
+  var api={};
+  function make(tag,cls,text){var n=document.createElement(tag);if(cls)n.className=cls;if(text!=null)n.textContent=text;return n;}
+  api.modal=function(title,content,opener){
+    var d=make('dialog','cm-dialog'),head=make('div','cm-dialog-head'),h=make('h2','',title);
+    h.id='cm-dialog-'+Math.random().toString(36).slice(2);d.setAttribute('aria-labelledby',h.id);
+    var close=make('button','cm-button','Close');close.type='button';head.append(h,close);d.append(head);d.append(content);
+    var returnTo=opener||document.activeElement;document.body.append(d);
+    close.onclick=function(){d.close();};
+    d.addEventListener('close',function(){d.remove();if(returnTo&&returnTo.isConnected)returnTo.focus();});
     d.showModal();close.focus();return d;
   };
-  api.saveStatus=(state,message)=>{const n=document.getElementById('cm-save-status');if(n){n.dataset.state=state;n.textContent=message;}};
-  api.saved=()=>api.saveStatus('saved','Saved in this browser at '+new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}));
-  api.handoff=(kind)=>{const n=document.getElementById('cm-handoff');if(n){n.hidden=false;n.querySelector('[data-copy-steps]').hidden=kind==='download';n.querySelector('[data-download-steps]').hidden=kind!=='download';n.querySelector('h2').textContent=kind==='download'?'HTML downloaded. Add it to Brightspace.':'Copied. Your next step is in Brightspace.';n.scrollIntoView({block:'nearest',behavior:'smooth'});n.focus();}};
-  api.search=()=>{
-    const input=document.querySelector('#site-search input[type="search"]');if(!input)return;
-    const body=make('div');const label=make('label','','Search pages, blocks, widgets, and help');label.htmlFor='cm-search-query';const query=make('input');query.type='search';query.id='cm-search-query';query.value=input.value.trim();
-    const status=make('p');status.setAttribute('role','status');const list=make('ul','cm-result-list');body.append(label,query,status,list);
-    const d=api.modal('Search Course Builder',body,input);
-    const render=()=>{const words=query.value.toLowerCase().trim().split(/\s+/).filter(Boolean);list.replaceChildren();if(!words.length){status.textContent='Enter a word or phrase, such as discussion, save, tabs, or module.';return;}
-      const matches=CM_SEARCH.filter(x=>words.every(w=>(x.title+' '+x.text+' '+x.type+' '+(x.keywords||'')).toLowerCase().includes(w))).sort((a,b)=>Number(b.title.toLowerCase().includes(query.value.toLowerCase()))-Number(a.title.toLowerCase().includes(query.value.toLowerCase())));
-      status.textContent=matches.length?matches.length+' results'+(matches.length>30?' · showing the first 30':''):'No matches. Try a shorter term, or open Help from the navigation.';
-      matches.slice(0,30).forEach(x=>{const li=make('li');const a=make('a','cm-result');a.href=x.href;a.append(make('small','',x.type),make('strong','',x.title),make('span','',x.text));li.append(a);list.append(li);});};
+  api.search=function(){
+    var input=document.querySelector('#site-search input[type="search"]');if(!input)return;
+    var body=make('div'),label=make('label','','Search pages, blocks, widgets, and help');label.htmlFor='cm-search-query';
+    var query=make('input');query.type='search';query.id='cm-search-query';query.value=input.value.trim();
+    var status=make('p');status.setAttribute('role','status');var list=make('ul','cm-result-list');
+    body.append(label,query,status,list);
+    var d=api.modal('Search Course Builder',body,input);
+    function render(){
+      var words=query.value.toLowerCase().trim().split(/\s+/).filter(Boolean);list.replaceChildren();
+      if(!words.length){status.textContent='Enter a word or phrase, such as discussion, save, tabs, or module.';return;}
+      var q=query.value.toLowerCase();
+      var matches=CM_SEARCH.filter(function(x){return words.every(function(w){return (x.title+' '+x.text+' '+x.type+' '+(x.keywords||'')).toLowerCase().indexOf(w)>-1;});})
+        .sort(function(a,b){return Number(b.title.toLowerCase().indexOf(q)>-1)-Number(a.title.toLowerCase().indexOf(q)>-1);});
+      status.textContent=matches.length?matches.length+' results'+(matches.length>30?' (showing the first 30)':''):'No matches. Try a shorter term, or open Help from the navigation.';
+      matches.slice(0,30).forEach(function(x){var li=make('li'),a=make('a','cm-result');a.href=x.href;a.append(make('small','',x.type),make('strong','',x.title),make('span','',x.text));li.append(a);list.append(li);});
+    }
     query.addEventListener('input',render);render();query.focus();
   };
-  document.addEventListener('submit',event=>{if(event.target.id!=='site-search')return;event.preventDefault();event.stopImmediatePropagation();api.search();},true);
-  document.addEventListener('DOMContentLoaded',()=>{
-    const nav=document.querySelector('nav[aria-label="Main navigation"]');if(nav){nav.classList.add('cm-navigation');const toggle=make('button','cm-nav-toggle','Menu');toggle.type='button';const ul=nav.querySelector('ul');ul.id='cm-navigation-links';toggle.setAttribute('aria-controls',ul.id);const update=()=>toggle.setAttribute('aria-expanded',String(!nav.classList.contains('cm-collapsed')));nav.classList.add('cm-collapsed');update();toggle.onclick=()=>{nav.classList.toggle('cm-collapsed');update();};nav.prepend(toggle);nav.addEventListener('keydown',e=>{if(e.key==='Escape'){nav.classList.add('cm-collapsed');update();toggle.focus();}});}
-    document.querySelector('[data-save-copy]')?.addEventListener('click',()=>document.querySelector('#export-page,#export-widget').click());
-    document.querySelector('[data-dismiss-handoff]')?.addEventListener('click',()=>{document.getElementById('cm-handoff').hidden=true;document.querySelector('#copy-page,#copy-widget').focus();});
-    document.querySelectorAll('.cm-menu').forEach(menu=>menu.addEventListener('keydown',e=>{if(e.key==='Escape'){menu.open=false;menu.querySelector('summary').focus();}}));
-    document.addEventListener('click',e=>document.querySelectorAll('.cm-menu[open]').forEach(m=>{if(!m.contains(e.target))m.open=false;}));
-    if(document.getElementById('cm-guide-filter')){const field=document.getElementById('cm-guide-filter');const cards=[...document.querySelectorAll('section.category article.card')];const filter=()=>{const words=field.value.toLowerCase().trim().split(/\s+/).filter(Boolean);let n=0;cards.forEach(c=>{c.hidden=!words.every(w=>c.textContent.toLowerCase().includes(w));if(!c.hidden)n++;});document.querySelectorAll('section.category').forEach(s=>s.hidden=![...s.querySelectorAll('article.card')].some(c=>!c.hidden));document.getElementById('cm-guide-status').textContent=n+' blocks shown';};field.addEventListener('input',filter);filter();}
+  document.addEventListener('submit',function(event){if(event.target.id!=='site-search')return;event.preventDefault();event.stopImmediatePropagation();api.search();},true);
+  document.addEventListener('DOMContentLoaded',function(){
+    var nav=document.querySelector('nav[aria-label="Main navigation"]');
+    if(nav){
+      nav.classList.add('cm-navigation');
+      var toggle=make('button','cm-nav-toggle','Menu');toggle.type='button';
+      var ul=nav.querySelector('ul');ul.id='cm-navigation-links';toggle.setAttribute('aria-controls',ul.id);
+      var update=function(){toggle.setAttribute('aria-expanded',String(!nav.classList.contains('cm-collapsed')));};
+      nav.classList.add('cm-collapsed');update();
+      toggle.onclick=function(){nav.classList.toggle('cm-collapsed');update();};
+      nav.prepend(toggle);
+      nav.addEventListener('keydown',function(e){if(e.key==='Escape'){nav.classList.add('cm-collapsed');update();toggle.focus();}});
+    }
   });
   return api;
 })();
-
 </script>
-    <a class="skip" href="#main-content">Skip to main content</a>
-    <header>
-      <div class="topbar">
-        <span>Instructional Design &amp; Innovation</span
-        ><a href="mailto:online@mclennan.edu">online@mclennan.edu</a>
-      </div>
-      <div class="brand-row">
-        <a class="brand" href="index.html" aria-label="MCC Course Builder home">
-          <img class="header-logo" src="mcclogoidi.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/jghazzagh/coursebuild/refs/heads/main/mcclogoidi.png'" alt="McLennan Community College" />
-          <span class="course-name">Course Builder</span>
-        </a>
-        <form class="search" id="site-search" role="search">
-          <label
-            for="search-box"
-            style="
-              position: absolute;
-              clip: rect(0, 0, 0, 0);
-              width: 1px;
-              height: 1px;
-              overflow: hidden;
-            "
-            >Search Course Builder</label
-          ><input
-            id="search-box"
-            type="search"
-            placeholder="Search Course Builder"
-          /><button>Search</button>
-        </form>
-      </div>
-      <nav class="nav" aria-label="Main navigation">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="templates.html">Templates</a></li>
-          <li>
-            <a href="coursebuilder.html">Page Builder</a>
-          </li>
-          <li><a href="building-blocks.html">Block Guide</a></li>
-          <li><a href="widget-builder.html">Widget Builder</a></li>
-          <li><a href="support.html" aria-current="page">Help</a></li>
-        </ul>
-      </nav>
-      <div class="crumb">
-        <a href="index.html">Home</a> &nbsp;/&nbsp; Support
-      </div>
-    </header>
 
-    <!-- BEGIN: Welcome and quick navigation -->
-    <main id="main-content">
-      <section class="support-intro" aria-labelledby="support-title">
-        <p class="tag">Course Builder support</p>
-        <h1 id="support-title">Create your page. Copy it. Paste it into Brightspace.</h1>
-        <p class="lead"><strong>You do not need to write or understand HTML.</strong> Course Builder creates the code for you. You only need to know which button copies it and where to paste it.</p>
-        <p>Keep Course Builder and your Brightspace course open in separate tabs so you can switch between them.</p>
-        <nav class="support-links" aria-label="Support topics">
-          <a href="#copy-paste">Add a course page</a><a href="#troubleshooting">Fix a problem</a><a href="#save-reuse">Save for later</a><a href="#edit-later">Update a page</a><a href="#widget-help">Add a homepage widget</a><a href="#contact-help">Ask for help</a>
-        </nav>
-      </section>
-      <!-- END: Welcome and quick navigation -->
+<a class="skip" href="#main-content">Skip to main content</a>
+<header>
+  <div class="topbar"><span>Instructional Design &amp; Innovation</span><a href="mailto:online@mclennan.edu">online@mclennan.edu</a></div>
+  <div class="brand-row">
+    <a class="brand" href="index.html" aria-label="MCC Course Builder home">
+      <img class="header-logo" src="mcclogoidi.png" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/jghazzagh/coursebuild/refs/heads/main/mcclogoidi.png'" alt="McLennan Community College">
+      <span class="course-name">Course Builder</span>
+    </a>
+    <form class="search" id="site-search" role="search">
+      <label for="search-box" class="sr-only">Search Course Builder</label>
+      <input id="search-box" type="search" placeholder="Search Course Builder"><button>Search</button>
+    </form>
+  </div>
+  <nav class="nav" aria-label="Main navigation">
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="templates.html">Templates</a></li>
+      <li><a href="coursebuilder.html">Page Builder</a></li>
+      <li><a href="building-blocks.html">Block Guide</a></li>
+      <li><a href="widget-builder.html">Widget Builder</a></li>
+      <li><a href="support.html" aria-current="page">Help</a></li>
+    </ul>
+  </nav>
+  <div class="crumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Support</div>
+</header>
 
-      <!-- BEGIN: Primary copy-and-paste walkthrough -->
-      <section id="copy-paste" aria-labelledby="copy-title">
-        <div class="section-head"><p class="tag">Start here</p><h2 id="copy-title">Put your first page into Brightspace</h2></div>
-        <p class="notice"><strong>Start with a new, blank content page.</strong> This walkthrough adds a complete page. If you already have content to keep, use the <a href="#replace-page">existing-page instructions</a> instead.</p>
-        <ol class="transfer-steps">
-          <li><span class="step">In Course Builder</span><h3>Build and check your page</h3><p>Open <strong>Start a page</strong> to choose a template. Use <strong>Page Header</strong> for the page title and colors. Add blocks, select them in the page preview, and edit their details. Select <strong>Check page</strong> and review the results.</p><p class="checkpoint"><strong>Ready to continue:</strong> Your page contains your own directions and content.</p></li>
-          <li><span class="step">In Course Builder</span><h3>Select Copy page HTML</h3><p>Use <strong>Copy page HTML</strong> near the top of the builder. This copies the whole page for you. You do not need to select the code yourself.</p><p>For this walkthrough, you do not need <strong>Download HTML</strong> or <strong>Save and manage → Save editable copy (JSON)</strong>.</p><p class="checkpoint"><strong>What to expect:</strong> A message confirms the page was copied.</p></li>
-          <li><span class="step">In Brightspace</span><h3>Create a blank page</h3><p>Open <strong>Content</strong>, select the unit or lesson where the page belongs, then choose <strong>Create New → Page</strong>. Enter the page title.</p><p class="checkpoint"><strong>What to expect:</strong> An editing area with a toolbar.</p></li>
-          <li><span class="step">In Brightspace</span><h3>Open the HTML Source Editor</h3><p>Find the <strong>HTML Source Editor</strong> control, usually shown as <strong>&lt;/&gt;</strong>. If needed, expand the toolbar or use Fullscreen. Hover over controls to read their names.</p><p class="checkpoint"><strong>What to expect:</strong> A plain-text window. Some starter code may already be there.</p></li>
-          <li><span class="step">In the source window</span><h3>Paste the copied page</h3><p>Click inside the source window. <strong>For this new blank page only,</strong> select its starter code with <kbd>Ctrl</kbd> + <kbd>A</kbd> (Mac: <kbd>Cmd</kbd> + <kbd>A</kbd>), then paste with <kbd>Ctrl</kbd> + <kbd>V</kbd> (Mac: <kbd>Cmd</kbd> + <kbd>V</kbd>).</p><p class="checkpoint"><strong>What to expect:</strong> Lots of code. That is normal. You do not need to read or change it.</p></li>
-          <li><span class="step">Back in Brightspace</span><h3>Apply, save, and check</h3><p>Apply the source-window change, then save the Brightspace page. Reopen the saved page and test its links and activities.</p><p class="checkpoint"><strong>Success looks like:</strong> The formatted page appears instead of code.</p></li>
-        </ol>
-        <p class="reference-note">Brightspace reference: <a href="https://community.d2l.com/brightspace/kb/articles/3681-add-and-organize-learning-materials-in-the-new-content-experience">Create a page in the New Content Experience</a> and <a href="https://community.d2l.com/brightspace/kb/articles/3652-about-brightspace-editor">Find the HTML Source Editor</a>. Your course’s controls may look slightly different.</p>
-      </section>
-      <!-- END: Primary copy-and-paste walkthrough -->
+<main id="main-content">
 
-      <!-- BEGIN: Editor comparison; replace illustration areas with annotated MCC screenshots when available -->
-      <section id="editor-views" aria-labelledby="views-title">
-        <div class="section-head"><p class="tag">Know where to paste</p><h2 id="views-title">One editor, two views</h2></div>
-        <p>These are simplified guides, not screenshots of the Brightspace interface.</p>
-        <div class="editor-comparison">
-          <article class="editor-example"><h3>Where you normally type</h3><div class="editor-illustration"><span class="illustration-label">Regular editing view</span><p class="example-heading">Welcome to this week</p><p>Your headings, paragraphs, and images appear as a formatted page.</p></div><p>Use this view for small wording changes after adding your page. Paste the Course Builder code in the source window described next.</p></article>
-          <article class="editor-example"><h3>Where you paste the code</h3><div class="editor-illustration source-illustration"><span class="illustration-label">HTML Source Editor · &lt;/&gt;</span><p class="paste-label">Your copied page code goes here.</p><p>Click inside this window, then paste.</p></div><p>Open this view, paste everything Course Builder copied, and apply the change. No code editing required.</p></article>
+<!-- ===== INTRO ===== -->
+<section class="support-intro" aria-labelledby="support-title">
+  <p class="tag">Course Builder support</p>
+  <h1 id="support-title">Create your page. Copy it. Paste it into Brightspace.</h1>
+  <p class="lead"><strong>You do not need to write or understand HTML.</strong> Course Builder creates the code for you. You only need to know which button copies it and where to paste it. Tour the builder first, then follow the interactive steps.</p>
+  <p><a class="button" href="coursebuilder.html">Open Page Builder</a></p>
+  <nav class="support-links" aria-label="Support topics">
+    <a href="#tour">Tour the builder</a><a href="#copy-paste">Add a page to Brightspace</a><a href="#save-reuse">Save and update</a><a href="#troubleshooting">Fix a problem</a><a href="#widget-help">Homepage widgets</a><a href="#contact-help">Ask for help</a>
+  </nav>
+</section>
+
+<!-- ===== INTERACTIVE MAP ===== -->
+<section id="tour" aria-labelledby="tour-title">
+  <div class="section-head"><p class="tag">Tour</p><h2 id="tour-title">Explore the Page Builder</h2></div>
+  <p>This is a simulated Page Builder. Select any highlighted part to see what it does. The real tool may look slightly different, but these areas are all there.</p>
+
+  <div class="map" data-map>
+    <div class="sim">
+      <div class="sim-top">
+        <div><p class="eb">Visual Brightspace page builder</p><p class="sim-h">Build your page</p></div>
+        <div class="sim-actions" role="group" aria-label="Simulated page actions">
+          <button type="button" class="hs sb" data-title="Undo" data-copy="Steps back one change. Use it if you edit or delete the wrong block. The keyboard shortcut is Ctrl + Z (Mac: Cmd + Z) when you are not typing in a field.">Undo</button>
+          <button type="button" class="hs sb" data-title="Redo" data-copy="Brings back a change you just undid. Shortcut: Ctrl + Y (Mac: Cmd + Shift + Z).">Redo</button>
+          <button type="button" class="hs sb" data-title="Check page" data-copy="Runs automated checks for text contrast, heading order, links, image descriptions, media, and leftover starter text, then lists what to fix. It is a helpful first pass. It does not replace previewing the finished page as a learner in Brightspace.">Check page</button>
+          <button type="button" class="hs sb tl" data-title="Download HTML" data-copy="Saves your page as a complete .html file on your computer. Use it for the download-and-upload method. You do not need it for copy and paste." data-link="#copy-paste" data-link-text="See the download and upload steps" data-tab="tab-dl">Download HTML</button>
+          <button type="button" class="hs sb or" data-title="Copy page HTML" data-copy="Copies the whole page code to your clipboard so you can paste it into Brightspace's HTML Source Editor. This is the button most people need." data-link="#copy-paste" data-link-text="See the copy and paste steps" data-tab="tab-copy">Copy page HTML</button>
+          <button type="button" class="hs sb" data-title="Save and manage" data-copy="Opens a menu with Save editable copy (JSON), Open editable copy (JSON), and Reset page. The JSON file is what you reopen in Course Builder later. The HTML is what you publish in Brightspace." data-link="#save-reuse" data-link-text="Learn about saving and reopening">Save and manage &#9662;</button>
         </div>
-      </section>
-      <!-- END: Editor comparison -->
+      </div>
+      <div class="sim-save">
+        <button type="button" class="hs savestat" data-title="Save status" data-copy="Course Builder autosaves in this browser and shows when it last did. That copy stays on this computer, so also save an editable copy (JSON) for anything important.">Saved in this browser at 10:25 a.m.</button>
+        <button type="button" class="hs sb sm" data-title="Save an editable copy" data-copy="Downloads a JSON project file. Keep it with your course materials. You can reopen it in Course Builder on any computer, or share it with a colleague. You never need to open the file yourself." data-link="#save-reuse" data-link-text="Learn about saving and reopening">Save an editable copy</button>
+      </div>
 
-      <!-- BEGIN: Troubleshooting -->
-      <section id="troubleshooting" aria-labelledby="trouble-title">
-        <div class="section-head"><p class="tag">Quick fixes</p><h2 id="trouble-title">What are you seeing?</h2></div>
-        <div class="faq">
-          <details><summary>My page shows code instead of the design.</summary><p>If you are still inside the source window, seeing code is expected. Apply the change to return to the regular editor. If code appears on the saved page, it may have been pasted into the regular editing area. Try the walkthrough on a new blank page and paste into <strong>HTML Source Editor</strong>. Keep any existing work until your new copy looks right. <a href="#contact-help">Still stuck? Ask us.</a></p></details>
-          <details><summary>I can’t find the HTML Source Editor button.</summary><p>Make sure you are editing a content page, rather than just viewing it. Look for the source-editor control; it may become available when the editor is expanded. <a href="https://community.d2l.com/brightspace/kb/articles/3652-about-brightspace-editor">D2L’s editor guide shows the control and editor views.</a> If your screen looks different, <a href="#contact-help">send us a screenshot of the toolbar</a>.</p></details>
-          <details><summary>Nothing happened when I pasted.</summary><p>Return to Course Builder and select <strong>Copy page HTML</strong> again. Switch to Brightspace, click inside the source window, and use the paste keyboard shortcut. On Windows, use <kbd>Ctrl</kbd> + <kbd>V</kbd>; on a Mac, use <kbd>Cmd</kbd> + <kbd>V</kbd>. If copying produces no confirmation, <a href="#contact-help">contact support</a>.</p></details>
-          <details><summary>The page looks different after saving.</summary><p>Open the saved page outside the editing area first. If the layout still looks wrong, confirm that you copied the whole page with <strong>Copy page HTML</strong>. Try it on a new blank page without adding another template in Brightspace. If the problem continues, send us screenshots of the Course Builder preview and the saved page through <a href="#contact-help">support</a>.</p></details>
-          <details><summary>The buttons or activities aren’t responding.</summary><p>Save the page and test it outside the editor. If the same activity works in Course Builder but not on the saved Brightspace page, <a href="#contact-help">tell us the block name and where you pasted it</a>. You do not need to troubleshoot its code. Practice blocks do not send scores to the Brightspace gradebook.</p></details>
-          <details><summary>My image still says placeholder.</summary><p>The placeholder marks a spot for your own image. Follow that block’s image instructions in Brightspace’s regular editor, or supply an image address if the block has an Image URL field in Course Builder. Include a useful image description. If you are unsure how to replace the placeholder, <a href="#contact-help">send us the block name</a>.</p></details>
-          <details><summary>I changed Course Builder, but Brightspace shows the old version.</summary><p>The copies do not update automatically. Copy the revised page again and follow <a href="#replace-page">Update an existing page</a>. Keep any changes made only in Brightspace before replacing its content.</p></details>
-          <details><summary>I changed or deleted the wrong block.</summary><p>Use <strong>Undo</strong> in Course Builder to step back. For a page from a previous session, reopen your saved project with <strong>Save and manage → Open editable copy (JSON)</strong>. If you changed the Brightspace copy, stop before saving unwanted changes and <a href="#contact-help">ask for help</a> if you are unsure how to recover.</p></details>
-        </div>
-      </section>
-      <!-- END: Troubleshooting -->
-
-      <!-- BEGIN: Final checks -->
-      <section id="final-check" aria-labelledby="check-title">
-        <div class="section-head"><p class="tag">Before students use it</p><h2 id="check-title">Give the finished page a quick check</h2></div>
-        <ul class="finish-list"><li>Replace example text, image placeholders, and sample links.</li><li>Check dates, directions, and the location of any assignment or discussion.</li><li>Open links and confirm students can access their destinations.</li><li>Check image descriptions, video captions, and audio transcripts.</li><li>Try interactive activities on the saved page, including with a keyboard.</li><li>Review the page as a learner and confirm its visibility settings.</li></ul>
-        <p class="notice"><strong>Check page is a helpful first pass.</strong> It can flag common issues in Course Builder, but it cannot replace reviewing the finished page in your course.</p>
-      </section>
-      <!-- END: Final checks -->
-
-      <!-- BEGIN: Saving and reopening -->
-      <section id="save-reuse" aria-labelledby="save-title">
-        <div class="section-head"><p class="tag">Keep your work</p><h2 id="save-title">Save a copy you can edit later</h2></div>
-        <p>Select <strong>Save and manage → Save editable copy (JSON)</strong> after building or revising a page. Give the downloaded file a useful name and keep it with your course materials. <strong>You never need to open or edit the file yourself.</strong> Course Builder reads it for you.</p>
-        <div class="table-wrap"><table><caption>Choose the button that matches your goal</caption><thead><tr><th scope="col">I want to…</th><th scope="col">Use this button</th><th scope="col">What it does</th></tr></thead><tbody>
-          <tr><th scope="row">Put my page into Brightspace</th><td>Copy page HTML</td><td>Copies the finished page for pasting into Brightspace.</td></tr>
-          <tr><th scope="row">Keep an editable copy</th><td>Save editable copy (JSON)</td><td>Saves a Course Builder project file to your computer.</td></tr>
-          <tr><th scope="row">Reopen or reuse a saved project</th><td>Open editable copy (JSON)</td><td>Opens that project in Course Builder with its blocks ready to edit.</td></tr>
-          <tr><th scope="row">Download a finished webpage file</th><td>Download HTML</td><td>Saves an HTML file. This is an optional alternative, not required for the copy-and-paste walkthrough.</td></tr>
-        </tbody></table></div>
-        <div class="save-grid"><article class="save-card"><h3>Come back later</h3><p>Course Builder also autosaves in the current browser. If a saved page is available when you return, select <strong>Resume page</strong>. Keep an exported project as your dependable copy.</p></article><article class="save-card"><h3>Use another computer</h3><p>Bring your exported project file with you, open Course Builder, and select <strong>Save and manage → Open editable copy (JSON)</strong>. Browser autosave and favorites do not travel between computers.</p></article><article class="save-card"><h3>Share with a colleague</h3><p>Give them the exported project file. They select <strong>Save and manage → Open editable copy (JSON)</strong> in Course Builder and customize their own copy. No one needs to read the file’s contents.</p></article></div>
-      </section>
-      <!-- END: Saving and reopening -->
-
-      <!-- BEGIN: Editing and replacing existing content -->
-      <section id="edit-later" aria-labelledby="edit-title">
-        <div class="section-head"><p class="tag">Making changes</p><h2 id="edit-title">Update a page after publishing</h2></div>
-        <div class="widget-help"><article class="widget-card"><h3>Small wording changes</h3><p>Use Brightspace’s regular editing view to revise a sentence, fix a typo, or adjust a link. Save and check the result. You do not need to open the code to change ordinary text.</p></article><article class="widget-card"><h3>Bigger layout changes</h3><p>Open the saved Course Builder project with <strong>Save and manage → Open editable copy (JSON)</strong>. Add, remove, or rearrange blocks there. Export an updated project before transferring the revised page.</p></article></div>
-        <p class="notice"><strong>Course Builder and Brightspace are separate copies.</strong> Changes made in Brightspace do not return to your Course Builder project. Keep track of those edits before replacing a page.</p>
-        <div class="faq" id="replace-page"><details><summary>Update an existing page without losing content</summary><div class="faq-body"><ol><li>Keep a copy of the current Brightspace page and any images or text you need. Ask support if you are unsure how.</li><li>Bring any changes made only in Brightspace into your Course Builder project.</li><li>Copy the revised page and check it on a new blank Brightspace page first.</li><li>When you are ready to replace the <strong>entire</strong> existing page, open that page for editing, open its HTML Source Editor, select the content inside that source window, and paste the revised copy.</li><li>Apply the change, save, and recheck links, media, and activities.</li></ol><p>If you only want to insert one block into an existing page, <a href="#contact-help">ask us to help with placement</a>. You do not need to work out where to insert code.</p></div></details></div>
-      </section>
-      <!-- END: Editing and replacing existing content -->
-
-      <!-- BEGIN: Optional builder tips -->
-      <section aria-labelledby="builder-tips-title"><div class="section-head"><p class="tag">Useful shortcuts</p><h2 id="builder-tips-title">Get comfortable in Course Builder</h2></div>
-        <div class="guide-grid"><article class="guide"><h3>Try a preview</h3><p>Select <strong>Preview</strong> beside a block to see a sample before adding it.</p></article><article class="guide"><h3>Keep favorites</h3><p>Select <strong>Favorite</strong>. Find those choices and your last five additions in <strong>Favorites &amp; recently used</strong>.</p></article><article class="guide"><h3>Find a block</h3><p>Search by name or purpose, such as “instructor,” “rubric,” or “office hours.”</p></article><article class="guide"><h3>Read its guidance</h3><p>The editor’s <strong>How this block works</strong> note explains whether a block displays directions, provides practice, or links to another activity.</p></article></div>
-        <p><a href="building-blocks.html">Explore the Building Block Guide</a></p>
-      </section>
-      <!-- END: Optional builder tips -->
-
-      <!-- BEGIN: Separate homepage widget help -->
-      <section id="widget-help" aria-labelledby="widget-title"><div class="section-head"><p class="tag">A different task</p><h2 id="widget-title">Add a homepage widget</h2></div><p>Widgets appear on the course homepage. Follow these guides for that task; use the <a href="#copy-paste">course-page walkthrough above</a> for pages inside Content.</p>
-      <div class="widget-help"><article class="widget-card"><p class="tag">Video guide</p><h3>Watch the widget walkthrough</h3><p>Follow the demonstration of editing a homepage and its custom widget.</p><a href="https://youtu.be/ItXixUVR300?si=0_dC1Wr00gIqMuvj">Watch the homepage widget video</a></article><article class="widget-card"><p class="tag">Visual steps</p><h3>Follow the Scribe walkthrough</h3><p>Use the step-by-step guide to editing a course homepage and Instructor Widget.</p><a href="https://scribehow.com/embed/Brightspace_how_to_edit_a_course_homepage_and_edit_Instructor_Widget__QgXLWjDySP-rgZySQU1oNQ">Open the homepage widget guide</a></article></div></section>
-      <!-- END: Separate homepage widget help -->
-
-      <!-- BEGIN: Human support and community -->
-      <section id="contact-help" aria-labelledby="contact-title"><div class="section-head"><p class="tag">We can help</p><h2 id="contact-title">Tell us where you got stuck</h2></div><p>You do not need to diagnose the problem. Tell us the course and page name, what you clicked, and what happened. A screenshot helps; leave out student names, grades, and other student information.</p>
-      <div class="help-grid"><article class="help-card"><p class="tag">Course Builder and Brightspace</p><h3>Get help with a page</h3><p>Open an email with prompts already filled in. Add your details before sending.</p><a href="mailto:online@mclennan.edu?subject=Course Builder%20help&amp;body=Course%20name%20and%20section%3A%20%0APage%20name%3A%20%0AWhat%20I%20clicked%3A%20%0AWhat%20I%20expected%3A%20%0AWhat%20happened%20instead%3A%20%0A%0AI%20can%20attach%20a%20screenshot%20with%20student%20information%20removed.%0A">Start a support email</a></article><article class="help-card"><p class="tag">Instructional design</p><h3>Plan or improve a page</h3><p>We can help with organization, student directions, accessibility, and choosing useful blocks.</p><a href="mailto:online@mclennan.edu">Email online@mclennan.edu</a></article></div>
-      <p>No email app opens? Email <a href="mailto:online@mclennan.edu">online@mclennan.edu</a> and include those details.</p></section>
-      <section aria-labelledby="community-title"><div class="section-head"><p class="tag">Your ideas</p><h2 id="community-title">Help Course Builder get better</h2></div><div class="community-grid"><article class="community-card"><h3>Request a template or block</h3><p>Tell us what you keep rebuilding and how it would help your students.</p><a href="mailto:online@mclennan.edu?subject=Course Builder%20Suggestion">Send a suggestion</a></article><article class="community-card"><h3>Share a useful example</h3><p>Show us a course page or teaching approach that other faculty could adapt.</p><a href="mailto:online@mclennan.edu?subject=Course Builder%20Community%20Example">Share an example</a></article></div></section>
-      <!-- END: Human support and community -->
-      <section class="cta"><h2>Ready to build your page?</h2><p>Choose a template, make it yours, and come back to the copy-and-paste steps when you are ready.</p><a class="button" href="coursebuilder.html">Open Page Builder</a></section>
-    </main>
-
-    <footer>
-      <div class="footer-main">
-        <div>
-          <div class="footer-brand">
-            McLennan Community College
+      <div class="sim-grid">
+        <!-- Left: block library -->
+        <div class="sp">
+          <div class="sp-head"><p class="sp-h">Building blocks</p>
+            <button type="button" class="hs sb sm" data-title="Hide the blocks panel" data-copy="Hides this panel to give the preview and editor more room. A slim Show blocks strip appears in the same spot so you can bring it back.">Hide</button></div>
+          <div role="button" tabindex="0" class="hs fld" data-title="Search blocks" data-copy="Search by block name or purpose, for example instructor, rubric, or office hours. The list filters as you type.">Search blocks or purposes</div>
+          <div role="button" tabindex="0" class="hs fld" data-title="What are you trying to do?" data-copy="Not sure which block you need? Choose a goal, such as Present information, Guide a process, Let students practice, Organize weekly work, or Add media, to narrow the list.">What are you trying to do? &#9662;</div>
+          <div role="button" tabindex="0" class="hs row" data-title="Page Header" data-copy="Open this to set the starter template, page label and title, title style (color banner or text only), heading level, an optional banner image link, and the accent color. Choosing a new template asks you to confirm, because it replaces your current blocks."><span>Page Header</span><span class="cnt">edit</span></div>
+          <div role="button" tabindex="0" class="hs row" data-title="Favorites and recently used" data-copy="Select Favorite on any block to pin it here. The list also shows your last five additions. Both are saved in this browser only."><span>Favorites &amp; recently used</span></div>
+          <div role="button" tabindex="0" class="hs cats" data-title="Block categories" data-copy="Blocks live in ten categories, such as Text &amp; Layout, Practice &amp; Feedback, and Media &amp; Visuals. Open a category, then select a block to add it to the end of your page. Select Preview on any block to see a sample and read how it behaves first.">
+            <span class="cat">Text &amp; Layout</span><span class="cat">Instructor Information</span><span class="cat">Course Organization</span><span class="cat">Practice &amp; Feedback</span><span class="tiny">and 6 more categories</span>
           </div>
-          <p>
-            Course Builder is maintained by Instructional Design &amp; Innovation
-            to help MCC faculty create clear, consistent, and accessible
-            Brightspace courses.
-          </p>
-          <span class="online">McLennan Online</span>
         </div>
+
+        <!-- Middle: preview -->
         <div>
-          <h2>Build</h2>
-          <a href="templates.html">Page templates</a
-          ><a href="coursebuilder.html">Page builder</a
-          ><a href="building-blocks.html">Building block guide</a
-          ><a href="widget-builder.html">Widget builder</a>
+          <div class="pv-head">
+            <div><p class="sp-h">Page preview</p><p class="tiny">Approximates how Brightspace renders the exported page</p></div>
+            <div class="pv-tools">
+              <button type="button" class="hs sb sm" data-title="Preview size" data-copy="Switch between Phone, Tablet, Fit, 1000px, and 1200px to see how your page looks at different widths. The 1000px and 1200px sizes turn on Focus mode so the preview has room.">Preview size &#9662;</button>
+              <button type="button" class="hs sb sm" data-title="Preview options" data-copy="Focus mode hides the side panels so the preview uses the full width. Open in tab shows a full-size snapshot in a new browser tab. Reopen it after more edits, because the snapshot does not update.">Preview options &#9662;</button>
+              <span class="tiny">2 blocks</span>
+            </div>
+          </div>
+          <div class="frame">
+            <div role="button" tabindex="0" class="hs ttl" data-title="Page title bar" data-copy="This is the title area students see at the top of the page. It is built from the Page Header settings in the left panel: label, title, style, heading level, optional banner image, and accent color."><p class="kick">Course content</p><p class="ptitle">Module Overview</p></div>
+            <div class="frame-body">
+              <div class="blockwrap" aria-hidden="true">
+                <div class="blk"><span class="chip">Intro text</span><p style="margin:0">Add a brief overview explaining what students will learn in this module.</p></div>
+              </div>
+              <button type="button" class="hs addbar" data-title="Add block here" data-copy="Dashed bars between blocks insert a new block at that exact spot. A picker opens so you can search for the block you want. Every block also has a plus button in its toolbar that adds a block below it.">+ Add block here</button>
+              <div class="blockwrap">
+                <div role="button" tabindex="0" class="hs blk sel" data-title="A selected block" data-copy="Select any block in the preview to edit it. The selected block gets a teal outline and its fields open in the Block editor. You can also tab to a block and press Enter. Use Edit in its toolbar to jump straight to the fields.">
+                  <span class="chip">Accordion</span>
+                  <div class="mini-acc">Select to learn more</div><div class="mini-acc">Explore an example</div><div class="mini-acc">Check your understanding</div>
+                </div>
+                <button type="button" class="hs tools" aria-label="Block tools" data-title="Block tools" data-copy="These tools appear when you hover over or focus a block. Edit jumps to its fields, the grip drags it to a new spot, the arrows move it up or down, plus adds a block below, the copy icon duplicates it, and the x deletes it. Undo brings back a deleted block."><span>Edit</span><span>&#8942;&#8942;</span><span>&#8593;</span><span>&#8595;</span><span>+</span><span>&#10697;</span><span>&times;</span></button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div>
-          <h2>Need help?</h2>
-          <a href="mailto:online@mclennan.edu">online@mclennan.edu</a
-          ><a href="support.html">Support options</a
-          ><a href="https://www.mclennan.edu/">McLennan.edu</a>
+
+        <!-- Right: editor -->
+        <div class="sp">
+          <div role="button" tabindex="0" class="hs ed-head" data-title="Block editor" data-copy="The fields for the selected block appear here. If nothing is selected, click a block in the preview first. In Focus mode this panel slides in as a drawer."><p class="sp-h">Block editor</p><span class="sel-chip">Accordion</span></div>
+          <div role="button" tabindex="0" class="hs row" data-title="Content" data-copy="The text and settings for the selected block, such as headings, paragraphs, links, and choices. Your edits show in the preview as you type."><span>Content</span><span class="cnt">1</span></div>
+          <div role="button" tabindex="0" class="hs row" data-title="Sections (repeating items)" data-copy="Repeating pieces, such as accordion sections or quiz answers, are edited here. Change the number in Content to add or remove them."><span>Sections</span><span class="cnt">3</span></div>
+          <div role="button" tabindex="0" class="hs row" data-title="Appearance and colors" data-copy="Choose a font, accent color, text color, and background color for this block. A contrast checker shows whether the text is easy to read. WCAG AA asks for at least 4.5 to 1 for normal text."><span>Appearance and colors</span></div>
+          <div role="button" tabindex="0" class="hs row" data-title="Code snippet and actions" data-copy="Shows this block's code exactly as it will export, with Copy block HTML and Delete this block buttons. You never need to read or edit the code."><span>Code snippet and actions</span></div>
         </div>
       </div>
-      <div class="footer-bottom">
-        <span>© 2026 McLennan Community College · McLennan Online</span
-        ><span>Designed for WCAG 2.1 AA accessibility</span>
+    </div>
+    <div class="pop" data-pop hidden aria-hidden="true"><strong data-pop-title></strong><span data-pop-copy></span></div>
+  </div>
+
+  <div class="mappanel" data-map-panel>
+    <p class="tag">Selected area</p>
+    <h3 data-panel-title>Explore the Page Builder</h3>
+    <p data-panel-copy aria-live="polite">Select any part of the simulated Page Builder above to learn what it does.</p>
+    <a data-panel-link href="#copy-paste" hidden></a>
+  </div>
+</section>
+
+<!-- ===== WALKTHROUGHS ===== -->
+<section id="copy-paste" aria-labelledby="copy-title">
+  <div class="section-head"><p class="tag">Step by step</p><h2 id="copy-title">Get your page into Brightspace</h2></div>
+  <p>Choose a method, then work through the steps. Each screen is a simulation you can click, so you can practice before touching your real course. Use <strong>Next step</strong> to move along. Keep Course Builder and Brightspace open in separate tabs so you can switch between them.</p>
+
+  <div class="methods" role="tablist" aria-label="Choose a method">
+    <button type="button" role="tab" id="tab-copy" aria-controls="walk-copy" aria-selected="true">Copy and paste <small>Recommended: stays editable in Brightspace</small></button>
+    <button type="button" role="tab" id="tab-dl" aria-controls="walk-dl" aria-selected="false" tabindex="-1">Download and upload <small>Saves a web page file</small></button>
+  </div>
+
+  <!-- COPY AND PASTE -->
+  <div class="walk" id="walk-copy" role="tabpanel" aria-labelledby="tab-copy" data-walk>
+    <p class="notice"><strong>Start with a new, blank content page.</strong> This walkthrough adds a complete page. If you already have content to keep, see <a href="#replace-page">Update a page you already published</a> instead.</p>
+    <ol class="walk-nav" aria-label="Steps">
+      <li><button type="button" data-go="0">1. Copy</button></li>
+      <li><button type="button" data-go="1">2. Blank page</button></li>
+      <li><button type="button" data-go="2">3. Source editor</button></li>
+      <li><button type="button" data-go="3">4. Paste</button></li>
+      <li><button type="button" data-go="4">5. Check</button></li>
+    </ol>
+
+    <article class="wstep" data-step data-name="Select Copy page HTML">
+      <span class="where">In Course Builder</span>
+      <h3 tabindex="-1">Select Copy page HTML</h3>
+      <p>Build and check your page first. When it holds your own content, select <strong>Copy page HTML</strong> near the top of the builder. It copies the whole page for you, so you never select any code yourself.</p>
+      <div class="screen" role="group" aria-label="Simulated Course Builder action buttons">
+        <div class="cbbar" data-want="copy" data-ok="Done. Course Builder copied the whole page to your clipboard. Select Next step to move to Brightspace." data-miss="Good button, but this step needs Copy page HTML.">
+          <button type="button" class="cbbtn" data-act="bar" data-key="undo">Undo</button>
+          <button type="button" class="cbbtn" data-act="bar" data-key="redo">Redo</button>
+          <button type="button" class="cbbtn" data-act="bar" data-key="check">Check page</button>
+          <button type="button" class="cbbtn tl" data-act="bar" data-key="download">Download HTML</button>
+          <button type="button" class="cbbtn or target" data-act="bar" data-key="copy">Copy page HTML</button>
+          <button type="button" class="cbbtn" data-act="bar" data-key="save">Save and manage &#9662;</button>
+        </div>
+        <div class="cbtoast" hidden><strong>Page HTML copied.</strong></div>
       </div>
-    </footer>
-    <script>
-      document.getElementById('site-search').addEventListener('submit',function(event){
-        event.preventDefault();var q=document.getElementById('search-box').value.trim().toLowerCase();
-        if(/paste|copy|html|source|editor/.test(q)) location.href='#copy-paste';
-        else if(/broken|problem|blank|wrong|trouble|not work/.test(q)) location.href='#troubleshooting';
-        else if(/json|save|resume|import|export|share/.test(q)) location.href='#save-reuse';
-        else if(/update|edit|replace/.test(q)) location.href='#edit-later';
-        else if(/widget|homepage/.test(q)) location.href='#widget-help';
-        else if(/help|support|accessib|brightspace/.test(q)) location.href='#contact-help';
-        else if(/block|accordion|tab|question|timeline|carousel|table|layout|sort|sequence|match|audio|reading|instructor|rubric|objective/.test(q)) location.href='building-blocks.html';
-        else if(/template|policy|module/.test(q)) location.href='templates.html';
-        else location.href='#contact-help';
+      <p class="hint" role="status" aria-live="polite">Try it: select Copy page HTML in the simulated builder.</p>
+      <p class="checkpoint"><strong>What to expect:</strong> A message confirms the page was copied.</p>
+      <div class="step-foot"><button type="button" class="small-btn" data-act="reset">Try this step again</button></div>
+    </article>
+
+    <article class="wstep" data-step data-name="Create a blank page">
+      <span class="where">In Brightspace</span>
+      <h3 tabindex="-1">Create a blank page</h3>
+      <p>Open <strong>Content</strong> and choose the unit or lesson where the page belongs. Select <strong>Create New</strong>, choose <strong>Page</strong>, and enter a page title.</p>
+      <div class="screen" role="group" aria-label="Simulated Brightspace Content area">
+        <div class="bs bs-card">
+          <p class="bs-crumb">Content</p><p class="bs-h">Week 1</p>
+          <div class="bsbar" data-want="create" data-miss="Good button, but a new page starts with Create New.">
+            <button type="button" class="bsb primary" data-act="bs" data-key="existing">Add Existing</button>
+            <button type="button" class="bsb target" data-act="bs" data-key="create">Create New</button>
+          </div>
+          <div class="bsmenu" role="group" aria-label="Create New menu" hidden>
+            <button type="button" class="bsm target" data-act="page">Page</button>
+            <span class="bsm-muted">Your menu may list other options. Choose Page.</span>
+          </div>
+          <div class="bsform" hidden>
+            <label for="sim-title">Page Title *</label>
+            <input id="sim-title" type="text" value="Navigating Brightspace">
+            <div class="edbox">The editing area with its toolbar opens here.</div>
+          </div>
+        </div>
+      </div>
+      <p class="hint" role="status" aria-live="polite">Try it: select Create New.</p>
+      <p class="checkpoint"><strong>What to expect:</strong> A new page opens with a title field and an editing area that has a toolbar.</p>
+      <div class="step-foot"><button type="button" class="small-btn" data-act="reset">Try this step again</button></div>
+    </article>
+
+    <article class="wstep" data-step data-name="Open the HTML Source Editor">
+      <span class="where">In Brightspace</span>
+      <h3 tabindex="-1">Open the HTML Source Editor</h3>
+      <p>Look at the toolbar above the Page Content area. The <strong>HTML Source Editor</strong> button looks like <strong>&lt;/&gt;</strong>. If you do not see it, expand the toolbar with the three dots or use the fullscreen button. Hover over any control to read its name.</p>
+      <div class="screen" role="group" aria-label="Simulated Brightspace editor toolbar">
+        <div class="bs rte">
+          <div class="rte-top"><span>Page Content</span><a href="#copy-paste" tabindex="-1" aria-hidden="true">Select Template &#9662;</a></div>
+          <div class="tb-wrap">
+            <div class="tbrow" aria-hidden="true">
+              <span class="tb sel"><span>Paragraph</span><span>&#9662;</span></span><span class="sep"></span>
+              <span class="tb"><b>B</b></span><span class="tb"><i>I</i></span><span class="tb"><u>U</u> &#9662;</span><span class="tb">A<sub>x</sub></span><span class="sep"></span>
+              <span class="tb">&#8801; &#9662;</span><span class="tb">&#8801; &#9662;</span><span class="sep"></span>
+              <span class="tb">&#9998; &#9662;</span><span class="tb">&#9654;</span>
+              <span class="tb"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#202122" d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/></svg></span>
+              <span class="tb"><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#202122" d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></span>
+              <span class="tb">+ &#9662;</span><span style="flex:1"></span><span class="tb">&middot;&middot;&middot;</span><span class="tb">&#10530;</span>
+            </div>
+            <div class="tbrow">
+              <span class="tbrow" aria-hidden="true" style="margin:0"><span class="tb sel"><span>Lato,Arial,san...</span><span>&#9662;</span></span><span class="tb sel" style="min-width:76px"><span>13px</span><span>&#9662;</span></span><span class="sep"></span><span class="tb">&#9638;</span><span class="sep"></span>
+              <span class="tb"><span class="badge">&#9201;<b>9</b></span></span><span class="tb">123</span><span class="tb">&#9906;</span><span class="sep"></span></span>
+              <button type="button" class="srcbtn target" data-act="src" aria-label="HTML Source Editor, shown as less-than slash greater-than">&lt;/&gt;</button>
+              <span class="tbrow" aria-hidden="true" style="margin:0"><span class="tb">&#8630;</span><span class="tb">&#8631;</span></span>
+            </div>
+          </div>
+          <div class="rte-body">Your page content appears in this editing area.</div>
+        </div>
+      </div>
+      <p class="hint" role="status" aria-live="polite">Try it: select the &lt;/&gt; button in the toolbar.</p>
+      <p class="checkpoint"><strong>What to expect:</strong> A plain-text Source Code window opens. It may already hold a little starter code.</p>
+      <div class="step-foot"><button type="button" class="small-btn" data-act="reset">Try this step again</button></div>
+    </article>
+
+    <article class="wstep" data-step data-name="Paste your page and save">
+      <span class="where">In the Source Code window</span>
+      <h3 tabindex="-1">Paste your page and save</h3>
+      <p>Click inside the source window. <strong>For this new blank page only,</strong> select its starter code with <kbd>Ctrl</kbd> + <kbd>A</kbd> (Mac: <kbd>Cmd</kbd> + <kbd>A</kbd>), then paste with <kbd>Ctrl</kbd> + <kbd>V</kbd> (Mac: <kbd>Cmd</kbd> + <kbd>V</kbd>). Then select <strong>Save</strong>.</p>
+      <div class="screen" role="group" aria-label="Simulated Brightspace Source Code window">
+        <div class="bs dlg">
+          <div class="dlg-head"><p class="dlg-title">Source Code</p><span class="dlg-x" aria-hidden="true">&times;</span></div>
+          <div class="code" tabindex="0" role="group" aria-label="Simulated source code. Press Ctrl + A to select all, then Ctrl + V to paste.">
+            <div data-state="starter">
+              <div class="cl"><span class="ln">1</span><span class="tx"><span class="t">&lt;p&gt;</span>&amp;nbsp;<span class="t">&lt;/p&gt;</span></span></div>
+            </div>
+            <div data-state="pasted" hidden>
+              <div class="cl"><span class="ln">1</span><span class="tx"><span class="t">&lt;div</span> <span class="k">style</span>=<span class="s">"max-width:1100px;margin:0 auto;background-color:#fff;border:1px solid #d5dfe4;font-family:Lato,Arial,sans-serif;font-size:19px;color:#1f2933;line-height:1.65"</span><span class="t">&gt;</span></span></div>
+              <div class="cl"><span class="ln">2</span><span class="tx"><span class="c">&lt;!-- BEGIN: Page header --&gt;</span></span></div>
+              <div class="cl"><span class="ln">3</span><span class="tx"><span class="t">&lt;div</span> <span class="k">style</span>=<span class="s">"padding:32px 40px;color:#ffffff;background-color:#003366;border-bottom:7px solid #FF6600"</span><span class="t">&gt;</span>...</span></div>
+              <div class="cl"><span class="ln">4</span><span class="tx"><span class="c">&lt;!-- END: Page header --&gt;</span></span></div>
+              <div class="cl"><span class="ln">5</span><span class="tx"><span class="c">&lt;!-- BEGIN: Page content --&gt;</span></span></div>
+              <div class="cl"><span class="ln">6</span><span class="tx"><span class="t">&lt;div</span> <span class="k">style</span>=<span class="s">"padding:32px 40px"</span><span class="t">&gt;</span></span></div>
+              <div class="cl"><span class="ln">7</span><span class="tx"><span class="c">&lt;!-- BEGIN: Intro text --&gt;</span></span></div>
+              <div class="cl"><span class="ln">8</span><span class="tx"><span class="t">&lt;p</span> <span class="k">style</span>=<span class="s">"font-family:Lato,Arial,sans-serif;font-size:21px;margin:0 0 24px"</span><span class="t">&gt;</span>Add a brief overview...</span></div>
+              <div class="cl"><span class="ln">9</span><span class="tx">...</span></div>
+            </div>
+          </div>
+          <div class="dlg-btns">
+            <button type="button" class="bsb primary" data-act="dlgsave">Save</button>
+            <button type="button" class="bsb">Cancel</button>
+          </div>
+        </div>
+        <div class="helpers">
+          <button type="button" class="small-btn" data-act="sel">1. Select all (Ctrl + A)</button>
+          <button type="button" class="small-btn" data-act="paste" disabled>2. Paste (Ctrl + V)</button>
+        </div>
+      </div>
+      <p class="hint" role="status" aria-live="polite">Try it: click in the code window and press Ctrl + A then Ctrl + V, or use the two buttons under the window.</p>
+      <p class="checkpoint"><strong>What to expect:</strong> Lots of code appears. That is normal. You do not need to read or change it.</p>
+      <div class="step-foot"><button type="button" class="small-btn" data-act="reset">Try this step again</button></div>
+    </article>
+
+    <article class="wstep" data-step data-name="Save and check the page">
+      <span class="where">Back in Brightspace</span>
+      <h3 tabindex="-1">Save and check the page</h3>
+      <p>The editor now shows your formatted page instead of code. Save the Brightspace page, reopen it, and test it as a learner before students see it. Use this checklist.</p>
+      <div class="screen" role="group" aria-label="Simulated saved Brightspace page">
+        <div class="bs bs-card">
+          <div class="minipage"><div class="mini-h"><span>COURSE CONTENT</span><b>Module Overview</b></div><div class="mini-b">Add a brief overview explaining what students will learn in this module.<div class="mini-acc">Select to learn more</div></div></div>
+          <div class="bsbar"><button type="button" class="bsb primary target" data-act="pagesave">Save</button><button type="button" class="bsb">Cancel</button></div>
+        </div>
+      </div>
+      <p class="hint" role="status" aria-live="polite">Select Save in the simulated page. Your own button may say Save and Close.</p>
+      <div class="checklist">
+        <h4>Before students use it</h4>
+        <label><input type="checkbox"> Replace example text, image placeholders, and sample links.</label>
+        <label><input type="checkbox"> Check dates, directions, and where assignments or discussions live.</label>
+        <label><input type="checkbox"> Open every link and confirm students can reach its destination.</label>
+        <label><input type="checkbox"> Check image descriptions, video captions, and audio transcripts.</label>
+        <label><input type="checkbox"> Try the interactive activities, including with a keyboard.</label>
+        <label><input type="checkbox"> View the page as a learner and confirm its visibility settings.</label>
+        <p class="cprog" role="status" aria-live="polite">0 of 6 checked</p>
+      </div>
+      <p class="notice" style="margin-top:14px"><strong>Order matters.</strong> Finish your text in Course Builder first, then add images, video, and audio in Brightspace last. Pasting new HTML over a page replaces anything you added there. The <strong>Check page</strong> button in Course Builder is a good first pass, but it cannot replace reviewing the finished page in your course.</p>
+      <div class="step-foot"><button type="button" class="small-btn" data-act="reset">Try this step again</button></div>
+    </article>
+
+    <div class="walk-controls">
+      <button type="button" class="small-btn" data-prev>Previous</button>
+      <button type="button" class="small-btn next" data-next>Next step</button>
+      <p class="walk-status" role="status" aria-live="polite" data-status></p>
+    </div>
+  </div>
+
+  <!-- DOWNLOAD AND UPLOAD -->
+  <div class="walk" id="walk-dl" role="tabpanel" aria-labelledby="tab-dl" data-walk hidden>
+    <p class="notice"><strong>Prefer a file?</strong> This method saves your page as its own web page file and adds it to your course. To change it later, edit the page in Course Builder, download again, and upload the new file. Copy and paste keeps the page editable inside Brightspace, so most people prefer it.</p>
+    <ol class="walk-nav" aria-label="Steps">
+      <li><button type="button" data-go="0">1. Download</button></li>
+      <li><button type="button" data-go="1">2. Add Existing</button></li>
+      <li><button type="button" data-go="2">3. Upload</button></li>
+      <li><button type="button" data-go="3">4. Check</button></li>
+    </ol>
+
+    <article class="wstep" data-step data-name="Select Download HTML">
+      <span class="where">In Course Builder</span>
+      <h3 tabindex="-1">Select Download HTML</h3>
+      <p>Select <strong>Download HTML</strong>. Course Builder saves a complete web page file named after your page title, usually into your Downloads folder. You do not need Copy page HTML for this method.</p>
+      <div class="screen" role="group" aria-label="Simulated Course Builder action buttons">
+        <div class="cbbar" data-want="download" data-ok="Done. The file my-course-page.html is now in your Downloads folder. Select Next step to add it in Brightspace." data-miss="Good button, but this step needs Download HTML.">
+          <button type="button" class="cbbtn" data-act="bar" data-key="undo">Undo</button>
+          <button type="button" class="cbbtn" data-act="bar" data-key="redo">Redo</button>
+          <button type="button" class="cbbtn" data-act="bar" data-key="check">Check page</button>
+          <button type="button" class="cbbtn tl target" data-act="bar" data-key="download">Download HTML</button>
+          <button type="button" class="cbbtn or" data-act="bar" data-key="copy">Copy page HTML</button>
+          <button type="button" class="cbbtn" data-act="bar" data-key="save">Save and manage &#9662;</button>
+        </div>
+        <div class="cbtoast" hidden><span class="filechip">my-course-page.html</span> <strong>HTML file downloaded.</strong></div>
+      </div>
+      <p class="hint" role="status" aria-live="polite">Try it: select Download HTML in the simulated builder.</p>
+      <p class="checkpoint"><strong>What to expect:</strong> Your browser saves a file ending in .html.</p>
+      <div class="step-foot"><button type="button" class="small-btn" data-act="reset">Try this step again</button></div>
+    </article>
+
+    <article class="wstep" data-step data-name="Select Add Existing">
+      <span class="where">In Brightspace</span>
+      <h3 tabindex="-1">Select Add Existing</h3>
+      <p>Open <strong>Content</strong> and choose the unit or lesson where the page belongs. Select <strong>Add Existing</strong>.</p>
+      <div class="screen" role="group" aria-label="Simulated Brightspace Content area">
+        <div class="bs bs-card">
+          <p class="bs-crumb">Content</p><p class="bs-h">Week 1</p>
+          <div class="bsbar" data-want="existing" data-ok="The Add Existing panel opened. Select Next step to see where the file goes." data-miss="Good button, but uploading a file starts with Add Existing.">
+            <button type="button" class="bsb primary target" data-act="bs" data-key="existing">Add Existing</button>
+            <button type="button" class="bsb" data-act="bs" data-key="create">Create New</button>
+          </div>
+        </div>
+      </div>
+      <p class="hint" role="status" aria-live="polite">Try it: select Add Existing.</p>
+      <p class="checkpoint"><strong>What to expect:</strong> A panel opens with options for adding existing material, including a place to upload a file.</p>
+      <div class="step-foot"><button type="button" class="small-btn" data-act="reset">Try this step again</button></div>
+    </article>
+
+    <article class="wstep" data-step data-name="Upload the file">
+      <span class="where">In Brightspace</span>
+      <h3 tabindex="-1">Upload the file</h3>
+      <p>Scroll past the tool icons to the upload box. Drag the file from your Downloads folder onto the box, or select <strong>browse</strong> and choose it.</p>
+      <div class="screen" role="group" aria-label="Simulated Brightspace Add Existing panel">
+        <div class="bs bs-card">
+          <div class="tools-grid" aria-hidden="true">
+            <div><span class="ico"></span>Google Drive</div><div><span class="ico"></span>OneDrive</div><div><span class="ico"></span>Assignment</div><div><span class="ico"></span>Discussion</div><div><span class="ico"></span>Quiz</div><div><span class="ico"></span>Checklist</div><div><span class="ico"></span>External Tool Activity</div><div><span class="ico"></span>SCORM/xAPI Object</div><div><span class="ico"></span>Createspace</div><div><span class="ico"></span>LOR</div><div><span class="ico"></span>BryteWave Deep Link</div><div><span class="ico"></span>SAGE Vantage</div><div><span class="ico"></span>VoiceThread</div><div><span class="ico"></span>More</div>
+          </div>
+          <button type="button" class="drop target" data-act="browse" aria-label="Upload area. Drag and drop a file or browse.">
+            <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="#565a5c" stroke-width="1.6" aria-hidden="true"><path d="M17.5 19H7a5 5 0 0 1-.9-9.9A6 6 0 0 1 17.6 9 4.5 4.5 0 0 1 17.5 19z"/><path d="M12 17v-6M9.5 13.5L12 11l2.5 2.5"/></svg>
+            Drag and drop or <u>browse</u>
+          </button>
+          <p class="upnote">To upload SCORM or xAPI files, click the SCORM icon.</p>
+          <div class="upfile" hidden><span aria-hidden="true">&#10003;</span> my-course-page.html uploaded</div>
+        </div>
+      </div>
+      <p class="hint" role="status" aria-live="polite">Try it: select the upload box, as if you were choosing your file.</p>
+      <p class="checkpoint"><strong>What to expect:</strong> Brightspace shows your file name and adds it to the unit. If your course uses Manage Files, you can upload there and add the file as an existing item instead.</p>
+      <div class="step-foot"><button type="button" class="small-btn" data-act="reset">Try this step again</button></div>
+    </article>
+
+    <article class="wstep" data-step data-name="Open the file and check it">
+      <span class="where">Back in Brightspace</span>
+      <h3 tabindex="-1">Open the file and check it</h3>
+      <p>Your file appears as a topic in the unit. Open it and test it as a learner before students see it. To change the page later, edit it in Course Builder, download again, and upload the new file.</p>
+      <div class="screen" role="group" aria-label="Simulated Brightspace unit with the uploaded file">
+        <div class="bs bs-card"><p class="bs-crumb">Content</p><p class="bs-h">Week 1</p>
+          <div class="filerow"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#565a5c" stroke-width="1.6" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/></svg> my-course-page.html</div>
+        </div>
+      </div>
+      <div class="checklist">
+        <h4>Before students use it</h4>
+        <label><input type="checkbox"> Replace example text, image placeholders, and sample links.</label>
+        <label><input type="checkbox"> Check dates, directions, and where assignments or discussions live.</label>
+        <label><input type="checkbox"> Open every link and confirm students can reach its destination.</label>
+        <label><input type="checkbox"> Check image descriptions, video captions, and audio transcripts.</label>
+        <label><input type="checkbox"> Try the interactive activities, including with a keyboard.</label>
+        <label><input type="checkbox"> View the file as a learner and confirm its visibility settings.</label>
+        <p class="cprog" role="status" aria-live="polite">0 of 6 checked</p>
+      </div>
+    </article>
+
+    <div class="walk-controls">
+      <button type="button" class="small-btn" data-prev>Previous</button>
+      <button type="button" class="small-btn next" data-next>Next step</button>
+      <p class="walk-status" role="status" aria-live="polite" data-status></p>
+    </div>
+  </div>
+
+  <p class="note-sm" style="margin-top:14px">Brightspace reference: <a href="https://community.d2l.com/brightspace/kb/articles/3681-add-and-organize-learning-materials-in-the-new-content-experience">Create a page in the New Content Experience</a> and <a href="https://community.d2l.com/brightspace/kb/articles/3652-about-brightspace-editor">Find the HTML Source Editor</a>. These screens are simplified, and your course's controls may look slightly different.</p>
+</section>
+
+<!-- ===== SAVE, REUSE, UPDATE ===== -->
+<section id="save-reuse" aria-labelledby="save-title">
+  <div class="section-head"><p class="tag">Keep your work</p><h2 id="save-title">Save, reuse, and update</h2></div>
+  <p>Course Builder autosaves in your browser, but that copy stays on this computer. After building or revising a page, choose <strong>Save and manage → Save editable copy (JSON)</strong>, give the file a useful name, and keep it with your course materials. <strong>You never need to open the file yourself.</strong></p>
+  <div class="table-wrap"><table><caption>Which button should I use?</caption><thead><tr><th scope="col">I want to…</th><th scope="col">Use this button</th><th scope="col">What it does</th></tr></thead><tbody>
+    <tr><th scope="row">Put my page into Brightspace</th><td>Copy page HTML</td><td>Copies the finished page for pasting into the HTML Source Editor.</td></tr>
+    <tr><th scope="row">Keep an editable copy</th><td>Save editable copy (JSON)</td><td>Saves a Course Builder project file to your computer.</td></tr>
+    <tr><th scope="row">Reopen or reuse a saved project</th><td>Open editable copy (JSON)</td><td>Opens the project with its blocks ready to edit.</td></tr>
+    <tr><th scope="row">Get a finished web page file</th><td>Download HTML</td><td>Saves an HTML file for the download-and-upload method.</td></tr>
+  </tbody></table></div>
+  <div class="cards">
+    <article class="card"><h3>Come back later</h3><p>If an autosaved page is waiting when you return to the same browser, select <strong>Resume page</strong>. Treat an exported project file as your dependable copy.</p></article>
+    <article class="card"><h3>Another computer or a colleague</h3><p>Bring or send the exported project file. Open Course Builder and choose <strong>Save and manage → Open editable copy (JSON)</strong>. Autosave and favorites do not travel between computers.</p></article>
+    <article class="card" id="edit-later"><h3>Update a published page</h3><p><strong>Small wording changes:</strong> use Brightspace's regular editing view.</p><p><strong>Bigger layout changes:</strong> reopen your project in Course Builder, revise it, then replace the page.</p></article>
+  </div>
+  <p class="notice" style="margin-top:18px"><strong>Course Builder and Brightspace hold separate copies.</strong> Changes made in Brightspace do not return to your Course Builder project, so note any Brightspace-only edits before you replace a page.</p>
+  <div class="faq" id="replace-page" style="margin-top:14px"><details><summary>Update a page you already published</summary><div class="body"><ol>
+    <li>Keep a copy of the current Brightspace page and any images or text you need. Ask us if you are unsure how.</li>
+    <li>Bring any changes made only in Brightspace into your Course Builder project.</li>
+    <li>Copy the revised page and test it on a new blank Brightspace page first.</li>
+    <li>When you are ready to replace the <strong>entire</strong> existing page, open it for editing, open its HTML Source Editor, select everything inside that window, and paste the revised copy.</li>
+    <li>Apply the change, save, and recheck links, media, and activities.</li></ol>
+    <p>To insert just one block into an existing page, <a href="#contact-help">ask us to help with placement</a>. You do not need to work out where the code goes.</p></div></details></div>
+</section>
+
+<!-- ===== TROUBLESHOOTING ===== -->
+<section id="troubleshooting" aria-labelledby="trouble-title">
+  <div class="section-head"><p class="tag">Quick fixes</p><h2 id="trouble-title">What are you seeing?</h2></div>
+  <div class="faq">
+    <details><summary>I see code instead of my page, or nothing happened when I pasted.</summary><div class="body"><p>Inside the source window, code is expected. Apply the change to return to the editor. If code shows on the saved page, it was probably pasted into the regular editing area. Try a new blank page and paste into the <strong>HTML Source Editor</strong>, and keep any existing work until the new copy looks right.</p><p>If pasting does nothing, go back to Course Builder and select <strong>Copy page HTML</strong> again. Switch to Brightspace, click inside the source window, and press <kbd>Ctrl</kbd> + <kbd>V</kbd> (Mac: <kbd>Cmd</kbd> + <kbd>V</kbd>). <a href="#contact-help">Still stuck? Ask us.</a></p></div></details>
+    <details><summary>I can't find the HTML Source Editor button.</summary><div class="body"><p>Make sure you are editing a content page, not just viewing it. The control may appear only when the toolbar is expanded, so try the three dots or the fullscreen button. <a href="https://community.d2l.com/brightspace/kb/articles/3652-about-brightspace-editor">D2L's editor guide shows the control.</a> If your screen looks different, <a href="#contact-help">send us a screenshot of the toolbar</a>.</p></div></details>
+    <details><summary>The page looks different, or a button or activity does not respond.</summary><div class="body"><p>Save the page and test it outside the editing area first. Confirm you used <strong>Copy page HTML</strong> so the whole page was copied, then try it on a new blank page. If an activity works in Course Builder but not on the saved Brightspace page, <a href="#contact-help">tell us the block name and where you pasted it</a>. You do not need to troubleshoot the code. Practice blocks do not send scores to the Brightspace gradebook.</p></div></details>
+    <details><summary>An image still says placeholder.</summary><div class="body"><p>The placeholder marks a spot for your own image. Add the image in Brightspace's regular editor, or paste an image address if the block has an Image link field. Include a useful image description. If you are unsure, <a href="#contact-help">send us the block name</a>.</p></div></details>
+    <details><summary>Brightspace shows an old version, or I changed the wrong block.</summary><div class="body"><p>The two copies do not update automatically. Copy the revised page again and follow <a href="#replace-page">Update a page you already published</a>. In Course Builder, use <strong>Undo</strong> to step back, or reopen your project with <strong>Save and manage → Open editable copy (JSON)</strong>. If you changed the Brightspace copy, stop before saving unwanted changes and <a href="#contact-help">ask for help</a>.</p></div></details>
+  </div>
+</section>
+
+<!-- ===== WIDGETS ===== -->
+<section id="widget-help" aria-labelledby="widget-title">
+  <div class="section-head"><p class="tag">A different task</p><h2 id="widget-title">Add a homepage widget</h2></div>
+  <p>Widgets appear on the course homepage. For pages inside Content, use the <a href="#copy-paste">walkthrough above</a>.</p>
+  <div class="widget-row">
+    <article class="card"><p class="tag">Video guide</p><h3>Watch the widget walkthrough</h3><p>See how to edit a homepage and its custom widget.</p><p><a href="https://youtu.be/ItXixUVR300?si=0_dC1Wr00gIqMuvj">Watch the homepage widget video</a></p></article>
+    <article class="card"><p class="tag">Visual steps</p><h3>Follow the Scribe walkthrough</h3><p>Step-by-step screens for editing a course homepage and the Instructor Widget.</p><p><a href="https://scribehow.com/embed/Brightspace_how_to_edit_a_course_homepage_and_edit_Instructor_Widget__QgXLWjDySP-rgZySQU1oNQ">Open the homepage widget guide</a></p></article>
+  </div>
+</section>
+
+<!-- ===== HELP ===== -->
+<section id="contact-help" aria-labelledby="contact-title">
+  <div class="section-head"><p class="tag">We can help</p><h2 id="contact-title">Tell us where you got stuck</h2></div>
+  <p>You do not need to diagnose the problem. Tell us the course and page name, what you clicked, and what happened. A screenshot helps. Leave out student names, grades, and other student information.</p>
+  <div class="help-cards">
+    <article class="help-card first"><p class="tag">Course Builder and Brightspace</p><h3>Get help with a page</h3><p>Open an email with prompts already filled in, then add your details.</p><a href="mailto:online@mclennan.edu?subject=Course Builder%20help&amp;body=Course%20name%20and%20section%3A%20%0APage%20name%3A%20%0AWhat%20I%20clicked%3A%20%0AWhat%20I%20expected%3A%20%0AWhat%20happened%20instead%3A%20%0A%0AI%20can%20attach%20a%20screenshot%20with%20student%20information%20removed.%0A">Start a support email</a></article>
+    <article class="help-card"><p class="tag">Instructional design</p><h3>Plan or improve a page</h3><p>We can help with organization, student directions, accessibility, and choosing useful blocks.</p><a href="mailto:online@mclennan.edu">Email online@mclennan.edu</a></article>
+    <article class="help-card"><p class="tag">Your ideas</p><h3>Suggest a block or share an example</h3><p>Tell us what you keep rebuilding, or show us a page other faculty could adapt.</p><a href="mailto:online@mclennan.edu?subject=Course Builder%20Suggestion">Send a suggestion</a></article>
+  </div>
+  <p class="note-sm" style="margin-top:14px">No email app opens? Email <a href="mailto:online@mclennan.edu">online@mclennan.edu</a> and include those details.</p>
+</section>
+
+</main>
+
+<footer>
+  <div class="footer-main">
+    <div>
+      <div class="footer-brand">McLennan Community College</div>
+      <p>Course Builder is maintained by Instructional Design &amp; Innovation to help MCC faculty create clear, consistent, and accessible Brightspace courses.</p>
+      <span class="online">McLennan Online</span>
+    </div>
+    <div><h2>Build</h2><a href="templates.html">Page templates</a><a href="coursebuilder.html">Page builder</a><a href="building-blocks.html">Building block guide</a><a href="widget-builder.html">Widget builder</a></div>
+    <div><h2>Need help?</h2><a href="mailto:online@mclennan.edu">online@mclennan.edu</a><a href="support.html">Support options</a><a href="https://www.mclennan.edu/">McLennan.edu</a></div>
+  </div>
+  <div class="footer-bottom"><span>&copy; 2026 McLennan Community College &middot; McLennan Online</span><span>Designed for WCAG 2.1 AA accessibility</span></div>
+</footer>
+
+<script>
+/* =========================================================
+   INTERACTIVE PAGE BUILDER MAP
+   ========================================================= */
+(function () {
+  var root = document.querySelector('[data-map]');
+  if (!root) return;
+  var pop = root.querySelector('[data-pop]');
+  var panel = document.querySelector('[data-map-panel]');
+  var items = root.querySelectorAll('.hs');
+  var current = null;
+
+  function clear() {
+    for (var i = 0; i < items.length; i++) items[i].classList.remove('is-on');
+    pop.hidden = true;
+    current = null;
+  }
+
+  function place(el) {
+    pop.hidden = false;
+    var r = root.getBoundingClientRect();
+    var e = el.getBoundingClientRect();
+    var pw = pop.offsetWidth, ph = pop.offsetHeight;
+    var left = e.left - r.left + e.width / 2 - pw / 2;
+    left = Math.max(8, Math.min(left, r.width - pw - 8));
+    var top;
+    if (e.height > 140) {
+      top = e.bottom - r.top - ph - 12;
+    } else {
+      top = e.bottom - r.top + 8;
+      if (top + ph > r.height - 8) top = e.top - r.top - ph - 8;
+    }
+    pop.style.left = left + 'px';
+    pop.style.top = Math.max(8, top) + 'px';
+  }
+
+  function select(el) {
+    clear();
+    el.classList.add('is-on');
+    current = el;
+    var title = el.getAttribute('data-title'), copy = el.getAttribute('data-copy');
+    pop.querySelector('[data-pop-title]').textContent = title;
+    pop.querySelector('[data-pop-copy]').textContent = copy;
+    panel.querySelector('[data-panel-title]').textContent = title;
+    panel.querySelector('[data-panel-copy]').textContent = copy;
+    var link = panel.querySelector('[data-panel-link]');
+    if (el.getAttribute('data-link')) {
+      link.href = el.getAttribute('data-link');
+      link.textContent = el.getAttribute('data-link-text') || 'Learn more';
+      if (el.getAttribute('data-tab')) link.setAttribute('data-tab', el.getAttribute('data-tab'));
+      else link.removeAttribute('data-tab');
+      link.hidden = false;
+    } else {
+      link.hidden = true;
+    }
+    place(el);
+  }
+
+  for (var i = 0; i < items.length; i++) {
+    (function (el) {
+      el.addEventListener('click', function () { select(el); });
+      if (el.getAttribute('role') === 'button') {
+        el.addEventListener('keydown', function (ev) {
+          if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); select(el); }
+        });
+      }
+    })(items[i]);
+  }
+
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') clear(); });
+  document.addEventListener('click', function (ev) { if (!ev.target.closest('[data-map]')) pop.hidden = true; });
+  window.addEventListener('resize', function () { if (current && !pop.hidden) place(current); });
+
+  // Panel links that point at a specific walkthrough tab
+  panel.querySelector('[data-panel-link]').addEventListener('click', function () {
+    var id = this.getAttribute('data-tab');
+    if (id && window.mccPickTab) window.mccPickTab(id);
+  });
+})();
+
+/* =========================================================
+   WALKTHROUGH TABS AND STEPPERS
+   ========================================================= */
+(function () {
+  var tabs = [].slice.call(document.querySelectorAll('.methods [role="tab"]'));
+
+  function pick(tab, focus) {
+    tabs.forEach(function (t) {
+      var on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+    });
+    if (focus) tab.focus();
+  }
+  window.mccPickTab = function (id) { var t = document.getElementById(id); if (t) pick(t, false); };
+
+  tabs.forEach(function (t, i) {
+    t.addEventListener('click', function () { pick(t, false); });
+    t.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        var n = tabs[(i + (e.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        pick(n, true);
+      }
+    });
+  });
+
+  function initWalk(root) {
+    var steps = [].slice.call(root.querySelectorAll('[data-step]'));
+    var navBtns = [].slice.call(root.querySelectorAll('[data-go]'));
+    var prev = root.querySelector('[data-prev]');
+    var next = root.querySelector('[data-next]');
+    var status = root.querySelector('[data-status]');
+    var cur = 0;
+
+    steps.forEach(function (s) {
+      var sc = s.querySelector('.screen');
+      if (sc) sc.setAttribute('data-initial', sc.innerHTML);
+      var h = s.querySelector('.hint');
+      if (h) h.setAttribute('data-default', h.textContent);
+    });
+
+    function show(n, focusHeading) {
+      cur = Math.max(0, Math.min(steps.length - 1, n));
+      steps.forEach(function (s, i) { s.hidden = i !== cur; });
+      navBtns.forEach(function (b, i) {
+        if (i === cur) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
       });
-    </script>
-  
+      prev.disabled = cur === 0;
+      next.disabled = cur === steps.length - 1;
+      status.textContent = 'Step ' + (cur + 1) + ' of ' + steps.length + ': ' + steps[cur].getAttribute('data-name');
+      if (focusHeading) steps[cur].querySelector('h3').focus();
+    }
+
+    prev.addEventListener('click', function () { show(cur - 1, true); });
+    next.addEventListener('click', function () { show(cur + 1, true); });
+    navBtns.forEach(function (b) {
+      b.addEventListener('click', function () { show(parseInt(b.getAttribute('data-go'), 10), true); });
+    });
+    show(0, false);
+  }
+
+  [].slice.call(document.querySelectorAll('[data-walk]')).forEach(initWalk);
+
+  if (location.hash === '#download') { pick(document.getElementById('tab-dl'), false); }
+})();
+
+/* =========================================================
+   INTERACTIVE SCREENS INSIDE THE STEPS
+   ========================================================= */
+(function () {
+  function hint(step, text) {
+    var h = step.querySelector('.hint');
+    if (h) h.textContent = text;
+  }
+
+  function selectCode(step) {
+    var c = step.querySelector('.code');
+    c.classList.add('sel');
+    step.querySelector('[data-act="paste"]').disabled = false;
+    hint(step, 'Everything in the window is selected. Now paste with Ctrl + V (Mac: Cmd + V), or use the Paste button.');
+  }
+
+  function pasteCode(step) {
+    var c = step.querySelector('.code');
+    if (!c.classList.contains('sel')) { hint(step, 'Select all first with Ctrl + A (Mac: Cmd + A).'); return; }
+    step.querySelector('[data-state="starter"]').hidden = true;
+    step.querySelector('[data-state="pasted"]').hidden = false;
+    c.classList.remove('sel');
+    step.querySelector('[data-act="dlgsave"]').classList.add('target');
+    hint(step, 'Pasted. Lots of code is normal. Now select Save in the Source Code window.');
+  }
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-act]');
+    if (!b) return;
+    var step = b.closest('.wstep');
+    if (!step) return;
+    var act = b.getAttribute('data-act');
+    var key = b.getAttribute('data-key');
+
+    if (act === 'bar') {
+      var bar = b.closest('.cbbar');
+      if (key === bar.getAttribute('data-want')) {
+        b.classList.add('done');
+        var toast = step.querySelector('.cbtoast');
+        if (toast) toast.hidden = false;
+        hint(step, bar.getAttribute('data-ok'));
+      } else {
+        hint(step, bar.getAttribute('data-miss'));
+      }
+    } else if (act === 'bs') {
+      var bsbar = b.closest('.bsbar');
+      var want = bsbar.getAttribute('data-want');
+      if (key !== want) { hint(step, bsbar.getAttribute('data-miss')); return; }
+      b.classList.add('done');
+      if (want === 'create') {
+        step.querySelector('.bsmenu').hidden = false;
+        hint(step, 'The Create New menu opened. Now choose Page.');
+      } else {
+        hint(step, bsbar.getAttribute('data-ok'));
+      }
+    } else if (act === 'page') {
+      b.classList.add('done');
+      step.querySelector('.bsform').hidden = false;
+      hint(step, 'A new page opened with a title field and an editing area. Enter your title, then select Next step.');
+    } else if (act === 'src') {
+      b.classList.add('done');
+      hint(step, 'The Source Code window opens. Select Next step to see it.');
+    } else if (act === 'sel') {
+      selectCode(step);
+    } else if (act === 'paste') {
+      pasteCode(step);
+    } else if (act === 'dlgsave') {
+      if (step.querySelector('[data-state="pasted"]').hidden) {
+        hint(step, 'Paste your page first, then select Save.');
+      } else {
+        b.classList.add('done');
+        hint(step, 'Saved. Brightspace now shows your formatted page instead of code. Select Next step to check it.');
+      }
+    } else if (act === 'browse') {
+      b.classList.add('done');
+      step.querySelector('.upfile').hidden = false;
+      hint(step, 'The file is uploaded. Select Next step to check it.');
+    } else if (act === 'pagesave') {
+      b.classList.add('done');
+      hint(step, 'Saved. Now reopen the page and work through the checklist below.');
+    } else if (act === 'reset') {
+      var sc = step.querySelector('.screen');
+      if (sc) sc.innerHTML = sc.getAttribute('data-initial');
+      var h = step.querySelector('.hint');
+      if (h) h.textContent = h.getAttribute('data-default');
+    }
+  });
+
+  // Practice the real keyboard shortcuts inside the simulated source window
+  document.addEventListener('keydown', function (e) {
+    var c = e.target.closest && e.target.closest('.code');
+    if (!c || !(e.ctrlKey || e.metaKey)) return;
+    var k = e.key.toLowerCase();
+    var step = c.closest('.wstep');
+    if (k === 'a') { e.preventDefault(); selectCode(step); }
+    else if (k === 'v') { e.preventDefault(); pasteCode(step); }
+  });
+
+  document.addEventListener('change', function (e) {
+    var box = e.target.closest('.checklist');
+    if (!box) return;
+    var all = box.querySelectorAll('input[type="checkbox"]').length;
+    var n = box.querySelectorAll('input:checked').length;
+    box.querySelector('.cprog').textContent = n + ' of ' + all + ' checked' + (n === all ? '. Your page is ready for students.' : '');
+  });
+})();
+</script>
+
 <style id="cb-shared">
-/* Course Builder shared shell. Matches the Page Builder so every page looks the same. */
 body{font-family:Poppins,Arial,Helvetica,sans-serif;color:#182936}
 body header{background:#fff}
 body .topbar{background:#001b3b;color:#fff;font-size:13px}
@@ -892,22 +1067,12 @@ body .footer-main h2{margin:4px 0 13px;font-size:15px;font-weight:500}
 body .online,body .online-tag{display:inline-block;margin-top:12px;padding:7px 11px;color:#001b3b;background:#f7b32b;border:0;border-radius:4px;font-weight:500;letter-spacing:.04em}
 body .footer-bottom{color:#c9d6dd;font-size:12px}
 body main a:not([class]){color:#0567aa}
-/* Page title block: same eyebrow, H1, and intro text as the Page Builder. */
-body .intro-block .eyebrow,body .support-intro .tag,body .intro .eyebrow,body .cm-page-head .eyebrow{margin:0 0 8px;color:#008da7;font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
-body .intro-block h1,body .support-intro h1,body .intro h1,body .cm-page-head h1{max-width:none;margin:0;color:#001b3b;font-size:clamp(38px,5vw,60px);line-height:1.04;font-weight:500;letter-spacing:-.035em}
-body .intro-block .lede,body .cm-page-head .lede,body .intro p{max-width:760px;margin:8px 0 0;color:#5a6872;font-size:17px;font-weight:400}
-body .intro-block .lede strong,body .cm-page-head .lede strong{color:#182936}
-body .intro-block{margin-bottom:44px}
-body .intro-block h1,body .support-intro h1,body .cm-page-head h1{margin-bottom:8px}
-body .cm-html-note,body .support-intro .lead{max-width:760px;margin:22px 0 0;padding:16px 20px;border-left:6px solid #008da7;border-radius:0 8px 8px 0;background:#fff;box-shadow:0 7px 24px rgba(0,27,59,.08);color:#182936;font-size:17px}
-body .cm-html-note strong,body .support-intro .lead strong{color:#001b3b}
-body .cm-page-head{margin:0 0 32px}
-/* Buttons: same look as the Page Builder buttons. */
-body a.button,body a.page-builder-cta,body a.cm-btn{display:inline-flex;align-items:center;min-height:48px;padding:11px 17px;border:2px solid #ff6600;border-radius:8px;background:#ff6600;color:#fff;font-weight:500;line-height:1.3;text-decoration:none}
-body a.button:hover,body a.button:focus-visible,body a.page-builder-cta:hover,body a.page-builder-cta:focus-visible,body a.cm-btn:hover,body a.cm-btn:focus-visible{background:#d94f00;border-color:#d94f00;color:#fff}
-body a.button.cm-btn-outline,body a.cm-btn.cm-btn-outline{border-color:#003366;background:#fff;color:#003366}
-body a.button.cm-btn-outline:hover,body a.button.cm-btn-outline:focus-visible,body a.cm-btn.cm-btn-outline:hover,body a.cm-btn.cm-btn-outline:focus-visible{background:#e8f1f5;border-color:#003366;color:#003366}
-.cm-cta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+body .support-intro .tag{margin:0 0 8px;color:#008da7;font-size:13px;font-weight:500;letter-spacing:.14em;text-transform:uppercase}
+body .support-intro h1{max-width:none;margin:0 0 8px;color:#001b3b;font-size:clamp(38px,5vw,60px);line-height:1.04;font-weight:500;letter-spacing:-.035em}
+body .support-intro .lead{max-width:760px;margin:22px 0 0;padding:16px 20px;border-left:6px solid #008da7;border-radius:0 8px 8px 0;background:#fff;box-shadow:0 7px 24px rgba(0,27,59,.08);color:#182936;font-size:17px}
+body .support-intro .lead strong{color:#001b3b}
+body a.button{display:inline-flex;align-items:center;min-height:48px;padding:11px 17px;border:2px solid #ff6600;border-radius:8px;background:#ff6600;color:#fff;font-weight:500;line-height:1.3;text-decoration:none}
+body a.button:hover,body a.button:focus-visible{background:#d94f00;border-color:#d94f00;color:#fff}
 </style>
 </body>
 </html>
