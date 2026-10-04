@@ -353,9 +353,8 @@ window.CMUX=(function(){
 <!-- ===== INTRO ===== -->
 <section class="support-intro" aria-labelledby="support-title">
   <p class="tag">Course Builder support</p>
-  <h1 id="support-title">Create your page. Copy it. Paste it into Brightspace.</h1>
+  <h1 id="support-title" class="cm-sr-only">Course Builder help</h1>
   <p class="lead"><strong>You do not need to write or understand HTML.</strong> Course Builder creates the code for you. You only need to know which button copies it and where to paste it. Tour the builder first, then follow the interactive steps.</p>
-  <p><a class="button" href="coursebuilder.html">Open Page Builder</a></p>
   <nav class="support-links" aria-label="Support topics">
     <a href="#tour">Tour the builder</a><a href="#copy-paste">Add a page to Brightspace</a><a href="#save-reuse">Save and update</a><a href="#troubleshooting">Fix a problem</a><a href="#widget-help">Homepage widgets</a><a href="#contact-help">Ask for help</a>
   </nav>
@@ -784,12 +783,11 @@ window.CMUX=(function(){
     <div>
       <div class="footer-brand">McLennan Community College</div>
       <p>Course Builder is maintained by Instructional Design &amp; Innovation to help MCC faculty create clear, consistent, and accessible Brightspace courses.</p>
-      <span class="online">McLennan Online</span>
     </div>
     <div><h2>Build</h2><a href="templates.html">Page templates</a><a href="coursebuilder.html">Page builder</a><a href="building-blocks.html">Building block guide</a><a href="widget-builder.html">Widget builder</a></div>
     <div><h2>Need help?</h2><a href="mailto:online@mclennan.edu">online@mclennan.edu</a><a href="support.html">Support options</a><a href="https://www.mclennan.edu/">McLennan.edu</a></div>
   </div>
-  <div class="footer-bottom"><span>&copy; 2026 McLennan Community College &middot; McLennan Online</span><span>Designed for WCAG 2.1 AA accessibility</span></div>
+  <div class="footer-bottom"><span>&copy; 2026 McLennan Community College</span><span>Designed for WCAG 2.1 AA accessibility</span></div>
 </footer>
 
 <script>
@@ -1073,6 +1071,16 @@ body .support-intro .lead{max-width:760px;margin:22px 0 0;padding:16px 20px;bord
 body .support-intro .lead strong{color:#001b3b}
 body a.button{display:inline-flex;align-items:center;min-height:48px;padding:11px 17px;border:2px solid #ff6600;border-radius:8px;background:#ff6600;color:#fff;font-weight:500;line-height:1.3;text-decoration:none}
 body a.button:hover,body a.button:focus-visible{background:#d94f00;border-color:#d94f00;color:#fff}
+</style>
+<style>.cm-sr-only{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}</style>
+<style id="cb-compact-header">
+/* Compact site header: smaller logo and tighter rows so the page content comes first. */
+body .topbar{padding-top:4px;padding-bottom:4px;font-size:12px;line-height:1.4}
+body header .brand-row{min-height:0;padding-top:8px;padding-bottom:8px;gap:20px}
+body header .header-logo{width:auto;height:56px;max-width:none}
+body header .course-name,body header .brand-name{font-size:20px}
+body header .search input{padding:9px 13px}
+@media(max-width:800px){body header .brand-row{padding:8px 0}body header .header-logo{height:48px}}
 </style>
 </body>
 </html>
