@@ -614,16 +614,7 @@ window.CMUX = (() => {
     </header>
     <main id="main-content">
       <div class="cm-page-head"><p class="eyebrow">Build</p><h1>Page templates</h1><p class="lede">Start from a ready-made layout, then make it yours in the Page Builder.</p></div>
-      <div class="reuse-note">
-        <p>
-          <strong>Already have a saved project?</strong> Starting from a
-          template is not the only option. If you have a Course Builder .json file,
-          one you exported before or one a colleague shared, open the Page
-          Builder and choose Import JSON to load it and keep editing.
-        </p>
-        <a href="coursebuilder.html">Open the Page Builder &rarr;</a>
-      </div>
-      <div class="cm-task"><h2>Start here, then make it yours</h2><p>Choose a layout below. In the Page Builder, select a block and edit its content. Use Check page before copying to Brightspace.</p><p><strong>Already working on a page?</strong> Save an editable JSON copy before starting another template.</p><a href="support.html#save-reuse">How to save and reopen your work</a></div><div class="template-grid">
+      <div class="template-grid">
         <article class="template">
           <div class="mini">
             <div class="mini-page">
@@ -818,7 +809,6 @@ window.CMUX = (() => {
             to help MCC faculty create clear, consistent, and accessible
             Brightspace courses.
           </p>
-          <span class="online">McLennan Online</span>
         </div>
         <div>
           <h2>Build</h2>
@@ -835,7 +825,7 @@ window.CMUX = (() => {
         </div>
       </div>
       <div class="footer-bottom">
-        <span>© 2026 McLennan Community College · McLennan Online</span
+        <span>© 2026 McLennan Community College</span
         ><span>Designed for WCAG 2.1 AA accessibility</span>
       </div>
     </footer>
@@ -896,6 +886,15 @@ body a.button.cm-btn-outline:hover,body a.button.cm-btn-outline:focus-visible,bo
 </style>
 <style id="cb-page">
 body main{padding-top:40px}
+</style>
+<style id="cb-compact-header">
+/* Compact site header: smaller logo and tighter rows so the page content comes first. */
+body .topbar{padding-top:4px;padding-bottom:4px;font-size:12px;line-height:1.4}
+body header .brand-row{min-height:0;padding-top:8px;padding-bottom:8px;gap:20px}
+body header .header-logo{width:auto;height:56px;max-width:none}
+body header .course-name,body header .brand-name{font-size:20px}
+body header .search input{padding:9px 13px}
+@media(max-width:800px){body header .brand-row{padding:8px 0}body header .header-logo{height:48px}}
 </style>
 </body>
 </html>
