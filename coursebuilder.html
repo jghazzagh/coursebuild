@@ -740,6 +740,10 @@
   #block-library .category-name {display:flex;align-items:center;gap:8px;}
   #block-library .category-chevron {font-size:23px;line-height:1;transition:transform .15s;}
   #block-library details[open] .category-chevron {transform:rotate(90deg);}
+  #header-details > summary, #shortcut-details > summary {font-size:13px;font-weight:700;letter-spacing:0;text-transform:none;gap:10px;min-height:46px;}
+  #header-details .category-name, #shortcut-details .category-name {display:flex;align-items:center;gap:8px;}
+  #header-details .category-chevron, #shortcut-details .category-chevron {font-size:23px;line-height:1;transition:transform .15s;}
+  #header-details[open] > summary .category-chevron, #shortcut-details[open] > summary .category-chevron {transform:rotate(90deg);}
   #block-library .cat-count {background:var(--mcc-blue);font-size:11px;flex-shrink:0;}
   #block-library .add-block {align-items:flex-start;padding:11px 10px;}
   #block-library .plus {background:var(--mcc-blue);margin-top:2px;}
@@ -752,7 +756,7 @@
   #library-status {margin:0;color:#52616d;font-size:12px;}
   #clear-block-search {border:1px solid #9eacb5;background:white;color:#003366;border-radius:5px;padding:7px;font-size:12px;}
   #clear-block-search[hidden] {display:none;}
-  @media (prefers-reduced-motion:reduce) {#block-library .category-chevron {transition:none;}}
+  @media (prefers-reduced-motion:reduce) {#block-library .category-chevron, #header-details .category-chevron, #shortcut-details .category-chevron {transition:none;}}
   /* END: Block library navigation */
 
   /* Compact catalog actions, browser-local shortcuts, and block preview. */
@@ -906,13 +910,12 @@ window.CMUX = (() => {
             <h2 id="interactive-blocks">Building blocks</h2>
             <button type="button" class="panel-collapse" id="hide-library" title="Hide the building blocks panel to give the preview and editor more room">Hide</button>
           </div>
-          <p class="field-help">Edit the page header below, then open a category and select a block to add it to your page. Use the "Add block here" bars in the preview to insert between blocks, or drag blocks to reorder them.</p>
           <label class="block-search" for="block-search">
             <span aria-hidden="true">⌕</span>
             <input id="block-search" type="search" placeholder="Search blocks or purposes" aria-label="Search building blocks">
           </label>
-<div class="cm-task" style="margin:12px 0;padding:12px"><label for="learning-goal">What are you trying to do?</label><select id="learning-goal"><option value="">Show all blocks</option><option value="present">Present information</option><option value="process">Guide a process</option><option value="practice">Let students practice</option><option value="organize">Organize weekly work</option><option value="media">Add media</option></select></div><details class="cat-acc" id="header-details">
-            <summary>Page Header<span class="cat-count">edit</span></summary>
+<details class="cat-acc" id="header-details">
+            <summary><span class="category-name"><span class="category-chevron" aria-hidden="true">›</span>Page Header</span><span class="cat-count">edit</span></summary>
             <div class="setup-body" style="padding:12px">
               <div class="control-group">
                 <label for="starter-template">Starter template</label>
@@ -953,7 +956,7 @@ window.CMUX = (() => {
           <!-- BEGIN: Categorized building block library -->
           <div class="library-tools"><p id="library-status" role="status" aria-live="polite" aria-atomic="true"></p><button type="button" id="clear-block-search" hidden>Clear search</button></div>
           <details class="cat-acc" id="shortcut-details">
-            <summary>Favorites &amp; recently used</summary>
+            <summary><span class="category-name"><span class="category-chevron" aria-hidden="true">›</span>Favorites &amp; recently used</span></summary>
             <div id="block-shortcuts" style="padding:8px"></div>
           </details>
           <div id="block-library"></div>
@@ -1005,7 +1008,6 @@ window.CMUX = (() => {
     <div>
       <div class="footer-brand">McLennan Community College</div>
       <p>Course Builder is maintained by Instructional Design &amp; Innovation to help MCC faculty create clear, consistent, and accessible Brightspace courses.</p>
-      <span class="online-tag">McLennan Online</span>
 
     </div>
     <div>
@@ -2148,6 +2150,7 @@ window.CMUX = (() => {
   });
 
   // Each block has one primary category. Internal blocks remain unavailable in the menu.
+  let currentGoal = ''; // set only by a ?goal= link; Clear search resets it
   const LIBRARY_CATEGORIES = ["Text & Layout", "Instructor Information", "Course Organization", "Callouts & Key Ideas", "Media & Visuals", "Reveal & Explore", "Timelines & Processes", "Practice & Feedback", "Scenarios & Examples", "Interactive Simulations", "Resources & Data"];
   const SEARCH_ALIASES = {
     instructorInfo: 'teacher faculty bio biography contact email office hours',
@@ -2179,18 +2182,18 @@ window.CMUX = (() => {
     el.library.innerHTML = LIBRARY_CATEGORIES.map(cat => {
       const entries = Object.entries(defs).filter(([key,d]) => {
         const searchable = [d.label, d.category, d.description, SEARCH_ALIASES[key] || ''].join(' ').toLowerCase();
-        const goal=document.getElementById('learning-goal').value;
+        const goal=currentGoal;
         return !d.internal && d.category === cat && (!goal || GOAL_BLOCKS[goal].includes(key)) && words.every(word => searchable.includes(word));
       }).sort((a, b) => orderIndex(a[0]) - orderIndex(b[0]));
       if (!entries.length) return '';
       total += entries.length;
       const buttons = entries.map(([key]) => libraryCard(key, 'catalog')).join('');
-      const open = (q || document.getElementById('learning-goal').value) ? true : openCategory === cat;
+      const open = (q || currentGoal) ? true : openCategory === cat;
       return '<details class="cat-acc" data-cat="' + e(cat) + '"' + (open ? ' open' : '') + '><summary><span class="category-name"><span class="category-chevron" aria-hidden="true">\u203a</span>' + e(cat) + '</span><span class="cat-count" aria-label="' + entries.length + ' blocks">' + entries.length + '</span></summary><div class="block-library">' + buttons + '</div></details>';
     }).join('');
     if (!total) el.library.innerHTML = '<div class="empty-search">No matching blocks. Try a broader term such as \u201cimage,\u201d \u201ctasks,\u201d or \u201cquestions,\u201d or clear your search.</div>';
-    document.getElementById('library-status').textContent = total + ((q || document.getElementById('learning-goal').value) ? ' matching blocks' : ' blocks in ' + LIBRARY_CATEGORIES.length + ' categories');
-    document.getElementById('clear-block-search').hidden = !q && !document.getElementById('learning-goal').value;
+    document.getElementById('library-status').textContent = total + ((q || currentGoal) ? ' matching blocks' : ' blocks in ' + LIBRARY_CATEGORIES.length + ' categories');
+    document.getElementById('clear-block-search').hidden = !q && !currentGoal;
     renderShortcuts();
   }
 
@@ -3220,7 +3223,7 @@ window.CMUX = (() => {
   el.search.addEventListener('input', () => renderLibrary(el.search.value));
   document.getElementById('clear-block-search').addEventListener('click', () => {
     el.search.value = '';
-    document.getElementById('learning-goal').value='';
+    currentGoal='';
     renderLibrary('');
     el.search.focus();
   });
@@ -3575,15 +3578,13 @@ window.CMUX = (() => {
     const content='<p>This is an example only. Close it to keep working on your page.</p><div style="border:1px solid #cbd6dc;padding:20px"><h2 style="color:#003366">Example instructional page</h2>'+blocks.map(renderBlockHtml).join('')+'</div>';
     const dialog=CMUX.modal('Sample course page',content,opener);dialog.addEventListener('click',ev=>{if(ev.target.closest('a')){ev.preventDefault();toast('Sample link only.');}});
   }
-  const goalSelect=document.getElementById('learning-goal');
-  goalSelect.addEventListener('change',()=>renderLibrary(el.search.value));
   el.preview.addEventListener('click',ev=>{const action=ev.target.closest('[data-empty-action]');if(!action)return;
     if(action.dataset.emptyAction==='block')openBlockPicker(0,action);
     if(action.dataset.emptyAction==='sample')showSamplePage(action);
   });
   el.preview.addEventListener('keydown',ev=>{const wrapper=ev.target.closest('[data-block-id]');if(wrapper&&ev.target===wrapper&&['Enter',' '].includes(ev.key)){ev.preventDefault();selectBlock(wrapper.dataset.blockId,true);}});
   function handleDeepLink() {
-    const params=new URLSearchParams(location.search);const goal=params.get('goal');if(goal&&GOAL_BLOCKS[goal]){goalSelect.value=goal;renderLibrary('');}
+    const params=new URLSearchParams(location.search);const goal=params.get('goal');if(goal&&GOAL_BLOCKS[goal]){currentGoal=goal;renderLibrary('');}
     const key=params.get('block');if(selectableBlock(key))showBlockExample(key,document.getElementById('preview-heading'));
   }
 
@@ -3658,6 +3659,15 @@ body a.button:hover,body a.button:focus-visible,body a.page-builder-cta:hover,bo
 body a.button.cm-btn-outline,body a.cm-btn.cm-btn-outline{border-color:#003366;background:#fff;color:#003366}
 body a.button.cm-btn-outline:hover,body a.button.cm-btn-outline:focus-visible,body a.cm-btn.cm-btn-outline:hover,body a.cm-btn.cm-btn-outline:focus-visible{background:#e8f1f5;border-color:#003366;color:#003366}
 .cm-cta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+</style>
+<style id="cb-compact-header">
+/* Compact site header: smaller logo and tighter rows so the page content comes first. */
+body .topbar{padding-top:4px;padding-bottom:4px;font-size:12px;line-height:1.4}
+body header .brand-row{min-height:0;padding-top:8px;padding-bottom:8px;gap:20px}
+body header .header-logo{width:auto;height:56px;max-width:none}
+body header .course-name,body header .brand-name{font-size:20px}
+body header .search input{padding:9px 13px}
+@media(max-width:800px){body header .brand-row{padding:8px 0}body header .header-logo{height:48px}}
 </style>
 </body>
 </html>
