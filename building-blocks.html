@@ -102,14 +102,10 @@ window.CMUX = (() => {
   <div class="crumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Building Block Guide</div>
 </header>
 <main id="main-content" class="page">
-  <!-- BEGIN: Module Overview note -->
-  <aside class="tip" role="note" style="margin:0 0 28px"><strong>Before you use interactive blocks in a module</strong>Some interactive blocks will not work in the top level of a module (the Overview section). Add interactive blocks to a content page inside the module instead, and keep the Overview to text, layout, and other static blocks. Interactive blocks have an orange top border in this guide. After you paste any interactive block into Brightspace, preview the page as a learner to confirm it works.</aside>
-  <!-- END: Module Overview note -->
   <!-- BEGIN: Guide introduction and category navigation -->
-  <section class="intro"><div><p class="eyebrow">Building block guide</p><h1>Start with the learning need</h1><p>Choose a block that makes the content clearer, easier to navigate, or more useful for practice. This guide groups the blocks in the same 11 categories and order used in the Page Builder. The newest blocks are in Interactive Simulations.</p>
-  <p style="margin-top:16px">In the builder, select Preview to try a sample before adding it. Use Favorite to save shortcuts; Favorites &amp; recently used keeps your choices in the current browser. Starter templates, titles, banners, and accent colors are under Page Header. Use the Templates page to compare complete layouts. Fields with a formatting toolbar support bold, italic, underline, strikethrough, superscript, and subscript.</p>
-  <nav class="toc" aria-label="Building block categories"><a href="#text">Text &amp; Layout</a><a href="#instructor">Instructor Information</a><a href="#organization">Course Organization</a><a href="#callouts">Callouts &amp; Key Ideas</a><a href="#media">Media &amp; Visuals</a><a href="#reveal">Reveal &amp; Explore</a><a href="#timelines">Timelines &amp; Processes</a><a href="#practice">Practice &amp; Feedback</a><a href="#questions">Scenarios &amp; Examples</a><a href="#simulations">Interactive Simulations</a><a href="#data">Resources &amp; Data</a></nav></div><aside class="tip"><strong>Accessibility reminder</strong>Keep essential directions visible. Use logical headings, meaningful link labels, useful image descriptions, and accurate media captions or transcripts. Check the finished page with a keyboard and in the learner view.
-  <strong style="margin-top:18px">Practice and progress</strong>Page interactions do not save responses or send grades or completion to Brightspace. Do not rely on answers or progress remaining after a reload or return visit. Use Brightspace assessments to collect graded work. The builder’s How this block works note explains each block’s behavior.</aside></section>
+  <section class="intro"><div><p class="eyebrow">Building block guide</p><h1>Start with the learning need</h1><p>Choose a block for what students need. The newest blocks are in Interactive Simulations.</p>
+  <p class="cm-overview-note"><strong>Module Overview pages:</strong> some interactive blocks (orange top border) will not work in the top level of a module. Put those on a content page instead.</p>
+  <nav class="toc" aria-label="Building block categories"><a href="#text">Text &amp; Layout</a><a href="#instructor">Instructor Information</a><a href="#organization">Course Organization</a><a href="#callouts">Callouts &amp; Key Ideas</a><a href="#media">Media &amp; Visuals</a><a href="#reveal">Reveal &amp; Explore</a><a href="#timelines">Timelines &amp; Processes</a><a href="#practice">Practice &amp; Feedback</a><a href="#questions">Scenarios &amp; Examples</a><a href="#simulations">Interactive Simulations</a><a href="#data">Resources &amp; Data</a></nav></div></section>
   <!-- END: Guide introduction and category navigation -->
 
 <div class="cm-guide-search"><label for="cm-guide-filter">Find a block in this guide</label><input id="cm-guide-filter" type="search" placeholder="Search by block name or purpose"><p id="cm-guide-status" role="status"></p></div>  <!-- BEGIN: Text &amp; Layout -->
@@ -230,7 +226,7 @@ window.CMUX = (() => {
   <section class="action"><h2>Ready to assemble the page?</h2><p>Open the Page Builder, add only the blocks the lesson needs, and preview the finished output before publishing it in Brightspace.</p><a class="button" href="coursebuilder.html">Open Page Builder</a></section>
 </main>
 
-<footer><div class="footer-main"><div><div class="footer-brand">McLennan Community College</div><p>Course Builder is maintained by Instructional Design &amp; Innovation to help MCC faculty create clear, consistent, and accessible Brightspace courses.</p><span class="online">McLennan Online</span></div><div><h2>Build</h2><a href="templates.html">Page templates</a><a href="coursebuilder.html">Page builder</a><a href="building-blocks.html">Building block guide</a><a href="widget-builder.html">Widget builder</a></div><div><h2>Need help?</h2><a href="mailto:online@mclennan.edu">online@mclennan.edu</a><a href="support.html">Support options</a><a href="https://www.mclennan.edu/">McLennan.edu</a></div></div><div class="footer-bottom"><span>© 2026 McLennan Community College · McLennan Online</span><span>Designed for WCAG 2.1 AA accessibility</span></div></footer>
+<footer><div class="footer-main"><div><div class="footer-brand">McLennan Community College</div><p>Course Builder is maintained by Instructional Design &amp; Innovation to help MCC faculty create clear, consistent, and accessible Brightspace courses.</p></div><div><h2>Build</h2><a href="templates.html">Page templates</a><a href="coursebuilder.html">Page builder</a><a href="building-blocks.html">Building block guide</a><a href="widget-builder.html">Widget builder</a></div><div><h2>Need help?</h2><a href="mailto:online@mclennan.edu">online@mclennan.edu</a><a href="support.html">Support options</a><a href="https://www.mclennan.edu/">McLennan.edu</a></div></div><div class="footer-bottom"><span>© 2026 McLennan Community College</span><span>Designed for WCAG 2.1 AA accessibility</span></div></footer>
 <script>
 document.getElementById('site-search').addEventListener('submit',function(event){
   event.preventDefault();
@@ -281,7 +277,22 @@ body a.button.cm-btn-outline:hover,body a.button.cm-btn-outline:focus-visible,bo
 .cm-cta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
 </style>
 <style id="cb-page">
-body .page{padding-top:48px}
+body .page{padding-top:28px}
+body .intro{grid-template-columns:1fr;margin-bottom:8px}
+body .intro h1{font-size:clamp(30px,3.6vw,40px)}
+body .intro p.cm-overview-note{max-width:none;margin:12px 0 0;padding:9px 14px;border-left:5px solid #ff6600;border-radius:0 6px 6px 0;background:#edf4f7;color:#182936;font-size:15px}
+body .intro .cm-overview-note strong{color:#001b3b}
+body .toc{margin-top:16px}
+body .cm-guide-search{margin:16px 0 20px}
+</style>
+<style id="cb-compact-header">
+/* Compact site header: smaller logo and tighter rows so the page content comes first. */
+body .topbar{padding-top:4px;padding-bottom:4px;font-size:12px;line-height:1.4}
+body header .brand-row{min-height:0;padding-top:8px;padding-bottom:8px;gap:20px}
+body header .header-logo{width:auto;height:56px;max-width:none}
+body header .course-name,body header .brand-name{font-size:20px}
+body header .search input{padding:9px 13px}
+@media(max-width:800px){body header .brand-row{padding:8px 0}body header .header-logo{height:48px}}
 </style>
 </body>
 </html>
