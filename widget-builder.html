@@ -102,6 +102,9 @@
   .appearance-body { padding: 14px; }
   .palette { display: flex; flex-wrap: wrap; gap: 8px; }
   .color { width: 32px; height: 32px; padding: 0; border: 3px solid #fff; border-radius: 50%; box-shadow: 0 0 0 1px #81929c; }
+  .edge-group { margin-top: 14px; padding-top: 12px !important; border-top: 1px solid #dbe4e8 !important; }
+  .edge-auto { padding: 6px 10px; border: 1px solid #a8bac5; border-radius: 6px; background: #fff; color: #003366; font: inherit; font-size: 13px; cursor: pointer; }
+  .edge-auto[aria-pressed="true"] { background: #003366; border-color: #003366; color: #fff; }
   .color[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--ink); }
   .color-custom { display: grid; grid-template-columns: 48px 1fr; gap: 8px; margin-top: 10px; }
   .color-custom input[type="color"] { height: 42px; padding: 3px; }
@@ -432,7 +435,16 @@ window.CMUX = (() => {
   var baseColors = { headerBg: '#003366', headerText: '#FFFFFF', contentBg: '#FFFFFF', contentText: '#1F2933' };
   var FONT = 'font-family:Lato,Arial,sans-serif;';
 
-  function defaults(extra) { return Object.assign({}, baseColors, extra); }
+  var EDGE_BASE = { headerEdge: 'top', headerEdgeWidth: '5', headerEdgeColor: '', buttonEdge: 'none', buttonEdgeWidth: '5', buttonEdgeColor: '' };
+  function defaults(extra) { return Object.assign({}, baseColors, EDGE_BASE, extra); }
+  // Automatic edge color: MCC orange, or navy when the fill it sits on is orange or gold.
+  function edgeAuto(bg) { return ['#FF6600', '#EE7B30', '#F7B32B'].indexOf(String(bg || '').toUpperCase()) >= 0 ? '#003366' : '#FF6600'; }
+  function edgeCss(side, width, color, auto) {
+    if (['top', 'right', 'bottom', 'left'].indexOf(side) < 0) return '';
+    var w = [3, 5, 8].indexOf(parseInt(width, 10)) >= 0 ? parseInt(width, 10) : 5;
+    return ';border-' + side + ':' + w + 'px solid ' + (normalizeHex(color) || auto);
+  }
+  function hasButtons(t) { return t.kind === 'links' || (t.kind === 'instructor' && t.design !== 'plain'); }
   function f(k, label, type, help, options) { return { k: k, label: label, type: type || 'text', help: help || '', options: options || null }; }
 
   // Instructor widgets share one set of fields; each design is its own gallery choice.
@@ -648,6 +660,23 @@ window.CMUX = (() => {
         : '<input id="field-' + def.k + '" data-key="' + def.k + '" type="' + (def.type === 'url' ? 'url' : 'text') + '" value="' + esc(v) + '">') +
       '</div>';
   }
+  function edgeControls(prefix, label, help) {
+    var d = current();
+    var cur = normalizeHex(d[prefix + 'Color']);
+    var auto = edgeAuto(d.headerBg);
+    var sel = function (key, text, options) {
+      return '<div class="field"><label for="field-' + key + '">' + esc(text) + '</label><select id="field-' + key + '" data-key="' + key + '">' +
+        options.map(function (o) { return '<option value="' + o[0] + '"' + (String(d[key]) === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></div>';
+    };
+    return '<fieldset class="field edge-group" style="border:0;padding:0"><legend class="legend">' + esc(label) + '</legend><p class="help">' + esc(help) + '</p>' +
+      sel(prefix, 'Side', [['none', 'None'], ['top', 'Top'], ['right', 'Right'], ['bottom', 'Bottom'], ['left', 'Left']]) +
+      sel(prefix + 'Width', 'Thickness', [['3', 'Thin (3px)'], ['5', 'Medium (5px)'], ['8', 'Thick (8px)']]) +
+      '<p class="legend" style="margin-top:4px">Edge color</p><div class="palette"><button type="button" class="edge-auto" data-color-key="' + prefix + 'Color" data-color="" aria-pressed="' + !cur + '">Automatic</button>' +
+      colors.map(function (c) {
+        return '<button type="button" class="color" data-color-key="' + prefix + 'Color" data-color="' + c + '" style="background-color:' + c + '" aria-label="Use ' + label.toLowerCase() + ' color ' + c + '" aria-pressed="' + (!!cur && cur.toLowerCase() === c.toLowerCase()) + '"></button>';
+      }).join('') +
+      '</div><div class="color-custom"><input type="color" data-color-picker="' + prefix + 'Color" value="' + (cur || auto) + '" aria-label="Choose ' + label.toLowerCase() + ' color"><input type="text" data-color-text="' + prefix + 'Color" value="' + (cur || '') + '" placeholder="Automatic" maxlength="7" aria-label="' + label + ' hexadecimal value"></div></fieldset>';
+  }
   function renderGallery() {
     if (!state.galleryOpen) {
       var t = templates[state.type];
@@ -678,26 +707,29 @@ window.CMUX = (() => {
     }
     var content = input(f('title', 'Widget title')) + input(f('subtitle', 'Short subtitle')) +
       t.fields.map(input).join('');
-    var appearance = '<details class="appearance"><summary>Appearance and colors</summary><div class="appearance-body">' +
+    var appearanceOpen = !!el.editor.querySelector('details.appearance[open]');
+    var appearance = '<details class="appearance"' + (appearanceOpen ? ' open' : '') + '><summary>Appearance and colors</summary><div class="appearance-body">' +
       colorControl('headerBg', 'Header and button background') +
       colorControl('headerText', 'Header and button text') +
       colorControl('contentBg', 'Content background') +
       colorControl('contentText', 'Content text') +
+      edgeControls('headerEdge', 'Header accent edge', 'A colored edge on the widget header. Automatic uses MCC orange, or navy on an orange header.') +
+      (hasButtons(t) ? edgeControls('buttonEdge', 'Button accent edge', 'A colored edge on every button in this widget.') : '') +
       contrastHtml() + '</div></details>';
     el.editor.innerHTML = content + appearance;
   }
 
   function header() {
     var d = current();
-    var top = String(d.headerBg).toLowerCase() === '#ff6600' ? '#003366' : '#FF6600';
-    return '<div style="background-color:' + d.headerBg + ';border-top:5px solid ' + top +
+    var edge = edgeCss(d.headerEdge || 'top', d.headerEdgeWidth, d.headerEdgeColor, edgeAuto(d.headerBg));
+    return '<div style="background-color:' + d.headerBg + edge +
       ';border-radius:8px 8px 0 0;padding:13px 16px;text-align:center;box-sizing:border-box"><h2 style="' + FONT + 'font-size:21px;line-height:1.2;color:' + d.headerText + ';margin:0">' + esc(d.title) + '</h2>' +
       (d.subtitle ? '<p style="' + FONT + 'font-size:13px;line-height:1.4;color:' + d.headerText + ';margin:4px 0 0">' + esc(d.subtitle) + '</p>' : '') + '</div>';
   }
   function button(label, url, margin) {
     var d = current();
     return '<a href="' + safe(url) + '" target="_blank" rel="noopener" style="display:block;width:100%;box-sizing:border-box;background-color:' + d.headerBg +
-      ';color:' + d.headerText + ';border:1px solid ' + d.headerBg +
+      ';color:' + d.headerText + ';border:1px solid ' + d.headerBg + edgeCss(d.buttonEdge, d.buttonEdgeWidth, d.buttonEdgeColor, edgeAuto(d.headerBg)) +
       ';border-radius:6px;padding:10px 12px;text-align:center;text-decoration:none;' + FONT + 'font-size:15px;line-height:1.3;font-weight:700;margin:' + (margin || '0 0 9px') + '">' + esc(label) + '</a>';
   }
   function pad(inner, padding) {
@@ -878,6 +910,8 @@ window.CMUX = (() => {
     var contentRatio = ratio(d.contentText, d.contentBg);
     if (headerRatio < 4.5) issues.push('Header and button contrast is ' + headerRatio.toFixed(2) + ':1, below the 4.5:1 WCAG AA minimum.');
     if (contentRatio < 4.5) issues.push('Content contrast is ' + contentRatio.toFixed(2) + ':1, below the 4.5:1 WCAG AA minimum.');
+    if (d.headerEdge !== 'none' && normalizeHex(d.headerEdgeColor) && ratio(d.headerEdgeColor, d.headerBg) < 1.5) issues.push('The header accent edge color is almost the same as the header, so the edge will barely show. Pick a color that stands out, or set the side to None.');
+    if (hasButtons(t) && d.buttonEdge !== 'none' && normalizeHex(d.buttonEdgeColor) && ratio(d.buttonEdgeColor, d.headerBg) < 1.5) issues.push('The Button accent edge color is almost the same as the buttons, so the edge will barely show. Pick a color that stands out, or set the side to None.');
     if (String(d.title || '').length > 40) issues.push('The widget title is ' + String(d.title).length + ' characters. Long titles wrap awkwardly at narrow sidebar widths; aim for 40 or fewer.');
     if (t.upkeep) issues.push('This widget needs ' + t.upkeep + ' updates. Confirm someone owns keeping it current, or switch to a static widget.');
     t.fields.forEach(function (def) {
@@ -901,7 +935,7 @@ window.CMUX = (() => {
     const note=document.createElement('p');note.textContent='Automated checks cover selected colors, links, and fields. Review the finished widget at narrow and wide widths in Brightspace.';body.append(note);
     if(!issues.length){const p=document.createElement('p');p.className='audit-pass';p.textContent='Automated checks passed. Check the content and links in Brightspace before publishing.';body.append(p);}
     const dialog=CMUX.modal('Check your widget',body,document.getElementById('audit-widget'));
-    issues.forEach(message=>{const item=document.createElement('div');item.className='cm-audit-item';const badge=document.createElement('strong');badge.className='cm-severity'+(/updates|characters|questions|placeholder/.test(message)?' review':'');badge.textContent=/updates|characters|questions|placeholder/.test(message)?'Review before publishing':'Fix before publishing';const text=document.createElement('p');text.textContent=message;const button=document.createElement('button');button.className='cm-button';button.type='button';button.textContent='Open relevant field';button.onclick=()=>{dialog.close();const quoted=message.match(/“([^”]+)”/);let key=quoted?(templates[state.type].fields.find(f=>f.label===quoted[1])||{}).k:null;key=key||(/title/.test(message)?'title':/image/.test(message)?'image':/FAQ/.test(message)?'qas':null);let field=key?el.editor.querySelector('[data-key="'+key+'"]'):null;if(/contrast/.test(message)){el.editor.querySelector('details.appearance').open=true;field=el.editor.querySelector('[data-color-text="'+(/Content/.test(message)?'contentText':'headerText')+'"]');}field=field||el.editor.querySelector('input,textarea,select');field?.focus();field?.scrollIntoView({block:'center',behavior:'smooth'});};item.append(badge,text,button);body.append(item);});
+    issues.forEach(message=>{const item=document.createElement('div');item.className='cm-audit-item';const badge=document.createElement('strong');badge.className='cm-severity'+(/updates|characters|questions|placeholder|barely/.test(message)?' review':'');badge.textContent=/updates|characters|questions|placeholder|barely/.test(message)?'Review before publishing':'Fix before publishing';const text=document.createElement('p');text.textContent=message;const button=document.createElement('button');button.className='cm-button';button.type='button';button.textContent='Open relevant field';button.onclick=()=>{dialog.close();const quoted=message.match(/“([^”]+)”/);let key=quoted?(templates[state.type].fields.find(f=>f.label===quoted[1])||{}).k:null;key=key||(/title/.test(message)?'title':/image/.test(message)?'image':/FAQ/.test(message)?'qas':null);let field=key?el.editor.querySelector('[data-key="'+key+'"]'):null;if(/accent edge/.test(message)){el.editor.querySelector('details.appearance').open=true;field=el.editor.querySelector('[data-key="'+(/Button accent/.test(message)?'buttonEdge':'headerEdge')+'"]');}else if(/contrast/.test(message)){el.editor.querySelector('details.appearance').open=true;field=el.editor.querySelector('[data-color-text="'+(/Content/.test(message)?'contentText':'headerText')+'"]');}field=field||el.editor.querySelector('input,textarea,select');field?.focus();field?.scrollIntoView({block:'center',behavior:'smooth'});};item.append(badge,text,button);body.append(item);});
   }
 
   function updateOutput() {
@@ -979,6 +1013,8 @@ window.CMUX = (() => {
     if (!button) return;
     current()[button.dataset.colorKey] = button.dataset.color;
     render();
+    var again = el.editor.querySelector('[data-color-key="' + button.dataset.colorKey + '"][data-color="' + button.dataset.color + '"]');
+    if (again) again.focus();
   });
   document.querySelectorAll('[data-width]').forEach(function (button) {
     button.addEventListener('click', function () {
