@@ -236,6 +236,11 @@
   .color-button[aria-pressed="true"] { box-shadow: 0 0 0 3px #182936; }
   .color-custom { display: grid; grid-template-columns: 48px 1fr; gap: 8px; margin-top: 10px; }
   .color-custom input[type="color"] { height: 42px; padding: 3px; }
+  .edge-sides { display: flex; flex-wrap: wrap; gap: 6px; }
+  .edge-sides button, .edge-standard { padding: 7px 10px; border: 1px solid #a8bac5; border-radius: 6px; background: #fff; color: #003366; font: inherit; font-size: 13px; cursor: pointer; }
+  .edge-sides button[aria-pressed="true"], .edge-standard[aria-pressed="true"] { background: #003366; border-color: #003366; color: #fff; }
+  .edge-row { margin-top: 12px; }
+  .edge-row select { width: 100%; }
   .contrast-card { margin: 15px 0; padding: 13px; border: 1px solid #b8c8d0; border-left: 5px solid var(--mcc-teal); border-radius: 7px; background: #f6fafb; }
   .contrast-card h3 { margin: 0 0 7px; color: var(--mcc-navy); font-size: 15px; }
   .contrast-ratio { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 8px 0; }
@@ -1153,6 +1158,36 @@ window.CMUX = (() => {
   const COLOR_NAMES = { '#003366': 'MCC Blue', '#001B3B': 'Navy', '#008DA7': 'Teal', '#33A1FD': 'Sky blue', '#FF6600': 'MCC Orange', '#EE7B30': 'Soft orange', '#F7B32B': 'Gold', '#D6E8EE': 'Pale blue', '#000000': 'Black', '#FFFFFF': 'White' };
   const colorName = (hex) => COLOR_NAMES[String(hex).toUpperCase()] || String(hex).toUpperCase();
 
+  // Accent edge: one side, one color, one thickness per block. Anything left unset uses the block's standard look,
+  // so existing pages and saved files render exactly as before.
+  const EDGE_SIDES = ['none', 'top', 'right', 'bottom', 'left'];
+  const EDGE_WIDTHS = [3, 5, 8];
+  const EDGE_BLOCKS = {
+    button: { side: 'none', width: 5, target: 'every button in this block' },
+    colored: { side: 'none', width: 5, target: 'the colored panel' },
+    callout: { side: 'left', width: 8, target: 'the callout' },
+    statCard: { side: 'left', width: 8, target: 'the statistic card' },
+    dueDate: { side: 'left', width: 9, target: 'the reminder' },
+    quote: { side: 'left', width: 6, target: 'the quote' },
+    stepBoxes: { side: 'none', width: 5, target: 'each box' },
+    courseCards: { side: 'top', width: 5, target: 'each card' },
+    insight: { side: 'top', width: 6, target: 'the card' },
+    instructorInfo: { side: 'top', width: 6, target: 'the card' },
+    imageText: { side: 'top', width: 6, target: 'the card' },
+    columns: { side: 'top', width: 6, target: 'each column' },
+    reveal: { side: 'left', width: 5, target: 'the revealed answer' }
+  };
+  const cleanEdge = (raw) => {
+    if (!raw || typeof raw !== 'object') return null;
+    const side = EDGE_SIDES.includes(raw.side) ? raw.side : null;
+    const color = normalizeHex(raw.color);
+    const w = parseInt(raw.width, 10);
+    const width = EDGE_WIDTHS.includes(w) ? w : null;
+    return (side || color || width) ? { side, color, width } : null;
+  };
+  // Standard edge color on filled shapes: MCC orange, or navy when the fill is already orange or gold.
+  const edgeAlt = (bg) => ['#FF6600', '#EE7B30', '#F7B32B'].includes(String(bg || '').toUpperCase()) ? '#003366' : '#FF6600';
+
   // Inline styles cannot use media queries, so let the grid decide how many columns fit.
   const autoGrid = (n, minPx, gap) => 'repeat(auto-fit,minmax(min(100%,max(' + minPx + 'px,calc(100% / ' + gridColumns(n) + ' - ' + gap + 'px))),1fr))';
 
@@ -1862,7 +1897,7 @@ window.CMUX = (() => {
       let id = String(b.id || '');
       if (!/^[A-Za-z0-9_-]{1,64}$/.test(id) || seen.has(id)) id = uid();
       seen.add(id);
-      return { id, type: b.type, color: normalizeHex(b.color), textColor: normalizeHex(b.textColor), backgroundColor: normalizeHex(b.backgroundColor), fontFamily: FONT_STACKS[b.fontFamily] ? b.fontFamily : null, data: Object.assign(clone(defs[b.type].defaults), raw) };
+      return { id, type: b.type, color: normalizeHex(b.color), textColor: normalizeHex(b.textColor), backgroundColor: normalizeHex(b.backgroundColor), fontFamily: FONT_STACKS[b.fontFamily] ? b.fontFamily : null, edge: cleanEdge(b.edge), data: Object.assign(clone(defs[b.type].defaults), raw) };
     });
     state.blocks.forEach(b => { syncRepeater(b); sanitizeBlockRichText(b); });
     state.selectedId = state.blocks.some(b => b.id === saved.selectedId) ? saved.selectedId : null;
@@ -1921,7 +1956,7 @@ window.CMUX = (() => {
   }
 
   function makeBlock(type, override) {
-    return { id: uid(), type, color: null, textColor: null, backgroundColor: null, fontFamily: null, data: Object.assign(clone(defs[type].defaults), clone(override || {})) };
+    return { id: uid(), type, color: null, textColor: null, backgroundColor: null, fontFamily: null, edge: null, data: Object.assign(clone(defs[type].defaults), clone(override || {})) };
   }
 
   function syncRepeater(block) {
@@ -2287,6 +2322,15 @@ window.CMUX = (() => {
     const fontStack = FONT_STACKS[block.fontFamily] || FONT_STACKS.Lato;
     const base = 'font-family:' + fontStack + ';font-size:19px;color:' + rootText + ';background-color:' + rootBackground + ';line-height:1.65';
     const items = (d.items || []).slice(0, parseInt(d.count, 10) || (d.items || []).length);
+    const edgeCfg = EDGE_BLOCKS[block.type];
+    // Returns ';border-<side>:<w>px solid <color>' for this block's accent edge, or '' when the side is None.
+    const edgeOf = (standardColor) => {
+      if (!edgeCfg) return '';
+      const ed = block.edge || {};
+      const side = ed.side || edgeCfg.side;
+      if (side === 'none') return '';
+      return ';border-' + side + ':' + (ed.width || edgeCfg.width) + 'px solid ' + (ed.color || standardColor);
+    };
 
     // ---- Interactive Simulations: shared pieces (used only by the simulation blocks) ----
     const SIM_FONT = 'font-family:' + fontStack;
@@ -2326,7 +2370,7 @@ window.CMUX = (() => {
 
     const photoCardLayout = (layout, widthPct, placeholderTitle, innerContent, imageUrl, imageAlt) => {
       const tint = mixWithWhite(color, 0.85);
-      const cardStyle = 'width:100%;margin:24px 0;border:1px solid ' + tint + ';border-top:6px solid ' + color + ';border-radius:8px;overflow:hidden;background-color:#FFFFFF;font-family:' + fontStack + ';color:' + text;
+      const cardStyle = 'width:100%;margin:24px 0;border:1px solid ' + tint + edgeOf(color) + ';border-radius:8px;overflow:hidden;background-color:#FFFFFF;font-family:' + fontStack + ';color:' + text;
       if (layout === 'none') {
         return '<div style="' + cardStyle + '"><div style="padding:36px 40px">' + innerContent + '</div></div>';
       }
@@ -2365,14 +2409,14 @@ window.CMUX = (() => {
           const accent = block.color || palette.accent;
           const iconFontSize = ['\u2713', '\u2727', '\u201C'].includes(palette.icon) ? '26px' : '30px';
           const iconLineHeight = palette.icon === '\u201C' ? '58px' : '48px';
-          return '<div style="' + base + ';display:flex;align-items:flex-start;margin:24px 0;padding:20px 22px;border:2px solid ' + accent + ';border-left-width:8px;border-radius:8px;background-color:' + background + '"><div style="flex:0 0 48px;width:48px;padding:0"><span aria-hidden="true" style="display:block;width:48px;height:48px;border-radius:50%;overflow:hidden;color:' + contrast(accent) + ';background-color:' + accent + ';font-family:' + fontStack + ';font-size:' + iconFontSize + ';font-weight:800;text-align:center;line-height:' + iconLineHeight + '">' + palette.icon + '</span></div><div style="flex:1 1 auto;min-width:0;padding:0 0 0 18px"><h' + HT + ' style="font-family:' + fontStack + ';font-size:22px;color:' + text + ';margin:0 0 7px;line-height:1.3">' + e(d.title) + '</h' + HT + '><p style="font-family:' + fontStack + ';color:' + text + ';margin:0;line-height:1.55">' + sanitizeRichText(d.content || '') + '</p></div></div>';
+          return '<div style="' + base + ';display:flex;align-items:flex-start;margin:24px 0;padding:20px 22px;border:2px solid ' + accent + edgeOf(accent) + ';border-radius:8px;background-color:' + background + '"><div style="flex:0 0 48px;width:48px;padding:0"><span aria-hidden="true" style="display:block;width:48px;height:48px;border-radius:50%;overflow:hidden;color:' + contrast(accent) + ';background-color:' + accent + ';font-family:' + fontStack + ';font-size:' + iconFontSize + ';font-weight:800;text-align:center;line-height:' + iconLineHeight + '">' + palette.icon + '</span></div><div style="flex:1 1 auto;min-width:0;padding:0 0 0 18px"><h' + HT + ' style="font-family:' + fontStack + ';font-size:22px;color:' + text + ';margin:0 0 7px;line-height:1.3">' + e(d.title) + '</h' + HT + '><p style="font-family:' + fontStack + ';color:' + text + ';margin:0;line-height:1.55">' + sanitizeRichText(d.content || '') + '</p></div></div>';
         }
       case 'quote':
-        return '<figure style="' + base + ';margin:26px 0;padding:22px 25px;border-left:6px solid ' + color + ';background-color:' + background + '"><blockquote style="margin:0 0 9px;font-size:23px;font-style:italic;color:' + text + '">“' + br(d.quote) + '”</blockquote><figcaption style="font-size:16px;color:' + text + '">— ' + e(d.citation) + '</figcaption></figure>';
+        return '<figure style="' + base + ';margin:26px 0;padding:22px 25px' + edgeOf(color) + ';background-color:' + background + '"><blockquote style="margin:0 0 9px;font-size:23px;font-style:italic;color:' + text + '">“' + br(d.quote) + '”</blockquote><figcaption style="font-size:16px;color:' + text + '">— ' + e(d.citation) + '</figcaption></figure>';
       case 'button':
-        return '<div style="display:grid;grid-template-columns:' + autoGrid(items.length, 180, 10) + ';gap:10px;margin:24px 0;font-family:' + fontStack + '">' + items.map(item => '<a href="' + safeUrl(item.url, '#') + '" style="display:block;box-sizing:border-box;padding:13px 20px;color:' + text + ';background-color:' + background + ';border:1px solid ' + color + ';border-radius:6px;font-size:18px;font-weight:700;text-align:center;text-decoration:none">' + e(item.label) + '</a>').join('') + '</div>';
+        return '<div style="display:grid;grid-template-columns:' + autoGrid(items.length, 180, 10) + ';margin:19px -5px;font-family:' + fontStack + '">' + items.map(item => '<a href="' + safeUrl(item.url, '#') + '" style="display:block;box-sizing:border-box;margin:5px;padding:13px 20px;color:' + text + ';background-color:' + background + ';border:1px solid ' + color + edgeOf(edgeAlt(background)) + ';border-radius:6px;font-size:18px;font-weight:700;text-align:center;text-decoration:none">' + e(item.label) + '</a>').join('') + '</div>';
       case 'colored':
-        return '<section style="' + base + ';margin:24px 0;padding:22px 24px;color:' + text + ';background-color:' + background + ';border-radius:8px"><h' + HT + ' style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h' + HT + '><p style="color:' + text + ';margin:0">' + sanitizeRichText(d.content || '') + '</p></section>';
+        return '<section style="' + base + ';margin:24px 0;padding:22px 24px;color:' + text + ';background-color:' + background + edgeOf(edgeAlt(background)) + ';border-radius:8px"><h' + HT + ' style="font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h' + HT + '><p style="color:' + text + ';margin:0">' + sanitizeRichText(d.content || '') + '</p></section>';
       case 'insight': {
         const info = '<h' + HT + ' style="font-family:' + fontStack + ';font-size:23px;color:' + text + ';margin:0 0 8px">' + e(d.title) + '</h' + HT + '><p style="font-family:' + fontStack + ';color:' + text + ';margin:0">' + sanitizeRichText(d.content || '') + '</p>';
         return photoCardLayout(d.layout, d.imageWidth, 'Instructor Photo', info, d.image, d.alt);
@@ -2411,7 +2455,7 @@ window.CMUX = (() => {
           countdownHtml = '<p id="' + countId + '" data-mcc-countdown data-due="' + dueMs + '" role="timer" hidden style="margin:6px 0 0;font-family:' + fontStack + ';color:' + ink + ';font-size:17px;font-weight:800"></p>' +
             '<script>(function(){var el=document.getElementById("' + countId + '");if(!el)return;var due=' + dueMs + ';function tick(){var ms=due-Date.now();el.hidden=false;if(ms<=0){el.textContent="This is now past due.";return false}var m=Math.floor(ms/60000),dd=Math.floor(m/1440),hh=Math.floor((m%1440)/60),mm=m%60;el.textContent="Due in "+dd+(dd===1?" day, ":" days, ")+hh+(hh===1?" hour, ":" hours, ")+mm+(mm===1?" minute":" minutes");return true}if(tick())setInterval(tick,30000)})();<\/script>';
         }
-        return '<div style="' + base + ';display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin:24px 0;padding:18px 22px;border:2px solid ' + color + ';border-left-width:9px;border-radius:8px;background-color:' + background + '"><span aria-hidden="true" style="display:grid;place-items:center;flex:0 0 74px;height:74px;border-radius:8px;overflow:hidden;color:' + contrast(color) + ';background-color:' + color + ';font-size:15px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-align:center">Due</span><div style="flex:1 1 240px"><p style="margin:0 0 3px;color:' + text + ';font-size:14px;font-weight:800;letter-spacing:.1em;text-transform:uppercase">' + e(d.label) + '</p><p style="margin:0 0 6px;color:' + text + ';font-size:24px;font-weight:800">' + e(shownDate) + '</p>' + countdownHtml + (d.note ? '<p style="margin:' + (countdownHtml ? '6px' : '0') + ' 0 0;color:' + text + '">' + br(d.note) + '</p>' : '') + '</div></div>';
+        return '<div style="' + base + ';display:flex;flex-wrap:wrap;gap:18px;align-items:center;margin:24px 0;padding:18px 22px;border:2px solid ' + color + edgeOf(color) + ';border-radius:8px;background-color:' + background + '"><span aria-hidden="true" style="display:grid;place-items:center;flex:0 0 74px;height:74px;border-radius:8px;overflow:hidden;color:' + contrast(color) + ';background-color:' + color + ';font-size:15px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;text-align:center">Due</span><div style="flex:1 1 240px"><p style="margin:0 0 3px;color:' + text + ';font-size:14px;font-weight:800;letter-spacing:.1em;text-transform:uppercase">' + e(d.label) + '</p><p style="margin:0 0 6px;color:' + text + ';font-size:24px;font-weight:800">' + e(shownDate) + '</p>' + countdownHtml + (d.note ? '<p style="margin:' + (countdownHtml ? '6px' : '0') + ' 0 0;color:' + text + '">' + br(d.note) + '</p>' : '') + '</div></div>';
       }
       case 'accordion':
         return '<div style="' + base + ';margin:24px 0">' + items.map(item => '<details style="font-family:' + fontStack + ';font-size:19px;border:1px solid ' + color + ';border-radius:8px;margin:0 0 10px;overflow:hidden"><summary style="cursor:pointer;background-color:' + background + ';color:' + text + ';font-weight:700;padding:16px 18px">' + e(item.heading) + '</summary><div style="padding:16px 18px;color:#1F2933;background-color:#FFFFFF">' + br(item.content) + '</div></details>').join('') + '</div>';
@@ -2631,7 +2675,7 @@ window.CMUX = (() => {
         return '<section data-mcc-interactive-timeline style="' + base + ';margin:26px 0;padding:22px;border:1px solid #B8C8D0;border-radius:9px;color:#1F2933;background-color:#F7FAFB"><h' + HT + ' style="margin:0 0 5px;color:' + ink + ';font-size:26px">' + e(d.title) + '</h' + HT + '><p style="margin:0 0 16px;color:#1F2933">' + br(d.instructions) + '</p><div role="group" aria-label="Timeline milestones" style="display:flex;flex-wrap:wrap;gap:9px;border-bottom:4px solid ' + color + ';padding-bottom:13px">' + controls + '</div><div aria-live="polite">' + panels + '</div></section>';
       }
       case 'reveal':
-        return '<section data-mcc-reveal style="' + base + ';margin:24px 0;padding:22px;border:1px solid #b8c8d0;border-radius:8px;background-color:#f7fafb"><p style="color:#1F2933;margin:0 0 14px;font-weight:700">' + br(d.prompt) + '</p><details><summary style="cursor:pointer;padding:11px 16px;border-radius:6px;color:' + text + ';background-color:' + background + ';font-size:17px;font-weight:700">' + e(d.button) + '</summary><div style="margin-top:15px;padding:16px;border-left:5px solid ' + color + ';color:#1F2933;background-color:#FFFFFF">' + br(d.content) + '</div></details></section>';
+        return '<section data-mcc-reveal style="' + base + ';margin:24px 0;padding:22px;border:1px solid #b8c8d0;border-radius:8px;background-color:#f7fafb"><p style="color:#1F2933;margin:0 0 14px;font-weight:700">' + br(d.prompt) + '</p><details><summary style="cursor:pointer;padding:11px 16px;border-radius:6px;color:' + text + ';background-color:' + background + ';font-size:17px;font-weight:700">' + e(d.button) + '</summary><div style="margin-top:15px;padding:16px' + edgeOf(color) + ';color:#1F2933;background-color:#FFFFFF">' + br(d.content) + '</div></details></section>';
       case 'knowledge': {
         const qid = block.id + '-question';
         const opts = items.map((item, i) => '<label style="display:block;margin:9px 0;padding:12px;border:1px solid #c3d0d6;border-radius:6px;cursor:pointer"><input type="radio" name="' + qid + '" value="' + (i + 1) + '" data-feedback="' + attr(sanitizeRichText(item.feedback || '')) + '" style="margin-right:9px">' + e(item.option) + '</label>').join('');
@@ -2661,7 +2705,7 @@ window.CMUX = (() => {
       }
       case 'courseCards': {
         const altColor = String(color).toUpperCase() === '#FF6600' ? '#003366' : '#FF6600';
-        const courseCardsHtml = items.map((item, i) => '<div style="box-sizing:border-box;padding:20px;background-color:#FFFFFF;border:1px solid #C9D7DE;border-top:5px solid ' + (i % 2 ? altColor : color) + ';border-radius:8px;box-shadow:0 2px 8px rgba(0,27,59,.08)"><h' + HI + ' style="font-family:' + fontStack + ';margin:0 0 8px;color:' + ink + ';font-size:20px;line-height:1.3">' + e(item.heading) + '</h' + HI + '><p style="margin:0;color:#1F2933;font-family:' + fontStack + ';font-size:17px;line-height:1.55">' + br(item.content) + '</p></div>').join('');
+        const courseCardsHtml = items.map((item, i) => '<div style="box-sizing:border-box;padding:20px;background-color:#FFFFFF;border:1px solid #C9D7DE' + edgeOf(i % 2 ? altColor : color) + ';border-radius:8px;box-shadow:0 2px 8px rgba(0,27,59,.08)"><h' + HI + ' style="font-family:' + fontStack + ';margin:0 0 8px;color:' + ink + ';font-size:20px;line-height:1.3">' + e(item.heading) + '</h' + HI + '><p style="margin:0;color:#1F2933;font-family:' + fontStack + ';font-size:17px;line-height:1.55">' + br(item.content) + '</p></div>').join('');
         return '<section style="' + base + ';margin:26px 0">' + (d.title ? '<h' + HT + ' style="font-size:26px;color:' + ink + ';margin:0 0 14px">' + e(d.title) + '</h' + HT + '>' : '') + '<div style="display:grid;grid-template-columns:' + autoGrid(items.length, 220, 14) + ';gap:14px">' + courseCardsHtml + '</div></section>';
       }
       case 'scopeCards': {
@@ -2684,7 +2728,7 @@ window.CMUX = (() => {
         const stepBoxesHtml = items.map((item, i) => {
           const p = stepPalettes[i % stepPalettes.length];
           const arrow = i ? '<div aria-hidden="true" style="flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:24px;color:' + ink + ';font-weight:700;padding:0 4px">→</div>' : '';
-          return arrow + '<div style="flex:1 1 200px;background-color:' + p.bg + ';border-radius:8px;padding:18px 16px;text-align:center"><p style="margin:0 0 6px;font-family:' + fontStack + ';font-size:12px;font-weight:700;letter-spacing:.05em;color:' + p.label + ';text-transform:uppercase">' + e(item.label) + '</p><p style="margin:0;font-family:' + fontStack + ';font-size:19px;font-weight:700;color:' + p.heading + '">' + e(item.heading) + '</p><p style="margin:8px 0 0;font-family:' + fontStack + ';font-size:15px;color:' + p.body + ';line-height:1.5">' + sanitizeRichText(item.content || '') + '</p></div>';
+          return arrow + '<div style="flex:1 1 200px;background-color:' + p.bg + edgeOf(edgeAlt(p.bg)) + ';border-radius:8px;padding:18px 16px;text-align:center"><p style="margin:0 0 6px;font-family:' + fontStack + ';font-size:12px;font-weight:700;letter-spacing:.05em;color:' + p.label + ';text-transform:uppercase">' + e(item.label) + '</p><p style="margin:0;font-family:' + fontStack + ';font-size:19px;font-weight:700;color:' + p.heading + '">' + e(item.heading) + '</p><p style="margin:8px 0 0;font-family:' + fontStack + ';font-size:15px;color:' + p.body + ';line-height:1.5">' + sanitizeRichText(item.content || '') + '</p></div>';
         }).join('');
         return '<div style="' + base + ';display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:26px 0">' + stepBoxesHtml + '</div>';
       }
@@ -2774,7 +2818,7 @@ window.CMUX = (() => {
         return '<section style="' + base + ';margin:26px 0;padding:20px 22px;border:1px solid #B8C8D0;border-left:7px solid ' + color + ';border-radius:0 9px 9px 0;background-color:#FFFFFF"><h' + HT + ' style="font-size:22px;color:' + ink + ';margin:0 0 12px">' + e(d.title) + '</h' + HT + '>' + player + '<details style="margin-top:14px;border:1px solid #C9D7DE;border-radius:6px;overflow:hidden"><summary style="cursor:pointer;padding:11px 14px;color:#173744;background-color:#EEF6F8;font-weight:700">View the transcript</summary><div style="padding:14px;color:#1F2933;background-color:#FFFFFF">' + br(d.transcript) + '</div></details></section>';
       }
       case 'statCard': {
-        return '<figure style="' + base + ';margin:26px 0;padding:24px 26px;border:1px solid #C9D7DE;border-left:8px solid ' + color + ';border-radius:0 8px 8px 0;background-color:#FFFFFF"><p style="margin:0 0 6px;font-family:' + fontStack + ';font-size:clamp(40px,7vw,58px);font-weight:800;color:' + ink + ';line-height:1">' + e(d.stat) + '</p><figcaption style="font-family:' + fontStack + ';font-size:18px;color:#1F2933;line-height:1.5">' + br(d.label) + '</figcaption>' + (d.source ? '<p style="margin:14px 0 0;font-family:' + fontStack + ';font-size:14px;font-style:italic;color:#5A6872;border-top:1px solid #E1EAEE;padding-top:10px">Source: ' + br(d.source) + '</p>' : '') + '</figure>';
+        return '<figure style="' + base + ';margin:26px 0;padding:24px 26px;border:1px solid #C9D7DE' + edgeOf(color) + ';border-radius:0 8px 8px 0;background-color:#FFFFFF"><p style="margin:0 0 6px;font-family:' + fontStack + ';font-size:clamp(40px,7vw,58px);font-weight:800;color:' + ink + ';line-height:1">' + e(d.stat) + '</p><figcaption style="font-family:' + fontStack + ';font-size:18px;color:#1F2933;line-height:1.5">' + br(d.label) + '</figcaption>' + (d.source ? '<p style="margin:14px 0 0;font-family:' + fontStack + ';font-size:14px;font-style:italic;color:#5A6872;border-top:1px solid #E1EAEE;padding-top:10px">Source: ' + br(d.source) + '</p>' : '') + '</figure>';
       }
       case 'rubricTable': {
         const rubricLevels = String(d.levels || '').split('|').map(s => s.trim()).filter(Boolean);
@@ -2801,7 +2845,7 @@ window.CMUX = (() => {
       case 'divider':
         return '<hr style="border:0;border-top:4px solid ' + color + ';margin:32px 0">';
       case 'columns':
-        return '<div style="' + base + ';display:flex;flex-wrap:wrap;gap:20px;margin:25px 0"><section style="flex:1 1 260px;padding:20px;border-top:6px solid ' + color + ';color:' + text + ';background-color:' + background + '"><h' + HT + ' style="font-size:22px;color:' + text + ';margin:0 0 8px">' + e(d.leftTitle) + '</h' + HT + '><p style="color:' + text + ';margin:0">' + br(d.leftContent) + '</p></section><section style="flex:1 1 260px;padding:20px;border-top:6px solid ' + color + ';color:' + text + ';background-color:' + background + '"><h' + HT + ' style="font-size:22px;color:' + text + ';margin:0 0 8px">' + e(d.rightTitle) + '</h' + HT + '><p style="color:' + text + ';margin:0">' + br(d.rightContent) + '</p></section></div>';
+        return '<div style="' + base + ';display:flex;flex-wrap:wrap;gap:20px;margin:25px 0"><section style="flex:1 1 260px;padding:20px' + edgeOf(color) + ';color:' + text + ';background-color:' + background + '"><h' + HT + ' style="font-size:22px;color:' + text + ';margin:0 0 8px">' + e(d.leftTitle) + '</h' + HT + '><p style="color:' + text + ';margin:0">' + br(d.leftContent) + '</p></section><section style="flex:1 1 260px;padding:20px' + edgeOf(color) + ';color:' + text + ';background-color:' + background + '"><h' + HT + ' style="font-size:22px;color:' + text + ';margin:0 0 8px">' + e(d.rightTitle) + '</h' + HT + '><p style="color:' + text + ';margin:0">' + br(d.rightContent) + '</p></section></div>';
       default:
         return '';
     }
@@ -2947,6 +2991,23 @@ window.CMUX = (() => {
     return '<div class="editor-field"><label class="field-label" for="' + id + '">' + e(f.label) + '</label>' + (f.help ? '<p class="field-help">' + e(f.help) + '</p>' : '') + control + '</div>';
   }
 
+  function edgeFieldsetHtml(block) {
+    const cfg = EDGE_BLOCKS[block.type];
+    if (!cfg) return '';
+    const ed = block.edge || {};
+    const side = ed.side || cfg.side;
+    const cap = (v) => v.charAt(0).toUpperCase() + v.slice(1);
+    const sides = EDGE_SIDES.map(v => '<button type="button" data-edge-side="' + v + '" aria-pressed="' + (side === v) + '">' + cap(v) + (v === cfg.side ? ' (standard)' : '') + '</button>').join('');
+    const widthId = 'edge-width-' + block.id;
+    const widths = '<div class="edge-row"><label class="field-label" for="' + widthId + '">Thickness</label><select id="' + widthId + '" data-edge-width><option value="">Standard (' + cfg.width + 'px)</option>' +
+      [[3, 'Thin (3px)'], [5, 'Medium (5px)'], [8, 'Thick (8px)']].map(o => '<option value="' + o[0] + '"' + (ed.width === o[0] ? ' selected' : '') + '>' + o[1] + '</option>').join('') + '</select></div>';
+    const swatches = BLOCK_COLORS.map(c => '<button type="button" class="color-button" style="background-color:' + c + '" data-edge-color="' + c + '" title="' + colorName(c) + '" aria-label="Use accent edge color ' + colorName(c) + '" aria-pressed="' + (ed.color === c) + '"></button>').join('');
+    const custom = '<div class="color-custom"><input type="color" data-edge-custom value="' + (ed.color || '#FF6600') + '" aria-label="Choose a custom accent edge color"><input type="text" data-edge-custom value="' + (ed.color || '') + '" placeholder="Standard" maxlength="7" aria-label="Accent edge hexadecimal color"></div>';
+    const colorsHtml = '<div class="edge-row"><p class="field-label" style="margin:0 0 6px">Edge color</p><button type="button" class="edge-standard" data-edge-color="standard" aria-pressed="' + !ed.color + '">Standard color</button><div class="palette" style="margin-top:8px">' + swatches + '</div>' + custom + '</div>';
+    return '<fieldset class="editor-field" style="border:0;padding:0"><legend class="field-label">Accent edge</legend><p class="field-help">Adds a colored edge to ' + e(cfg.target) + '. Choose one side, or None.</p>' +
+      '<div class="edge-sides" role="group" aria-label="Accent edge side">' + sides + '</div>' + (side === 'none' ? '' : widths + colorsHtml) + '</fieldset>';
+  }
+
   function renderEditor() {
     const block = state.blocks.find(b => b.id === state.selectedId);
     document.getElementById('editor-heading').textContent = block ? 'Editing: ' + defs[block.type].label : 'Block editor';
@@ -2983,6 +3044,7 @@ window.CMUX = (() => {
       '<fieldset class="editor-field" style="border:0;padding:0"><legend class="field-label">Accent color</legend><p class="field-help">Used for borders, markers, headings, and interactive accents.</p><div class="palette">' + colorButtons + '</div></fieldset>' +
       '<fieldset class="editor-field" style="border:0;padding:0"><legend class="field-label">Text color</legend><p class="field-help">Choose an MCC color or enter a hexadecimal color.</p><div class="palette">' + textButtons + '</div>' + textCustom + '</fieldset>' +
       '<fieldset class="editor-field" style="border:0;padding:0"><legend class="field-label">Background color</legend><p class="field-help">Solid colors only. Course Builder does not generate gradients.</p><div class="palette">' + backgroundButtons + '</div>' + backgroundCustom + '</fieldset>' +
+      edgeFieldsetHtml(block) +
       contrastResultsHtml(block) +
       '</div></details>');
     sections.push('<details class="editor-acc" data-section="code"' + isOpen('code') + '><summary>Code snippet and actions</summary><div class="editor-acc-body"><div class="snippet-box" style="margin-top:0;padding-top:0;border-top:0"><h3>Customized code snippet</h3><p>This updates as you edit the selected block.</p><pre id="block-code"></pre><button type="button" class="small-button" data-copy-block>Copy block HTML</button><button type="button" class="small-button danger-button" data-delete-selected>Delete this block</button></div></div></details>');
@@ -3108,6 +3170,10 @@ window.CMUX = (() => {
       const pair = blockColorPair(block);
       const ratio = contrastRatio(pair.text, pair.background);
       if (ratio < 4.5) add(i, 'fix', label + ': text contrast is ' + ratio.toFixed(2) + ':1, below the 4.5:1 WCAG AA minimum for normal text.', 'textColor', 'appearance');
+      if (EDGE_BLOCKS[block.type] && block.edge && block.edge.color && (block.edge.side || EDGE_BLOCKS[block.type].side) !== 'none' && block.type !== 'stepBoxes') {
+        const behind = ['button', 'colored', 'columns', 'callout', 'dueDate', 'quote'].includes(block.type) ? pair.background : '#FFFFFF';
+        if (contrastRatio(block.edge.color, behind) < 1.5) add(i, 'review', label + ': the accent edge color is almost the same as the color it sits on, so the edge will barely show. Pick a color that stands out, or set the edge to None.', '', 'appearance');
+      }
       if (JSON.stringify(d).toLowerCase().indexOf('placehold.co') >= 0) add(i, 'fix', label + ': uses a temporary placeholder image (placehold.co). Replace it with your own image.', 'url');
       if (block.type === 'image' && d.mode === 'link') {
         if (!IMG_OK.test(String(d.url || '').trim())) add(i, 'fix', label + ': the image link is empty or is not a web address. Add a link, or switch to "I\'ll add it in Brightspace".', 'url');
@@ -3324,6 +3390,14 @@ window.CMUX = (() => {
     const block = state.blocks.find(b => b.id === state.selectedId); if (!block) return;
     const target = event.target;
     const def = defs[block.type];
+    if (target.hasAttribute('data-edge-custom')) {
+      const hex = normalizeHex(target.value);
+      if (!hex) return;
+      block.edge = cleanEdge(Object.assign({}, block.edge, { color: hex }));
+      if (target.type === 'color') { const t = el.editor.querySelector('input[type="text"][data-edge-custom]'); if (t) t.value = hex; }
+      updatePreviewAndCode();
+      return;
+    }
     if (target.dataset.blockCustom) {
       const hex = normalizeHex(target.value);
       if (!hex) return;
@@ -3360,6 +3434,11 @@ window.CMUX = (() => {
     const target = event.target;
     const block = state.blocks.find(b => b.id === state.selectedId); if (!block) return;
     const def = defs[block.type];
+    if (target.hasAttribute('data-edge-width')) {
+      block.edge = cleanEdge(Object.assign({}, block.edge, { width: target.value ? parseInt(target.value, 10) : null }));
+      updatePreviewAndCode();
+      return;
+    }
     if (target.dataset.field) {
       const key = target.dataset.field;
       const f = def.fields.find(x => x.key === key);
@@ -3428,6 +3507,24 @@ window.CMUX = (() => {
         }
         updatePreviewAndCode();
       }
+      return;
+    }
+    const edgeSide = event.target.closest('[data-edge-side]');
+    if (edgeSide) {
+      snapshot();
+      const picked = edgeSide.dataset.edgeSide;
+      block.edge = cleanEdge(Object.assign({}, block.edge, { side: picked === EDGE_BLOCKS[block.type].side ? null : picked }));
+      renderAll();
+      const again = el.editor.querySelector('[data-edge-side="' + picked + '"]'); if (again) again.focus();
+      return;
+    }
+    const edgeColor = event.target.closest('[data-edge-color]');
+    if (edgeColor) {
+      snapshot();
+      const picked = edgeColor.dataset.edgeColor;
+      block.edge = cleanEdge(Object.assign({}, block.edge, { color: picked === 'standard' ? null : picked }));
+      renderAll();
+      const again = el.editor.querySelector('[data-edge-color="' + picked + '"]'); if (again) again.focus();
       return;
     }
     const color = event.target.closest('[data-block-color]');
