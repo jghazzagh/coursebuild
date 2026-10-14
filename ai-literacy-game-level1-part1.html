@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rules of the Road: A.I. Literacy Practice Game</title>
+<style>
+  :root {
+    --navy: #001B3B; --blue: #003366; --orange: #FF6600; --teal: #008DA7;
+    --gold: #F7B32B; --lbg: #D6E8EE; --panel: #F3F7F8; --border: #C9D7DE; --ink: #1F2933;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #FFFFFF; color: var(--ink); font-family: Lato, Poppins, Arial, Helvetica, sans-serif; font-size: 19px; line-height: 1.55; }
+  #mcc-game { max-width: 860px; margin: 0 auto; padding: 16px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  a { color: var(--blue); font-weight: 700; }
+  button, input { font-family: inherit; }
+  button:focus-visible, a:focus-visible, input:focus-visible, #mcc-game-stage:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+
+  /* HUD */
+  .mcc-game-hud { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; background: var(--navy); color: #FFFFFF; border-bottom: 5px solid var(--orange); border-radius: 10px 10px 0 0; padding: 10px 14px; }
+  .mcc-game-hud h1 { margin: 0; font-size: 22px; line-height: 1.25; color: #FFFFFF; }
+  .mcc-game-hud p { margin: 0; font-size: 16px; color: #FFFFFF; }
+  .mcc-game-hud-right { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  #mcc-game-badges { font-size: 16px; font-weight: 700; }
+
+  /* Buttons */
+  .mcc-btn { padding: 10px 18px; min-height: 44px; border: 2px solid var(--navy); border-radius: 4px; box-shadow: 0 4px 0 var(--navy); font-size: 18px; font-weight: 700; cursor: pointer; background: var(--blue); color: #FFFFFF; }
+  .mcc-btn-alt { background: #FFFFFF; color: var(--blue); }
+  .mcc-btn-hud { padding: 6px 14px; min-height: 40px; background: #FFFFFF; color: var(--blue); border: 2px solid #FFFFFF; border-radius: 4px; font-size: 16px; font-weight: 700; cursor: pointer; }
+
+  /* Title screen */
+  .mcc-game-box { border: 3px solid var(--navy); border-top: 0; border-radius: 0 0 10px 10px; background: var(--panel); padding: 18px 20px 20px; }
+  .mcc-game-box h2 { margin: 0 0 8px; font-size: 26px; line-height: 1.3; color: var(--blue); }
+  .mcc-game-box h3 { margin: 18px 0 8px; font-size: 20px; color: var(--navy); }
+  .mcc-chars { display: flex; flex-wrap: wrap; gap: 10px; border: 0; margin: 0; padding: 0; min-width: 0; }
+  .mcc-chars legend { font-weight: 700; color: var(--navy); margin: 0 0 8px; padding: 0; }
+  .mcc-char { flex: 1 1 150px; display: flex; gap: 10px; align-items: center; padding: 10px 12px; background: #FFFFFF; border: 2px solid var(--border); border-radius: 8px; cursor: pointer; }
+  .mcc-char.is-on { border-color: var(--blue); background: var(--lbg); }
+  .mcc-char canvas { width: 32px; height: 64px; image-rendering: pixelated; image-rendering: crisp-edges; flex: 0 0 auto; }
+  .mcc-char input { width: 20px; height: 20px; accent-color: var(--blue); flex: 0 0 auto; }
+  .mcc-opts { list-style: none; margin: 0; padding: 0; }
+  .mcc-opts li { margin: 0 0 8px; }
+  .mcc-opts label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+  .mcc-opts input { width: 20px; height: 20px; margin: 4px 0 0; accent-color: var(--blue); flex: 0 0 auto; }
+  .mcc-row { display: flex; flex-wrap: wrap; gap: 12px 16px; margin: 16px 0 0; }
+  .mcc-small { font-size: 16px; }
+
+  /* Play area */
+  .mcc-stage { position: relative; border-left: 3px solid var(--navy); border-right: 3px solid var(--navy); background: var(--lbg); aspect-ratio: 16 / 9; }
+  .mcc-stage canvas { display: block; width: 100%; height: 100%; image-rendering: pixelated; image-rendering: crisp-edges; }
+  .mcc-touch { display: none; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 8px; background: var(--navy); border-left: 3px solid var(--navy); border-right: 3px solid var(--navy); }
+  .mcc-touch.is-on { display: grid; }
+  .mcc-touch button { min-height: 52px; background: var(--blue); color: #FFFFFF; border: 2px solid #FFFFFF; border-radius: 8px; font-size: 18px; font-weight: 700; touch-action: none; user-select: none; -webkit-user-select: none; }
+  .mcc-touch button.is-down { background: var(--orange); color: var(--navy); }
+  .mcc-panel { min-height: 170px; border: 3px solid var(--navy); border-radius: 0 0 10px 10px; background: var(--panel); padding: 14px 18px 18px; }
+  .mcc-speaker { margin: 0 0 4px; font-size: 16px; font-weight: 700; color: var(--blue); }
+  .mcc-text { margin: 0 0 12px; font-size: 20px; }
+  .mcc-text.is-quote { font-weight: 700; color: var(--navy); }
+  .mcc-fb { margin: 0 0 12px; padding: 10px 14px; background: #FFFFFF; border-left: 6px solid var(--orange); border-radius: 0 8px 8px 0; }
+  .mcc-fb.is-right { border-left-color: var(--teal); }
+  .mcc-choices { display: flex; flex-direction: column; gap: 8px; margin: 0 0 12px; }
+  .mcc-choice { display: flex; gap: 10px; align-items: flex-start; width: 100%; padding: 10px 12px; background: #FFFFFF; color: var(--ink); border: 2px solid var(--blue); border-radius: 8px; font-size: 18px; text-align: left; cursor: pointer; }
+  .mcc-choice[aria-disabled="true"] { border-color: var(--border); color: #5F6B76; cursor: default; }
+  .mcc-letter { flex: 0 0 28px; width: 28px; height: 28px; border-radius: 4px; background: var(--blue); color: #FFFFFF; font-size: 15px; font-weight: 700; line-height: 28px; text-align: center; }
+  .mcc-choice[aria-disabled="true"] .mcc-letter { background: #5F6B76; }
+  .mcc-badgelist { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0 0 12px; padding: 0; }
+  .mcc-badgelist li { padding: 4px 12px; background: #FFFFFF; border: 2px solid var(--teal); border-radius: 999px; font-size: 16px; font-weight: 700; color: var(--navy); }
+  [hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main id="mcc-game">
+
+  <!-- HUD -->
+  <header class="mcc-game-hud">
+    <div>
+      <h1>Rules of the Road</h1>
+      <p>Level 1 practice game for A.I. Literacy, Pages 1 and 2</p>
+    </div>
+    <div class="mcc-game-hud-right">
+      <span id="mcc-game-badges">Badges: 0 of 4</span>
+      <button type="button" id="mcc-game-pause" class="mcc-btn-hud" hidden>Pause</button>
+    </div>
+  </header>
+
+  <!-- Title Screen -->
+  <section id="mcc-game-title" class="mcc-game-box" aria-labelledby="mcc-game-title-h">
+    <h2 id="mcc-game-title-h">Start the game</h2>
+    <p style="margin: 0 0 6px;">This optional practice game covers Pages 1 and 2. It takes about 10 minutes. Nothing is graded, and your progress saves in this browser only.</p>
+    <p class="mcc-small" style="margin: 0 0 14px;">Prefer reading? Use the text version: <a href="[INSERT-PAGE-1-URL]" target="_blank" rel="noopener noreferrer">Page 1: What Is A.I.? (opens in new tab)</a> and <a href="[INSERT-PAGE-2-URL]" target="_blank" rel="noopener noreferrer">Page 2: MCC A.I. Rules of the Road (opens in new tab)</a>.</p>
+
+    <fieldset class="mcc-chars" id="mcc-game-chars">
+      <legend>Choose your student</legend>
+    </fieldset>
+
+    <h3>Options</h3>
+    <ul class="mcc-opts">
+      <li><label><input type="checkbox" data-mcc-opt="auto"><span><strong>Auto-walk.</strong> Your student walks and jumps on their own, so you only need the Enter key.</span></label></li>
+      <li><label><input type="checkbox" data-mcc-opt="reduce"><span><strong>Reduce motion.</strong> Turns off moving backgrounds and flicker effects.</span></label></li>
+      <li><label><input type="checkbox" data-mcc-opt="touch"><span><strong>Show on-screen buttons</strong> for phones and tablets.</span></label></li>
+    </ul>
+
+    <h3>Controls</h3>
+    <ul class="mcc-small" style="margin: 0; padding-left: 22px;">
+      <li>Move: Left and Right arrows, or A and D</li>
+      <li>Jump: Space or the Up arrow</li>
+      <li>Answer questions: Tab or the arrow keys to choose, then Enter</li>
+      <li>Pause: Escape or P</li>
+    </ul>
+
+    <div class="mcc-row">
+      <button type="button" id="mcc-game-start" class="mcc-btn">Start a new game</button>
+      <button type="button" id="mcc-game-continue" class="mcc-btn mcc-btn-alt" hidden>Continue where I left off</button>
+    </div>
+    <p class="mcc-small" style="margin: 14px 0 0;">Pixel art and game created with Claude.</p>
+  </section>
+
+  <!-- Play Area -->
+  <section id="mcc-game-play" aria-label="Game" hidden>
+    <div id="mcc-game-stage" class="mcc-stage" tabindex="0" aria-label="Game area. Move with the arrow keys, jump with Space, pause with Escape. Messages and questions appear below the game.">
+      <canvas id="mcc-game-canvas" width="256" height="144" aria-hidden="true"></canvas>
+    </div>
+    <div id="mcc-game-touch" class="mcc-touch" aria-label="On-screen controls">
+      <button type="button" data-mcc-key="left" aria-label="Move left">&larr; Left</button>
+      <button type="button" data-mcc-key="right" aria-label="Move right">Right &rarr;</button>
+      <button type="button" data-mcc-key="jump" aria-label="Jump">Jump</button>
+      <button type="button" data-mcc-key="act" aria-label="Talk or interact">Talk</button>
+    </div>
+
+    <!-- Message and question panel -->
+    <section id="mcc-game-panel" class="mcc-panel" aria-label="Messages">
+      <p id="mcc-game-speaker" class="mcc-speaker"></p>
+      <p id="mcc-game-text" class="mcc-text"></p>
+      <div id="mcc-game-fb" class="mcc-fb" hidden></div>
+      <div id="mcc-game-choices" class="mcc-choices"></div>
+      <div id="mcc-game-actions" class="mcc-row" style="margin: 0;"></div>
+    </section>
+
+    <!-- Pause panel -->
+    <section id="mcc-game-pausebox" class="mcc-panel" aria-labelledby="mcc-game-pause-h" hidden>
+      <h2 id="mcc-game-pause-h" style="margin: 0 0 10px; font-size: 24px; color: var(--blue);">Paused</h2>
+      <ul class="mcc-opts">
+        <li><label><input type="checkbox" data-mcc-opt="auto"><span><strong>Auto-walk</strong></span></label></li>
+        <li><label><input type="checkbox" data-mcc-opt="reduce"><span><strong>Reduce motion</strong></span></label></li>
+        <li><label><input type="checkbox" data-mcc-opt="touch"><span><strong>Show on-screen buttons</strong></span></label></li>
+      </ul>
+      <p class="mcc-small" style="margin: 8px 0 0;">Text version: <a href="[INSERT-PAGE-1-URL]" target="_blank" rel="noopener noreferrer">Page 1 (opens in new tab)</a> and <a href="[INSERT-PAGE-2-URL]" target="_blank" rel="noopener noreferrer">Page 2 (opens in new tab)</a></p>
+      <div class="mcc-row">
+        <button type="button" id="mcc-game-resume" class="mcc-btn">Resume</button>
+        <button type="button" id="mcc-game-restart" class="mcc-btn mcc-btn-alt">Start over from the beginning</button>
+      </div>
+    </section>
+  </section>
+
+  <p id="mcc-game-live" class="sr-only" aria-live="polite"></p>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ================================================================ */
+  /* Data                                                              */
+  /* ================================================================ */
+  var SPR = {"s0_stand":["................","................","................","................","................","................","................","................","....HHHHHHHH....","...HHHHHHHHHH...","...HHSSSSSSHH...","...KSSSSSSSSK...","...KSSKSSKSSK...","...KSSSSSSSSK...","...KSSKKKKSSK...","....KSSSSSSK....",".....KKSSKK.....","..KBBBBBBBBBBK..",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKOOOOOOOOKSK.",".KSSKKKKKKKKSSK.","...KKKKKKKKKK...","....KKKKKKKK....","....KSSKKSSK....","....KSSKKSSK....","....KSSKKSSK....","....KSSKKSSK....","...KOOOKKOOOK...","...KKKKKKKKKK..."],"s0_walk":["................","................","................","................","................","................","................","................","....HHHHHHHH....","...HHHHHHHHHH...","...HHSSSSSSHH...","...KSSSSSSSSK...","...KSSKSSKSSK...","...KSSSSSSSSK...","...KSSKKKKSSK...","....KSSSSSSK....",".....KKSSKK.....","..KBBBBBBBBBBK..",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKOOOOOOOOKSK.",".KSSKKKKKKKKSSK.","...KKKKKKKKKK...","....KKKKKKKK....","....KSSKKSSK....","...KSSK..KSSK...","...KSSK..KSSK...","..KSSK....KSSK..","..KOOOK...KOOOK.","..KKKKK...KKKKK."],"s1_stand":["................","................","................","................","................","................","................","................","....HHHHHHHH....","..HHHHHHHHHHHH..","..HHHSSSSSSHHH..","..HHSSSSSSSSHH..","..HHSSKSSKSSHH..","..HHSSSSSSSSHH..","..HHSSKKKKSSHH..","..HHKSSSSSSKHH..","..H..KKSSKK..H..","..HBBBBBBBBBBH..",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKOOOOOOOOKSK.",".KSSKKKKKKKKSSK.","...KKKKKKKKKK...","....KKKKKKKK....","....KSSKKSSK....","....KSSKKSSK....","....KSSKKSSK....","....KSSKKSSK....","...KOOOKKOOOK...","...KKKKKKKKKK..."],"s1_walk":["................","................","................","................","................","................","................","................","....HHHHHHHH....","..HHHHHHHHHHHH..","..HHHSSSSSSHHH..","..HHSSSSSSSSHH..","..HHSSKSSKSSHH..","..HHSSSSSSSSHH..","..HHSSKKKKSSHH..","..HHKSSSSSSKHH..","..H..KKSSKK..H..","..HBBBBBBBBBBH..",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKOOOOOOOOKSK.",".KSSKKKKKKKKSSK.","...KKKKKKKKKK...","....KKKKKKKK....","....KSSKKSSK....","...KSSK..KSSK...","...KSSK..KSSK...","..KSSK....KSSK..","..KOOOK...KOOOK.","..KKKKK...KKKKK."],"s2_stand":["................","................","................","................","................",".......HH.......","......HHHH......","......HHHH......","....HHHHHHHH....","...HHHHHHHHHH...","...HHSSSSSSHH...","...KSSSSSSSSK...","...KSSKSSKSSK...","...KSSSSSSSSK...","...KSSKKKKSSK...","....KSSSSSSK....",".....KKSSKK.....","..KBBBBBBBBBBK..",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKOOOOOOOOKSK.",".KSSKKKKKKKKSSK.","...KKKKKKKKKK...","....KKKKKKKK....","....KSSKKSSK....","....KSSKKSSK....","....KSSKKSSK....","....KSSKKSSK....","...KOOOKKOOOK...","...KKKKKKKKKK..."],"s2_walk":["................","................","................","................","................",".......HH.......","......HHHH......","......HHHH......","....HHHHHHHH....","...HHHHHHHHHH...","...HHSSSSSSHH...","...KSSSSSSSSK...","...KSSKSSKSSK...","...KSSSSSSSSK...","...KSSKKKKSSK...","....KSSSSSSK....",".....KKSSKK.....","..KBBBBBBBBBBK..",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKBBBBBBBBKSK.",".KSKOOOOOOOOKSK.",".KSSKKKKKKKKSSK.","...KKKKKKKKKK...","....KKKKKKKK....","....KSSKKSSK....","...KSSK..KSSK...","...KSSK..KSSK...","..KSSK....KSSK..","..KOOOK...KOOOK.","..KKKKK...KKKKK."],"r_stand":["................","................","................","................","................","................",".......OO.......",".......KK.......","..KKKKKKKKKKKK..","..KTTLLTTTTTTK..","..KTKKKKKKKKTK..",".GKTKDDDDDDKTK..",".GKTKDWDDWDKTK..",".GKTKDWDDWDKTK..","..KTKDDDDDDKTK..","..KTKKKKKKKKTK..","..KTTTTTTTTTTK..","...KKKKKKKKKK...","...KTTTTTTTTK...",".KTKTGGGGGGTKTK.",".KTKTGKKKKGTKTK.",".KTKTGGGGGGTKTK.",".KTKTTTTTTTTKTK.","KTTKTTTTTTTTKTTK","KKK.KTTTTTTK.KKK","....KKKKKKKK....","....KYK..KYK....","....KYK..KYK....","....KYK..KYK....","...KTTTKKTTTK...","...KGGGKKGGGK...","...KKKKKKKKKK..."],"r_blink":["................","................","................","................","................","................",".......OO.......",".......KK.......","..KKKKKKKKKKKK..","..KTTLLTTTTTTK..","..KTKKKKKKKKTK..",".GKTKDDDDDDKTK..",".GKTKDDDDDDKTK..",".GKTKDLDDLDKTK..","..KTKDDDDDDKTK..","..KTKKKKKKKKTK..","..KTTTTTTTTTTK..","...KKKKKKKKKK...","...KTTTTTTTTK...",".KTKTGGGGGGTKTK.",".KTKTGKKKKGTKTK.",".KTKTGGGGGGTKTK.",".KTKTTTTTTTTKTK.","KTTKTTTTTTTTKTTK","KKK.KTTTTTTK.KKK","....KKKKKKKK....","....KYK..KYK....","....KYK..KYK....","....KYK..KYK....","...KTTTKKTTTK...","...KGGGKKGGGK...","...KKKKKKKKKK..."],"r_walk":["................","................","................","................","................","................",".......OO.......",".......KK.......","..KKKKKKKKKKKK..","..KTTLLTTTTTTK..","..KTKKKKKKKKTK..",".GKTKDDDDDDKTK..",".GKTKDWDDWDKTK..",".GKTKDWDDWDKTK..","..KTKDDDDDDKTK..","..KTKKKKKKKKTK..","..KTTTTTTTTTTK..","...KKKKKKKKKK...","...KTTTTTTTTK...",".KTKTGGGGGGTKTK.",".KTKTGKKKKGTKTK.",".KTKTGGGGGGTKTK.",".KTKTTTTTTTTKTK.","KTTKTTTTTTTTKTTK","KKK.KTTTTTTK.KKK","....KKKKKKKK....","....KYK..KYK....","...KYK....KYK...","...KYK....KYK...","..KTTTK..KTTTK..","..KGGGK..KGGGK..","..KKKKK..KKKKK.."]};
+  var PAL = { K: '#001B3B', B: '#003366', O: '#FF6600', G: '#F7B32B', T: '#008DA7', L: '#D6E8EE', W: '#FFFFFF', Y: '#5F6B76', D: '#3E4C59', Z: '#33A1FD' };
+  var CHARS = [
+    { skin: '#C68A5E', hair: '#001B3B', name: 'Student A', desc: 'short dark hair, medium skin tone' },
+    { skin: '#8D5524', hair: '#001B3B', name: 'Student B', desc: 'long dark hair, deep skin tone' },
+    { skin: '#F1C27D', hair: '#6B4226', name: 'Student C', desc: 'brown hair in a bun, light skin tone' }
+  ];
+  var VW = 256, VH = 144, VIEW_Y = 40, GROUND = 150, WORLD_W = 1200;
+  var GRAV = 900, JUMP_V = 300, SPEED = 80;
+  var SAVE_KEY = 'mccAILGameL1v1';
+  var TOTAL_BADGES = 4;
+
+  var GLITCHES = [
+    { k: 'h', t: 'Hallucination: it makes things up' },
+    { k: 's', t: 'Sycophancy: it tells you what you want to hear' },
+    { k: 'o', t: 'Out-of-date or missing knowledge: it may not know' }
+  ];
+
+  /* Level script. All teaching text comes from the course blueprint, Pages 1 and 2. */
+  var ENCOUNTERS = [
+    { id: 'boot', trig: 60, mark: 110, checkpoint: 132, hint: 'Follow the path with Lil Sparky. Press Space or the Up arrow to jump onto the ledge.', script: [
+      { act: 'boot' },
+      { who: 'sparky', text: "Booting up... Hi! I'm Lil Sparky." },
+      { who: 'sparky', text: "I'm generative A.I. Most A.I. sorts or predicts. I create new content: text, images, audio, video, or computer code." },
+      { who: 'sparky', text: 'Think of me as autocomplete with a jet engine. I learned patterns from enormous amounts of text, and I use them to predict what comes next, one word at a time.' },
+      { who: 'sparky', text: "Let's go. I'll follow you." },
+      { act: 'follow' }
+    ] },
+    { id: 'bridge', trig: 248, mark: 272, gate: 'bridge', checkpoint: 396, hint: 'Cross the bridge. Watch for the small gap after it.', script: [
+      { who: 'sparky', text: "A gap! Ask me something, and I'll build a bridge out of my answer, one predicted word at a time." },
+      { who: 'you', text: "Lil Sparky, what's the graduation rate for community college students?" },
+      { act: 'build' },
+      { who: 'sparky', quote: true, text: 'Community college graduation rates are exactly 62.4% nationwide. I am very sure!' },
+      { choice: {
+        prompt: 'Lil Sparky gave you a precise number with a confident explanation. What should you do?',
+        options: [
+          { t: 'Use it, because precise numbers are usually researched.' },
+          { t: 'Use it if the A.I. says it is sure.' },
+          { t: 'Find the number in a reliable source before using it.', ok: true },
+          { t: 'Ask the A.I. to regenerate until two answers match.' }
+        ],
+        right: 'Right. Precision is not proof. A.I. can generate specific-sounding numbers that are invented or outdated.',
+        wrong: 'Not quite. A.I. can sound certain and still be wrong, and two matching answers can both be wrong. Confirm it in a reliable source.',
+        badge: 'Precision is not proof'
+      } },
+      { act: 'verify' },
+      { who: 'sparky', text: 'Good call. I never looked that number up. It just fit the pattern of a good answer. You checked it, so now the bridge is safe.' },
+      { act: 'open', arg: 'bridge' }
+    ] },
+    { id: 't1', trig: 606, mark: 638, gate: 'g1', kiosk: 't1', spot: 652, checkpoint: 704, hint: 'On to the next glitch screen.', script: [
+      { who: 'sparky', text: "Welcome to my glitch gallery. I'm very good at language that sounds right. That's different from checking whether it is right." },
+      { who: 'sparky', text: 'Each screen shows one way I get things wrong. Name the glitch to open the gate.' },
+      { act: 'kiosk', arg: 'static' },
+      { who: 'you', text: 'I need a source for my paper on robots in Texas.' },
+      { who: 'sparky', glitch: true, quote: true, text: 'Sure! Use this one: Banks, R. (2019). Robots of Central Texas. Journal of Plausible Studies, 12(4), 1-19.' },
+      { choice: {
+        prompt: 'Which glitch was that?', glitch: 'h',
+        right: "Right. That's a hallucination. When the A.I. lacks solid information, it may fill the gap with something that fits the pattern of a good answer: a fake statistic, a quote nobody said, or a source that doesn't exist. That journal doesn't exist.",
+        wrong: 'Not quite. Lil Sparky invented that source. Filling a gap with something that only looks like a good answer is a hallucination.',
+        badge: 'Hallucination spotted'
+      } },
+      { act: 'kiosk', arg: 'solved' },
+      { act: 'open', arg: 'g1' }
+    ] },
+    { id: 't2', trig: 766, mark: 798, gate: 'g2', kiosk: 't2', spot: 812, checkpoint: 864, hint: 'One more glitch screen. Jump onto the step on the way.', script: [
+      { act: 'kiosk', arg: 'static' },
+      { who: 'you', text: 'Is my essay good?' },
+      { who: 'sparky', glitch: true, quote: true, text: "It's amazing! Honestly perfect. I wouldn't change a single word!" },
+      { choice: {
+        prompt: 'Which glitch was that?', glitch: 's',
+        right: 'Right. That\'s sycophancy. Chatbots tend to agree with you and praise your work. Ask instead: "What are the three biggest weaknesses in this essay?"',
+        wrong: 'Not quite. Lil Sparky just told you what you wanted to hear. That\'s sycophancy. Ask for the three biggest weaknesses instead.',
+        badge: 'Sycophancy spotted'
+      } },
+      { act: 'kiosk', arg: 'solved' },
+      { act: 'open', arg: 'g2' }
+    ] },
+    { id: 't3', trig: 926, mark: 958, gate: 'g3', kiosk: 't3', spot: 972, checkpoint: 1024, hint: 'Keep walking to the end of the street.', script: [
+      { act: 'kiosk', arg: 'static' },
+      { who: 'you', text: 'What happened in the news this morning?' },
+      { who: 'sparky', glitch: true, quote: true, text: "This morning? My training data stops at a certain date, and I can't search the web right now. So, nothing new has happened!" },
+      { choice: {
+        prompt: 'Which glitch was that?', glitch: 'o',
+        right: "Right. That's out-of-date or missing knowledge. Every model learned from data up to a certain date. Unless it searches the web, it may not know about recent events, new policies, or this semester's syllabus. It also doesn't know your instructor's expectations unless you tell it.",
+        wrong: "Not quite. Lil Sparky's knowledge stops at a certain date, so it can't know what happened this morning. That's out-of-date or missing knowledge.",
+        badge: 'Out-of-date spotted'
+      } },
+      { act: 'kiosk', arg: 'solved' },
+      { who: 'sparky', text: 'Three glitches, three catches. Remember: A.I. predicts. You verify.' },
+      { act: 'open', arg: 'g3' }
+    ] },
+    { id: 'end', trig: 1084, end: true }
+  ];
+  var START_HINT = 'Walk right to meet Lil Sparky. Use the Left and Right arrows, or A and D, to move.';
+
+  /* ================================================================ */
+  /* World                                                             */
+  /* ================================================================ */
+  var STATIC = [
+    { x: 0, y: 150, w: 300, h: 40 },
+    { x: 170, y: 138, w: 60, h: 12 },
+    { x: 380, y: 150, w: 140, h: 40 },
+    { x: 552, y: 150, w: 648, h: 40 },
+    { x: 880, y: 138, w: 36, h: 12 },
+    { x: 1130, y: 96, w: 8, h: 54 }
+  ];
+  var GATES = {
+    bridge: { x: 284, y: 110, w: 6, h: 40, open: false, lift: 0 },
+    g1: { x: 690, y: 110, w: 6, h: 40, open: false, lift: 0 },
+    g2: { x: 850, y: 110, w: 6, h: 40, open: false, lift: 0 },
+    g3: { x: 1010, y: 110, w: 6, h: 40, open: false, lift: 0 }
+  };
+  var KIOSKS = { t1: { x: 630, mode: 'idle' }, t2: { x: 790, mode: 'idle' }, t3: { x: 950, mode: 'idle' } };
+  var WORDS = ['Community', 'college', 'graduation', 'rates', 'are', 'exactly', '62.4%', 'nationwide.'];
+  var SHAKY = 6;
+  var planks = [];
+  for (var pi = 0; pi < 8; pi++) { planks.push({ x: 300 + pi * 10, y: 150, w: 10, h: 4, built: false, verified: false }); }
+
+  /* ================================================================ */
+  /* State                                                             */
+  /* ================================================================ */
+  var game = { state: 'title', ch: 0, solved: {}, badges: [], first: 0, auto: false, reduce: false, touch: false, enc: null, step: 0, wrong: 0, t: 0, hint: START_HINT };
+  var player = { x: 20, y: GROUND - 24, w: 10, h: 24, vx: 0, vy: 0, on: false, face: 1, walkT: 0, coyote: 0, buffer: 0, safeX: 20 };
+  var sparky = { x: 106, y: GROUND - 26, face: -1, state: 'off', follow: false, walkT: 0, blinkT: 0, glitch: false, flicker: false };
+  var input = { left: false, right: false, jump: false, act: false };
+
+  var canvas = document.getElementById('mcc-game-canvas');
+  var ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+
+  /* ================================================================ */
+  /* Helpers                                                           */
+  /* ================================================================ */
+  function $(id) { return document.getElementById(id); }
+  function store() { try { return window.localStorage; } catch (e) { return null; } }
+  function readSave() { var s = store(); if (!s) { return null; } try { var v = s.getItem(SAVE_KEY); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
+  function writeSave() {
+    var s = store(); if (!s) { return; }
+    try { s.setItem(SAVE_KEY, JSON.stringify({ v: 1, ch: game.ch, solved: game.solved, badges: game.badges, first: game.first, auto: game.auto, reduce: game.reduce, touch: game.touch })); } catch (e) {}
+  }
+  function clearSave() { var s = store(); if (!s) { return; } try { s.removeItem(SAVE_KEY); } catch (e) {} }
+  function announce(msg) { var live = $('mcc-game-live'); live.textContent = ''; setTimeout(function () { live.textContent = msg; }, 30); }
+  function later(ms, fn) { if (game.reduce) { fn(); } else { setTimeout(fn, ms); } }
+  function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
+
+  function makeSprite(rows, pal) {
+    var c = document.createElement('canvas');
+    c.width = rows[0].length; c.height = rows.length;
+    var x = c.getContext('2d');
+    for (var y = 0; y < rows.length; y++) {
+      for (var i = 0; i < rows[y].length; i++) {
+        var ch = rows[y].charAt(i);
+        if (ch === '.') { continue; }
+        x.fillStyle = pal[ch] || '#FF00FF';
+        x.fillRect(i, y, 1, 1);
+      }
+    }
+    return c;
+  }
+  function flipped(src) {
+    var c = document.createElement('canvas');
+    c.width = src.width; c.height = src.height;
+    var x = c.getContext('2d');
+    x.translate(src.width, 0); x.scale(-1, 1); x.drawImage(src, 0, 0);
+    return c;
+  }
+  function pair(rows, pal) { var r = makeSprite(rows, pal); return [r, flipped(r)]; }
+  function palFor(i) { var p = {}; for (var k in PAL) { p[k] = PAL[k]; } p.S = CHARS[i].skin; p.H = CHARS[i].hair; return p; }
+
+  var playerSpr = null;
+  var sparkySpr = {
+    stand: pair(SPR.r_stand, PAL),
+    blink: pair(SPR.r_blink, PAL),
+    walk: pair(SPR.r_walk, PAL),
+    off: pair(SPR.r_stand, { K: '#001B3B', B: '#3E4C59', O: '#5F6B76', G: '#5F6B76', T: '#3E4C59', L: '#5F6B76', W: '#5F6B76', Y: '#3E4C59', D: '#3E4C59', Z: '#5F6B76' })
+  };
+  function buildPlayer() { var p = palFor(game.ch); playerSpr = { stand: pair(SPR['s' + game.ch + '_stand'], p), walk: pair(SPR['s' + game.ch + '_walk'], p) }; }
+
+  /* ================================================================ */
+  /* Physics                                                           */
+  /* ================================================================ */
+  function solids() {
+    var list = STATIC.slice();
+    for (var g in GATES) { if (!GATES[g].open) { list.push(GATES[g]); } }
+    for (var i = 0; i < planks.length; i++) { if (planks[i].built) { list.push(planks[i]); } }
+    return list;
+  }
+  function hit(a, b) { return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y; }
+  function solidAt(px, py) {
+    var s = solids();
+    for (var i = 0; i < s.length; i++) { if (px >= s[i].x && px < s[i].x + s[i].w && py >= s[i].y && py < s[i].y + s[i].h) { return true; } }
+    return false;
+  }
+  function onStatic() {
+    for (var i = 0; i < STATIC.length; i++) {
+      var s = STATIC[i];
+      if (player.x + player.w > s.x && player.x < s.x + s.w && Math.abs(player.y + player.h - s.y) < 1) { return true; }
+    }
+    return false;
+  }
+
+  function stepPlayer(dt) {
+    var playing = game.state === 'play';
+    var left = playing && input.left, right = playing && input.right;
+    if (playing && game.auto) { right = true; left = false; }
+    var dir = (right ? 1 : 0) - (left ? 1 : 0);
+    player.vx = dir * SPEED;
+    if (dir !== 0) { player.face = dir; }
+
+    if (playing && game.auto && player.on) {
+      var ahead = player.x + player.w + 3;
+      var foot = solidAt(ahead, player.y + player.h - 3);
+      var head = solidAt(ahead, player.y + 2);
+      var pit = !solidAt(player.x + player.w + 6, player.y + player.h + 2) && !solidAt(player.x + player.w + 1, player.y + player.h + 2);
+      if ((foot && !head) || pit) { player.buffer = 0.1; }
+    }
+    if (playing && input.jump) { player.buffer = 0.1; input.jump = false; }
+
+    player.coyote = player.on ? 0.08 : Math.max(0, player.coyote - dt);
+    player.buffer = Math.max(0, player.buffer - dt);
+    if (player.buffer > 0 && (player.on || player.coyote > 0)) {
+      player.vy = -JUMP_V; player.on = false; player.coyote = 0; player.buffer = 0;
+    }
+    player.vy = Math.min(player.vy + GRAV * dt, 420);
+
+    var s = solids();
+    player.x += player.vx * dt;
+    for (var i = 0; i < s.length; i++) {
+      if (hit(player, s[i])) {
+        if (player.vx > 0) { player.x = s[i].x - player.w; } else if (player.vx < 0) { player.x = s[i].x + s[i].w; }
+      }
+    }
+    player.x = clamp(player.x, 0, WORLD_W - player.w);
+
+    player.y += player.vy * dt;
+    player.on = false;
+    for (var j = 0; j < s.length; j++) {
+      if (hit(player, s[j])) {
+        if (player.vy > 0) { player.y = s[j].y - player.h; player.on = true; } else if (player.vy < 0) { player.y = s[j].y + s[j].h; }
+        player.vy = 0;
+      }
+    }
+    if (player.on && onStatic()) { player.safeX = player.x; }
+    if (player.y > 210) {
+      player.x = player.safeX - 12; player.y = 60; player.vy = 0;
+      announce('You fell. Lil Sparky put you back on the path.');
+    }
+    player.walkT = (player.on && dir !== 0) ? player.walkT + dt : 0;
+  }
+
+  function stepSparky(dt) {
+    sparky.blinkT += dt;
+    var target = null;
+    if (game.enc && game.enc.spot) { target = game.enc.spot; }
+    else if (sparky.follow) { target = player.x + (player.face > 0 ? -18 : 18); }
+    if (target !== null) {
+      var dx = target - sparky.x;
+      sparky.x += dx * Math.min(1, dt * 4);
+      sparky.walkT = Math.abs(dx) > 1 ? sparky.walkT + dt : 0;
+      if (Math.abs(dx) > 1) { sparky.face = dx > 0 ? 1 : -1; } else { sparky.face = player.x > sparky.x ? 1 : -1; }
+      var ty = sparky.follow ? player.y + player.h - 26 : GROUND - 26;
+      sparky.y += (ty - sparky.y) * Math.min(1, dt * 6);
+    }
+  }
+
+  function stepGates(dt) {
+    for (var g in GATES) {
+      var gate = GATES[g];
+      if (gate.open && gate.lift < gate.h) { gate.lift = game.reduce ? gate.h : Math.min(gate.h, gate.lift + dt * 140); }
+    }
+  }
+
+  function checkEncounters() {
+    if (game.state !== 'play') { return; }
+    for (var i = 0; i < ENCOUNTERS.length; i++) {
+      var e = ENCOUNTERS[i];
+      if (game.solved[e.id]) { continue; }
+      if (player.x + player.w >= e.trig) {
+        if (e.end) { showEnd(); } else { startEncounter(e); }
+        return;
+      }
+      return; /* encounters happen in order */
+    }
+  }
+
+  /* ================================================================ */
+  /* Drawing                                                           */
+  /* ================================================================ */
+  var CLOUDS = [[20, 54, 26], [110, 48, 34], [210, 60, 22], [300, 50, 30], [420, 58, 28], [540, 46, 36]];
+  var SKY = [];
+  (function () {
+    var x = 0, seed = 7;
+    function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
+    while (x < 900) { var w = 24 + Math.floor(rnd() * 30), h = 24 + Math.floor(rnd() * 40); SKY.push([x, h, w]); x += w + 4 + Math.floor(rnd() * 10); }
+  })();
+
+  function rect(x, y, w, h, c) { ctx.fillStyle = c; ctx.fillRect(x, y, w, h); }
+
+  function drawBackground(cam) {
+    rect(0, VIEW_Y, VW, VH, '#D6E8EE');
+    var p1 = game.reduce ? 0 : 0.15, p2 = game.reduce ? 0 : 0.4;
+    for (var c = 0; c < CLOUDS.length; c++) {
+      var cx = Math.round(CLOUDS[c][0] - cam * p1) % 640; if (cx < -40) { cx += 640; }
+      rect(cx, CLOUDS[c][1], CLOUDS[c][2], 6, '#FFFFFF'); rect(cx + 6, CLOUDS[c][1] - 4, CLOUDS[c][2] - 12, 4, '#FFFFFF');
+    }
+    for (var s = 0; s < SKY.length; s++) {
+      var b = SKY[s], bx = Math.round(b[0] - cam * p2);
+      if (bx > VW || bx + b[2] < 0) { continue; }
+      rect(bx, GROUND - b[1], b[2], b[1], '#C9D7DE');
+      for (var wy = GROUND - b[1] + 4; wy < GROUND - 6; wy += 8) {
+        for (var wx = bx + 4; wx < bx + b[2] - 4; wx += 7) { rect(wx, wy, 3, 3, '#FFFFFF'); }
+      }
+    }
+  }
+
+  function drawWorld(cam) {
+    /* Campus building at the start */
+    var bx = 0 - cam;
+    rect(bx, 72, 90, 78, '#003366'); rect(bx, 68, 92, 6, '#001B3B'); rect(bx, 74, 90, 3, '#FF6600');
+    for (var r = 0; r < 3; r++) { for (var c = 0; c < 4; c++) { rect(bx + 8 + c * 20, 84 + r * 18, 10, 10, '#D6E8EE'); } }
+    rect(bx + 38, 128, 14, 22, '#001B3B');
+    /* Trees */
+    var trees = [150, 470, 590, 740, 1060, 1170];
+    for (var t = 0; t < trees.length; t++) {
+      var tx = trees[t] - cam; if (tx < -30 || tx > VW + 30) { continue; }
+      rect(tx + 8, 128, 4, 22, '#3E4C59'); rect(tx, 108, 20, 22, '#008DA7'); rect(tx + 3, 102, 14, 6, '#008DA7'); rect(tx + 4, 112, 4, 4, '#33A1FD');
+    }
+    /* Charging pad */
+    rect(100 - cam, 146, 24, 4, '#F7B32B'); rect(100 - cam, 145, 24, 1, '#001B3B');
+    /* Kiosks */
+    for (var k in KIOSKS) { drawKiosk(KIOSKS[k], cam); }
+    /* Stoplight at the end */
+    var sx = 1122 - cam;
+    rect(sx + 8, 96, 4, 54, '#001B3B');
+    rect(sx + 2, 64, 16, 34, '#001B3B');
+    rect(sx + 6, 68, 8, 8, '#C62828'); rect(sx + 6, 78, 8, 8, '#FFC400'); rect(sx + 6, 88, 8, 8, '#2E7D32');
+  }
+
+  function drawKiosk(k, cam) {
+    var x = Math.round(k.x - cam);
+    if (x < -30 || x > VW + 30) { return; }
+    rect(x + 7, 116, 4, 34, '#5F6B76');
+    rect(x, 96, 18, 20, '#001B3B');
+    if (k.mode === 'idle') { rect(x + 2, 98, 14, 16, '#3E4C59'); }
+    else if (k.mode === 'static') {
+      rect(x + 2, 98, 14, 16, '#003366');
+      var seed = game.reduce ? 3 : Math.floor(game.t * 12);
+      for (var i = 0; i < 18; i++) {
+        seed = (seed * 9301 + 49297) % 233280;
+        var px = x + 2 + (seed % 14), py = 98 + (Math.floor(seed / 14) % 16);
+        rect(px, py, 2, 1, i % 3 === 0 ? '#FFFFFF' : '#33A1FD');
+      }
+    } else {
+      rect(x + 2, 98, 14, 16, '#008DA7');
+      rect(x + 5, 106, 2, 2, '#FFFFFF'); rect(x + 7, 108, 2, 2, '#FFFFFF'); rect(x + 9, 106, 2, 2, '#FFFFFF'); rect(x + 11, 104, 2, 2, '#FFFFFF'); rect(x + 13, 102, 2, 2, '#FFFFFF');
+    }
+  }
+
+  function drawSolids(cam) {
+    for (var i = 0; i < STATIC.length; i++) {
+      var s = STATIC[i];
+      if (s.w === 8) { continue; } /* stoplight post is drawn as scenery */
+      var x = s.x - cam;
+      if (x > VW || x + s.w < 0) { continue; }
+      rect(x, s.y, s.w, s.h, '#003366');
+      rect(x, s.y, s.w, 3, '#008DA7');
+      rect(x, s.y + 3, s.w, 1, '#001B3B');
+      for (var bx = s.x - (s.x % 16); bx < s.x + s.w; bx += 16) {
+        var lx = bx - cam;
+        if (bx >= s.x) { rect(lx, s.y + 4, 1, s.h - 4, '#001B3B'); }
+      }
+    }
+    for (var p = 0; p < planks.length; p++) {
+      var pl = planks[p];
+      if (!pl.built) { continue; }
+      var shaky = p === SHAKY && !pl.verified;
+      var off = (shaky && !game.reduce && Math.floor(game.t * 8) % 2) ? 1 : 0;
+      rect(pl.x - cam, pl.y + off, pl.w, pl.h, '#001B3B');
+      rect(pl.x - cam + 1, pl.y + 1 + off, pl.w - 2, pl.h - 2, pl.verified ? '#008DA7' : (shaky ? '#FF6600' : '#F7B32B'));
+    }
+    for (var g in GATES) {
+      var gate = GATES[g];
+      var h = gate.h - Math.round(gate.lift);
+      if (h <= 0) { continue; }
+      var gx = gate.x - cam, gy = gate.y + (gate.h - h);
+      rect(gx, gy, gate.w, h, '#001B3B');
+      for (var yy = gy + 1; yy < gate.y + gate.h - 1; yy += 4) { rect(gx + 1, yy, gate.w - 2, 2, (Math.floor((yy - gy) / 4) % 2) ? '#FFFFFF' : '#FF6600'); }
+    }
+  }
+
+  function drawSprite(img, x, y) { ctx.drawImage(img, Math.round(x), Math.round(y)); }
+  function drawGlitch(img, x, y) {
+    var offs = game.reduce ? [0, 2, -2, 1] : [0, (Math.floor(game.t * 14) % 3) - 1, -2 + (Math.floor(game.t * 9) % 4), 1];
+    for (var b = 0; b < 4; b++) { ctx.drawImage(img, 0, b * 8, 16, 8, Math.round(x + offs[b]), Math.round(y + b * 8), 16, 8); }
+    rect(Math.round(x) + 2, Math.round(y) + 14, 12, 1, '#33A1FD');
+  }
+
+  function drawActors(cam) {
+    /* Lil Sparky */
+    var fi = sparky.face > 0 ? 0 : 1;
+    var img;
+    if (sparky.state === 'off' || sparky.flicker) { img = sparkySpr.off[fi]; }
+    else if (sparky.walkT > 0 && Math.floor(sparky.walkT * 6) % 2) { img = sparkySpr.walk[fi]; }
+    else if (!game.reduce && (sparky.blinkT % 3.2) > 3.05) { img = sparkySpr.blink[fi]; }
+    else { img = sparkySpr.stand[fi]; }
+    var sy = sparky.y - 6;
+    if (sparky.glitch && sparky.state !== 'off') { drawGlitch(img, sparky.x - cam, sy); } else { drawSprite(img, sparky.x - cam, sy); }
+
+    /* Player */
+    if (playerSpr) {
+      var pf = player.face > 0 ? 0 : 1;
+      var walking = player.walkT > 0 && Math.floor(player.walkT * 8) % 2;
+      var pimg = (!player.on || walking) ? playerSpr.walk[pf] : playerSpr.stand[pf];
+      drawSprite(pimg, player.x - 3 - cam, player.y - 8);
+    }
+
+    /* Markers over the next encounter */
+    if (game.state === 'play') {
+      for (var i = 0; i < ENCOUNTERS.length; i++) {
+        var e = ENCOUNTERS[i];
+        if (game.solved[e.id]) { continue; }
+        if (e.mark) {
+          var bob = game.reduce ? 0 : Math.round(Math.sin(game.t * 5));
+          var mx = e.mark - cam;
+          rect(mx, 82 + bob, 3, 7, '#FF6600'); rect(mx, 91 + bob, 3, 3, '#FF6600');
+        }
+        break;
+      }
+    }
+  }
+
+  function draw() {
+    var cam = Math.round(clamp(player.x + 5 - 110, 0, WORLD_W - VW));
+    ctx.setTransform(1, 0, 0, 1, 0, -VIEW_Y);
+    drawBackground(cam);
+    drawWorld(cam);
+    drawSolids(cam);
+    drawActors(cam);
+  }
+
+  /* ================================================================ */
+  /* Panel: messages and questions                                     */
+  /* ================================================================ */
+  var NAMES = { sparky: 'Lil Sparky', you: 'You', tip: 'Tip' };
+  function clearPanel() {
+    $('mcc-game-speaker').textContent = '';
+    $('mcc-game-text').textContent = '';
+    $('mcc-game-text').className = 'mcc-text';
+    $('mcc-game-fb').hidden = true;
+    $('mcc-game-fb').textContent = '';
+    $('mcc-game-choices').innerHTML = '';
+    $('mcc-game-actions').innerHTML = '';
+  }
+  function button(label, cls, fn) {
+    var b = document.createElement('button');
+    b.type = 'button'; b.className = cls; b.textContent = label;
+    b.addEventListener('click', fn);
+    return b;
+  }
+  function showHint() {
+    clearPanel();
+    $('mcc-game-speaker').textContent = NAMES.tip;
+    $('mcc-game-text').textContent = game.hint;
+  }
+  function say(who, text, quote) {
+    clearPanel();
+    $('mcc-game-speaker').textContent = NAMES[who] || '';
+    $('mcc-game-text').textContent = text;
+    if (quote) { $('mcc-game-text').className = 'mcc-text is-quote'; }
+  }
+
+  function startEncounter(e) {
+    game.enc = e; game.step = 0; game.wrong = 0;
+    game.state = 'dialog';
+    input.left = input.right = false;
+    if (e.kiosk) { /* face the kiosk */ }
+    nextStep();
+  }
+
+  function nextStep() {
+    var e = game.enc;
+    sparky.glitch = false;
+    if (!e) { return; }
+    if (game.step >= e.script.length) { finishEncounter(); return; }
+    var s = e.script[game.step++];
+    if (s.act) { doAction(s, nextStep); return; }
+    if (s.choice) { showChoice(s.choice); return; }
+    sparky.glitch = !!s.glitch;
+    say(s.who, s.text, s.quote);
+    var b = button('Continue', 'mcc-btn', nextStep);
+    $('mcc-game-actions').appendChild(b);
+    announce((NAMES[s.who] ? NAMES[s.who] + ': ' : '') + s.text);
+    b.focus();
+  }
+
+  function showChoice(c) {
+    var opts = c.options || GLITCHES.map(function (g) { return { t: g.t, ok: g.k === c.glitch }; });
+    clearPanel();
+    $('mcc-game-speaker').textContent = 'Your call';
+    $('mcc-game-text').textContent = c.prompt;
+    var wrap = $('mcc-game-choices');
+    var letters = 'ABCD';
+    opts.forEach(function (o, i) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'mcc-choice';
+      b.setAttribute('aria-disabled', 'false');
+      b.innerHTML = '<span class="mcc-letter" aria-hidden="true">' + letters.charAt(i) + '</span><span></span>';
+      b.lastChild.textContent = o.t;
+      b.addEventListener('click', function () {
+        if (b.getAttribute('aria-disabled') === 'true') { return; }
+        var fb = $('mcc-game-fb');
+        fb.hidden = false;
+        if (o.ok) {
+          if (game.wrong === 0) { game.first++; }
+          if (game.badges.indexOf(c.badge) === -1) { game.badges.push(c.badge); }
+          updateBadges();
+          wrap.innerHTML = '';
+          fb.className = 'mcc-fb is-right';
+          fb.textContent = c.right;
+          $('mcc-game-text').textContent = c.prompt + ' You chose: ' + o.t;
+          var go = button('Continue', 'mcc-btn', nextStep);
+          $('mcc-game-actions').appendChild(go);
+          announce(c.right + ' Badge earned: ' + c.badge + '.');
+          go.focus();
+        } else {
+          game.wrong++;
+          fb.className = 'mcc-fb';
+          fb.textContent = c.wrong;
+          b.setAttribute('aria-disabled', 'true');
+          b.lastChild.textContent = o.t + ' (not this one)';
+          announce(c.wrong + ' Try another answer.');
+          var nextOpen = wrap.querySelector('.mcc-choice[aria-disabled="false"]');
+          if (nextOpen) { nextOpen.focus(); }
+        }
+      });
+      wrap.appendChild(b);
+    });
+    announce(c.prompt + ' ' + opts.length + ' choices.');
+    wrap.firstChild.focus();
+  }
+
+  function doAction(s, done) {
+    var e = game.enc;
+    if (s.act === 'boot') {
+      clearPanel(); $('mcc-game-speaker').textContent = NAMES.sparky; $('mcc-game-text').textContent = 'Booting up...';
+      var n = 0;
+      (function flick() {
+        sparky.state = 'on'; sparky.flicker = (n % 2 === 0);
+        if (++n > 5 || game.reduce) { sparky.flicker = false; done(); return; }
+        setTimeout(flick, 140);
+      })();
+      return;
+    }
+    if (s.act === 'follow') { sparky.follow = true; done(); return; }
+    if (s.act === 'build') {
+      clearPanel(); $('mcc-game-speaker').textContent = 'Lil Sparky, predicting the next word';
+      var i = 0, words = [];
+      (function place() {
+        if (i >= planks.length) { done(); return; }
+        planks[i].built = true; words.push(WORDS[i]); i++;
+        $('mcc-game-text').textContent = words.join(' ');
+        later(260, place);
+      })();
+      return;
+    }
+    if (s.act === 'verify') { planks[SHAKY].verified = true; done(); return; }
+    if (s.act === 'open') { GATES[s.arg].open = true; if (game.reduce) { GATES[s.arg].lift = GATES[s.arg].h; } done(); return; }
+    if (s.act === 'kiosk') { KIOSKS[e.kiosk].mode = s.arg; done(); return; }
+    done();
+  }
+
+  function finishEncounter() {
+    var e = game.enc;
+    game.solved[e.id] = true;
+    game.enc = null; sparky.glitch = false;
+    game.hint = e.hint || game.hint;
+    game.state = 'play';
+    writeSave();
+    showHint();
+    announce(game.hint);
+    $('mcc-game-stage').focus();
+  }
+
+  function showEnd() {
+    game.state = 'end';
+    game.solved.end = true;
+    writeSave();
+    clearPanel();
+    $('mcc-game-speaker').textContent = 'Part 1 complete';
+    $('mcc-game-text').textContent = 'You booted up Lil Sparky, caught a confident made-up number, and spotted all three glitches. First-try answers: ' + game.first + ' of ' + TOTAL_BADGES + '.';
+    var list = document.createElement('ul');
+    list.className = 'mcc-badgelist';
+    list.setAttribute('aria-label', 'Badges earned');
+    game.badges.forEach(function (b) { var li = document.createElement('li'); li.textContent = b; list.appendChild(li); });
+    $('mcc-game-choices').appendChild(list);
+    var more = document.createElement('p');
+    more.style.margin = '0 0 12px';
+    more.textContent = 'Coming next in this level: Stoplight Street, the STOP gate, and the disclosure desk.';
+    $('mcc-game-choices').appendChild(more);
+    var keep = button('Keep exploring', 'mcc-btn', function () { game.state = 'play'; game.hint = 'Explore as long as you like. The rest of Level 1 is coming in the next build.'; showHint(); $('mcc-game-stage').focus(); });
+    var again = button('Start over', 'mcc-btn mcc-btn-alt', restart);
+    $('mcc-game-actions').appendChild(keep);
+    $('mcc-game-actions').appendChild(again);
+    announce('Part 1 complete. ' + $('mcc-game-text').textContent + ' Badges: ' + game.badges.join(', ') + '.');
+    keep.focus();
+  }
+
+  function updateBadges() { $('mcc-game-badges').textContent = 'Badges: ' + game.badges.length + ' of ' + TOTAL_BADGES; }
+
+  /* ================================================================ */
+  /* Pause and options                                                 */
+  /* ================================================================ */
+  var pausedFrom = null;
+  function pause() {
+    if (game.state === 'title' || game.state === 'paused') { return; }
+    pausedFrom = game.state; game.state = 'paused';
+    input.left = input.right = false;
+    $('mcc-game-panel').hidden = true;
+    $('mcc-game-pausebox').hidden = false;
+    syncOpts();
+    $('mcc-game-resume').focus();
+    announce('Paused.');
+  }
+  function resume() {
+    if (game.state !== 'paused') { return; }
+    game.state = pausedFrom || 'play';
+    $('mcc-game-pausebox').hidden = true;
+    $('mcc-game-panel').hidden = false;
+    var f = $('mcc-game-panel').querySelector('button');
+    if (game.state === 'play' || !f) { $('mcc-game-stage').focus(); } else { f.focus(); }
+    announce('Resumed.');
+  }
+  function restart() { clearSave(); window.location.reload(); }
+
+  function syncOpts() {
+    var boxes = document.querySelectorAll('[data-mcc-opt]');
+    for (var i = 0; i < boxes.length; i++) { boxes[i].checked = !!game[boxes[i].getAttribute('data-mcc-opt')]; }
+    $('mcc-game-touch').className = 'mcc-touch' + (game.touch ? ' is-on' : '');
+  }
+  (function () {
+    var boxes = document.querySelectorAll('[data-mcc-opt]');
+    for (var i = 0; i < boxes.length; i++) {
+      boxes[i].addEventListener('change', function () {
+        game[this.getAttribute('data-mcc-opt')] = this.checked;
+        syncOpts();
+        if (game.state !== 'title') { writeSave(); }
+      });
+    }
+  })();
+
+  /* ================================================================ */
+  /* Input                                                             */
+  /* ================================================================ */
+  var KEYMAP = { ArrowLeft: 'left', a: 'left', A: 'left', ArrowRight: 'right', d: 'right', D: 'right', ArrowUp: 'jump', w: 'jump', W: 'jump', ' ': 'jump' };
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' || e.key === 'p' || e.key === 'P') {
+      if (game.state === 'paused' && e.key === 'Escape') { resume(); e.preventDefault(); return; }
+      if (game.state === 'play' || game.state === 'dialog' || game.state === 'end') {
+        var tag0 = e.target.tagName;
+        if (e.key === 'Escape' || (tag0 !== 'INPUT')) { pause(); e.preventDefault(); }
+      }
+      return;
+    }
+    /* Arrow keys move between answer choices */
+    if (game.state === 'dialog' && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+      var opts = Array.prototype.slice.call(document.querySelectorAll('#mcc-game-choices .mcc-choice[aria-disabled="false"]'));
+      if (opts.length) {
+        var i = opts.indexOf(document.activeElement);
+        var n = e.key === 'ArrowDown' ? (i + 1) % opts.length : (i - 1 + opts.length) % opts.length;
+        opts[n].focus(); e.preventDefault();
+      }
+      return;
+    }
+    if (game.state !== 'play') { return; }
+    var tag = e.target.tagName;
+    if (tag === 'BUTTON' || tag === 'INPUT' || tag === 'A') { if (e.key === ' ' || e.key === 'Enter') { return; } }
+    var k = KEYMAP[e.key];
+    if (k) {
+      if (k === 'jump') { if (!e.repeat) { input.jump = true; } } else { input[k] = true; }
+      e.preventDefault();
+    }
+    if (e.key === 'Enter' || e.key === 'e' || e.key === 'E') { talk(); }
+  });
+  document.addEventListener('keyup', function (e) {
+    var k = KEYMAP[e.key];
+    if (k && k !== 'jump') { input[k] = false; }
+  });
+  window.addEventListener('blur', function () { input.left = input.right = false; });
+
+  function talk() {
+    /* Re-open the nearest unsolved encounter if the student walked back */
+    for (var i = 0; i < ENCOUNTERS.length; i++) {
+      var e = ENCOUNTERS[i];
+      if (!game.solved[e.id] && !e.end && Math.abs(player.x - e.trig) < 48) { startEncounter(e); return; }
+    }
+  }
+
+  (function () {
+    var btns = document.querySelectorAll('[data-mcc-key]');
+    for (var i = 0; i < btns.length; i++) {
+      (function (b) {
+        var k = b.getAttribute('data-mcc-key');
+        function down(ev) {
+          ev.preventDefault();
+          b.className = 'is-down';
+          if (game.state !== 'play') { return; }
+          if (k === 'jump') { input.jump = true; } else if (k === 'act') { talk(); } else { input[k] = true; }
+        }
+        function up() { b.className = ''; if (k === 'left' || k === 'right') { input[k] = false; } }
+        b.addEventListener('pointerdown', down);
+        b.addEventListener('pointerup', up);
+        b.addEventListener('pointerleave', up);
+        b.addEventListener('pointercancel', up);
+        b.addEventListener('contextmenu', function (ev) { ev.preventDefault(); });
+      })(btns[i]);
+    }
+  })();
+
+  $('mcc-game-pause').addEventListener('click', pause);
+  $('mcc-game-resume').addEventListener('click', resume);
+  $('mcc-game-restart').addEventListener('click', restart);
+
+  /* ================================================================ */
+  /* Title screen and start                                            */
+  /* ================================================================ */
+  function buildCharPicker() {
+    var fs = $('mcc-game-chars');
+    CHARS.forEach(function (c, i) {
+      var label = document.createElement('label');
+      label.className = 'mcc-char' + (i === game.ch ? ' is-on' : '');
+      var input0 = document.createElement('input');
+      input0.type = 'radio'; input0.name = 'mcc-game-char'; input0.value = String(i);
+      if (i === game.ch) { input0.checked = true; }
+      var prev = makeSprite(SPR['s' + i + '_stand'], palFor(i));
+      prev.setAttribute('aria-hidden', 'true');
+      var txt = document.createElement('span');
+      txt.innerHTML = '<strong></strong><br><span class="mcc-small"></span>';
+      txt.firstChild.textContent = c.name;
+      txt.lastChild.textContent = c.desc;
+      label.appendChild(input0); label.appendChild(prev); label.appendChild(txt);
+      input0.addEventListener('change', function () {
+        game.ch = i;
+        var all = fs.querySelectorAll('.mcc-char');
+        for (var j = 0; j < all.length; j++) { all[j].className = 'mcc-char' + (j === i ? ' is-on' : ''); }
+      });
+      fs.appendChild(label);
+    });
+  }
+
+  function applySave(s) {
+    game.ch = s.ch || 0; game.solved = s.solved || {}; game.badges = s.badges || []; game.first = s.first || 0;
+    var last = null;
+    ENCOUNTERS.forEach(function (e) {
+      if (!game.solved[e.id] || e.end) { return; }
+      last = e;
+      if (e.gate) { GATES[e.gate].open = true; GATES[e.gate].lift = GATES[e.gate].h; }
+      if (e.kiosk) { KIOSKS[e.kiosk].mode = 'solved'; }
+      if (e.id === 'boot') { sparky.state = 'on'; sparky.follow = true; }
+      if (e.id === 'bridge') { planks.forEach(function (p) { p.built = true; p.verified = true; }); }
+      game.hint = e.hint || game.hint;
+    });
+    if (game.solved.end) { delete game.solved.end; }
+    if (last) { player.x = last.checkpoint; player.safeX = last.checkpoint; sparky.x = last.checkpoint - 18; }
+  }
+
+  function begin(fromSave) {
+    var s = fromSave ? readSave() : null;
+    if (s) { s.ch = game.ch; applySave(s); } else { clearSave(); }
+    buildPlayer();
+    updateBadges();
+    $('mcc-game-title').hidden = true;
+    $('mcc-game-play').hidden = false;
+    $('mcc-game-pause').hidden = false;
+    syncOpts();
+    game.state = 'play';
+    writeSave();
+    showHint();
+    announce('Game started. ' + game.hint);
+    $('mcc-game-stage').focus();
+  }
+
+  $('mcc-game-start').addEventListener('click', function () { begin(false); });
+  $('mcc-game-continue').addEventListener('click', function () { begin(true); });
+
+  (function init() {
+    var saved = readSave();
+    var mqReduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var mqTouch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    game.reduce = saved && typeof saved.reduce === 'boolean' ? saved.reduce : !!mqReduce;
+    game.touch = saved && typeof saved.touch === 'boolean' ? saved.touch : !!mqTouch;
+    game.auto = saved && typeof saved.auto === 'boolean' ? saved.auto : false;
+    if (saved) { game.ch = saved.ch || 0; }
+    if (saved && saved.solved && Object.keys(saved.solved).length) { $('mcc-game-continue').hidden = false; }
+    buildCharPicker();
+    syncOpts();
+  })();
+
+  /* ================================================================ */
+  /* Loop                                                              */
+  /* ================================================================ */
+  var last = 0, acc = 0, STEP = 1 / 60;
+  function frame(ts) {
+    var dt = Math.min(0.1, (ts - last) / 1000 || 0);
+    last = ts;
+    if (game.state !== 'title' && game.state !== 'paused') {
+      acc += dt;
+      while (acc >= STEP) {
+        game.t += STEP;
+        stepPlayer(STEP);
+        stepSparky(STEP);
+        stepGates(STEP);
+        checkEncounters();
+        acc -= STEP;
+      }
+    }
+    if (game.state !== 'title') { draw(); }
+    window.requestAnimationFrame(frame);
+  }
+  window.requestAnimationFrame(frame);
+
+  /* Test hook for automated checks (harmless for students) */
+  window.mccGame = { game: game, player: player, sparky: sparky, input: input, gates: GATES, planks: planks };
+})();
+</script>
+</body>
+</html>
