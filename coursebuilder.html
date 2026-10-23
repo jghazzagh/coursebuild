@@ -766,6 +766,19 @@
 
   /* Compact catalog actions, browser-local shortcuts, and block preview. */
   .library-card {border:1px solid #d0d9de;border-radius:6px;background:#fff;overflow:hidden;}
+  .dest-group {margin:0 0 12px;padding:10px 12px 8px;border:1px solid #d0d9de;border-radius:6px;background:#fff;}
+  .dest-group legend {padding:0 4px;color:#001b3b;font-size:13px;font-weight:700;}
+  .dest-options {display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:4px 0 6px;}
+  .dest-option {position:relative;display:block;margin:0;cursor:pointer;}
+  .dest-option input {position:absolute;opacity:0;width:1px;height:1px;}
+  .dest-option span {display:flex;align-items:center;justify-content:center;min-height:40px;padding:6px 8px;border:2px solid #c9d4da;border-radius:6px;background:#f2f6f8;color:#003366;font-size:13px;font-weight:700;text-align:center;line-height:1.25;}
+  .dest-option input:checked + span {border-color:#003366;background:#003366;color:#fff;}
+  .dest-option input:focus-visible + span {outline:3px solid #ff6600;outline-offset:2px;}
+  .dest-group .field-help {margin:0;font-size:12px;}
+  .overview-tag {display:inline-block;margin-top:5px;padding:2px 7px;border-radius:4px;background:#fff4e5;border:1px solid #b45309;color:#7a3e00;font-size:11px;font-weight:700;line-height:1.4;}
+  .cm-overview-flag {display:block;margin:8px 0 0;padding:6px 10px;border-left:4px solid #b45309;border-radius:0 4px 4px 0;background:#fff4e5;color:#7a3e00;font-size:13px;font-weight:700;line-height:1.4;}
+  .overview-notice {margin:0 0 12px;padding:10px 12px;border-left:5px solid #b45309;border-radius:0 6px 6px 0;background:#fff4e5;color:#4a2600;font-size:14px;line-height:1.5;}
+  .overview-notice strong {color:#7a3e00;}
   #block-library .library-card .add-block, #block-shortcuts .add-block {border:0;border-radius:0;}
   .library-card-actions {display:flex;justify-content:flex-end;gap:6px;padding:0 8px 8px;}
   .library-card-actions button {font-size:12px;padding:5px 8px;min-height:32px;color:#003366;background:#f2f6f8;border:1px solid #c9d4da;border-radius:4px;cursor:pointer;}
@@ -906,7 +919,7 @@ window.CMUX = (() => {
       <div class="top-actions" aria-label="Page actions"><button class="btn" id="undo-page" type="button">Undo</button><button class="btn" id="redo-page" type="button">Redo</button><button class="btn" id="audit-page" type="button">Check page</button><button class="btn btn-teal" id="download-page" type="button">Download HTML</button><button class="btn btn-primary" id="copy-page" type="button">Copy page HTML</button><details class="cm-menu"><summary>Save and manage</summary><div class="cm-menu-body"><button class="btn" id="export-page" type="button">Save editable copy (JSON)</button><button class="btn" id="import-page" type="button">Open editable copy (JSON)</button><p><strong>JSON:</strong> reopen and edit in Course Builder.<br><strong>HTML:</strong> publish in Brightspace.</p><button class="btn" id="reset-page" type="button">Reset page</button></div></details><input type="file" id="import-file" accept=".json,application/json" hidden></div>
     </div>
 
-<div class="cm-save-row cm-save-compact"><p id="cm-save-status"></p><p id="cm-save-alert" class="cm-sr-only" role="alert"></p></div><section class="cm-handoff" id="cm-handoff" tabindex="-1" aria-label="Next steps in Brightspace" hidden><button class="cm-button" type="button" data-dismiss-handoff>Dismiss</button><h2>Copied. Your next step is in Brightspace.</h2><div data-copy-steps><ol><li>Create or open a Brightspace content page.</li><li>Open the HTML Source Editor and paste the copied HTML.</li><li>Apply, save, and preview the page as a learner.</li></ol></div><p data-download-steps hidden>Upload the downloaded HTML file to Brightspace Manage Files, then add it to your course content.</p><p id="cm-media-note" hidden></p><p><strong>Order matters:</strong> finish your text in Course Builder first, then add images, video, and audio in Brightspace last. Pasting new HTML over a page replaces anything you added there.</p><a href="support.html#copy-paste">Open the illustrated page instructions</a><p>Keep the JSON copy if you want to edit this page in Course Builder later.</p></section>
+<div class="cm-save-row cm-save-compact"><p id="cm-save-status"></p><p id="cm-save-alert" class="cm-sr-only" role="alert"></p></div><section class="cm-handoff" id="cm-handoff" tabindex="-1" aria-label="Next steps in Brightspace" hidden><button class="cm-button" type="button" data-dismiss-handoff>Dismiss</button><h2>Copied. Your next step is in Brightspace.</h2><div data-copy-steps><ol><li>Create or open a Brightspace content page.</li><li>Open the HTML Source Editor and paste the copied HTML.</li><li>Apply, save, and preview the page as a learner.</li></ol></div><p data-download-steps hidden>Upload the downloaded HTML file to Brightspace Manage Files, then add it to your course content.</p><p id="cm-media-note" hidden></p><p id="cm-overview-note" hidden></p><p><strong>Order matters:</strong> finish your text in Course Builder first, then add images, video, and audio in Brightspace last. Pasting new HTML over a page replaces anything you added there.</p><a href="support.html#copy-paste">Open the illustrated page instructions</a><p>Keep the JSON copy if you want to edit this page in Course Builder later.</p></section>
     <div class="builder-grid">
       <button type="button" class="collapsed-rail" id="show-library-rail" title="Show the building blocks panel"><span aria-hidden="true">&rsaquo;</span><span class="rail-label">Show blocks</span></button>
       <aside class="panel control-panel" aria-label="Page controls and building blocks">
@@ -919,6 +932,14 @@ window.CMUX = (() => {
             <span aria-hidden="true">⌕</span>
             <input id="block-search" type="search" placeholder="Search blocks or purposes" aria-label="Search building blocks">
           </label>
+          <fieldset class="dest-group" id="page-destination">
+            <legend>Where will this page go?</legend>
+            <div class="dest-options">
+              <label class="dest-option"><input type="radio" name="page-destination" value="page" checked><span>Content page</span></label>
+              <label class="dest-option"><input type="radio" name="page-destination" value="overview"><span>Module Overview</span></label>
+            </div>
+            <p class="field-help" id="dest-help" aria-live="polite">Every block works on a content page.</p>
+          </fieldset>
 <details class="cat-acc" id="header-details">
             <summary><span class="category-name"><span class="category-chevron" aria-hidden="true">›</span>Page Header</span><span class="cat-count">edit</span></summary>
             <div class="setup-body" style="padding:12px">
@@ -1838,7 +1859,7 @@ window.CMUX = (() => {
   };
 
   const state = {
-    template: 'blank', pageLabel: 'Course content', title: 'Blank page', titleStyle: 'banner', titleLevel: '1', bannerUrl: '', accent: '#003366', blocks: [], selectedId: null, insertAt: null
+    template: 'blank', pageLabel: 'Course content', title: 'Blank page', titleStyle: 'banner', titleLevel: '1', bannerUrl: '', accent: '#003366', destination: 'page', blocks: [], selectedId: null, insertAt: null
   };
   const undoStack = [];
   let ready = false;
@@ -1856,7 +1877,7 @@ window.CMUX = (() => {
 
   const SCHEMA_VERSION = 2;
   function contentObject() {
-    return { template: state.template, pageLabel: state.pageLabel, title: state.title, titleStyle: state.titleStyle, titleLevel: state.titleLevel, bannerUrl: state.bannerUrl, accent: state.accent, blocks: state.blocks };
+    return { template: state.template, pageLabel: state.pageLabel, title: state.title, titleStyle: state.titleStyle, titleLevel: state.titleLevel, bannerUrl: state.bannerUrl, accent: state.accent, destination: state.destination, blocks: state.blocks };
   }
   const contentKey = () => JSON.stringify(contentObject());
   function serialize() {
@@ -1888,6 +1909,7 @@ window.CMUX = (() => {
     state.titleLevel = String(saved.titleLevel) === '2' ? '2' : '1';
     state.bannerUrl = String(saved.bannerUrl || '');
     state.accent = normalizeHex(saved.accent) || '#003366';
+    state.destination = saved.destination === 'overview' ? 'overview' : 'page';
     // Colors, ids, and fonts end up inside style attributes, inline handlers, and the countdown
     // script, so a shared .coursebuilder.json file may only supply values that pass these checks.
     const seen = new Set();
@@ -1998,6 +2020,7 @@ window.CMUX = (() => {
     state.accent = t.accent || '#003366';
     state.titleStyle = 'banner';
     state.bannerUrl = '';
+    state.destination = key === 'module' ? 'overview' : 'page';
     state.insertAt = null;
     state.blocks = t.random ? randomBlocks(t.random) : t.blocks.map(([type, data]) => makeBlock(type, data));
     state.blocks.forEach(syncRepeater);
@@ -2017,6 +2040,7 @@ window.CMUX = (() => {
     if (el.titleStyle) el.titleStyle.value = state.titleStyle;
     if (el.titleLevel) el.titleLevel.value = state.titleLevel;
     if (el.banner) el.banner.value = state.bannerUrl;
+    document.querySelectorAll('input[name="page-destination"]').forEach(r => { r.checked = r.value === state.destination; });
     renderAccentPalette();
   }
 
@@ -2106,10 +2130,49 @@ window.CMUX = (() => {
     try { localStorage.setItem(CATALOG_KEY, JSON.stringify({favorites, recent:recentBlocks})); }
     catch (_) { toast('Browser storage is unavailable. Shortcuts will last for this session only.'); }
   }
+  // Module Overviews: Brightspace removes buttons, form controls, inline event code, and scripts
+  // from a module's overview (tested in Brightspace), but keeps the built-in details/summary show and hide.
+  // Safety is read from the HTML each block actually exports, so new blocks are classified automatically.
+  const OVERVIEW_BREAKS = /<(button|input|select|textarea|form)\b|\son[a-z]+\s*=/i;
+  function overviewProblem(html) {
+    if (OVERVIEW_BREAKS.test(html)) return 'breaks';
+    if (/<script\b/i.test(html)) return 'script';
+    return '';
+  }
+  const overviewTypeCache = {};
+  function overviewSafeType(key) {
+    if (!(key in overviewTypeCache)) { const sample = makeBlock(key); syncRepeater(sample); overviewTypeCache[key] = overviewProblem(renderBlockHtml(sample)) !== 'breaks'; }
+    return overviewTypeCache[key];
+  }
+  function blockOverviewProblem(block) { return overviewProblem(renderBlockHtml(block, ctxFor(block))); }
+  const OVERVIEW_ALTERNATIVES = {
+    tabs: 'Use an Accordion instead. It holds the same content and works in a Module Overview.',
+    flip: 'Use Click and reveal or an Accordion instead, with the term as the heading and the definition inside.',
+    knowledge: 'Use Click and reveal to ask the question and reveal the answer, or put the question on a content page.',
+    multipleChoice: 'Use Click and reveal to ask the question and reveal the answer, or put the question on a content page.',
+    interactiveTimeline: 'Use a Timeline instead. It shows every milestone at once.',
+    pathTimeline: 'Use a Timeline instead. It shows every stop at once.',
+    process: 'Use Step flow boxes or a Timeline instead.',
+    weeklyRhythm: 'Use Step flow boxes or a Timeline instead.',
+    carousel: 'Use Content image with text, or an Accordion with one section per slide.',
+    interactiveChecklist: 'Use a Checklist instead. Students can read it but cannot tick items off.',
+    annotated: 'Use Callout boxes or an Accordion for the notes instead.'
+  };
+  function overviewAdvice(type) { return OVERVIEW_ALTERNATIVES[type] || 'Put this activity on a content page, then link to it from the overview with a Button links block.'; }
+  function overviewBrokenCount() { return state.blocks.filter(b => defs[b.type] && blockOverviewProblem(b) === 'breaks').length; }
+  let libraryMode = null;
+  function updateDestinationUi() {
+    if (libraryMode !== null && libraryMode !== state.destination) renderLibrary(el.search.value);
+    const help = document.getElementById('dest-help');
+    if (!help) return;
+    if (state.destination !== 'overview') { help.textContent = 'Every block works on a content page.'; return; }
+    const n = overviewBrokenCount();
+    help.textContent = 'Brightspace removes buttons and code from Module Overviews. Blocks that need them are tagged Content pages only.' + (n ? ' This page has ' + n + (n === 1 ? ' block' : ' blocks') + ' that will not work there.' : ' Everything on this page will work there.');
+  }
   function libraryCard(key, location) {
     const d = defs[key], favorite = favorites.includes(key);
     const helpId = location + '-help-' + key;
-    return '<div class="library-card"><button class="add-block" type="button" data-add="' + key + '" aria-label="Add ' + attr(d.label) + '" aria-describedby="' + helpId + '"><span class="plus" aria-hidden="true">+</span><span class="block-copy"><span class="block-name">' + e(d.label) + '</span><span class="block-description" id="' + helpId + '">' + e(d.description) + '</span></span></button><div class="library-card-actions"><button type="button" data-example="' + key + '" aria-label="Preview ' + attr(d.label) + '">Preview</button><button type="button" data-favorite="' + key + '" aria-label="Favorite ' + attr(d.label) + '" aria-pressed="' + favorite + '">' + (favorite ? 'Favorited' : 'Favorite') + '</button></div></div>';
+    return '<div class="library-card"><button class="add-block" type="button" data-add="' + key + '" aria-label="Add ' + attr(d.label) + '" aria-describedby="' + helpId + '"><span class="plus" aria-hidden="true">+</span><span class="block-copy"><span class="block-name">' + e(d.label) + '</span><span class="block-description" id="' + helpId + '">' + e(d.description) + '</span>' + (state.destination === 'overview' && !overviewSafeType(key) ? '<span class="overview-tag">Content pages only</span>' : '') + '</span></button><div class="library-card-actions"><button type="button" data-example="' + key + '" aria-label="Preview ' + attr(d.label) + '">Preview</button><button type="button" data-favorite="' + key + '" aria-label="Favorite ' + attr(d.label) + '" aria-pressed="' + favorite + '">' + (favorite ? 'Favorited' : 'Favorite') + '</button></div></div>';
   }
   function renderShortcuts() {
     document.getElementById('block-shortcuts').innerHTML = '<p class="field-help">Saved in this browser. Recent blocks shows your last five choices.</p><h3>Favorites</h3>' + (favorites.map(key => libraryCard(key,'favorite')).join('') || '<p class="field-help">Select Favorite beside any block.</p>') + '<h3>Recently used</h3>' + (recentBlocks.map(key => libraryCard(key,'recent')).join('') || '<p class="field-help">Add a block to start this list.</p>');
@@ -2124,7 +2187,7 @@ window.CMUX = (() => {
     if (['video','audio'].includes(type)) return 'Embedded media. This block does not record completion or grades. Any tracking provided by the media service is separate.';
     return 'Content only. This block does not collect responses or report grades or completion to Brightspace.';
   }
-  function behaviorHtml(type) { return '<p class="behavior-note"><strong>How this block works</strong><br>' + e(behaviorText(type)) + '</p>'; }
+  function behaviorHtml(type) { return '<p class="behavior-note"><strong>How this block works</strong><br>' + e(behaviorText(type)) + (overviewSafeType(type) ? '' : '<br><br><strong>Content pages only.</strong> Brightspace removes buttons and code from Module Overviews, so this block will not work there.') + '</p>'; }
   function addLibraryBlock(key) {
     if (!selectableBlock(key)) return;
     snapshot();
@@ -2137,7 +2200,7 @@ window.CMUX = (() => {
     }
     state.selectedId = block.id;
     recentBlocks = [key, ...recentBlocks.filter(k => k !== key)].slice(0,5);
-    saveCatalog(); renderShortcuts(); renderAll(); toast(defs[key].label + ' added.');
+    saveCatalog(); renderShortcuts(); renderAll(); toast(defs[key].label + ' added.' + (state.destination === 'overview' && !overviewSafeType(key) ? ' Heads up: it will not work in a Module Overview. Its editor explains your options.' : ''));
     setTimeout(() => document.querySelector('[data-block-id="' + block.id + '"]')?.scrollIntoView({behavior:'smooth',block:'center'}), 20);
   }
   function handleLibraryAction(event) {
@@ -2211,6 +2274,7 @@ window.CMUX = (() => {
     whatIfSlider: 'slider what if scenario budget calculator explore variable'
   };
   function renderLibrary(filter) {
+    libraryMode = state.destination;
     const q = String(filter || '').trim().toLowerCase();
     const words = q.split(/\s+/).filter(Boolean);
     let total = 0;
@@ -2916,7 +2980,8 @@ window.CMUX = (() => {
         '<button type="button" class="block-tool" data-action="addbelow" title="Add a block below" aria-label="Add a block below">+</button>' +
         '<button type="button" class="block-tool" data-action="duplicate" title="Duplicate block" aria-label="Duplicate block">⧉</button>' +
         '<button type="button" class="block-tool delete" data-action="delete" aria-label="Delete block">×</button></div>' +
-        '<div class="cm-block-body">' + renderBlockHtml(block, ctxs[index]) + '</div></div>');
+        '<div class="cm-block-body">' + renderBlockHtml(block, ctxs[index]) + '</div>' +
+        (state.destination === 'overview' && overviewProblem(renderBlockHtml(block, ctxs[index])) === 'breaks' ? '<span class="cm-overview-flag">Content pages only: this block will not work in a Module Overview</span>' : '') + '</div>');
     });
     if (state.blocks.length) parts.push(insertBarHtml(state.blocks.length));
     const blocksHtml = parts.join('');
@@ -2927,6 +2992,7 @@ window.CMUX = (() => {
     el.preview.innerHTML = banner + '<div class="page-title-preview' + titleClass + '" style="' + (state.titleStyle === 'banner' ? 'background-color:' + state.accent + ';color:' + contrast(state.accent) + ';border-bottom-color:#FF6600' : 'border-bottom-color:' + state.accent) + '"><p class="page-kicker">' + e(state.pageLabel) + '</p><h3>' + e(state.title) + '</h3></div><div class="preview-content' + (state.selectedId ? ' has-selection' : '') + '">' + (blocksHtml || emptyState) + '</div><div class="preview-footer" aria-hidden="true"></div>';
     el.count.textContent = countText(state.blocks.length);
     hydratePreview(el.preview);
+    updateDestinationUi();
     queueSave();
   }
 
@@ -3048,7 +3114,8 @@ window.CMUX = (() => {
       contrastResultsHtml(block) +
       '</div></details>');
     sections.push('<details class="editor-acc" data-section="code"' + isOpen('code') + '><summary>Code snippet and actions</summary><div class="editor-acc-body"><div class="snippet-box" style="margin-top:0;padding-top:0;border-top:0"><h3>Customized code snippet</h3><p>This updates as you edit the selected block.</p><pre id="block-code"></pre><button type="button" class="small-button" data-copy-block>Copy block HTML</button><button type="button" class="small-button danger-button" data-delete-selected>Delete this block</button></div></div></details>');
-    el.editor.innerHTML = '<span class="selected-kind">' + e(def.label) + '</span><div class="editor-fields">' + sections.join('') + '</div>';
+    const overviewNote = state.destination !== 'overview' ? '' : (() => { const p = blockOverviewProblem(block); if (p === 'breaks') return '<div class="overview-notice" role="note"><strong>This block will not work in a Module Overview.</strong> Brightspace removes buttons and code there. ' + e(overviewAdvice(block.type)) + ' If this page is not going in a Module Overview, change Where will this page go? to Content page.</div>'; if (p === 'script') return '<div class="overview-notice" role="note"><strong>Part of this block will not run in a Module Overview.</strong> The countdown needs a script, which Brightspace removes there. The date and note still show.</div>'; return ''; })();
+    el.editor.innerHTML = '<span class="selected-kind">' + e(def.label) + '</span>' + overviewNote + '<div class="editor-fields">' + sections.join('') + '</div>';
     document.getElementById('block-code').textContent = renderBlockHtml(block);
   }
 
@@ -3167,6 +3234,11 @@ window.CMUX = (() => {
         if (level - lastLevel > 1) add(i, 'review', label + ': heading level jumps from H' + lastLevel + ' to H' + level + '. Keep heading levels in order.', block.type === 'heading' ? 'level' : '');
         lastLevel = level;
       });
+      if (state.destination === 'overview') {
+        const problem = overviewProblem(renderBlockHtml(block, ctxs[i]));
+        if (problem === 'breaks') add(i, 'fix', label + ': will not work in a Module Overview, because Brightspace removes buttons and code there. ' + overviewAdvice(block.type));
+        else if (problem === 'script') add(i, 'review', label + ': the countdown will not appear in a Module Overview, because Brightspace removes scripts there. The date and note still show.', 'countdown');
+      }
       const pair = blockColorPair(block);
       const ratio = contrastRatio(pair.text, pair.background);
       if (ratio < 4.5) add(i, 'fix', label + ': text contrast is ' + ratio.toFixed(2) + ':1, below the 4.5:1 WCAG AA minimum for normal text.', 'textColor', 'appearance');
@@ -3218,6 +3290,17 @@ window.CMUX = (() => {
 
   function announceHandoff(kind) {
     CMUX.handoff(kind);
+    const overview = state.destination === 'overview';
+    const firstStep = document.querySelector('#cm-handoff [data-copy-steps] li');
+    if (firstStep) firstStep.textContent = overview ? 'In Brightspace, open the module and edit its overview (description).' : 'Create or open a Brightspace content page.';
+    const dl = document.querySelector('#cm-handoff [data-download-steps]');
+    if (dl) dl.textContent = overview ? 'A Module Overview cannot use an uploaded HTML file. Use Copy page HTML instead, then paste it into the overview with the HTML Source Editor.' : 'Upload the downloaded HTML file to Brightspace Manage Files, then add it to your course content.';
+    const warn = document.getElementById('cm-overview-note');
+    if (warn) {
+      const n = overview ? overviewBrokenCount() : 0;
+      warn.hidden = !n;
+      warn.textContent = n ? 'Heads up: ' + n + (n === 1 ? ' block on this page needs' : ' blocks on this page need') + ' a content page and will not work in a Module Overview. Run Check page for options.' : '';
+    }
     const note = document.getElementById('cm-media-note');
     if (!note) return;
     const spots = mediaSpots();
@@ -3264,6 +3347,14 @@ window.CMUX = (() => {
   if (el.titleStyle) el.titleStyle.addEventListener('change', () => { state.titleStyle = el.titleStyle.value; renderPreview(); });
   if (el.titleLevel) el.titleLevel.addEventListener('change', () => { snapshot(); state.titleLevel = el.titleLevel.value === '2' ? '2' : '1'; renderAll(); });
   if (el.banner) el.banner.addEventListener('input', () => { state.bannerUrl = el.banner.value; renderPreview(); });
+  document.querySelectorAll('input[name="page-destination"]').forEach(radio => radio.addEventListener('change', () => {
+    if (!radio.checked) return;
+    snapshot();
+    state.destination = radio.value === 'overview' ? 'overview' : 'page';
+    renderLibrary(el.search.value); renderAll();
+    if (state.destination === 'overview') { const n = overviewBrokenCount(); toast('Module Overview mode. ' + (n ? n + (n === 1 ? ' block on this page needs' : ' blocks on this page need') + ' a content page.' : 'Everything on this page will work there.')); }
+    else toast('Content page mode. Every block works on a content page.');
+  }));
   if (el.accent) el.accent.addEventListener('click', (event) => {
     const button = event.target.closest('[data-accent]'); if (!button) return;
     snapshot();
