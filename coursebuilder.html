@@ -4189,12 +4189,61 @@ window.CMUX = (() => {
 
   document.getElementById('audit-page').addEventListener('click', showAudit);
 
-  document.getElementById('export-page').addEventListener('click', () => {
-    const blob = new Blob([serialize()], { type: 'application/json;charset=utf-8' });
-    const url = URL.createObjectURL(blob); const a = document.createElement('a');
-    a.href = url; a.download = slugify(state.title) + '.coursebuilder.json';
-    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    toast('Page exported as JSON. Import it later to keep editing, or share it with a colleague.');
+  // Saving files: Chrome and Edge open a Save As window (name and folder). Other browsers get a rename box, then a normal download.
+  function cleanFileName(value) {
+    return String(value || '').replace(/\.(coursebuilder\.json|json|html?)$/i, '').replace(/[\\/:*?"<>|]+/g, '-').replace(/^[\s.]+|[\s.]+$/g, '');
+  }
+  function askFileName(base, ext, opener) {
+    return new Promise((resolve) => {
+      const form = document.createElement('form');
+      form.innerHTML = '<p>Choose a name for your file. Your browser decides which folder it goes in, usually Downloads. To pick the folder each time, turn on &ldquo;Ask where to save each file&rdquo; in your browser settings.</p>' +
+        '<div class="field"><label for="cm-file-name">File name</label><div style="display:flex;align-items:center;gap:8px"><input id="cm-file-name" type="text" autocomplete="off" style="flex:1 1 auto;min-width:0;padding:10px 12px;border:1px solid #8e9da6;border-radius:5px"><span aria-hidden="true">' + ext + '</span></div></div>' +
+        '<div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px"><button type="submit" class="cm-button" style="background:#ff6600;border-color:#ff6600;color:#fff;font-weight:700">Save file</button></div>';
+      const input = form.querySelector('input');
+      input.value = base;
+      let result = null;
+      const dialog = CMUX.modal('Name your file', form, opener);
+      dialog.addEventListener('close', () => resolve(result));
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        result = cleanFileName(input.value) || base;
+        dialog.close();
+      });
+      input.focus();
+      input.select();
+    });
+  }
+  async function saveFile(text, base, ext, mime, description, opener) {
+    const suggested = base + ext;
+    if (window.showSaveFilePicker && window.isSecureContext) {
+      try {
+        const handle = await window.showSaveFilePicker({
+          suggestedName: suggested,
+          types: [{ description, accept: { [mime]: [/\.json$/.test(ext) ? '.json' : ext] } }]
+        });
+        const writer = await handle.createWritable();
+        await writer.write(new Blob([text], { type: mime + ';charset=utf-8' }));
+        await writer.close();
+        return { saved: true, name: handle.name };
+      } catch (err) {
+        if (err && err.name === 'AbortError') return { saved: false };
+        // Any other problem (for example a blocked frame): fall back to the rename box and a normal download.
+      }
+    }
+    const chosen = await askFileName(base, ext, opener);
+    if (chosen == null) return { saved: false };
+    const url = URL.createObjectURL(new Blob([text], { type: mime + ';charset=utf-8' }));
+    const a = document.createElement('a');
+    a.href = url; a.download = chosen + ext;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1500);
+    return { saved: true, name: chosen + ext };
+  }
+
+  document.getElementById('export-page').addEventListener('click', async () => {
+    const result = await saveFile(serialize(), slugify(state.title), '.coursebuilder.json', 'application/json', 'Course Builder editable copy', document.getElementById('export-page'));
+    if (!result.saved) { toast('Save cancelled. Nothing was saved.'); return; }
+    toast('Saved as ' + result.name + '. Open it later to keep editing, or share it with a colleague.');
   });
   document.getElementById('import-page').addEventListener('click', () => document.getElementById('import-file').click());
   document.getElementById('import-file').addEventListener('change', (event) => {
@@ -4211,10 +4260,11 @@ window.CMUX = (() => {
   });
 
   document.getElementById('copy-page').addEventListener('click', async () => { if(await copyText(generatedBody(), 'Page HTML copied.')) announceHandoff('copy'); });
-  document.getElementById('download-page').addEventListener('click', () => {
-    const blob = new Blob([fullHtml()], { type: 'text/html;charset=utf-8' });
-    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = slugify(state.title) + '.html';
-    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url); toast('HTML file downloaded. Upload it to Manage Files in Brightspace.'); announceHandoff('download');
+  document.getElementById('download-page').addEventListener('click', async () => {
+    const result = await saveFile(fullHtml(), slugify(state.title), '.html', 'text/html', 'HTML page', document.getElementById('download-page'));
+    if (!result.saved) { toast('Save cancelled. Nothing was saved.'); return; }
+    toast('Saved as ' + result.name + '. Upload it to Manage Files in Brightspace.');
+    announceHandoff('download');
   });
   document.getElementById('reset-page').addEventListener('click', () => {
     if (state.blocks.length && !window.confirm('Reset the page and remove all current blocks? You can undo this with Ctrl+Z.')) return;
