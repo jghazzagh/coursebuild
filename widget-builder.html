@@ -333,58 +333,72 @@ window.CMUX = (() => {
   </nav>
   <div class="crumb"><a href="index.html">Home</a> &nbsp;/&nbsp; Build &nbsp;/&nbsp; Widget Builder</div>
 </header>
-<main id="main-content" class="builder">
-  <div class="wrap">
-    <div class="builder-head">
-      <div>
-        <p class="eyebrow">Brightspace homepage widgets</p>
-        <h1>Build a course widget</h1>
-        <p>Widgets are small snippets for your Brightspace <strong>course homepage</strong>. Pick one, customize it, and copy self-contained, script-free HTML. Building a lesson page instead? <a href="coursebuilder.html">Use the Page Builder</a>.</p>
+<main id="main-content" class="builder wb">
+  <h1 class="wb-sr">Widget Builder</h1>
+  <div class="wb-bar" id="wb-bar">
+    <div class="wb-row" role="toolbar" aria-label="Widget Builder toolbar">
+      <button type="button" class="wb-tb wb-current" id="wb-cur" title="Jump to the widget list"><span class="wb-dot" id="wb-cur-dot" aria-hidden="true"></span><span id="wb-cur-name">Widget</span></button>
+      <span class="wb-vr" aria-hidden="true"></span>
+      <button type="button" class="wb-tb" id="wb-undo" disabled>Undo</button>
+      <button type="button" class="wb-tb" id="wb-redo" disabled>Redo</button>
+      <span class="wb-vr" aria-hidden="true"></span>
+      <button type="button" class="wb-tb" id="audit-widget">Check widget</button>
+      <button type="button" class="wb-tb" id="wb-viewhtml" aria-expanded="false" aria-controls="wb-drawer">View HTML</button>
+      <span class="wb-sp"></span>
+      <button type="button" class="wb-tb wb-primary" id="copy-widget">Copy widget HTML</button>
+      <details class="cm-menu wb-menu" id="wb-savemenu"><summary>Save</summary><div class="wb-pop">
+        <button type="button" class="wb-tb" id="download-widget">Download HTML</button>
+        <button type="button" class="wb-tb" id="export-widget">Save editable copy (JSON)</button>
+        <button type="button" class="wb-tb" id="import-widget">Open editable copy (JSON)</button>
+        <p><strong>HTML</strong> is what you publish in Brightspace.<br><strong>JSON</strong> lets you reopen and edit the widget here later.</p>
+      </div></details>
+      <input type="file" id="import-file" accept=".json,application/json" hidden>
+    </div>
+  </div>
+  <div class="wb-notes" id="wb-notes">
+    <div class="cm-save-row cm-save-compact"><p id="cm-save-status" role="status" aria-live="polite"></p></div>
+    <section class="cm-handoff" id="cm-handoff" tabindex="-1" aria-label="Next steps in Brightspace" hidden><button class="cm-button" type="button" data-dismiss-handoff>Dismiss</button><h2>Copied. Your next step is in Brightspace.</h2><div data-copy-steps><ol><li>Open your course homepage editor.</li><li>Create or edit a custom widget and open its HTML source.</li><li>Paste the copied HTML, save, and preview the widget.</li></ol></div><p data-download-steps hidden>Keep this HTML file as a copy of the finished widget. To place it on a course homepage, use Copy widget HTML and follow the widget instructions below.</p><a href="support.html#widget-help">Open the illustrated widget instructions</a><p>Keep the JSON copy if you want to edit this widget in Course Builder later.</p></section>
+  </div>
+  <section class="wb-strip-wrap" aria-labelledby="wb-strip-h">
+    <div class="wb-strip-head"><h2 id="wb-strip-h">Choose a widget</h2>
+      <span class="wb-hint">For your course <strong>homepage</strong>. Building a lesson page? <a href="coursebuilder.html">Use the Page Builder</a>. Your edits are kept for each widget.</span>
+      <span class="wb-arrows"><button type="button" class="wb-sa" id="wb-sl" aria-label="Scroll widgets left">&#8249;</button><button type="button" class="wb-sa" id="wb-sr" aria-label="Scroll widgets right">&#8250;</button></span></div>
+    <div class="wb-strip" id="template-gallery" role="group" aria-labelledby="wb-strip-h"></div>
+  </section>
+  <div class="wb-work">
+    <section class="wb-stage" aria-labelledby="preview-heading">
+      <div class="wb-pbar">
+        <div><h2 id="preview-heading">Preview</h2><span class="wb-pnote" id="preview-note">Standard sidebar width (320px)</span></div>
+        <div class="wb-ctl">
+          <div><span class="wb-segl" id="wb-view-l">View</span><div class="wb-seg" role="group" aria-labelledby="wb-view-l"><button type="button" data-view="home" aria-pressed="true">Course homepage</button><button type="button" data-view="only" aria-pressed="false">Widget only</button></div></div>
+          <div><span class="wb-segl" id="wb-width-l">Widget width</span><div class="wb-seg width-toggle" role="group" aria-labelledby="wb-width-l"><button type="button" data-width="280" aria-pressed="false">Narrow 280</button><button type="button" data-width="320" aria-pressed="true">Standard 320</button><button type="button" data-width="600" aria-pressed="false">Wide panel</button></div></div>
+        </div>
       </div>
-      <div class="actions" aria-label="Widget actions"><button class="btn" id="audit-widget" type="button">Check widget</button><button class="btn teal" id="download-widget" type="button">Download HTML</button><button class="btn primary" id="copy-widget" type="button">Copy widget HTML</button><details class="cm-menu"><summary>Save and manage</summary><div class="cm-menu-body"><button class="btn" id="export-widget" type="button">Save editable copy (JSON)</button><button class="btn" id="import-widget" type="button">Open editable copy (JSON)</button><p><strong>JSON:</strong> reopen and edit in Course Builder.<br><strong>HTML:</strong> publish in Brightspace.</p></div></details><input type="file" id="import-file" accept=".json,application/json" hidden></div>
-    </div>
-<div class="cm-save-row cm-save-compact"><p id="cm-save-status" role="status" aria-live="polite"></p></div><section class="cm-handoff" id="cm-handoff" tabindex="-1" aria-label="Next steps in Brightspace" hidden><button class="cm-button" type="button" data-dismiss-handoff>Dismiss</button><h2>Copied. Your next step is in Brightspace.</h2><div data-copy-steps><ol><li>Open your course homepage editor.</li><li>Create or edit a custom widget and open its HTML source.</li><li>Paste the copied HTML, save, and preview the widget.</li></ol></div><p data-download-steps hidden>Keep this HTML file as a copy of the finished widget. To place it on a course homepage, use Copy widget HTML and follow the widget instructions below.</p><a href="support.html#widget-help">Open the illustrated widget instructions</a><p>Keep the JSON copy if you want to edit this widget in Course Builder later.</p></section>
-    <div class="builder-grid">
-      <aside class="panel editor" aria-label="Widget template gallery and editor">
-        <div class="panel-body">
-          <h2>Widget gallery</h2>
-          <div id="template-gallery"></div>
-          <h2 style="margin-top:20px">Widget editor</h2>
-          <p class="template-desc" id="template-desc"></p>
-          <p class="upkeep-note" id="upkeep-note" hidden></p>
-          <div id="widget-editor"></div>
-        </div>
-      </aside>
-      <section class="preview-pane" aria-labelledby="preview-heading">
-        <div class="preview-title">
-          <div>
-            <h2 id="preview-heading">Widget preview</h2>
-            <span class="preview-note" id="preview-note">Standard sidebar width (320px)</span>
+      <div class="wb-hp" id="wb-hp">
+        <div class="wb-hp-nav" aria-hidden="true"><b>Your Course</b><span class="on">Course Home</span><span>Content</span><span>Assignments</span><span>Discussions</span><span>Grades</span><span>Course Tools</span></div>
+        <div class="wb-hp-banner" aria-hidden="true"><div><h3>Course name</h3><p>Term and section</p></div></div>
+        <div class="wb-hp-grid">
+          <div class="wb-fakes" aria-hidden="true">
+            <div class="wb-fake"><h4>Announcements</h4><div class="wb-sk"><i></i><i></i><i></i><i></i></div></div>
+            <div class="wb-fake"><h4>Upcoming events</h4><div class="wb-sk"><i></i><i></i><i></i></div></div>
+            <div class="wb-fake"><h4>Course activity</h4><div class="wb-sk"><i></i><i></i><i></i><i></i><i></i></div></div>
           </div>
-          <div class="width-toggle" role="group" aria-label="Preview width">
-            <button type="button" data-width="280" aria-pressed="false">Narrow 280</button>
-            <button type="button" data-width="320" aria-pressed="true">Standard 320</button>
-            <button type="button" data-width="600" aria-pressed="false">Wide panel</button>
-          </div>
+          <div class="wb-slot"><span class="wb-slot-tag" aria-hidden="true">Your widget</span><div class="wb-slot-in"><div class="widget-preview" id="widget-preview"></div></div></div>
         </div>
-        <div class="preview-stage">
-          <div style="width:100%">
-            <div class="widget-preview" id="widget-preview"></div>
-            <div class="safe-note" role="note">
-              <strong>Widget-safe output:</strong> Inline styles only, no page header markup, no style sheets, and no scripts. Expandable sections use native HTML.
-            </div>
-          </div>
-        </div>
-      </section>
-      <aside class="panel code-panel" aria-labelledby="code-heading">
-        <div class="panel-body">
-          <h2 id="code-heading">Widget code snippet</h2>
-          <p class="help">This code updates as you customize the widget.</p>
-<details><summary>Show HTML code</summary><pre id="widget-code"></pre></details>
-          <button class="copy-code" id="copy-code" type="button">Copy widget HTML</button>
-        </div>
-      </aside>
-    </div>
+      </div>
+      <p class="wb-safe"><strong>Widget-safe output:</strong> inline styles only, no page header markup, no style sheets, and no scripts. Expandable sections use native HTML. The course homepage around the widget is an approximation, and your college theme sets the real colors.</p>
+    </section>
+    <aside class="wb-editor" id="wb-editor" aria-labelledby="wb-editor-title">
+      <div class="wb-ed-head"><h2 id="wb-editor-title" tabindex="-1">Edit widget</h2>
+        <p class="template-desc" id="template-desc"></p><p class="upkeep-note" id="upkeep-note" hidden></p></div>
+      <div class="wb-ed-body"><div id="widget-editor"></div></div>
+    </aside>
+  </div>
+  <section class="wb-drawer" id="wb-drawer" hidden aria-labelledby="code-heading">
+    <div class="wb-drawer-h"><h2 id="code-heading">Widget HTML</h2><span><button type="button" class="wb-tb" id="copy-code">Copy widget HTML</button> <button type="button" class="wb-tb" id="wb-dr-x">Close</button></span></div>
+    <pre id="widget-code" tabindex="0"></pre>
+  </section>
+  <div class="wrap">
     <section class="walkthrough">
       <div class="walk-grid">
         <div>
@@ -677,24 +691,44 @@ window.CMUX = (() => {
       }).join('') +
       '</div><div class="color-custom"><input type="color" data-color-picker="' + prefix + 'Color" value="' + (cur || auto) + '" aria-label="Choose ' + label.toLowerCase() + ' color"><input type="text" data-color-text="' + prefix + 'Color" value="' + (cur || '') + '" placeholder="Automatic" maxlength="7" aria-label="' + label + ' hexadecimal value"></div></fieldset>';
   }
-  function renderGallery() {
-    if (!state.galleryOpen) {
-      var t = templates[state.type];
-      var swatch = (state.store[state.type] && normalizeHex(state.store[state.type].headerBg)) || normalizeHex(t.defaults.headerBg) || '#003366';
-      el.gallery.innerHTML = '<div class="gallery-bar"><span class="tswatch" aria-hidden="true" style="background-color:' + swatch + '"></span><span class="gname">' + esc(t.category + ': ' + t.label) + '</span><button type="button" class="gallery-change" data-gallery-open>Change widget</button></div>';
-      return;
+  function thumb(k) {
+    var t = templates[k];
+    var c = (state.store[k] && normalizeHex(state.store[k].headerBg)) || normalizeHex(t.defaults.headerBg) || '#003366';
+    var g = '#C9D6DD', s = '';
+    var dg = t.kind === 'instructor' ? t.design : (t.kind === 'links' ? 'links' : (k === 'coinstructor' ? 'co' : 'dates'));
+    var ln = function (x, y, w, col) { return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="3" rx="1.5" fill="' + (col || '#B3C3CC') + '"/>'; };
+    var bt = function (x, y, w) { return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="7" rx="2.5" fill="' + c + '"/>'; };
+    if (dg === 'classic') s = '<circle cx="48" cy="29" r="9" fill="' + g + '"/>' + ln(30, 42, 36, '#6c8493') + ln(35, 48, 26) + bt(26, 54, 44);
+    else if (dg === 'split') s = '<rect x="8" y="19" width="22" height="22" rx="4" fill="' + g + '"/>' + ln(36, 21, 50, '#6c8493') + ln(36, 27, 40) + ln(36, 33, 46) + bt(8, 47, 80);
+    else if (dg === 'banner') s = '<rect x="1" y="14" width="94" height="22" fill="' + g + '"/>' + ln(8, 41, 44, '#6c8493') + ln(8, 47, 34) + bt(8, 53, 80);
+    else if (dg === 'monogram') s = '<circle cx="48" cy="29" r="10" fill="' + c + '"/><text x="48" y="33" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" font-family="Arial">JR</text>' + ln(30, 43, 36, '#6c8493') + ln(35, 49, 26) + bt(26, 55, 44);
+    else if (dg === 'plain') s = ln(10, 21, 44, '#6c8493') + ln(10, 28, 32) + ln(10, 37, 60) + ln(10, 43, 50) + ln(10, 49, 56);
+    else if (dg === 'note') s = '<circle cx="19" cy="26" r="8" fill="' + g + '"/>' + ln(32, 22, 44, '#6c8493') + ln(32, 28, 30) + ln(10, 38, 76) + ln(10, 44, 70) + ln(10, 50, 40) + bt(10, 56, 76);
+    else if (dg === 'badge') s = '<rect x="40" y="9" width="16" height="7" rx="3" fill="#001B3B"/><rect x="14" y="17" width="68" height="44" rx="5" fill="#fff" stroke="' + c + '" stroke-width="2"/><rect x="15" y="18" width="66" height="8" fill="' + c + '"/><circle cx="48" cy="37" r="7" fill="' + g + '"/>' + ln(33, 47, 30, '#6c8493') + ln(37, 53, 22);
+    else if (dg === 'co') s = '<circle cx="25" cy="27" r="8" fill="' + g + '"/><circle cx="71" cy="27" r="8" fill="' + g + '"/>' + ln(10, 40, 30, '#6c8493') + ln(14, 46, 22) + ln(56, 40, 30, '#6c8493') + ln(60, 46, 22) + '<rect x="48" y="18" width="1" height="38" fill="#d5e0e5"/>';
+    else if (dg === 'links') {
+      var n = Object.keys(t.defaults).filter(function (key) { return /^l\d+$/.test(key) && String(t.defaults[key]).trim(); }).length || 3;
+      var step = n > 4 ? 8.6 : n > 3 ? 10.5 : 13, hh = n > 4 ? 6 : n > 3 ? 7.5 : 9;
+      for (var i = 0; i < n; i++) s += '<rect x="10" y="' + (18 + i * step) + '" width="76" height="' + hh + '" rx="2.5" fill="' + c + '"/>';
+    } else {
+      for (var j = 0; j < 4; j++) { var yy = 19 + j * 10; s += '<rect x="10" y="' + yy + '" width="34" height="9" fill="#fff" stroke="#c4d1d8"/><rect x="44" y="' + yy + '" width="42" height="9" fill="#fff" stroke="#c4d1d8"/>' + ln(13, yy + 3, 24, '#6c8493') + ln(48, yy + 3, 22); }
     }
-    el.gallery.innerHTML = '<p class="help">Your edits are kept per widget, so you can switch between widgets to compare without losing work.</p>' + CATEGORIES.map(function (cat) {
+    return '<svg viewBox="0 0 96 64" aria-hidden="true" focusable="false"><rect x=".5" y=".5" width="95" height="63" rx="6" fill="#fff" stroke="#c4d1d8"/><path d="M1 13V7a6 6 0 0 1 6-6h82a6 6 0 0 1 6 6v6z" fill="' + c + '"/><rect x="1" y="1" width="94" height="2.5" fill="#FF6600" opacity=".9"/>' + s + '</svg>';
+  }
+  function renderGallery() {
+    el.gallery.innerHTML = CATEGORIES.map(function (cat) {
       var cards = Object.keys(templates).filter(function (k) { return templates[k].category === cat; }).map(function (k) {
         var t = templates[k];
-        var swatch = (state.store[k] && normalizeHex(state.store[k].headerBg)) || normalizeHex(t.defaults.headerBg) || '#003366';
-        return '<button type="button" class="tcard" data-template="' + k + '" aria-pressed="' + (state.type === k) + '">' +
-          '<span class="tswatch" aria-hidden="true" style="background-color:' + swatch + '"></span>' +
-          '<span class="tinfo"><span class="tname">' + esc(t.label) + '</span><span class="tdesc">' + esc(t.description.split('.')[0]) + '.</span></span>' +
-          (t.upkeep ? '<span class="tflag">Upkeep</span>' : '') + '</button>';
+        return '<button type="button" class="wb-card" data-template="' + k + '" aria-pressed="' + (state.type === k) + '" title="' + esc(t.description) + '">' +
+          thumb(k) + '<span class="wb-cname">' + esc(t.label) + '</span>' + (t.upkeep ? '<span class="wb-cflag">Upkeep</span>' : '') + '</button>';
       }).join('');
-      return cards ? '<div class="tcat">' + esc(cat) + '</div><div class="tgallery">' + cards + '</div>' : '';
+      return cards ? '<div class="wb-grp" role="group" aria-label="' + esc(cat) + '"><h3>' + esc(cat) + '</h3><div class="wb-cards">' + cards + '</div></div>' : '';
     }).join('');
+    var sel = el.gallery.querySelector('[aria-pressed="true"]');
+    if (sel) {
+      var l = sel.offsetLeft, r = l + sel.offsetWidth;
+      if (l < el.gallery.scrollLeft || r > el.gallery.scrollLeft + el.gallery.clientWidth) el.gallery.scrollLeft = Math.max(0, l - 40);
+    }
   }
   function renderEditor() {
     var t = templates[state.type];
@@ -944,12 +978,67 @@ window.CMUX = (() => {
     el.code.textContent = html;
     var results = document.getElementById('contrast-results');
     if (results) results.outerHTML = contrastHtml();
+    renderCur();
+    scheduleHist();
     saveLocal();
   }
   function render() {
     renderGallery();
     renderEditor();
     updateOutput();
+    flushHist();
+  }
+  // Current widget chip and editor title.
+  function renderCur() {
+    var t = templates[state.type];
+    var name = document.getElementById('wb-cur-name');
+    if (name) name.textContent = t.label;
+    var dot = document.getElementById('wb-cur-dot');
+    if (dot) dot.style.backgroundColor = normalizeHex(current().headerBg) || '#003366';
+    var title = document.getElementById('wb-editor-title');
+    if (title) title.textContent = 'Edit: ' + t.label;
+    refreshThumb();
+  }
+  // Redraw only the selected card's thumbnail so header color changes show right away.
+  function refreshThumb() {
+    var card = el.gallery.querySelector('[data-template="' + state.type + '"]');
+    if (!card) return;
+    var old = card.querySelector('svg');
+    if (!old) return;
+    var holder = document.createElement('div');
+    holder.innerHTML = thumb(state.type);
+    old.parentNode.replaceChild(holder.firstChild, old);
+  }
+  // Undo and redo keep a short history of the whole widget set.
+  var hist = [], hpos = -1, histTimer = null, restoring = false;
+  function histSnap() { return JSON.stringify({ type: state.type, store: state.store }); }
+  function histButtons() {
+    var u = document.getElementById('wb-undo'), r = document.getElementById('wb-redo');
+    if (u) u.disabled = hpos <= 0;
+    if (r) r.disabled = hpos >= hist.length - 1;
+  }
+  function pushHist() {
+    if (restoring) return;
+    var snap = histSnap();
+    if (hist[hpos] === snap) { histButtons(); return; }
+    hist = hist.slice(0, hpos + 1); hist.push(snap);
+    if (hist.length > 60) hist.shift();
+    hpos = hist.length - 1;
+    histButtons();
+  }
+  function scheduleHist() { if (restoring) return; clearTimeout(histTimer); histTimer = setTimeout(pushHist, 600); }
+  function flushHist() { clearTimeout(histTimer); pushHist(); }
+  function stepHist(dir) {
+    flushHist();
+    var next = hpos + dir;
+    if (next < 0 || next >= hist.length) return;
+    hpos = next;
+    var o = JSON.parse(hist[hpos]);
+    restoring = true;
+    state.type = o.type; state.store = o.store;
+    render();
+    restoring = false;
+    histButtons();
   }
   function toast(msg) {
     el.toast.textContent = msg;
@@ -982,6 +1071,16 @@ window.CMUX = (() => {
     state.type = card.dataset.template;
     state.galleryOpen = false;
     render();
+    var again = el.gallery.querySelector('[data-template="' + state.type + '"]');
+    if (again) again.focus({ preventScroll: true });
+  });
+  el.gallery.addEventListener('keydown', function (event) {
+    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return;
+    var all = [].slice.call(el.gallery.querySelectorAll('.wb-card')), i = all.indexOf(document.activeElement);
+    if (i < 0) return;
+    event.preventDefault();
+    var next = all[i + (event.key === 'ArrowRight' ? 1 : -1)];
+    if (next) next.focus();
   });
   el.editor.addEventListener('input', function (event) {
     var target = event.target,
@@ -1016,15 +1115,40 @@ window.CMUX = (() => {
     var again = el.editor.querySelector('[data-color-key="' + button.dataset.colorKey + '"][data-color="' + button.dataset.color + '"]');
     if (again) again.focus();
   });
+  var hp = document.getElementById('wb-hp');
   document.querySelectorAll('[data-width]').forEach(function (button) {
     button.addEventListener('click', function () {
       document.querySelectorAll('[data-width]').forEach(function (b) { b.setAttribute('aria-pressed', b === button); });
-      el.preview.classList.remove('w280', 'w600');
-      if (button.dataset.width === '280') { el.preview.classList.add('w280'); el.previewNote.textContent = 'Narrow sidebar width (280px)'; }
-      else if (button.dataset.width === '600') { el.preview.classList.add('w600'); el.previewNote.textContent = 'Wide main-panel width (600px)'; }
-      else el.previewNote.textContent = 'Standard sidebar width (320px)';
+      var w = button.dataset.width;
+      document.querySelector('.wb').style.setProperty('--wcol', w + 'px');
+      hp.classList.toggle('wide', w === '600');
+      el.previewNote.textContent = w === '280' ? 'Narrow sidebar width (280px)' : w === '600' ? 'Wide main-panel width (600px)' : 'Standard sidebar width (320px)';
     });
   });
+  document.querySelectorAll('[data-view]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      document.querySelectorAll('[data-view]').forEach(function (b) { b.setAttribute('aria-pressed', b === button); });
+      hp.classList.toggle('only', button.dataset.view === 'only');
+    });
+  });
+  document.getElementById('wb-undo').addEventListener('click', function () { stepHist(-1); });
+  document.getElementById('wb-redo').addEventListener('click', function () { stepHist(1); });
+  document.getElementById('wb-cur').addEventListener('click', function () {
+    var sel = el.gallery.querySelector('[aria-pressed="true"]');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (sel) setTimeout(function () { sel.focus({ preventScroll: true }); }, 250);
+  });
+  document.getElementById('wb-sl').addEventListener('click', function () { el.gallery.scrollBy({ left: -420, behavior: 'smooth' }); });
+  document.getElementById('wb-sr').addEventListener('click', function () { el.gallery.scrollBy({ left: 420, behavior: 'smooth' }); });
+  var drawer = document.getElementById('wb-drawer'), viewBtn = document.getElementById('wb-viewhtml');
+  function drawerOpen(open) { drawer.hidden = !open; viewBtn.setAttribute('aria-expanded', String(open)); }
+  viewBtn.addEventListener('click', function () { drawerOpen(drawer.hidden); });
+  document.getElementById('wb-dr-x').addEventListener('click', function () { drawerOpen(false); viewBtn.focus(); });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape' && !drawer.hidden && !document.querySelector('dialog[open]') && !document.querySelector('.wb-menu[open]')) { drawerOpen(false); viewBtn.focus(); }
+  });
+  function barHeight() { document.documentElement.style.setProperty('--wb-barh', (document.getElementById('wb-bar').offsetHeight + 10) + 'px'); }
+  window.addEventListener('resize', barHeight);
   document.getElementById('audit-widget').addEventListener('click', showAudit);
   document.getElementById('copy-widget').addEventListener('click', copy);
   document.getElementById('copy-code').addEventListener('click', copy);
@@ -1035,8 +1159,11 @@ window.CMUX = (() => {
     a.href = url; a.download = slugify(current().title) + '.widget.json';
     document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
     toast('Widget exported as JSON. Import it later to keep editing, or share it with a colleague.');
+    closeSave();
   });
+  function closeSave() { var m = document.getElementById('wb-savemenu'); if (m) m.open = false; }
   document.getElementById('import-widget').addEventListener('click', function () {
+    closeSave();
     document.getElementById('import-file').click();
   });
   document.getElementById('import-file').addEventListener('change', function (event) {
@@ -1067,7 +1194,7 @@ window.CMUX = (() => {
     a.href = url;
     a.download = slugify(current().title) + '.html';
     document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    toast('Widget HTML downloaded.');CMUX.handoff('download');
+    toast('Widget HTML downloaded.');CMUX.handoff('download');closeSave();
   });
   document.getElementById('site-search').addEventListener('submit', function (event) {
     event.preventDefault();
@@ -1091,8 +1218,7 @@ window.CMUX = (() => {
     var bannerRow = document.createElement('div');
     bannerRow.className = 'resume-banner';
     bannerRow.innerHTML = '<span><strong>Pick up where you left off?</strong> Autosaved widget edits found.</span><span class="resume-actions"><button class="btn" type="button" data-resume>Resume edits</button><button class="btn" type="button" data-dismiss>Start fresh</button></span>';
-    var wrap = document.querySelector('.wrap');
-    wrap.insertBefore(bannerRow, wrap.querySelector('.builder-grid'));
+    document.getElementById('wb-notes').insertBefore(bannerRow, document.getElementById('wb-notes').firstChild);
     bannerRow.addEventListener('click', function (event) {
       if (event.target.closest('[data-resume]')) {
         pendingWidgetDraft = false;
@@ -1114,6 +1240,7 @@ window.CMUX = (() => {
   }
 
   render();
+  barHeight();
 })();
 </script>
 
@@ -1160,13 +1287,6 @@ body .btn{font-weight:500;border-radius:8px}
 body .btn.primary,body .btn.teal{font-weight:500}
 body .width-toggle button{font-weight:500}
 body .crumb a{font-weight:700}
-/* Three panes: gallery and editor on the left, preview in the middle, code on the right. Each stays put and scrolls inside itself. */
-body .builder-grid{align-items:start}
-body .editor{max-height:calc(100vh - 28px);overflow:auto;overscroll-behavior:contain;position:sticky;top:14px}
-body .code-panel{position:sticky;top:14px}
-body .preview-pane{position:sticky;top:14px;display:flex;flex-direction:column;max-height:calc(100vh - 28px);min-width:0}
-body .preview-pane .preview-stage{flex:1 1 auto;min-height:0;overflow:auto;overscroll-behavior:contain;align-content:start}
-body .editor .panel-body>h2:first-child{position:sticky;top:-18px;z-index:5;margin:-18px -18px 14px;padding:16px 18px 10px;background:#fff;border-bottom:1px solid #dbe4e8;border-radius:11px 11px 0 0}
 /* Blocks versus widgets */
 .cm-compare{margin:0 0 18px;padding:14px 20px 16px;border:1px solid #cbd6dc;border-left:5px solid #008da7;border-radius:8px;background:#fff}
 .cm-compare>h2{margin:0 0 10px;color:#001b3b;font-size:18px;font-weight:500}
@@ -1179,8 +1299,6 @@ body .editor .panel-body>h2:first-child{position:sticky;top:-18px;z-index:5;marg
 .cm-compare-where{margin:0 0 4px;color:#003366;font-size:14px}
 .cm-compare-what{margin:0;color:#182936;font-size:13px}
 .cm-compare-what a{color:#0567aa;font-weight:600}
-@media(max-width:1050px){body .preview-pane{position:static;max-height:none}body .preview-pane .preview-stage{overflow:visible}.cm-compare-grid{grid-template-columns:1fr}}
-@media(max-width:760px){body .editor,body .code-panel{position:static;max-height:none}body .editor .panel-body>h2:first-child{position:static;margin:0 0 14px;padding:0;border:0}}
 </style>
 <style id="cb-compact-widget">
 /* Save status stays available to screen readers and only shows on screen when something goes wrong. */
@@ -1195,6 +1313,129 @@ body header .header-logo{width:auto;height:56px;max-width:none}
 body header .course-name,body header .brand-name{font-size:20px}
 body header .search input{padding:9px 13px}
 @media(max-width:800px){body header .brand-row{padding:8px 0}body header .header-logo{height:48px}}
+</style>
+<style id="wb-layout">
+/* Widget Builder layout: sticky toolbar, widget strip, course homepage preview, docked editor. Same pattern as the Page Builder. */
+body .wb.builder{--wcol:320px;padding:0 0 56px;background:#edf4f7}
+.wb-sr{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.wb-bar{position:sticky;top:0;z-index:9050;padding:8px 24px;background:#fff;border-bottom:1px solid #cad5da;box-shadow:0 4px 14px rgba(0,27,59,.08)}
+.wb-row{display:flex;flex-wrap:wrap;align-items:center;gap:5px;max-width:1500px;margin:0 auto}
+body .wb .wb-tb,body .wb .wb-menu>summary{display:inline-flex;align-items:center;gap:5px;min-height:38px;box-sizing:border-box;padding:6px 10px;border:1px solid #a8bac5;border-radius:6px;background:#fff;color:#003366;font:inherit;font-size:14px;font-weight:700;line-height:1.3;cursor:pointer;white-space:nowrap;list-style:none}
+body .wb .wb-menu>summary::-webkit-details-marker{display:none}
+body .wb .wb-menu>summary::after{content:'\25BE';font-size:11px}
+body .wb .wb-tb:hover,body .wb .wb-menu>summary:hover,body .wb .wb-menu[open]>summary{background:#edf4f7;border-color:#003366}
+body .wb .wb-tb[disabled]{opacity:.45;cursor:default;background:#fff;border-color:#a8bac5}
+body .wb .wb-tb.wb-primary{background:#ff6600;border-color:#ff6600;color:#fff}
+body .wb .wb-tb.wb-primary:hover{background:#d95500;border-color:#d95500}
+body .wb .wb-tb.wb-current{border-color:#008da7;background:#eff9fb;max-width:260px;overflow:hidden;text-overflow:ellipsis}
+.wb-dot{width:14px;height:14px;flex:0 0 14px;border-radius:4px;border:1px solid rgba(0,0,0,.25)}
+.wb-sp{flex:1 1 8px}
+.wb-vr{width:1px;height:24px;margin:0 3px;background:#cad5da}
+.wb .wb-tb:focus-visible,.wb .wb-menu>summary:focus-visible,.wb .wb-card:focus-visible,.wb .wb-sa:focus-visible,.wb .wb-seg button:focus-visible{outline:3px solid #ff6600;outline-offset:2px}
+.wb-menu{position:relative}
+.wb-pop{position:absolute;right:0;top:calc(100% + 6px);z-index:9100;width:min(340px,calc(100vw - 32px));padding:12px;border:1px solid #b7c4ca;border-radius:8px;background:#fff;box-shadow:0 14px 34px rgba(0,27,59,.22)}
+.wb-pop .wb-tb{width:100%;justify-content:flex-start;margin:0 0 6px}
+.wb-pop p{margin:6px 0 0;font-size:13px;color:#52616d;line-height:1.5}
+/* Notes: resume banner, save status, copy and download steps */
+.wb-notes{max-width:1500px;margin:0 auto;padding:0 24px}
+.wb-notes .resume-banner{margin:12px 0 0}
+.wb-notes .cm-handoff{margin:12px 0 0;padding:14px 18px}
+.wb-notes .cm-handoff h2{font-size:19px}
+/* Widget strip */
+.wb-strip-wrap{max-width:1500px;margin:12px auto 0;padding:0 24px}
+.wb-strip-head{display:flex;align-items:center;gap:14px;margin:0 0 6px}
+.wb-strip-head h2{margin:0;color:#001b3b;font-size:16px;font-weight:600}
+.wb-hint{flex:1;text-align:right;font-size:13px;color:#52616d}
+.wb-hint a{color:#003366;font-weight:700}
+.wb-arrows{display:flex;gap:4px}
+.wb-sa{width:32px;height:30px;border:1px solid #a8bac5;border-radius:6px;background:#fff;color:#003366;font-size:18px;line-height:1}
+.wb-sa:hover{background:#edf4f7;border-color:#003366}
+.wb-strip{display:flex;align-items:flex-start;gap:6px;overflow-x:auto;padding:2px 2px 10px;position:relative;scroll-snap-type:x proximity;scrollbar-width:thin}
+.wb-grp{display:flex;flex-direction:column;gap:4px;flex:0 0 auto;margin-right:2px;padding-right:10px;border-right:1px solid #cad5da}
+.wb-grp:last-child{border-right:0}
+.wb-grp h3{margin:0;color:#526570;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+.wb-cards{display:flex;gap:6px}
+.wb-card{position:relative;flex:0 0 auto;width:96px;padding:6px 6px 7px;border:1px solid #c9d6dd;border-radius:8px;background:#fff;color:#001b3b;text-align:center;scroll-snap-align:start}
+.wb-card svg{display:block;width:100%;height:auto;margin:0 0 5px}
+.wb-cname{display:block;font-size:12px;font-weight:600;line-height:1.25}
+.wb-cflag{display:block;margin-top:2px;color:#934400;font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase}
+.wb-card:hover{border-color:#008da7;background:#f4fbfc}
+.wb-card[aria-pressed="true"]{padding:5px 5px 6px;border:2px solid #008da7;background:#eff9fb;box-shadow:0 2px 8px rgba(0,141,167,.2)}
+/* Work area */
+.wb-work{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:16px;align-items:start;max-width:1500px;margin:8px auto 0;padding:0 24px}
+.wb-stage{min-width:0}
+.wb-pbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 18px;margin:0 0 10px}
+.wb-pbar h2{display:inline;margin:0 10px 0 0;color:#001b3b;font-size:18px;font-weight:600}
+.wb-pnote{color:#52616d;font-size:12px}
+.wb-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px}
+.wb-segl{margin-right:6px;color:#52616d;font-size:12px}
+.wb-seg{display:inline-flex;gap:0;vertical-align:middle}
+.wb-seg button{min-height:34px;padding:4px 12px;border:1px solid #a8bac5;background:#fff;color:#003366;font:inherit;font-size:13px;font-weight:600}
+.wb-seg button:first-child{border-radius:6px 0 0 6px}
+.wb-seg button:last-child{border-radius:0 6px 6px 0}
+.wb-seg button+button{border-left:0}
+.wb-seg button[aria-pressed="true"]{background:#003366;border-color:#003366;color:#fff}
+/* Course homepage mock */
+.wb-hp{overflow:hidden;border:1px solid #b9c6cd;border-radius:8px;background:#f1f3f5;box-shadow:0 8px 24px rgba(0,27,59,.1)}
+.wb-hp-nav{display:flex;flex-wrap:wrap;align-items:center;gap:2px;min-height:42px;padding:0 14px;background:#06416f;color:#fff;font-size:13px}
+.wb-hp-nav b{margin-right:12px;font-size:14px}
+.wb-hp-nav span{padding:11px 10px;opacity:.92}
+.wb-hp-nav span.on{border-bottom:3px solid #ff6600;opacity:1;font-weight:700}
+.wb-hp-banner{display:flex;align-items:flex-end;height:70px;padding:12px 20px;background:linear-gradient(120deg,#001b3b,#003366 60%,#008da7);color:#fff}
+.wb-hp-banner h3{margin:0;font-size:20px;line-height:1.15;color:#fff}
+.wb-hp-banner p{margin:2px 0 0;font-size:13px;opacity:.9}
+.wb-hp-grid{display:grid;grid-template-columns:minmax(0,1fr) var(--wcol);gap:14px;align-items:start;padding:14px}
+.wb-fake{margin:0 0 14px;overflow:hidden;border:1px solid #d5dce0;border-radius:8px;background:#fff}
+.wb-fake h4{margin:0;padding:10px 14px;border-bottom:1px solid #e1e7ea;background:#f6f8f9;color:#2b3a45;font-size:15px}
+.wb-sk{padding:12px 14px}
+.wb-sk i{display:block;height:9px;margin:0 0 9px;border-radius:5px;background:#e3e9ec}
+.wb-sk i:nth-child(2n){width:82%}.wb-sk i:nth-child(3n){width:61%}
+.wb-slot{position:relative;margin:0 0 14px}
+.wb-slot-tag{position:absolute;top:-11px;left:10px;z-index:2;padding:1px 8px;border-radius:10px;background:#ff6600;color:#fff;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.wb-slot-in{border-radius:8px;outline:2px dashed #ff6600;outline-offset:3px}
+.wb .widget-preview{width:100%;max-width:none}
+.wb-hp.wide .wb-hp-grid{grid-template-columns:1fr}
+.wb-hp.wide .wb-slot{order:-1;width:var(--wcol);max-width:100%}
+.wb-hp.only{padding:30px 18px;background:repeating-linear-gradient(45deg,#f4f7f8,#f4f7f8 12px,#eef2f4 12px,#eef2f4 24px)}
+.wb-hp.only .wb-hp-nav,.wb-hp.only .wb-hp-banner,.wb-hp.only .wb-fakes{display:none}
+.wb-hp.only .wb-hp-grid{display:flex;justify-content:center;padding:0}
+.wb-hp.only .wb-slot{width:var(--wcol);max-width:100%;margin:0}
+.wb-safe{margin:12px 0 0;color:#52616d;font-size:13px}
+/* Docked editor */
+.wb-editor{position:sticky;top:var(--wb-barh,60px);max-height:calc(100vh - var(--wb-barh,60px) - 16px);overflow:auto;overscroll-behavior:contain;border:1px solid #cad5da;border-radius:8px;background:#fff;box-shadow:0 8px 24px rgba(0,27,59,.1)}
+.wb-ed-head{position:sticky;top:0;z-index:2;padding:12px 16px 10px;border-bottom:1px solid #e1e7ea;background:#fff}
+.wb-ed-head h2{margin:0;color:#001b3b;font-size:18px;font-weight:600}
+.wb-ed-head .template-desc{margin:6px 0 0;padding:0;border:0;background:none;color:#52616d;font-size:13px}
+.wb-ed-head .upkeep-note{margin:8px 0 0;padding:8px 10px;font-size:12px}
+.wb-ed-body{padding:12px 16px 18px}
+.wb-editor .field input,.wb-editor .field select,.wb-editor .field textarea{padding:8px 10px;font-size:14px}
+.wb-editor .contrast-card .swatch-preview,.wb-editor .contrast-card .badge:nth-child(n+3){display:none}
+.wb-editor .contrast-card{padding:12px}
+/* HTML drawer */
+.wb-drawer{position:fixed;left:0;right:0;bottom:0;z-index:9300;display:flex;flex-direction:column;max-height:48vh;border-top:3px solid #003366;background:#fff;box-shadow:0 -10px 30px rgba(0,27,59,.25)}
+.wb-drawer[hidden]{display:none}
+.wb-drawer-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 24px;background:#edf4f7}
+.wb-drawer-h h2{margin:0;color:#001b3b;font-size:16px;font-weight:600}
+.wb-drawer pre{margin:0;padding:12px 24px;overflow:auto;background:#0b1e33;color:#dbeaf3;font:12px/1.45 Consolas,monospace;white-space:pre-wrap;word-break:break-all}
+body .wb .wrap{padding:0 24px}
+body .wb .walkthrough{margin-top:36px}
+@media (max-width:1100px){.wb-work{grid-template-columns:minmax(0,1fr) 340px}}
+@media (max-width:900px){
+  .wb-work{grid-template-columns:1fr}
+  .wb-editor{position:static;max-height:none}
+  .wb-hp-grid{grid-template-columns:1fr}
+  .wb-hp .wb-slot{order:-1}
+}
+@media (max-width:760px){
+  .wb-bar,.wb-notes,.wb-strip-wrap,.wb-work{padding-left:14px;padding-right:14px}
+  body .wb .wb-tb.wb-current{max-width:100%;flex:1 1 100%}
+  .wb-arrows{display:none}
+  .wb-strip-head{flex-wrap:wrap}
+  .wb-hint{flex:1 1 100%;text-align:left}
+  .wb-pop{position:fixed;left:14px;right:14px;top:auto;width:auto}
+  body .wb .wrap{padding:0 14px}
+}
+@media (prefers-reduced-motion:reduce){.wb *{scroll-behavior:auto!important;transition:none!important}}
 </style>
 </body>
 </html>
