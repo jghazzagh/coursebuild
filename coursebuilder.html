@@ -911,11 +911,7 @@ window.CMUX = (() => {
 <main id="builder" class="builder-shell">
   <div class="builder-wrap">
     <div class="builder-head">
-      <div>
-        <p class="eyebrow">Visual Brightspace page builder</p>
-        <h1>Build your page</h1>
-        <p>Add blocks, edit the details, reorder them, and export self-contained HTML for Brightspace. Building a homepage widget instead? <a href="widget-builder.html" style="color:#0567aa;font-weight:600">Use the Widget Builder</a>.</p>
-      </div>
+      <h1 class="cm-sr-only">Page Builder</h1>
       <div class="top-actions" aria-label="Page actions"><button class="btn" id="undo-page" type="button">Undo</button><button class="btn" id="redo-page" type="button">Redo</button><button class="btn" id="audit-page" type="button">Check page</button><button class="btn btn-teal" id="download-page" type="button">Download HTML</button><button class="btn btn-primary" id="copy-page" type="button">Copy page HTML</button><details class="cm-menu"><summary>Save and manage</summary><div class="cm-menu-body"><button class="btn" id="export-page" type="button">Save editable copy (JSON)</button><button class="btn" id="import-page" type="button">Open editable copy (JSON)</button><p><strong>JSON:</strong> reopen and edit in Course Builder.<br><strong>HTML:</strong> publish in Brightspace.</p><button class="btn" id="reset-page" type="button">Reset page</button></div></details><input type="file" id="import-file" accept=".json,application/json" hidden></div>
     </div>
 
@@ -4354,5 +4350,253 @@ body header .course-name,body header .brand-name{font-size:20px}
 body header .search input{padding:9px 13px}
 @media(max-width:800px){body header .brand-row{padding:8px 0}body header .header-logo{height:48px}}
 </style>
+<!-- ===================== PAGE BUILDER TOOLBAR LAYOUT =====================
+     One sticky toolbar (search, six block menus, favorites, page settings, page actions), a preview at
+     Brightspace's content width, and the block editor as a slide-in panel. The block library below the
+     toolbar stays in the page, hidden, as the single source for block names, descriptions, search,
+     favorites, and Module Overview tags, so the menus always match the builder. -->
+<style id="cbt-layout">
+  .cbt #focus-toggle, .cbt #show-library, .cbt #show-library-rail, .cbt #hide-library, .cbt .tip { display: none !important; }
+  .cbt .builder-head { display: block; margin: 0; }
+  .cbt .builder-shell { padding-top: 0; }
+  .cbt .builder-wrap.focus-mode { max-width: none; }
+  .cbt .builder-wrap.focus-mode .insert-bar { display: block; }
+  .cbt .preview-column { max-width: 880px; margin: 18px auto 0; transition: margin .2s; }
+  .cbt.cbt-drawer .preview-column { margin-left: max(16px, calc(50vw - 640px)); margin-right: auto; }
+  .cbt .preview-label-row { margin-bottom: 8px; }
+  .cbt .preview-label-row h2 { font-size: 18px; }
+  .cbt .resume-banner { max-width: 880px; margin: 12px auto 0; }
+  .cbt .cm-save-row, .cbt .cm-handoff { max-width: 880px; margin-left: auto; margin-right: auto; }
+  /* Toolbar */
+  .cbt-bar { position: sticky; top: 0; z-index: 9050; margin: 0 -24px; padding: 8px 24px; background: #fff; border-bottom: 1px solid #cad5da; box-shadow: 0 4px 14px rgba(0,27,59,.08); }
+  .cbt-row { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; max-width: 1500px; margin: 0 auto; }
+  .cbt-search { position: relative; }
+  .cbt-search input { width: 150px; min-height: 38px; box-sizing: border-box; padding: 6px 10px 6px 30px; border: 1px solid #9eacb5; border-radius: 6px; font: inherit; font-size: 14px; background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23526570' stroke-width='2.5'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 9px center; }
+  .cbt-menu { position: relative; }
+  .cbt-menu > summary, .cbt-btn { display: inline-flex; align-items: center; gap: 4px; min-height: 38px; box-sizing: border-box; padding: 6px 9px; border: 1px solid #a8bac5; border-radius: 6px; background: #fff; color: #003366; font: inherit; font-size: 13px; font-weight: 700; line-height: 1.2; cursor: pointer; list-style: none; white-space: nowrap; }
+  .cbt-menu > summary::-webkit-details-marker { display: none; }
+  .cbt-menu > summary::after { content: '\25BE'; font-size: 11px; }
+  .cbt-menu[open] > summary, .cbt-menu > summary:hover, .cbt-btn:hover { background: #edf4f7; border-color: #003366; }
+  .cbt-menu > summary:focus-visible, .cbt-btn:focus-visible, .cbt-search input:focus-visible { outline: 3px solid #ff6600; outline-offset: 2px; }
+  .cbt-icon { width: 38px; justify-content: center; padding: 0; font-size: 17px; }
+  .cbt-primary { background: #ff6600 !important; border-color: #ff6600 !important; color: #fff !important; }
+  .cbt-primary:hover { background: #d95500 !important; }
+  .cbt-spacer { flex: 1 1 8px; }
+  .cbt-panel { position: absolute; top: calc(100% + 6px); left: 0; z-index: 8100; width: min(720px, calc(100vw - 32px)); max-height: min(70vh, 640px); overflow: auto; box-sizing: border-box; padding: 14px; border: 1px solid #b7c4ca; border-top: 4px solid #ff6600; border-radius: 8px; background: #fff; box-shadow: 0 14px 34px rgba(0,27,59,.22); }
+  .cbt-panel.right { left: auto; right: 0; width: min(380px, calc(100vw - 32px)); }
+  .cbt-panel h3 { margin: 10px 0 8px; color: #526570; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+  .cbt-panel h3:first-child { margin-top: 0; }
+  .cbt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; }
+  .cbt-item { display: flex; flex-direction: column; border: 1px solid #d0d9de; border-radius: 6px; background: #fff; }
+  .cbt-item:hover { border-color: #008da7; }
+  .cbt-add { flex: 1; display: block; width: 100%; padding: 9px 10px 4px; border: 0; background: none; text-align: left; font: inherit; cursor: pointer; color: #001b3b; }
+  .cbt-add strong { display: block; font-size: 14px; line-height: 1.3; }
+  .cbt-add span { display: block; margin-top: 3px; color: #52616d; font-size: 12px; line-height: 1.4; }
+  .cbt-add .overview-tag { margin-top: 5px; }
+  .cbt-add:focus-visible, .cbt-peek:focus-visible { outline: 3px solid #ff6600; outline-offset: -3px; }
+  .cbt-item-actions { display: flex; justify-content: flex-end; gap: 6px; margin: 0 8px 7px; }
+  .cbt-fav { padding: 3px 7px; border: 1px solid #c9d4da; border-radius: 4px; background: #fff; color: #526570; font: inherit; font-size: 13px; line-height: 1.2; cursor: pointer; }
+  .cbt-fav[aria-pressed="true"] { color: #9a5b00; border-color: #b45309; background: #fff4e5; }
+  .cbt-fav:focus-visible { outline: 3px solid #ff6600; outline-offset: 1px; }
+  .cbt-peek { margin: 0; padding: 3px 8px; border: 1px solid #c9d4da; border-radius: 4px; background: #f2f6f8; color: #003366; font: inherit; font-size: 12px; cursor: pointer; }
+  .cbt-where { margin: 0 0 10px; color: #3c4f5b; font-size: 13px; }
+  .cbt-empty { margin: 0; color: #52616d; font-size: 14px; }
+  .cbt-panel .dest-group { margin: 0 0 12px; }
+  .cbt-panel .setup-body { padding: 0 !important; }
+  .cbt-panel .cm-menu-body, .cbt-moved-menu .cm-menu-body { position: static; box-shadow: none; border: 0; padding: 0; }
+  .cbt-stack { display: grid; gap: 8px; }
+  .cbt-stack .btn { width: 100%; justify-content: center; }
+  @media (max-width: 1100px) { .cbt-search input { width: 150px; } .cbt-menu > summary, .cbt-btn { padding: 6px 9px; font-size: 13px; } }
+  @media (max-width: 760px) { .cbt-bar { margin: 0 -14px; padding: 8px 14px; } .cbt-search { flex: 1 1 100%; } .cbt-search input { width: 100%; } .cbt-panel { position: fixed; top: auto; left: 16px; right: 16px; width: auto; } .cbt-spacer { display: none; } }
+  @media (prefers-reduced-motion: reduce) { .cbt .preview-column { transition: none; } }
+</style>
+<script>
+(function () {
+  var GROUPS = [
+    ['Text', ['Text & Layout', 'Callouts & Key Ideas']],
+    ['Course info', ['Instructor Information', 'Course Organization']],
+    ['Media', ['Media & Visuals']],
+    ['Reveal', ['Reveal & Explore', 'Timelines & Processes']],
+    ['Practice', ['Practice & Feedback', 'Scenarios & Examples', 'Interactive Simulations']],
+    ['Page tools', ['Page-Wide Tools', 'Resources & Data']]
+  ];
+  var $ = function (s, c) { return (c || document).querySelector(s); };
+  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
+  function mk(tag, cls, html) { var n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; }
+  function esc(t) { return String(t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  document.body.classList.add('cbt');
+
+  // Start in the real builder's focus layout: library column hidden, editor as a slide-in drawer.
+  var wrap = $('.builder-wrap');
+  if (wrap && !wrap.classList.contains('focus-mode')) { $('#focus-toggle').click(); var t = $('#toast'); if (t) { t.classList.remove('show'); t.textContent = ''; } }
+
+  // ---------- Toolbar ----------
+  var bar = mk('div', 'cbt-bar'); bar.setAttribute('role', 'region'); bar.setAttribute('aria-label', 'Page Builder toolbar');
+  var row = mk('div', 'cbt-row'); bar.appendChild(row);
+
+  // Search, using the real library search so aliases such as "quiz" or "vocabulary" still work.
+  var search = mk('div', 'cbt-search');
+  search.innerHTML = '<label for="cbt-q" class="cm-sr-only">Search blocks</label><input id="cbt-q" type="search" placeholder="Search blocks" autocomplete="off" aria-controls="cbt-results" aria-expanded="false">';
+  var results = mk('div', 'cbt-panel'); results.id = 'cbt-results'; results.hidden = true; search.appendChild(results);
+  row.appendChild(search);
+
+  function libraryItems(filterCats) {
+    return $$('#block-library .library-card').map(function (card) {
+      var add = $('[data-add]', card), cat = card.closest('[data-cat]');
+      var fav = $('[data-favorite]', card);
+      return { key: add.getAttribute('data-add'), name: $('.block-name', card).textContent, desc: $('.block-description', card).textContent, tag: $('.overview-tag', card) ? $('.overview-tag', card).outerHTML : '', cat: cat ? cat.getAttribute('data-cat') : '', fav: !!fav && fav.getAttribute('aria-pressed') === 'true' };
+    }).filter(function (it) { return !filterCats || filterCats.indexOf(it.cat) >= 0; });
+  }
+  function itemHtml(it) {
+    return '<div class="cbt-item"><button type="button" class="cbt-add" data-cbt-add="' + esc(it.key) + '"><strong>' + esc(it.name) + '</strong><span>' + esc(it.desc) + '</span>' + it.tag + '</button><div class="cbt-item-actions"><button type="button" class="cbt-fav" data-cbt-fav="' + esc(it.key) + '" aria-pressed="' + it.fav + '" aria-label="Favorite ' + esc(it.name) + '" title="' + (it.fav ? 'Remove from favorites' : 'Add to favorites') + '">' + (it.fav ? '\u2605' : '\u2606') + '</button><button type="button" class="cbt-peek" data-cbt-peek="' + esc(it.key) + '" aria-label="Preview ' + esc(it.name) + '">Preview</button></div></div>';
+  }
+  function whereText() {
+    var sel = $('#page-preview .preview-block.is-selected');
+    var label = sel ? (sel.getAttribute('aria-label') || 'the selected block').replace(/ block$/, '') : '';
+    return '<p class="cbt-where">' + (sel ? 'New blocks go right below <strong>' + esc(label) + '</strong>.' : 'New blocks go at the end of the page. Select a block first to add below it.') + '</p>';
+  }
+  function groupHtml(cats) {
+    return whereText() + cats.map(function (cat) {
+      var items = libraryItems([cat]); if (!items.length) return '';
+      return '<h3>' + esc(cat) + '</h3><div class="cbt-grid">' + items.map(itemHtml).join('') + '</div>';
+    }).join('');
+  }
+
+  var menus = [];
+  function menu(label, build, right) {
+    var d = mk('details', 'cbt-menu'); var s = mk('summary', '', esc(label)); d.appendChild(s);
+    var p = mk('div', 'cbt-panel' + (right ? ' right' : '')); d.appendChild(p);
+    d.addEventListener('toggle', function () { if (d.open) { menus.forEach(function (m) { if (m !== d) m.open = false; }); if (q.value) { clearSearch(); } else { closeResults(); } if (build) p.innerHTML = build(); } });
+    d.cbtBuild = build; menus.push(d); return d;
+  }
+  GROUPS.forEach(function (g) { row.appendChild(menu(g[0], function () { return groupHtml(g[1]); })); });
+  var favMenu = menu('★', function () {
+    var box = $('#block-shortcuts');
+    var fav = box ? $$('h3', box)[0] : null;
+    var keys = function (h) { var out = [], n = h ? h.nextElementSibling : null; while (n && n.tagName !== 'H3') { $$('[data-add]', n).forEach(function (b) { out.push(b.getAttribute('data-add')); }); if (n.matches && n.matches('[data-add]')) out.push(n.getAttribute('data-add')); n = n.nextElementSibling; } return out; };
+    var all = libraryItems(); var pick = function (k) { return all.filter(function (i) { return i.key === k; })[0]; };
+    var hs = box ? $$('h3', box) : [];
+    var favs = keys(hs[0]).map(pick).filter(Boolean), recent = keys(hs[1]).map(pick).filter(Boolean);
+    return whereText() + '<h3>Favorites</h3>' + (favs.length ? '<div class="cbt-grid">' + favs.map(itemHtml).join('') + '</div>' : '<p class="cbt-empty">No favorites yet. Select the star on any block in these menus to add it here.</p>') +
+      '<h3>Recently used</h3>' + (recent.length ? '<div class="cbt-grid">' + recent.map(itemHtml).join('') + '</div>' : '<p class="cbt-empty">Blocks you add show up here.</p>');
+  });
+  var favSummary = favMenu.querySelector('summary'); favSummary.setAttribute('aria-label', 'Favorites and recently used'); favSummary.title = 'Favorites and recently used';
+  row.appendChild(favMenu);
+  row.appendChild(mk('span', 'cbt-spacer'));
+
+  // Page settings: the real destination control and Page Header fields, moved into a menu.
+  var settings = menu('Page settings', null, true); var sp = $('.cbt-panel', settings);
+  var dest = $('#page-destination'); if (dest) sp.appendChild(dest);
+  var headerBody = $('#header-details .setup-body'); if (headerBody) { sp.appendChild(mk('h3', '', 'Page header')); sp.appendChild(headerBody); $('#header-details').style.display = 'none'; }
+  row.appendChild(settings);
+
+  // Page actions: the real buttons, moved and made compact.
+  var undo = $('#undo-page'), redo = $('#redo-page');
+  [[undo, '↶', 'Undo'], [redo, '↷', 'Redo']].forEach(function (x) { if (!x[0]) return; x[0].className = 'cbt-btn cbt-icon'; x[0].textContent = x[1]; x[0].setAttribute('aria-label', x[2]); x[0].title = x[2]; row.appendChild(x[0]); });
+  var audit = $('#audit-page'); if (audit) { audit.className = 'cbt-btn'; row.appendChild(audit); }
+  var copy = $('#copy-page'); if (copy) { copy.className = 'cbt-btn cbt-primary'; copy.textContent = 'Copy page HTML'; row.appendChild(copy); }
+  var more = menu('Save', null, true); var mp = $('.cbt-panel', more); var stack = mk('div', 'cbt-stack'); mp.appendChild(stack);
+  ['#download-page', '#export-page', '#import-page', '#reset-page'].forEach(function (id) { var b = $(id); if (b) { b.className = 'btn'; stack.appendChild(b); } });
+  var oldManage = $('.top-actions .cm-menu'); if (oldManage) { var note = $('p', oldManage); if (note) stack.appendChild(note); oldManage.style.display = 'none'; }
+  var file = $('#import-file'); if (file) mp.appendChild(file);
+  row.appendChild(more);
+
+  var shell = $('#builder'); shell.insertBefore(bar, shell.firstChild);
+  var oldActions = $('.top-actions'); if (oldActions) oldActions.style.display = 'none';
+
+  // ---------- Adding blocks ----------
+  function addBlock(key) {
+    menus.forEach(function (m) { m.open = false; }); closeResults();
+    var sel = $('#page-preview .preview-block.is-selected');
+    var below = sel ? $('[data-action="addbelow"]', sel) : null;
+    if (below) {
+      below.click(); // opens the real "Add a block here" picker at the right position
+      var pick = $('dialog[open] [data-pick="' + key + '"]');
+      if (pick) { pick.click(); return; }
+      var dlg = $('dialog[open]'); if (dlg) dlg.close();
+    }
+    var add = $('#block-library [data-add="' + key + '"]'); if (add) add.click();
+  }
+  function peek(key) { menus.forEach(function (m) { m.open = false; }); closeResults(); var b = $('#block-library [data-example="' + key + '"]'); if (b) b.click(); }
+  bar.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-cbt-add]'); if (a) { addBlock(a.getAttribute('data-cbt-add')); return; }
+    var p = e.target.closest('[data-cbt-peek]'); if (p) { peek(p.getAttribute('data-cbt-peek')); return; }
+    var f = e.target.closest('[data-cbt-fav]'); if (f) { toggleFavorite(f); }
+  });
+  // Favorites use the builder's own list (saved in this browser), then the open menu is redrawn in place.
+  function toggleFavorite(btn) {
+    var key = btn.getAttribute('data-cbt-fav'), real = $('#block-library [data-favorite="' + key + '"]');
+    if (!real) return;
+    var host = btn.closest('.cbt-panel');
+    quiet = true; real.click(); quiet = false; // a click on the hidden library must not close the open menu
+    var open = menus.filter(function (m) { return m.open; })[0];
+    if (open && open.cbtBuild) { $('.cbt-panel', open).innerHTML = open.cbtBuild(); host = $('.cbt-panel', open); }
+    else if (host === results) { q.dispatchEvent(new Event('input')); }
+    var again = host && host.querySelector('[data-cbt-fav="' + key + '"]'); if (again) again.focus();
+  }
+
+  // ---------- Search results ----------
+  var q = $('#cbt-q'), realSearch = $('#block-search');
+  function closeResults() { results.hidden = true; q.setAttribute('aria-expanded', 'false'); }
+  q.addEventListener('input', function () {
+    var v = q.value.trim(); realSearch.value = v; realSearch.dispatchEvent(new Event('input', { bubbles: true }));
+    if (!v) { closeResults(); return; }
+    menus.forEach(function (m) { m.open = false; });
+    var items = libraryItems();
+    results.innerHTML = whereText() + (items.length ? '<h3>' + items.length + (items.length === 1 ? ' matching block' : ' matching blocks') + '</h3><div class="cbt-grid">' + items.map(itemHtml).join('') + '</div>' : '<p class="cbt-empty">No matching blocks. Try a broader word such as image, quiz, or timeline.</p>');
+    results.hidden = false; q.setAttribute('aria-expanded', 'true');
+  });
+  q.addEventListener('keydown', function (e) { if (e.key === 'ArrowDown' && !results.hidden) { e.preventDefault(); var f = $('.cbt-add', results); if (f) f.focus(); } });
+  // Arrow keys move between blocks inside an open menu or the search results.
+  bar.addEventListener('keydown', function (e) {
+    if (['ArrowDown', 'ArrowUp', 'ArrowRight', 'ArrowLeft', 'Home', 'End'].indexOf(e.key) < 0) return;
+    var summary = e.target.closest('.cbt-menu > summary');
+    if (summary && e.key === 'ArrowDown') {
+      var m = summary.parentNode; e.preventDefault();
+      if (!m.open) { m.open = true; }
+      setTimeout(function () { var f = $('.cbt-add', m); if (f) f.focus(); }, 0);
+      return;
+    }
+    var item = e.target.closest('.cbt-add'); if (!item) return;
+    var list = $$('.cbt-add', item.closest('.cbt-panel')), i = list.indexOf(item), next = i;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowRight') next = Math.min(list.length - 1, i + 1);
+    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') next = i - 1;
+    if (e.key === 'Home') next = 0;
+    if (e.key === 'End') next = list.length - 1;
+    e.preventDefault();
+    if (next < 0) { var owner = item.closest('.cbt-menu'); if (owner) $('summary', owner).focus(); else q.focus(); return; }
+    list[next].focus();
+  });
+  function clearSearch() { q.value = ''; realSearch.value = ''; realSearch.dispatchEvent(new Event('input', { bubbles: true })); closeResults(); }
+
+  // ---------- Closing menus ----------
+  var quiet = false;
+  document.addEventListener('click', function (e) {
+    // Ignore the hidden library click, and clicks on menu items that were just redrawn (no longer in the page).
+    if (quiet || !e.target.isConnected) return;
+    menus.forEach(function (m) { if (m.open && !m.contains(e.target)) m.open = false; });
+    if (!results.hidden && !search.contains(e.target)) closeResults();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    var openMenu = menus.filter(function (m) { return m.open; })[0];
+    if (openMenu) { openMenu.open = false; $('summary', openMenu).focus(); e.stopImmediatePropagation(); return; }
+    if (!results.hidden) { closeResults(); q.focus(); e.stopImmediatePropagation(); return; }
+    // Keep this layout: Escape closes the editor panel but never switches back to the old three-column view.
+    if (!document.querySelector('dialog[open]') && !document.querySelector('.editor-panel.drawer-open')) e.stopImmediatePropagation();
+  }, true);
+
+  // Slide the preview left when the editor panel opens so the two sit side by side on laptops.
+  var panel = $('.editor-panel');
+  var sync = function () { document.body.classList.toggle('cbt-drawer', panel.classList.contains('drawer-open')); };
+  new MutationObserver(sync).observe(panel, { attributes: true, attributeFilter: ['class'] }); sync();
+  // The editor panel starts below the toolbar, so page actions stay visible while you edit.
+  var placePanel = function () { var bottom = Math.max(0, Math.round(bar.getBoundingClientRect().bottom)); panel.style.top = bottom + 'px'; panel.style.borderRadius = '0 0 0 12px'; };
+  window.addEventListener('scroll', placePanel, { passive: true }); window.addEventListener('resize', placePanel); placePanel();
+  // After a new block is added, clear the search so the menus show everything again.
+  new MutationObserver(function () { if (q.value && document.activeElement !== q) clearSearch(); }).observe($('#page-preview'), { childList: true });
+})();
+</script>
+<!-- ===================== END PAGE BUILDER TOOLBAR LAYOUT ===================== -->
 </body>
 </html>
