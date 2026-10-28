@@ -3437,7 +3437,7 @@ window.CMUX = (() => {
     const titleClass = state.titleStyle === 'text' ? ' text-only' : '';
     const starterCards = ['module','instructor','course','weekly'].map(key => '<button type="button" class="starter-card" data-start-template="' + key + '">' + e(templates[key].label) + '</button>').join('');
     const emptyState = '<div class="preview-empty"><strong>Your page is ready for content.</strong><br>Choose a starting point:<div class="cm-empty-actions"><a class="cm-button" href="templates.html">Start with a template</a><button type="button" class="cm-button" data-empty-action="block">Add your first block</button><button type="button" class="cm-button" data-empty-action="sample">See a sample page</button></div><p style="font-size:14px">Or use a quick starter:</p><div class="starter-cards">' + starterCards + '</div></div>';
-    el.preview.innerHTML = banner + '<div class="page-title-preview' + titleClass + '" style="' + (state.titleStyle === 'banner' ? 'background-color:' + state.accent + ';color:' + contrast(state.accent) + ';border-bottom-color:#FF6600' : 'border-bottom-color:' + state.accent) + '"><p class="page-kicker">' + e(state.pageLabel) + '</p><h3>' + e(state.title) + '</h3></div><div class="preview-content' + (state.selectedId ? ' has-selection' : '') + '">' + (blocksHtml || emptyState) + '</div><div class="preview-footer" aria-hidden="true"></div>';
+    el.preview.innerHTML = banner + '<div class="page-title-preview' + titleClass + '" style="' + (state.titleStyle === 'banner' ? 'background-color:' + state.accent + ';color:' + contrast(state.accent) + ';border-bottom-color:#FF6600' : 'border-bottom-color:' + state.accent) + '"><button type="button" class="header-edit-btn" data-edit-page-header aria-controls="cbt-page-settings-panel">Edit header</button><p class="page-kicker">' + e(state.pageLabel) + '</p><h3>' + e(state.title) + '</h3></div><div class="preview-content' + (state.selectedId ? ' has-selection' : '') + '">' + (blocksHtml || emptyState) + '</div><div class="preview-footer" aria-hidden="true"></div>';
     el.count.textContent = countText(state.blocks.length);
     hydratePreview(el.preview);
     updateDestinationUi();
@@ -3825,7 +3825,7 @@ window.CMUX = (() => {
         item.append(fix);
       } else if (issue.field === 'title') {
         const fix = document.createElement('button'); fix.type = 'button'; fix.className = 'cm-button'; fix.textContent = 'Edit the page title';
-        fix.onclick = () => { dialog.close(); document.getElementById('header-details').open = true; document.getElementById('page-title').focus(); };
+        fix.onclick = (event) => { event.stopPropagation(); dialog.close(); document.dispatchEvent(new CustomEvent('mcc:edit-page-header')); };
         item.append(fix);
       }
       body.append(item);
@@ -4404,6 +4404,17 @@ body header .search input{padding:9px 13px}
      toolbar stays in the page, hidden, as the single source for block names, descriptions, search,
      favorites, and Module Overview tags, so the menus always match the builder. -->
 <style id="cbt-layout">
+  /* Builder-only header shortcut; exported course HTML is generated separately. */
+  .cbt .page-title-preview { position: relative; padding-top: 64px; }
+  .cbt .header-edit-btn {
+    position: absolute; top: 12px; right: 12px; min-height: 36px;
+    padding: 6px 12px; border: 1px solid #a8bac5; border-radius: 6px;
+    background: #fff; color: #003366; font: inherit; font-size: 13px;
+    font-weight: 700; line-height: 1.4; cursor: pointer;
+  }
+  .cbt .header-edit-btn:hover { background: #edf4f7; border-color: #003366; }
+  .cbt .header-edit-btn:focus-visible { outline: 3px solid #f7b32b; outline-offset: 2px; }
+
   .cbt #focus-toggle, .cbt #show-library, .cbt #show-library-rail, .cbt #hide-library, .cbt .tip { display: none !important; }
   .cbt .builder-head { display: block; margin: 0; }
   .cbt .builder-shell { padding-top: 0; }
@@ -4537,9 +4548,37 @@ body header .search input{padding:9px 13px}
 
   // Page settings: the real destination control and Page Header fields, moved into a menu.
   var settings = menu('Page settings', null, true); var sp = $('.cbt-panel', settings);
+  sp.id = 'cbt-page-settings-panel';
   var dest = $('#page-destination'); if (dest) sp.appendChild(dest);
   var headerBody = $('#header-details .setup-body'); if (headerBody) { sp.appendChild(mk('h3', '', 'Page header')); sp.appendChild(headerBody); $('#header-details').style.display = 'none'; }
   row.appendChild(settings);
+
+  // One route for the preview shortcut and the accessibility checker's title fix.
+  // Reuse the moved fields and their existing live-preview/autosave listeners.
+  var headerReturnFocus = false;
+  function openHeaderSettings() {
+    headerReturnFocus = true;
+    menus.forEach(function (m) { if (m !== settings) m.open = false; });
+    clearSearch();
+    settings.open = true;
+    // The sticky toolbar can start below the viewport; bring its controls into view.
+    settings.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    requestAnimationFrame(function () {
+      if (!settings.open) return;
+      var title = $('#page-title');
+      if (title) { title.focus({ preventScroll: true }); title.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+    });
+  }
+  document.addEventListener('mcc:edit-page-header', openHeaderSettings);
+  // Delegate to the stable container: renderPreview replaces the header on each edit.
+  $('#page-preview').addEventListener('click', function (e) {
+    if (!e.target.closest('[data-edit-page-header]')) return;
+    e.preventDefault();
+    e.stopPropagation(); // Do not let the outside-click handler immediately close settings.
+    openHeaderSettings();
+  });
+  $('summary', settings).addEventListener('click', function () { headerReturnFocus = false; });
+
 
   // Page actions: the real buttons, moved and made compact.
   var undo = $('#undo-page'), redo = $('#redo-page');
@@ -4631,7 +4670,14 @@ body header .search input{padding:9px 13px}
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
     var openMenu = menus.filter(function (m) { return m.open; })[0];
-    if (openMenu) { openMenu.open = false; $('summary', openMenu).focus(); e.stopImmediatePropagation(); return; }
+    if (openMenu) {
+      openMenu.open = false;
+      // The preview button may have been replaced while typing; resolve it again.
+      var back = openMenu === settings && headerReturnFocus ? $('[data-edit-page-header]') : null;
+      headerReturnFocus = false;
+      (back || $('summary', openMenu)).focus();
+      e.preventDefault(); e.stopImmediatePropagation(); return;
+    }
     if (!results.hidden) { closeResults(); q.focus(); e.stopImmediatePropagation(); return; }
     // Keep this layout: Escape closes the editor panel but never switches back to the old three-column view.
     if (!document.querySelector('dialog[open]') && !document.querySelector('.editor-panel.drawer-open')) e.stopImmediatePropagation();
